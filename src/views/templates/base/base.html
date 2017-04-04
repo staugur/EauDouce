@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="{{ url_for('ui.static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('ui.static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    {% block head %}{% endblock %}
+    <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+    <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <link href="{{ url_for('ui.static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
+    <link href="{{ url_for('ui.static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+    <p>
+        <a href="{{ url_for('ui.index') }}"><img src="{{ url_for('ui.static', filename='img/logo.png') }}" alt="{{ self.title() }}" title="{{ self.title() }}" class="img-circle" width="6%"></a><br/>
+        <b>{{ self.title() }}</b><sub class="text-lowercase"><kbd>v{{ g.sysInfo.Version }}</kbd></sub>
+    </p>
+    </div>
+    <br />
+
+    <!-- 导航 -->
+    <ul class="nav nav-tabs" id="tab">
+        <li><a href="{{ url_for('ui.index') }}" id="swarm" title="Swarms">集群 <span class="badge" id="swarm_number"></span></a></li>
+        <li><a href="{{ url_for('ui.service') }}" id="service" title="Services">服务 <span class="badge" id="service_number"></span></a></li>
+        <li><a href="{{ url_for('ui.node') }}" id="node" title="Nodes">节点 <span class="badge" id="node_number"></span></a></li>
+        <li><a href="{{ url_for('ui.network') }}" id="network" title="Networks">网络 </a></li>
+        <li><a href="{{ url_for('ui.registry') }}" id="registry" title="Registries">私有仓 </a></li>
+        <li><a href="{{ url_for('ui.storage') }}" id="storage" title="Storages">存储 </a></li>
+        {% if g.auth %}
+        <li><a href="{{ url_for('auth.logout') }}" title="Do you want to leave, {{ g.username }}?">注销</a></li>
+        {% endif %}
+    </ul>
+	<p></p></br>
+
+    {% block container %}{% endblock %}
+
+    </br>
+    </br>
+    <nav class="navbar navbar-default text-center">
+    <div class="navbar-inner navbar-content-center">
+        <p class="text-muted credit" style="padding: 10px;">
+              Copyright &copy; 2016-2017 SaintIC.&nbsp;&nbsp;
+              All rights reserved.&nbsp;&nbsp;
+              Originate by <a href="https://github.com/staugur/SwarmOps/" target="_blank" title="{{ g.sysInfo.Doc }}">SwarmOps</a>&nbsp;
+              <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
+              Contact Author:&nbsp;<a href="mailto:{{ g.sysInfo.Email }}">{{ g.sysInfo.Author }}</a>
+        </p>
+    </div>
+    </nav>
+</div>
+
+<script src="{{ url_for('ui.static', filename='js/jquery-3.1.0.min.js') }}"></script>
+<script src="{{ url_for('ui.static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('ui.static', filename='layer/layer.js') }}"></script>
+{% block script %}{% endblock %}
+</body>
+</html>

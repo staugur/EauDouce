@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="{{ url_for('front.static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('front.static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    {% block head %}{% endblock %}
+    <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+    <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <link href="{{ url_for('front.static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
+    <link href="{{ url_for('front.static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+</head>
+</head>
+<body>
+
+<div class="container">
+
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<nav class="navbar navbar-default navbar-inverse" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}">EauDouce&nbsp;<i class="icon-home icon-1x"></i></a>
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="#" title="Write">创作&nbsp;<i class="icon-pencil icon-1x"></i></a></li>
+						<li><a href="#" title="Feed">订阅&nbsp;<i class="icon-rss icon-1x"></i></a></li>
+						<li><a href="#" title="OpenSource">开源项目&nbsp;<i class="icon-github icon-1x"></i></a></li>
+						<li class="dropdown">
+							<a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="icon-book icon-1x"></i><strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">分类1</a></li>
+								<li><a href="#">分类2</a></li>
+								<li><a href="#">分类3</a></li>
+								<li class="divider"></li>
+								<li><a href="#">原创</a></li>
+								<li><a href="#">转载</a></li>
+								<li><a href="#">翻译</a></li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+					    {% if g.signin %}
+						<li class="dropdown">
+							<a href="#" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i><strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Signed in as <strong>{{ g.username }}</strong></a></li>
+								<li class="divider"></li>
+								<li><a href="#">我的资料</a></li>
+								<li><a href="#">我的文章</a></li>
+								<li><a href="#">修改头像</a></li>
+								<li><a href="#">修改密码</a></li>
+								<li class="divider"></li>
+								<li><a href="#" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
+								<li><a href="{{ url_for('logout') }}" title="Sign Out">注销&nbsp;<i class="icon-signout icon-1x"></i></a></li>
+							</ul>
+						</li>
+						{% else %}
+						<li><a href="{{ url_for('login') }}" title="Sign In">登录&nbsp;<i class="icon-signin icon-1x"></i></a></li>
+						<li><a href="{{ url_for('signup') }}" title="Sign Up">注册&nbsp;<i class="icon-signin icon-1x"></i></a></li>
+						{% endif %}
+					</ul>
+				</div>
+				
+			</nav>
+			<div class="carousel slide" id="carousel-394119">
+				<ol class="carousel-indicators">
+					<li data-slide-to="0" data-target="#carousel-394119">
+					</li>
+					<li data-slide-to="1" data-target="#carousel-394119">
+					</li>
+					<li data-slide-to="2" data-target="#carousel-394119" class="active">
+					</li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="item">
+						<img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/1/default.jpg" />
+						<div class="carousel-caption">
+							<h4>
+								First Thumbnail label
+							</h4>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/2/default.jpg" />
+						<div class="carousel-caption">
+							<h4>
+								Second Thumbnail label
+							</h4>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+						</div>
+					</div>
+					<div class="item active">
+						<img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/3/default.jpg" />
+						<div class="carousel-caption">
+							<h4>
+								Third Thumbnail label
+							</h4>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+						</div>
+					</div>
+				</div> <a class="left carousel-control" href="#carousel-394119" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-394119" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+			</div>
+		</div>
+	</div>
+
+	<!-- 公告 -->
+    <marquee direction="right" scrollamount="5" bgcolor="#FFFFFF">
+        <i class="icon-bullhorn"></i>&nbsp;做人要厚道&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <i class="icon-bullhorn"></i>&nbsp;做人要厚道&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <i class="icon-bullhorn"></i>&nbsp;做人要厚道&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </marquee>
+
+	<div class="row clearfix">
+		<div class="col-md-8 column">
+            <!-- 搜索 -->
+		    <form class="form-search form-horizontal" action="?q=" method="" id="SearchForm">
+                <div class="input-group search-input-group">
+                    <button type="submit" class="btn btn-success" style="height: 30px"><i class="icon-search"></i></button>
+                    <input type="text" name="q" placeholder="搜索博客文章" style="height: 27px;">
+                </div>
+            </form>
+
+            <!-- 置顶文章列表 -->
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<h3>
+						h3. 这是一套可视化布局系统.
+					</h3>
+				</div>
+			</div>
+
+            <!-- 文章列表缩略 -->
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<h3 class="text-left text-success">
+						h3. 这是一套可视化布局系统.
+					</h3>
+					<p class="text-left text-info">
+						 <em>Git</em> 是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong> 编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small> 社区中。
+					</p>
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<h3>
+						h3. 这是一套可视化布局系统.
+					</h3>
+					<p>
+						 <em>Git</em> 是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong> 编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small> 社区中。
+					</p>
+				</div>
+			</div>
+
+			<!-- 分页 -->
+			<ul class="pagination pagination-lg">
+				<li>
+					 <a href="#">Prev</a>
+				</li>
+				<li>
+					 <a href="#">1</a>
+				</li>
+				<li>
+					 <a href="#">2</a>
+				</li>
+				<li>
+					 <a href="#">3</a>
+				</li>
+				<li>
+					 <a href="#">4</a>
+				</li>
+				<li>
+					 <a href="#">5</a>
+				</li>
+				<li>
+					 <a href="#">Next</a>
+				</li>
+			</ul>
+		</div>
+		<!-- 右侧 -->
+		<div class="col-md-4 column">
+			<h3 class="text-success">
+				h3. 这是一套可视化布局系统.
+			</h3>
+			<address> <strong>Twitter, Inc.</strong><br /> 795 Folsom Ave, Suite 600<br /> San Francisco, CA 94107<br /> <abbr title="Phone">P:</abbr> (123) 456-7890
+			</address>
+
+			<!-- 标签云 -->
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					 <span class="label label-primary">标签<font>42</font></span>
+					 <span class="label label-success">标签<font>42</font></span>
+					 <span class="label label-warning">标签<font>42</font></span>
+				</div>
+			</div>
+			<!-- 友情链接 -->
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					 <button type="button" class="btn btn-default btn-link">按钮</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div id="footer" class="container">
+<nav class="navbar navbar-default text-center">
+    <div class="navbar-inner navbar-content-center">
+        <p class="text-muted credit" style="padding: 10px;">
+              Copyright &copy; 2017 SaintIC.&nbsp;&nbsp;
+              All rights reserved.&nbsp;&nbsp;
+              Originate by <a href="https://github.com/staugur/EauDouce/" target="_blank" title="{{ g.sysInfo.Doc }}">EauDouce</a>&nbsp;
+              <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
+              Contact Author:&nbsp;<a href="mailto:{{ g.sysInfo.Email }}">{{ g.sysInfo.Author }}</a>
+        </p>
+    </div>
+</nav>
+</div>
+
+<script src="{{ url_for('front.static', filename='js/jquery-3.1.0.min.js') }}"></script>
+<script src="{{ url_for('front.static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('front.static', filename='layer/layer.js') }}"></script>
+</body>
+</html>
