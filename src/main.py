@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-import json, datetime, SpliceURL
+import json, datetime, SpliceURL, time
 from flask import Flask, request, g, jsonify, redirect, make_response, url_for
 from config import GLOBAL, SSO
 from utils.tool import logger, isLogged_in, md5, login_required
@@ -21,6 +21,7 @@ app.register_blueprint(api_blueprint, url_prefix="/api")
 
 @app.before_request
 def before_request():
+    g.startTime = time.time()
     g.sessionId = request.cookies.get("sessionId", "")
     g.username  = request.cookies.get("username", "")
     g.expires   = request.cookies.get("time", "")
@@ -38,6 +39,7 @@ def after_request(response):
             "url": request.url,
             "referer": request.headers.get('Referer'),
             "agent": request.headers.get("User-Agent"),
+            "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
             }
         }
     ))

@@ -34,7 +34,7 @@
 						<li><a href="#" title="Feed">订阅&nbsp;<i class="icon-rss icon-1x"></i></a></li>
 						<li><a href="#" title="OpenSource">开源项目&nbsp;<i class="icon-github icon-1x"></i></a></li>
 						<li class="dropdown">
-							<a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="icon-book icon-1x"></i><strong class="caret"></strong></a>
+							<a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="icon-folder-open icon-1x"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">分类1</a></li>
 								<li><a href="#">分类2</a></li>
@@ -49,7 +49,7 @@
 					<ul class="nav navbar-nav navbar-right">
 					    {% if g.signin %}
 						<li class="dropdown">
-							<a href="#" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i><strong class="caret"></strong></a>
+							<a href="#" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Signed in as <strong>{{ g.username }}</strong></a></li>
 								<li class="divider"></li>
@@ -136,37 +136,44 @@
             </form>
 
             <!-- 置顶文章列表 -->
+            <p></p>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
-					<h3>
-						h3. 这是一套可视化布局系统.
-					</h3>
+				    <h3><scan class="icon-fire icon-large"> 置顶文章</scan></h3>
+			        <ol>
+				        <li>Lorem ipsum dolor sit amet</li>
+                    </ol>
 				</div>
 			</div>
 
             <!-- 文章列表缩略 -->
+            <h3><scan class="icon-book icon-large"> 最新文章</scan></h3>
+            {% for blog in blogData %}
+            <blockquote>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
-					<h3 class="text-left text-success">
-						h3. 这是一套可视化布局系统.
-					</h3>
+					<h5 class="text-left text-success">
+						<a href="/blog/{{ blog.id }}.html" style="color: red; font-weight: bold;">{{ blog.title }}</a>
+					</h5>
 					<p class="text-left text-info">
-						 <em>Git</em> 是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong> 编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small> 社区中。
+						<!--{{ blog.content[:60]|safe }}-->
 					</p>
+					<h6>
+					    <i class="icon-user icon-1x"></i><a href="" title="由{{ blog.author }}发布" style="color: #999">{{ blog.author }}</a>&nbsp;
+					    <i class="icon-folder-open icon-1x"></i><a href="" title="查看{{ blog.catalog }}分类中所有文章" style="color: #999">{{ blog.catalog }}</a>&nbsp;
+					    <i class="icon-tag icon-1x"></i><a href="" title="查看{{ blog.tag }}标签中所有文章" style="color: #999">{{ blog.tag }}</a>&nbsp;
+					    <i class="icon-time icon-1x"></i><scan style="color: #999">{{ blog.create_time }}</scan>&nbsp;
+					    <i class="icon-eye-open icon-1x"></i><scan style="color: #999">阅读N次</scan>&nbsp;
+					    <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ blog.title }}》上的评论" style="color: #999">评论N次</a>&nbsp;
+					</h6>
 				</div>
 			</div>
-			<div class="row clearfix">
-				<div class="col-md-12 column">
-					<h3>
-						h3. 这是一套可视化布局系统.
-					</h3>
-					<p>
-						 <em>Git</em> 是一个分布式的版本控制系统，最初由 <strong>Linus Torvalds</strong> 编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在 <small>Ruby</small> 社区中。
-					</p>
-				</div>
-			</div>
+			</blockquote>
+			<p></p>
+			{% endfor %}
 
 			<!-- 分页 -->
+			<center>
 			<ul class="pagination pagination-lg">
 				<li>
 					 <a href="#">Prev</a>
@@ -190,16 +197,21 @@
 					 <a href="#">Next</a>
 				</li>
 			</ul>
+			</center>
 		</div>
+
 		<!-- 右侧 -->
 		<div class="col-md-4 column">
-			<h3 class="text-success">
-				h3. 这是一套可视化布局系统.
-			</h3>
+            <!-- 关于本站 -->
+		    <h4><scan class="icon-flag icon-1x"> 关于本站</scan></h4>
+			<p class="text-success">
+				这是一套可视化布局系统.
+			</p>
 			<address> <strong>Twitter, Inc.</strong><br /> 795 Folsom Ave, Suite 600<br /> San Francisco, CA 94107<br /> <abbr title="Phone">P:</abbr> (123) 456-7890
 			</address>
 
 			<!-- 标签云 -->
+			<h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 					 <span class="label label-primary">标签<font>42</font></span>
@@ -207,12 +219,41 @@
 					 <span class="label label-warning">标签<font>42</font></span>
 				</div>
 			</div>
-			<!-- 友情链接 -->
+
+			<!-- 友情链接 --><br/>
+			<h4><scan class="icon-link icon-1x"> 友情链接</scan></h4>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 					 <button type="button" class="btn btn-default btn-link">按钮</button>
 				</div>
 			</div>
+
+            <!-- 博客信息 -->
+			<h4><scan class="icon-info-sign icon-1x"> 博客统计</scan></h4>
+			<div class="panel-group" id="panel-579972">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						 <a class="panel-title" data-toggle="collapse" data-parent="#panel-579972" href="#panel-element-612038">文章数据</a>
+					</div>
+					<div id="panel-element-612038" class="panel-collapse in">
+						<div class="panel-body">
+							Anim pariatur cliche...1<br/>
+							Anim pariatur cliche...2<br/>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-579972" href="#panel-element-266807">用户数据</a>
+					</div>
+					<div id="panel-element-266807" class="panel-collapse collapse">
+						<div class="panel-body">
+							Anim pariatur cliche...1
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</div>
 
@@ -235,5 +276,23 @@
 <script src="{{ url_for('front.static', filename='js/jquery-3.1.0.min.js') }}"></script>
 <script src="{{ url_for('front.static', filename='js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('front.static', filename='layer/layer.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    dropdownOpen();//调用
+});
+/**
+ * 鼠标划过就展开子菜单，免得需要点击才能展开
+ */
+function dropdownOpen() {
+
+    var $dropdownLi = $('li.dropdown');
+
+    $dropdownLi.mouseover(function() {
+        $(this).addClass('open');
+    }).mouseout(function() {
+        $(this).removeClass('open');
+    });
+}
+</script>
 </body>
 </html>

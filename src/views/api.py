@@ -291,13 +291,12 @@ class Blog(Resource):
 
 class Misc(Resource):
 
-    """
-    设置->
-    推荐文章: Recommended articles 
-    置顶文章: Sticky articles 
-    """
-
     def post(self):
+        """
+        设置->
+        推荐文章: Recommended articles 
+        置顶文章: Sticky articles 
+        """
         res    = {"url": request.url, "msg": None, "success": False, "code": 0}
         blogId = request.args.get("blogId")
         action = request.args.get("action")
@@ -481,8 +480,30 @@ class User(Resource):
         logger.info(res)
         return res
 
+class Sys(Resource):
+
+    def get(self):
+        "查询系统数据"
+
+        res   = {"code": 200, "msg": None, "data": None}
+        query = request.args.get("q", request.args.get("query", None))
+
+        if query == "notice":
+            sql = "SELECT msg FROM sys_notice"
+            try:
+                data = mysql.query(sql)
+                logger.info("query notice data with sql: " + sql)
+            except Exception,e:
+                logger.error(e)
+            else:
+                res.update(data=data)
+
+        logger.info(res)
+        return res
+
 api_blueprint = Blueprint(__name__, __name__)
 api = Api(api_blueprint)
 api.add_resource(Blog, '/blog', '/blog/', endpoint='blog')
 api.add_resource(Misc, '/misc', '/misc/', endpoint='misc')
 api.add_resource(User, '/user', '/user/', endpoint='user')
+api.add_resource(Sys, '/sys', '/sys/', endpoint='sys')

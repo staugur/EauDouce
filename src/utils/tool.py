@@ -4,10 +4,9 @@ import re, requests, hashlib, datetime, random
 from uuid import uuid4
 from log import Syslog
 from base64 import b32encode
-from config import SSO, MYSQL
+from config import SSO
 from functools import wraps
 from flask import g, request, redirect, url_for
-from torndb import Connection
 
 ip_pat          = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
 mail_pat        = re.compile(r"([0-9a-zA-Z\_*\.*\-*]+)@([a-zA-Z0-9\-*\_*\.*]+)\.([a-zA-Z]+$)")
@@ -17,7 +16,6 @@ logger          = Syslog.getLogger()
 md5             = lambda pwd:hashlib.md5(pwd).hexdigest()
 gen_token       = lambda n=32:b32encode(uuid4().hex)[:n]
 gen_requestId   = lambda :str(uuid4())
-gen_fingerprint = lambda n=16,s=2: ":".join([ "".join(random.sample("0123456789abcdef",s)) for i in range(0, n) ])
 get_today       = lambda :datetime.datetime.now().strftime("%Y-%m-%d")
 gen_rnd_filename= lambda :"%s%s" %(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), str(random.randrange(1000, 10000)))
 
@@ -61,13 +59,5 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-mysql = Connection(
-                    host     = "%s:%s" %(ParseMySQL(MYSQL).get('Host'), ParseMySQL(MYSQL).get('Port', 3306)),
-                    database = ParseMySQL(MYSQL).get('Database'),
-                    user     = ParseMySQL(MYSQL).get('User'),
-                    password = ParseMySQL(MYSQL).get('Password'),
-                    time_zone= ParseMySQL(MYSQL).get('Timezone','+8:00'),
-                    charset  = ParseMySQL(MYSQL).get('Charset', 'utf8'),
-                    connect_timeout=3,
-                    max_idle_time=2)
+
 
