@@ -21,70 +21,91 @@ class ApiManager(object):
                     max_idle_time=2)
 
     def get_sources_data(self, sources, sort="desc", limit=None):
-        "查询原创数据"
+        "查询原创、转载、翻译文章"
+        res   = {"msg": None, "data": [], "code": -0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""
+
         if sources:
-            if sources.lower()[:3] == "1":
+            if sources == "1":
                 sources = '原创'
-            elif sources.lower()[:3] == "2":
+            elif sources == "2":
                 sources = '转载'
-            elif sources.lower()[:3] == "3":
+            elif sources == "3":
                 sources = '翻译'
             #Original reproduced translation
 
-            #sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog WHERE sources='%s' ORDER BY id %s %s" %(get_sources_data, sort, LIMIT)
-            sql = "SELECT id,title,sources FROM blog_article WHERE sources='%s' ORDER BY id %s %s" %(get_sources_data, sort, LIMIT)
-            logger.info("SELECT sources data SQL: %s" %sql)
+            sql = "SELECT id,title,sources FROM blog_article WHERE sources='%s' ORDER BY id %s %s" %(sources, sort, LIMIT)
+            logger.info("query sources data SQL: {}".format(sql))
             try:
-                data = mysql.query(sql)
-                logger.info(data)
+                data = self.mysql.query(sql)
             except Exception,e:
                 logger.error(e, exc_info=True)
-                res.update(data=[], msg="Sources data query fail", code=4)
+                res.update(msg="Sources data query fail", code=1000.1)
             else:
                 res.update(data=data)
-            logger.info(res)
-            return res
-    #####
 
-        if get_recommend_data:
-            sql = "SELECT id,title,create_time,update_time,recommend FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
-            logger.info(sql)
-            try:
-                data = mysql.query(sql)
-                logger.debug(data)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Recommend get fail", code=9)
-            else:
-                res.update(data=[ _ for _ in data if _.get("recommend") in ("true", "True", True) ])
-            logger.info(res)
-            return res
+        logger.info(res)
+        return res
 
-        if get_top_data:
-            sql = "SELECT id,title,create_time,update_time,top FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
-            logger.info(sql)
-            try:
-                data = mysql.query(sql)
-                logger.debug(data)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Top get fail", code=10)
-            else:
-                res.update(data=[ _ for _ in data if _.get("top") in ("true", "True", True) ])
-            logger.info(res)
-            return res
+    def get_recommend_data(self, sort="desc", limit=None):
+        "查询推荐文章"
+        res   = {"msg": None, "data": [], "code": -0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""
 
-        if get_tags_data:
-            sql = "SELECT id,title,tag FROM blog_article ORDER BY id " + sort
-            data = []
-            for _ in mysql.query(sql):
+        sql = "SELECT id,title,create_time,update_time,recommend FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
+        logger.info("query recommend data SQL: {}".format(sql))
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="Recommend data query fail", code=1000.2)
+        else:
+            res.update(data=[ _ for _ in data if _.get("recommend") in ("true", "True", True) ])
+
+        logger.info(res)
+        return res
+
+    def get_top_data(self, sort="desc", limit=None):
+        "查询置顶文章"
+        res   = {"msg": None, "data": [], "code": -0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""
+
+        sql = "SELECT id,title,create_time,update_time,top FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
+        logger.info("query top data SQL: {}".format(sql))
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="Top data query fail", code=1000.3)
+        else:
+            res.update(data=[ _ for _ in data if _.get("top") in ("true", "True", True) ])
+
+        logger.info(res)
+        return res
+
+    def get_tag_data(self, tag, sort="desc"):
+        "查询某个tag的文章"
+        res   = {"msg": None, "data": [], "code": -0}
+
+        sql = "SELECT id,title,tag FROM blog_article ORDER BY id {}".format(sort)
+        logger.info("query tag data SQL: {}".format(sql))
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="Tag data query fail", code=1000.4)
+        else:
+            tagData = []
+            for _ in data:
                 #if get_tags_data.decode('utf-8') in _.get('tag').split():
-                if get_tags_data in _.get('tag').split():
-                    data.append(_)
-            res.update(data=data)
-            logger.info(res)
-            return res
+                if tag in _.get('tag').split():
+                    tagData.append(_)
+            res.update(data=tagData)
 
+        logger.info(res)
+        return res
+
+'''
         if get_tags_list:
             sql  = "SELECT tag FROM blog_article"
             data = mysql.query(sql)
@@ -269,6 +290,7 @@ class ApiManager(object):
                 res = {"code": 7, "success": False, "msg": "blog form error."}
         logger.info(res)
         return res
+'''
 
 class Misc(Resource):
 

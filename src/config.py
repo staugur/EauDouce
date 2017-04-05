@@ -35,3 +35,18 @@ SSO={
 }
 
 MYSQL=os.getenv("eaudouce_MYSQL", "mysql://host:port:user:password:database?charset=&timezone=")
+
+
+REDIS={
+
+    "SystemIdentification": getenv("BlueSky_REDIS_SID", 0),
+    #Sid that uniquely identifies cluster nodes
+
+    "ClusterUniqueIdentificationKey": getenv("BlueSky_REDIS_CUIK", "bluesky_aliyun"),
+    #Uniquely identifies clusters of Key
+
+    "Connection": getenv("BlueSky_REDIS_Connection", "redis://ip:port:password")
+    #Support redis single or cluster.
+    #The single format is redis://ip:port:password;
+    #The cluster format is redis_cluster://ip:port,ip2:port,......,ipn:port;
+}
