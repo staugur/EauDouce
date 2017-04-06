@@ -5,8 +5,9 @@ from flask import Flask, request, g, jsonify, redirect, make_response, url_for
 from config import GLOBAL, SSO
 from utils.tool import logger, isLogged_in, md5, login_required
 from urllib import urlencode
+from libs.api import ApiManager
 from views.front import front_blueprint
-from views.api import api_blueprint
+#from views.api import api_blueprint
 
 __author__  = 'Mr.tao'
 __email__   = 'staugur@saintic.com'
@@ -16,8 +17,9 @@ __org__     = 'SaintIC'
 __version__ = '0.0.1'
 
 app = Flask(__name__)
+api = ApiManager()
 app.register_blueprint(front_blueprint, url_prefix="/blog")
-app.register_blueprint(api_blueprint, url_prefix="/api")
+#app.register_blueprint(api_blueprint, url_prefix="/api")
 
 @app.before_request
 def before_request():
@@ -28,6 +30,7 @@ def before_request():
     g.signin    = isLogged_in('.'.join([ g.username, g.expires, g.sessionId ]))
     g.sysInfo   = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__}
     app.logger.info(app.url_map)
+    app.logger.debug(dir(api))
 
 @app.after_request
 def after_request(response):

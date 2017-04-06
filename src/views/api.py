@@ -4,11 +4,7 @@ import time
 from torndb import IntegrityError
 from flask import request, g, Blueprint
 from flask_restful import Api, Resource
-from utils.tool import logger, mysql, md5, mail_pat, user_pat, get_today, isLogged_in
-
-RegisteredUser = lambda :[ _.get("lauth_username") for _ in mysql.query("SELECT lauth_username FROM user_lauth") if _.get("lauth_username") ]
-RegisteredUserInfo = lambda username:mysql.get("SELECT lauth_username, lauth_password FROM user_lauth WHERE lauth_username=%s", username)
-
+from utils.tool import logger
 
 class Blog(Resource):
 
