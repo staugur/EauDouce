@@ -11,10 +11,10 @@ class BaseApiManager(object):
 
     def __init__(self):
         self.mysql = Connection(
-                    host     = "%s:%s" %(ParseMySQL(MYSQL).get('Host'), ParseMySQL(MYSQL).get('Port', 3306)),
-                    database = ParseMySQL(MYSQL).get('Database'),
-                    user     = ParseMySQL(MYSQL).get('User'),
+                    host     = "%s:%s" %(ParseMySQL(MYSQL).get('Host', '127.0.0.1'), ParseMySQL(MYSQL).get('Port', 3306)),
+                    user     = ParseMySQL(MYSQL).get('User', 'root'),
                     password = ParseMySQL(MYSQL).get('Password'),
+                    database = ParseMySQL(MYSQL).get('Database'),
                     time_zone= ParseMySQL(MYSQL).get('Timezone','+8:00'),
                     charset  = ParseMySQL(MYSQL).get('Charset', 'utf8'),
                     connect_timeout=3,
