@@ -151,7 +151,7 @@
 
             <!-- 文章列表缩略 -->
             <h3><scan class="icon-book icon-large"> 最新文章</scan></h3>
-            {% for blog in g.api.blog_get_single_index(limit=request.args.get("limit", "10")).data %}
+            {% for blog in g.api.blog_get_single_index(limit=request.args.get("limit", "6")).data %}
             <blockquote>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
@@ -232,7 +232,7 @@
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 			        {% for d in g.api.blog_get_tags_list().data %}
-					<span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span>
+					<a href="#"><span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span></a>
 					{% endfor %}
 				</div>
 			</div>

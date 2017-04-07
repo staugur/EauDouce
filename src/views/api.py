@@ -38,194 +38,39 @@ class Blog(Resource):
         get_recommend_data=True if request.args.get("get_recommend_data") in ("true", "True", True) else False
         get_top_data     = True if request.args.get("get_top_data") in ("true", "True", True) else False
 
-        if get_sources_data:
-            if get_sources_data.lower()[:3] == "ori":
-                get_sources_data = '原创'
-            elif get_sources_data.lower()[:3] == "rep":
-                get_sources_data = '转载'
-            elif get_sources_data.lower()[:3] == "tra":
-                get_sources_data = '翻译'
-            #Original reproduced translation
-
         if get_recommend_data:
-            sql = "SELECT id,title,create_time,update_time,recommend FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
-            logger.info(sql)
-            try:
-                data = mysql.query(sql)
-                logger.debug(data)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Recommend get fail", code=9)
-            else:
-                res.update(data=[ _ for _ in data if _.get("recommend") in ("true", "True", True) ])
-            logger.info(res)
             return res
 
         if get_top_data:
-            sql = "SELECT id,title,create_time,update_time,top FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
-            logger.info(sql)
-            try:
-                data = mysql.query(sql)
-                logger.debug(data)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Top get fail", code=10)
-            else:
-                res.update(data=[ _ for _ in data if _.get("top") in ("true", "True", True) ])
-            logger.info(res)
             return res
 
         if get_tags_data:
-            sql = "SELECT id,title,tag FROM blog_article ORDER BY id " + sort
-            data = []
-            for _ in mysql.query(sql):
-                #if get_tags_data.decode('utf-8') in _.get('tag').split():
-                if get_tags_data in _.get('tag').split():
-                    data.append(_)
-            res.update(data=data)
-            logger.info(res)
             return res
 
         if get_tags_list:
-            sql  = "SELECT tag FROM blog_article"
-            data = mysql.query(sql)
-            tags = []
-            for _ in data:
-                if _.get('tag'):
-                    logger.debug(_.get("tag").split())
-                    tags += _.get("tag").split()
-            res.update(data=list(set(tags)))
-            logger.info(res)
-            return res
+            return g.api.blog_get_tags_list()
 
         if get_index_only:
-            sql = "SELECT id,title,create_time,update_time,tag FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
-            logger.info("SELECT title only SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Only title query fail", code=7)
-            else:
-                res.update(data=data)
-            logger.info(res)
             return res
 
         if get_update_data:
-            sql = "SELECT id,title,create_time,update_time,tag FROM blog_article WHERE update_time IS NOT NULL ORDER BY update_time %s %s" %(sort, LIMIT)
-            logger.info("SELECT update_time data SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Update data query fail", code=8)
-            else:
-                res.update(data=data)
-            logger.info(res)
             return res
 
         if get_catalog_list:
-            #sql = "SELECT GROUP_CONCAT(catalog) FROM blog GROUP BY catalog"
-            sql = 'SELECT catalog FROM blog_article'
-            logger.info("SELECT catalog list SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-                logger.info(data)
-                data = list(set([ v for _ in data for v in _.values() if v ]))
-                #data = [ v.split(",")[0] for i in data for v in i.values() if v and v.split(",")[0] ]
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Catalog query fail", code=1)
-            else:
-                res.update(data=data)
-            logger.info(res)
             return res
 
         if get_sources_list:
-            #sql = "SELECT GROUP_CONCAT(sources) FROM blog GROUP BY sources"
-            sql = 'SELECT sources FROM blog_article'
-            logger.info("SELECT sources list SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-                logger.info(data)
-                #data = [ v.split(",")[0] for i in data for v in i.values() if v and v.split(",")[0] ]
-                data = list(set([ v for _ in data for v in _.values() if v ]))
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Sources query fail", code=2)
-            else:
-                res.update(data=data)
-            logger.info(res)
             return res
 
         if get_catalog_data:
-            #sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog WHERE catalog='%s' ORDER BY id %s %s" %(get_catalog_data, sort, LIMIT)
-            sql = "SELECT id,title,catalog FROM blog_article WHERE catalog='%s' ORDER BY id %s %s" %(get_catalog_data, sort, LIMIT)
-            logger.info("SELECT catalog data SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-                logger.info(data)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Catalog data query fail", code=3)
-            else:
-                res.update(data=data)
-            logger.info(res)
             return res
 
         if get_sources_data:
-            #sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog WHERE sources='%s' ORDER BY id %s %s" %(get_sources_data, sort, LIMIT)
-            sql = "SELECT id,title,sources FROM blog_article WHERE sources='%s' ORDER BY id %s %s" %(get_sources_data, sort, LIMIT)
-            logger.info("SELECT sources data SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-                logger.info(data)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Sources data query fail", code=4)
-            else:
-                res.update(data=data)
-            logger.info(res)
             return res
 
         if get_user_blog:
-            sql = "SELECT id,title,create_time,tag,catalog,sources,author from blog_article WHERE author='%s' ORDER BY id %s %s" %(get_user_blog, sort, LIMIT)
-            logger.info("SELECT user blog SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="User blog data query fail", code=7)
-            else:
-                res.update(data=data)
-            logger.info(res)
             return res
 
-
-        if blogId:
-            sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article WHERE id=%s" %blogId
-            #sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog ORDER BY id %s %s" %(sort, LIMIT)
-            logger.info({"Blog:get:SQL": sql})
-            try:
-                data = mysql.get(sql)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(msg="get blog error", code=6)
-            else:
-                res.update(data=data)
-
-        elif num:
-            sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
-            logger.info({"Blog:get:SQL": sql})
-            try:
-                data = mysql.query(sql)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(msg="get all blog error", code=6)
-            else:
-                res.update(data=data)
-
-        logger.info(res)
         return res
 
     def post(self):

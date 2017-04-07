@@ -154,9 +154,9 @@ class BlogApiManager(BaseApiManager):
             tags = []
             for _ in data:
                 if _.get('tag'):
-                    for tag in _.get("tag").split():
-                        tags.append({"tag": tag, "color": choice(color)})
-            res.update(data=tags)
+                    tags += _.get("tag").split()
+            data = list(set(tags))
+            res.update(data=[ {"tag": tag, "color": choice(color)} for tag in data ])
 
         logger.info(res)
         return res

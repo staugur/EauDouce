@@ -7,7 +7,7 @@ from utils.tool import logger, isLogged_in, md5, login_required
 from urllib import urlencode
 from libs.api import ApiManager
 from views.front import front_blueprint
-#from views.api import api_blueprint
+from views.api import api_blueprint
 
 __author__  = 'Mr.tao'
 __email__   = 'staugur@saintic.com'
@@ -19,7 +19,7 @@ __version__ = '0.0.1'
 app = Flask(__name__)
 api = ApiManager()
 app.register_blueprint(front_blueprint, url_prefix="/blog")
-#app.register_blueprint(api_blueprint, url_prefix="/api")
+app.register_blueprint(api_blueprint, url_prefix="/api")
 
 @app.before_request
 def before_request():
