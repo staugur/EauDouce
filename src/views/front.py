@@ -10,32 +10,10 @@ from flask import Blueprint, g, render_template, request, redirect, url_for, mak
 
 front_blueprint = Blueprint("front", __name__, template_folder="templates", static_folder='static')
 
-data = [{
-         "author": "admin",
-         "catalog": "Interest.blog",
-         "content": u"           <p></p><p>           </p><h2><p><b>我是干什么的？</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">SA，DevOpser</code></pre><p><b>这个站点为什么存在？</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">记录技术点滴，开源项目源码，分享经验与技术。</code></pre><p><b>本站历程：</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">Interest.blog之前，\r\n--&gt;最初的PHP(wordpress、emlog等)\r\n--&gt;GitHub Page\r\n--&gt;Python Flask(saintic/blog-&gt;saintic/Team/Front-&gt;Interest.blog)\r\n如果你有好的文章、想法、经验想与大家分享，或者文章有错误，请及时告诉我，欢迎投稿。</code></pre><p><b>如何联系我？</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">如果还有问题想联系我？比如协同开发项目、谈谈人生聊聊理想啊，OK，我的邮箱是：staugur@saintic.com\r\n或者查看页脚部分的“邮我”按钮，给我们团队发邮件：<span style=\"font-size: 0.8em; color: rgb(17, 17, 17); font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;\">developers@saintic.com。</span></code></pre></h2><h2><p><b>Public：</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">我的GitHub组织代码仓库是--&gt;&gt; https:<span class=\"hljs-regexp\">//gi</span>thub.com/saintic\r\n\r\n我的GitHub私人代码仓库是--&gt;&gt; https:<span class=\"hljs-regexp\">//gi</span>thub.com/staugur\r\n\r\n我的Docker仓库名是staugur--&gt;&gt; docker search staugur\r\n\r\n订阅本站最近更新的文章--&gt;&gt; <a href=\"http://www.saintic.com/blog/200.html\" target=\"_blank\" style=\"font-size: 0.8em; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;\">http://www.saintic.com/blog/200.html</a></code></pre><p>另外如果你想砸死我，可以扫描下面的二维码试试：\r\n</p></h2><h2><img src=\"http://img.saintic.com/interest.blog/blog/5226820977404714.png\" alt=\"22-24-34-alipay\" class=\"\" style=\"font-size: 16px;\"><br></h2>",
-         "create_time": "2016-11-05",
-         "id": 113,
-         "sources": u"原创",
-         "tag": "Interest.blog",
-         "title": u"关于我们",
-         "update_time": "2016-12-08"
-      },
-      {
-         "author": "taochengwei",
-         "catalog": "python",
-         "content": u"           <p></p><p>           </p><h2><p><b>我是干什么的？</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">SA，DevOpser</code></pre><p><b>这个站点为什么存在？</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">记录技术点滴，开源项目源码，分享经验与技术。</code></pre><p><b>本站历程：</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">Interest.blog之前，\r\n--&gt;最初的PHP(wordpress、emlog等)\r\n--&gt;GitHub Page\r\n--&gt;Python Flask(saintic/blog-&gt;saintic/Team/Front-&gt;Interest.blog)\r\n如果你有好的文章、想法、经验想与大家分享，或者文章有错误，请及时告诉我，欢迎投稿。</code></pre><p><b>如何联系我？</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">如果还有问题想联系我？比如协同开发项目、谈谈人生聊聊理想啊，OK，我的邮箱是：staugur@saintic.com\r\n或者查看页脚部分的“邮我”按钮，给我们团队发邮件：<span style=\"font-size: 0.8em; color: rgb(17, 17, 17); font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;\">developers@saintic.com。</span></code></pre></h2><h2><p><b>Public：</b></p><pre style=\"max-width: 100%;\"><code class=\"coffeescript hljs\" codemark=\"1\">我的GitHub组织代码仓库是--&gt;&gt; https:<span class=\"hljs-regexp\">//gi</span>thub.com/saintic\r\n\r\n我的GitHub私人代码仓库是--&gt;&gt; https:<span class=\"hljs-regexp\">//gi</span>thub.com/staugur\r\n\r\n我的Docker仓库名是staugur--&gt;&gt; docker search staugur\r\n\r\n订阅本站最近更新的文章--&gt;&gt; <a href=\"http://www.saintic.com/blog/200.html\" target=\"_blank\" style=\"font-size: 0.8em; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;\">http://www.saintic.com/blog/200.html</a></code></pre><p>另外如果你想砸死我，可以扫描下面的二维码试试：\r\n</p></h2><h2><img src=\"http://img.saintic.com/interest.blog/blog/5226820977404714.png\" alt=\"22-24-34-alipay\" class=\"\" style=\"font-size: 16px;\"><br></h2>",
-         "create_time": "2016-11-05",
-         "id": 114,
-         "sources": u"原创",
-         "tag": "python",
-         "title": u"这是一篇测试文章",
-         "update_time": "2016-12-08"
-      }]
 
 @front_blueprint.route("/")
 def index():
-    return render_template("index.html", blogData=data)
+    return render_template("index.html")
 
 '''
 @front_page.route('/blog/<int:bid>.html')

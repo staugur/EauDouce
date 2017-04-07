@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}SaintIC EauDouce - 清水蓝天博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 引入 Bootstrap -->
     <link href="{{ url_for('front.static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
@@ -25,7 +25,7 @@
 		<div class="col-md-12 column">
 			<nav class="navbar navbar-default navbar-inverse" role="navigation">
 				<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}">EauDouce&nbsp;<i class="icon-home icon-1x"></i></a>
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}" title="清水蓝天">EauDouce&nbsp;<i class="icon-home icon-1x"></i></a>
 				</div>
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -36,9 +36,9 @@
 						<li class="dropdown">
 							<a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="icon-folder-open icon-1x"></i></a>
 							<ul class="dropdown-menu">
-								<li><a href="#">分类1</a></li>
-								<li><a href="#">分类2</a></li>
-								<li><a href="#">分类3</a></li>
+							    {% for catalog in g.api.blog_get_catalog_list().data %}
+								<li><a href="#">{{ catalog }}</a></li>
+							    {% endfor %}
 								<li class="divider"></li>
 								<li><a href="#">原创</a></li>
 								<li><a href="#">转载</a></li>
@@ -68,8 +68,9 @@
 						{% endif %}
 					</ul>
 				</div>
-				
 			</nav>
+
+            <!--首页轮番图-->
 			<div class="carousel slide" id="carousel-394119">
 				<ol class="carousel-indicators">
 					<li data-slide-to="0" data-target="#carousel-394119">
@@ -119,10 +120,10 @@
 	</div>
 
 	<!-- 公告 -->
-    <marquee direction="right" scrollamount="5" bgcolor="#FFFFFF">
-        <i class="icon-bullhorn"></i>&nbsp;做人要厚道&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <i class="icon-bullhorn"></i>&nbsp;做人要厚道&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <i class="icon-bullhorn"></i>&nbsp;做人要厚道&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
+        {% for msg in g.api.get_sys_notice().data %}
+        <i class="icon-bullhorn"></i>&nbsp;{{ msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {% endfor %}
     </marquee>
 
 	<div class="row clearfix">
@@ -140,31 +141,47 @@
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 				    <h3><scan class="icon-fire icon-large"> 置顶文章</scan></h3>
-			        <ol>
-				        <li>Lorem ipsum dolor sit amet</li>
+				    <ol>
+                    {% for blog in g.api.blog_get_top_data().data %}
+			            <li><a href="{{ blog.id }}.html">{{ blog.title }}</a></li>
+                    {% endfor %}
                     </ol>
 				</div>
 			</div>
 
             <!-- 文章列表缩略 -->
             <h3><scan class="icon-book icon-large"> 最新文章</scan></h3>
-            {% for blog in blogData %}
+            {% for blog in g.api.blog_get_single_index(limit=request.args.get("limit", "10")).data %}
             <blockquote>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
-					<h5 class="text-left text-success">
-						<a href="/blog/{{ blog.id }}.html" style="color: red; font-weight: bold;">{{ blog.title }}</a>
-					</h5>
+					<h4 class="text-left text-success">
+						<a href="/blog/{{ blog.id }}.html" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
+					</h4>
 					<p class="text-left text-info">
-						<!--{{ blog.content[:60]|safe }}-->
 					</p>
 					<h6>
-					    <i class="icon-user icon-1x"></i><a href="" title="由{{ blog.author }}发布" style="color: #999">{{ blog.author }}</a>&nbsp;
-					    <i class="icon-folder-open icon-1x"></i><a href="" title="查看{{ blog.catalog }}分类中所有文章" style="color: #999">{{ blog.catalog }}</a>&nbsp;
-					    <i class="icon-tag icon-1x"></i><a href="" title="查看{{ blog.tag }}标签中所有文章" style="color: #999">{{ blog.tag }}</a>&nbsp;
-					    <i class="icon-time icon-1x"></i><scan style="color: #999">{{ blog.create_time }}</scan>&nbsp;
-					    <i class="icon-eye-open icon-1x"></i><scan style="color: #999">阅读N次</scan>&nbsp;
-					    <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ blog.title }}》上的评论" style="color: #999">评论N次</a>&nbsp;
+					    {% if blog.author %}
+					    <i class="icon-user icon-1x"></i><a href="" title="由{{ blog.author }}发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
+					    {% endif %}
+
+                        {% if blog.catalog %}
+					    <i class="icon-folder-open icon-1x"></i><a href="" title="查看{{ blog.catalog }}分类中所有文章" style="color: #999">&nbsp;{{ blog.catalog }}</a>&nbsp;
+					    {% endif %}
+
+                        {% if blog.tag %}
+					    <i class="icon-tag icon-1x"></i>
+					    {% for tag in blog.tag.split() %}
+					        <a href="" title="查看{{ blog.tag }}标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
+					    {% endfor %}
+					    {% endif %}
+
+                        {% if blog.create_time %}
+					    <i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;
+					    {% endif %}
+
+					    <i class="icon-eye-open icon-1x"></i><scan style="color: #999">&nbsp;阅读N次</scan>&nbsp;
+					    <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ blog.title }}》上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;
 					</h6>
 				</div>
 			</div>
@@ -214,21 +231,14 @@
 			<h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
-					 <span class="label label-primary">标签<font>42</font></span>
-					 <span class="label label-success">标签<font>42</font></span>
-					 <span class="label label-warning">标签<font>42</font></span>
-				</div>
-			</div>
-
-			<!-- 友情链接 --><br/>
-			<h4><scan class="icon-link icon-1x"> 友情链接</scan></h4>
-			<div class="row clearfix">
-				<div class="col-md-12 column">
-					 <button type="button" class="btn btn-default btn-link">按钮</button>
+			        {% for d in g.api.blog_get_tags_list().data %}
+					<span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span>
+					{% endfor %}
 				</div>
 			</div>
 
             <!-- 博客信息 -->
+            {% set statistics = g.api.blog_get_statistics() %}
 			<h4><scan class="icon-info-sign icon-1x"> 博客统计</scan></h4>
 			<div class="panel-group" id="panel-579972">
 				<div class="panel panel-success">
@@ -237,20 +247,33 @@
 					</div>
 					<div id="panel-element-612038" class="panel-collapse in">
 						<div class="panel-body">
-							Anim pariatur cliche...1<br/>
-							Anim pariatur cliche...2<br/>
+							文章总数：{{ statistics.ArticleTotal }}篇<br/>
+							分类总数：{{ statistics.CatalogTotal }}个<br/>
+							标签总数：{{ statistics.TagTotal }}个<br/>
+							<!--评论总数：{{ statistics.CommentTotal }}条<br/>-->
 						</div>
 					</div>
 				</div>
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-579972" href="#panel-element-266807">用户数据</a>
+						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-579972" href="#panel-element-266807">访问数据</a>
 					</div>
 					<div id="panel-element-266807" class="panel-collapse collapse">
 						<div class="panel-body">
-							Anim pariatur cliche...1
+							<p class="bg-primary">{{ request.headers.get("User-Agent") }}</p>
+							<p class="bg-info">访问地址: {{ request.headers.get('X-Real-Ip', request.remote_addr) }}</p>
+							<p class="bg-danger">当前路径: {{ request.url }}</p>
+							<p class="bg-success">当前时间: <span id="localtime"></span></p>
 						</div>
 					</div>
+				</div>
+			</div>
+
+			<!-- 友情链接 -->
+			<h4><scan class="icon-link icon-1x"> 友情链接</scan></h4>
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					 <button type="button" class="btn btn-default btn-link">按钮</button>
 				</div>
 			</div>
 
@@ -280,19 +303,59 @@
 $(document).ready(function(){
     dropdownOpen();//调用
 });
-/**
- * 鼠标划过就展开子菜单，免得需要点击才能展开
- */
+
 function dropdownOpen() {
-
+    /**
+    * 鼠标划过就展开子菜单，免得需要点击才能展开
+    */
     var $dropdownLi = $('li.dropdown');
-
     $dropdownLi.mouseover(function() {
         $(this).addClass('open');
     }).mouseout(function() {
         $(this).removeClass('open');
     });
 }
-</script>
+
+function showLocale(objD)  
+{  
+    var str,colorhead,colorfoot;  
+    var yy = objD.getYear();  
+    if(yy<1900) yy = yy+1900;  
+    var MM = objD.getMonth()+1;  
+    if(MM<10) MM = '0' + MM;  
+    var dd = objD.getDate();  
+    if(dd<10) dd = '0' + dd;  
+    var hh = objD.getHours();  
+    if(hh<10) hh = '0' + hh;  
+    var mm = objD.getMinutes();  
+    if(mm<10) mm = '0' + mm;  
+    var ss = objD.getSeconds();  
+    if(ss<10) ss = '0' + ss;  
+    var ww = objD.getDay();  
+    if  ( ww==0 )  colorhead="<font color=\"red\">";  
+    if  ( ww > 0 && ww < 6 )  colorhead="<font color=\"red\">";  
+    if  ( ww==6 )  colorhead="<font color=\"red\">";  
+    if  (ww==0)  ww="星期日";  
+    if  (ww==1)  ww="星期一";  
+    if  (ww==2)  ww="星期二";  
+    if  (ww==3)  ww="星期三";  
+    if  (ww==4)  ww="星期四";  
+    if  (ww==5)  ww="星期五";  
+    if  (ww==6)  ww="星期六";  
+    colorfoot="</font>"  
+    str = colorhead + yy + "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss + "  " + ww + colorfoot;  
+    return(str);  
+};  
+
+function tick()  
+{  
+    var today;  
+    today = new Date();  
+    document.getElementById("localtime").innerHTML = showLocale(today);  
+    window.setTimeout("tick()", 1000);  
+};  
+tick();  
+</script>  
+
 </body>
 </html>

@@ -29,8 +29,9 @@ def before_request():
     g.expires   = request.cookies.get("time", "")
     g.signin    = isLogged_in('.'.join([ g.username, g.expires, g.sessionId ]))
     g.sysInfo   = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__}
+    g.api       = api
     app.logger.info(app.url_map)
-    app.logger.debug(dir(api))
+    app.logger.debug(dir(g.api))
 
 @app.after_request
 def after_request(response):

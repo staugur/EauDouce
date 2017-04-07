@@ -1,9 +1,9 @@
 # -*- coding: utf8 -*-
 
 from config import MYSQL
+from random import choice
 from torndb import IntegrityError, Connection
-from utils.tool import logger, ParseMySQL
-
+from utils.tool import logger, ParseMySQL, get_today
 
 
 class BaseApiManager(object):
@@ -50,13 +50,13 @@ class BaseApiManager(object):
         else:
             return data
 
-class BlogApiManager(BaseApiManager):
 
+class BlogApiManager(BaseApiManager):
 
     def blog_get_sources_data(self, sources, sort="desc", limit=None):
         "查询原创、转载、翻译文章"
 
-        res   = {"msg": None, "data": [], "code": -0}
+        res   = {"msg": None, "data": [], "code": 0}
         LIMIT = "LIMIT " + str(limit) if limit else ""
         if sources:
             if sources == "1":
@@ -82,7 +82,7 @@ class BlogApiManager(BaseApiManager):
 
     def blog_get_recommend_data(self, sort="desc", limit=None):
         "查询推荐文章"
-        res   = {"msg": None, "data": [], "code": -0}
+        res   = {"msg": None, "data": [], "code": 0}
         LIMIT = "LIMIT " + str(limit) if limit else ""
         sql   = "SELECT id,title,create_time,update_time,recommend FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
         logger.info("query recommend data SQL: {}".format(sql))
@@ -100,7 +100,7 @@ class BlogApiManager(BaseApiManager):
     def blog_get_top_data(self, sort="desc", limit=None):
         "查询置顶文章"
 
-        res   = {"msg": None, "data": [], "code": -0}
+        res   = {"msg": None, "data": [], "code": 0}
         LIMIT = "LIMIT " + str(limit) if limit else ""
         sql   = "SELECT id,title,create_time,update_time,top FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
         logger.info("query top data SQL: {}".format(sql))
@@ -118,7 +118,7 @@ class BlogApiManager(BaseApiManager):
     def blog_get_tag_data(self, tag, sort="desc"):
         "查询某个tag的文章"
 
-        res = {"msg": None, "data": [], "code": -0}
+        res = {"msg": None, "data": [], "code": 0}
         sql = "SELECT id,title,tag FROM blog_article ORDER BY id {}".format(sort)
         logger.info("query tag data SQL: {}".format(sql))
         try:
@@ -140,11 +140,13 @@ class BlogApiManager(BaseApiManager):
     def blog_get_tags_list(self):
         "查询所有tag列表"
 
-        res  = {"msg": None, "data": [], "code": -0}
-        sql  = "SELECT tag FROM blog_article"
+        res   = {"msg": None, "data": [], "code": 0}
+        sql   = "SELECT tag FROM blog_article"
+        color = ["default", "primary", "success", "info", "warning", "danger"] 
+        logger.info("query tag list SQL: "+ sql)
 
         try:
-            data = mysql.query(sql)
+            data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
             res.update(msg="Tag list query fail", code=1000.5)
@@ -152,9 +154,9 @@ class BlogApiManager(BaseApiManager):
             tags = []
             for _ in data:
                 if _.get('tag'):
-                    logger.debug(_.get("tag").split())
-                    tags += _.get("tag").split()
-            res.update(data=list(set(tags)))
+                    for tag in _.get("tag").split():
+                        tags.append({"tag": tag, "color": choice(color)})
+            res.update(data=tags)
 
         logger.info(res)
         return res
@@ -162,9 +164,9 @@ class BlogApiManager(BaseApiManager):
     def blog_get_single_index(self, sort="desc", limit=None):
         "获取所有文章简单数据索引"
 
-        res   = {"msg": None, "data": [], "code": -0}
+        res   = {"msg": None, "data": [], "code": 0}
         LIMIT = "LIMIT " + str(limit) if limit else ""
-        sql   = "SELECT id,title,create_time,update_time,tag FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
+        sql   = "SELECT id,title,create_time,update_time,tag,author,catalog FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
         logger.info("query single index SQL: %s" %sql)
         try:
             data = self.mysql.query(sql)
@@ -178,9 +180,9 @@ class BlogApiManager(BaseApiManager):
         return res
 
     def blog_get_update_data(self, sort="desc", limit=None):
-        "查询更新文章"
+        "查询更新过的文章"
 
-        res   = {"msg": None, "data": [], "code": -0}
+        res   = {"msg": None, "data": [], "code": 0}
         LIMIT = "LIMIT " + str(limit) if limit else ""      
         sql   = "SELECT id,title,create_time,update_time,tag FROM blog_article WHERE update_time IS NOT NULL ORDER BY update_time %s %s" %(sort, LIMIT)
         logger.info("query update_time data SQL: %s" %sql)
@@ -197,7 +199,8 @@ class BlogApiManager(BaseApiManager):
 
     def blog_get_catalog_list(self):
         "获取分类目录列表"
-        res = {"msg": None, "data": [], "code": -0}
+
+        res = {"msg": None, "data": [], "code": 0}
         sql = 'SELECT catalog FROM blog_catalog'
         logger.info("query catalog list SQL: %s" %sql)
         try:
@@ -212,138 +215,150 @@ class BlogApiManager(BaseApiManager):
 
         logger.info(res)
         return res
-'''
-        if get_sources_list:
-            #sql = "SELECT GROUP_CONCAT(sources) FROM blog GROUP BY sources"
-            sql = 'SELECT sources FROM blog_article'
-            logger.info("SELECT sources list SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-                logger.info(data)
-                #data = [ v.split(",")[0] for i in data for v in i.values() if v and v.split(",")[0] ]
-                data = list(set([ v for _ in data for v in _.values() if v ]))
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Sources query fail", code=2)
-            else:
-                res.update(data=data)
-            logger.info(res)
-            return res
 
-        if get_catalog_data:
-            #sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog WHERE catalog='%s' ORDER BY id %s %s" %(get_catalog_data, sort, LIMIT)
-            sql = "SELECT id,title,catalog FROM blog_article WHERE catalog='%s' ORDER BY id %s %s" %(get_catalog_data, sort, LIMIT)
-            logger.info("SELECT catalog data SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-                logger.info(data)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="Catalog data query fail", code=3)
-            else:
-                res.update(data=data)
-            logger.info(res)
-            return res
+    def blog_get_catalog_data(self, catalog, sort="desc", limit=None):
+        "查询分类目录数据"
 
-
-        if get_user_blog:
-            sql = "SELECT id,title,create_time,tag,catalog,sources,author from blog_article WHERE author='%s' ORDER BY id %s %s" %(get_user_blog, sort, LIMIT)
-            logger.info("SELECT user blog SQL: %s" %sql)
-            try:
-                data = mysql.query(sql)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(data=[], msg="User blog data query fail", code=7)
-            else:
-                res.update(data=data)
-            logger.info(res)
-            return res
-
-
-        if blogId:
-            sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article WHERE id=%s" %blogId
-            #sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog ORDER BY id %s %s" %(sort, LIMIT)
-            logger.info({"Blog:get:SQL": sql})
-            try:
-                data = mysql.get(sql)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(msg="get blog error", code=6)
-            else:
-                res.update(data=data)
-
-        elif num:
-            sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
-            logger.info({"Blog:get:SQL": sql})
-            try:
-                data = mysql.query(sql)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(msg="get all blog error", code=6)
-            else:
-                res.update(data=data)
+        res   = {"msg": None, "data": [], "code": 0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""
+        sql   = "SELECT id,title,catalog FROM blog_article WHERE catalog='%s' ORDER BY id %s %s" %(catalog, sort, LIMIT)
+        logger.info("query catalog data SQL: %s" %sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="Catalog data query fail", code=1000.9)
+        else:
+            res.update(data=data)
 
         logger.info(res)
         return res
 
-    def post(self):
-        """ 创建博客文章接口 """
-        #get blog form informations.
-        blog_title   = request.form.get('title')
-        blog_content = request.form.get('content')
+    def blog_get_user_blog(self, user, sort="desc", limit=None):
+        "查询某用户的博客"
+
+        res   = {"msg": None, "data": [], "code": 0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""
+        sql   = "SELECT id,title,create_time,update_time,tag,catalog,sources,author from blog_article WHERE author='%s' ORDER BY id %s %s" %(user, sort, LIMIT)
+        logger.info("query user blog SQL: %s" %sql)
+        try:
+            data = mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update( msg="User blog data query fail", code=1000.10)
+        else:
+            res.update(data=data)
+        
+        logger.info(res)
+        return res
+
+    def blog_get_id(self, blogId):
+        "查询某个id的博客数据"
+
+        res = {"msg": None, "data": [], "code": 0}
+        sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article WHERE id=%s" %blogId
+        logger.info("get some id blog SQL: %s" %sql)
+        try:
+            data = self.mysql.get(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="get blog error", code=1000.11)
+        else:
+            res.update(data=data)
+
+        logger.info(res)
+        return res
+
+    def blog_get_all(self, sort="desc", limit=None):
+        "查询所有文章"
+
+        res   = {"msg": None, "data": [], "code": 0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""
+        sql   = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
+        logger.info("query all blog SQL: %s" %sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="get all blog error", code=1000.12)
+        else:
+            res.update(data=data)
+
+        logger.info(res)
+        return res
+
+    def blog_create(self, **kwargs):
+        "创建博客文章接口"
+
+        res          = {"msg": None, "success": False, "code": 0}
+        blog_title   = kwargs.get('title')
+        blog_content = kwargs.get('content')
+        blog_tag     = kwargs.get("tag")
+        blog_catalog = kwargs.get("catalog", "未分类")
+        blog_sources = kwargs.get("sources", "原创")
+        blog_author  = kwargs.get("author", "admin")
         blog_ctime   = get_today()
-        blog_tag     = request.form.get("tag")
-        blog_catalog = request.form.get("catalog", "linux")
-        blog_sources = request.form.get("sources", "原创")
-        blog_author  = request.form.get("author")
-        logger.info("blog_title:%s, blog_content:%s, blog_ctime:%s, blog_tag:%s, blog_catalog:%s, blog_sources:%s, blog_author:%s" %(blog_title, blog_content, blog_ctime, blog_tag, blog_catalog, blog_sources, blog_author))
+
         if blog_title and blog_content and blog_ctime and blog_author:
             sql = 'INSERT INTO blog_article (title,content,create_time,tag,catalog,sources,author) VALUES (%s, %s, %s, %s, %s, %s, %s)'
             logger.info(sql %(blog_title, blog_content, blog_ctime, blog_tag, blog_catalog, blog_sources, blog_author))
             try:
-                blog_id  = mysql.insert(sql, blog_title, blog_content, blog_ctime, blog_tag, blog_catalog, blog_sources, blog_author)
+                blog_id  = self.mysql.insert(sql, blog_title, blog_content, blog_ctime, blog_tag, blog_catalog, blog_sources, blog_author)
             except Exception,e:
                 logger.error(e, exc_info=True)
-                res = {"code": 3, "data": None, "msg": "blog write error."}
+                res.update(msg="Blog article failed to write, please try to resubmit.", code=1000.13)
             else:
-                res = {"code": 0, "data": blog_id, "msg": "blog write success."}
+                res.update(msg="blog write success.", success=True)
         else:
-            res = {"code": 4, "data": None, "msg": "data form error."}
+            res.update(msg="data in wrong format.", code=1000.14)
+
         logger.info(res)
         return res
 
-    def put(self):
-        """ 更新博客文章接口 """
-        blog_title   = request.form.get('title')
-        blog_content = request.form.get('content')
+    def blog_update(self, **kwargs):
+        "更新博客文章接口"
+
+        res          = {"msg": None, "success": False, "code": 0}
+        blog_title   = kwargs.get('title')
+        blog_content = kwargs.get('content')
+        blog_tag     = kwargs.get("tag")
+        blog_catalog = kwargs.get("catalog", "未分类")
+        blog_sources = kwargs.get("sources", "原创")
+        blog_author  = kwargs.get("author", "admin")
+        blog_blogId  = kwargs.get("blogId")
         blog_utime   = get_today()
-        blog_tag     = request.form.get("tag")
-        blog_catalog = request.form.get("catalog", "linux")
-        blog_sources = request.form.get("sources", "原创")
-        blog_author  = request.form.get("author")
-        blog_blogId  = request.form.get("blogId")
-        logger.info("Update blog, blog_title:%s, blog_content:%s, blog_utime:%s, blog_tag:%s, blog_catalog:%s, blog_sources:%s, blog_author:%s, blog_blogId:%s" %(blog_title, blog_content, blog_utime, blog_tag, blog_catalog, blog_sources, blog_author, blog_blogId))
+
         try:
             blog_blogId = int(blog_blogId)
         except ValueError,e:
             logger.error(e, exc_info=True)
-            res = {"code": 5, "msg": "blog form error."}
+            res.update(msg="blogId form error.", code=1000.15)
         else:
             if blog_title and blog_content and blog_utime and blog_author:
-                sql = "UPDATE blog SET title=%s,content=%s,update_time=%s,tag=%s,catalog=%s,sources=%s,author=%s WHERE id=%s"
+                sql = "UPDATE blog_article SET title=%s,content=%s,update_time=%s,tag=%s,catalog=%s,sources=%s,author=%s WHERE id=%s"
                 try:
-                    mysql.update(sql, blog_title, blog_content, blog_utime, blog_tag, blog_catalog, blog_sources, blog_author, blog_blogId)
+                    self.mysql.update(sql, blog_title, blog_content, blog_utime, blog_tag, blog_catalog, blog_sources, blog_author, blog_blogId)
                 except Exception,e:
                     logger.error(e, exc_info=True)
-                    res = {"code": 6, "msg": "blog write error."}
+                    res.update(msg="blog update error.", code=1000.16)
                 else:
-                    res = {"code": 0, "success": True, "msg": None}
+                    res.update(success=True)
             else:
-                res = {"code": 7, "success": False, "msg": "blog form error."}
+                res.update(msg="blog form error.", code=1000.17)
+
         logger.info(res)
         return res
-'''
 
+    def blog_get_statistics(self):
+        "统计数据查询"
+        data = {
+            "ArticleTotal": len(self.blog_get_single_index().get("data")),
+            "CatalogTotal": len(self.blog_get_catalog_list().get("data")),
+            "TagTotal": len(self.blog_get_tags_list().get("data")),
+            "CommentTotal": None,
+        }
+        logger.info(data)
+        return data
 
 class MiscApiManager(BaseApiManager):
 
@@ -538,24 +553,26 @@ class UserApiManager(BaseApiManager):
         logger.info(res)
         return res
 
+    def user_get_statistics(self):
+        "统计数据查询"
+        pass
 
 class SysApiManager(BaseApiManager):
 
-    def get(self):
-        "查询系统数据"
+    def get_sys_notice(self):
+        "查询系统公告数据"
 
-        res   = {"code": 200, "msg": None, "data": None}
-        query = request.args.get("q", request.args.get("query", None))
+        res = {"code": 0, "msg": None, "data": None}
 
-        if query == "notice":
-            sql = "SELECT msg FROM sys_notice"
-            try:
-                data = mysql.query(sql)
-                logger.info("query notice data with sql: " + sql)
-            except Exception,e:
-                logger.error(e)
-            else:
-                res.update(data=data)
+        sql = "SELECT msg FROM sys_notice"
+        logger.info("query notice data with sql: " + sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e)
+            res.update(msg="query notice data error", code=4000.1)
+        else:
+            res.update(data=[ _.get("msg") for _ in data if _.get("msg") ])
 
         logger.info(res)
         return res
