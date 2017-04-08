@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} | SaintIC EauDouce - 清水蓝天博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 引入 Bootstrap -->
-    <link href="{{ url_for('ui.static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('ui.static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('front.static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('front.static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
     {% block head %}{% endblock %}
     <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
     <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
@@ -13,55 +13,344 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    <link href="{{ url_for('ui.static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
-    <link href="{{ url_for('ui.static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+    <link href="{{ url_for('front.static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
+    <link href="{{ url_for('front.static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+
+    <style type="text/css">
+    /* 返回顶部 */
+    #goTopBtn {
+        position: fixed;
+        line-height:36px;
+        width:36px;
+        bottom:35px;
+        height:36px;
+        cursor:pointer;
+        display:none;
+        background:url({{ url_for('front.static', filename='img/gototop.png') }});
+     }
+     </style>
+</head>
 </head>
 <body>
 
 <div class="container">
 
-    <div class="header">
-    <p>
-        <a href="{{ url_for('ui.index') }}"><img src="{{ url_for('ui.static', filename='img/logo.png') }}" alt="{{ self.title() }}" title="{{ self.title() }}" class="img-circle" width="6%"></a><br/>
-        <b>{{ self.title() }}</b><sub class="text-lowercase"><kbd>v{{ g.sysInfo.Version }}</kbd></sub>
-    </p>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <nav class="navbar navbar-default navbar-inverse" role="navigation">
+                <div class="navbar-header">
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}" title="清水蓝天">EauDouce&nbsp;<i class="icon-home icon-1x"></i></a>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" title="Write">创作&nbsp;<i class="icon-pencil icon-1x"></i></a></li>
+                        <li><a href="#" title="Feed">订阅&nbsp;<i class="icon-rss icon-1x"></i></a></li>
+                        <li><a href="#" title="OpenSource">开源项目&nbsp;<i class="icon-github icon-1x"></i></a></li>
+                        <li class="dropdown">
+                            <a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="icon-folder-open icon-1x"></i></a>
+                            <ul class="dropdown-menu">
+                                {% for catalog in g.api.blog_get_catalog_list().data %}
+                                <li><a href="#">{{ catalog }}</a></li>
+                                {% endfor %}
+                                <li class="divider"></li>
+                                <li><a href="#">原创</a></li>
+                                <li><a href="#">转载</a></li>
+                                <li><a href="#">翻译</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if g.signin %}
+                        <li class="dropdown">
+                            <a href="#" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Signed in as <strong>{{ g.username }}</strong></a></li>
+                                <li class="divider"></li>
+                                <li><a id="modal-616688" href="#modal-container-616688" role="button" data-toggle="modal">我的资料</a></li>
+                                <li><a href="#">我的文章</a></li>
+                                <li><a href="#">修改头像</a></li>
+                                <li><a href="#">修改密码</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
+                                <li><a href="{{ url_for('logout') }}" title="Sign Out">注销&nbsp;<i class="icon-signout icon-1x"></i></a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li><a href="{{ url_for('login') }}" title="Sign In">登录&nbsp;<i class="icon-signin icon-1x"></i></a></li>
+                        <li><a href="{{ url_for('signup') }}" title="Sign Up">注册&nbsp;<i class="icon-signin icon-1x"></i></a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+
+            <!--遮罩窗体触发资料显示-->
+            <div class="modal fade" id="modal-container-616688" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                我的资料({{ g.username }})
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            内容...
+                            <img alt="140x140" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/140/140/default.jpg" class="img-circle" />
+                        </div>
+                        <div class="modal-footer">
+                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--首页轮番图-->
+            <div class="carousel slide" id="carousel-394119">
+                <ol class="carousel-indicators">
+                    <li data-slide-to="0" data-target="#carousel-394119">
+                    </li>
+                    <li data-slide-to="1" data-target="#carousel-394119">
+                    </li>
+                    <li data-slide-to="2" data-target="#carousel-394119" class="active">
+                    </li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="item">
+                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/1/default.jpg" />
+                        <div class="carousel-caption">
+                            <h4>
+                                First Thumbnail label
+                            </h4>
+                            <p>
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/2/default.jpg" />
+                        <div class="carousel-caption">
+                            <h4>
+                                Second Thumbnail label
+                            </h4>
+                            <p>
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item active">
+                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/3/default.jpg" />
+                        <div class="carousel-caption">
+                            <h4>
+                                Third Thumbnail label
+                            </h4>
+                            <p>
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                            </p>
+                        </div>
+                    </div>
+                </div> <a class="left carousel-control" href="#carousel-394119" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-394119" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+        </div>
     </div>
-    <br />
 
-    <!-- 导航 -->
-    <ul class="nav nav-tabs" id="tab">
-        <li><a href="{{ url_for('ui.index') }}" id="swarm" title="Swarms">集群 <span class="badge" id="swarm_number"></span></a></li>
-        <li><a href="{{ url_for('ui.service') }}" id="service" title="Services">服务 <span class="badge" id="service_number"></span></a></li>
-        <li><a href="{{ url_for('ui.node') }}" id="node" title="Nodes">节点 <span class="badge" id="node_number"></span></a></li>
-        <li><a href="{{ url_for('ui.network') }}" id="network" title="Networks">网络 </a></li>
-        <li><a href="{{ url_for('ui.registry') }}" id="registry" title="Registries">私有仓 </a></li>
-        <li><a href="{{ url_for('ui.storage') }}" id="storage" title="Storages">存储 </a></li>
-        {% if g.auth %}
-        <li><a href="{{ url_for('auth.logout') }}" title="Do you want to leave, {{ g.username }}?">注销</a></li>
-        {% endif %}
-    </ul>
-	<p></p></br>
+    <!-- 公告 -->
+    <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
+        {% for msg in g.api.get_sys_notice().data %}
+        <i class="icon-bullhorn"></i>&nbsp;{{ msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {% endfor %}
+    </marquee>
 
-    {% block container %}{% endblock %}
+    <div class="row clearfix">
+        <div class="col-md-8 column">
 
-    </br>
-    </br>
-    <nav class="navbar navbar-default text-center">
-    <div class="navbar-inner navbar-content-center">
-        <p class="text-muted credit" style="padding: 10px;">
-              Copyright &copy; 2016-2017 SaintIC.&nbsp;&nbsp;
-              All rights reserved.&nbsp;&nbsp;
-              Originate by <a href="https://github.com/staugur/SwarmOps/" target="_blank" title="{{ g.sysInfo.Doc }}">SwarmOps</a>&nbsp;
-              <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
-              Contact Author:&nbsp;<a href="mailto:{{ g.sysInfo.Email }}">{{ g.sysInfo.Author }}</a>
-        </p>
+            <p><!-- 路径导航 -->
+            {% block PathNavigation %}{% endblock %}
+            </p>
+
+            <!-- 搜索 -->
+            <form class="form-search form-horizontal" action="?q=" method="" id="SearchForm">
+                <div class="input-group search-input-group">
+                    <button type="submit" class="btn btn-success" style="height: 30px"><i class="icon-search"></i></button>
+                    <input type="text" name="q" placeholder="搜索博客文章" style="height: 27px;">
+                </div>
+            </form>
+
+            {% block container %}{% endblock %}
+        </div>
+
+        <!-- 右侧 -->
+        <div class="col-md-4 column">
+            <!-- 关于本站 -->
+            <h4><scan class="icon-flag icon-1x"> 关于本站</scan></h4>
+            {% set config = g.api.get_sys_config().data %}
+            <p class="text-success">
+                <strong>{{ config.about_awi }}</strong><br />
+            </p>
+            <address>
+            {% if config.about_address %}
+            <i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;<abbr title="Address">{{ config.about_address }}</abbr><br />
+            {% endif %}
+
+            {% if config.about_phone %}
+            <i class="icon-mobile-phone"></i>&nbsp;&nbsp;&nbsp;&nbsp;<abbr title="Phone">{{ config.about_phone }}</abbr><br />
+            {% endif %}
+
+            {% if config.about_email %}
+            <i class="icon-envelope"></i>&nbsp;&nbsp;<abbr title="Email">{{ config.about_email }}</abbr><br />
+            {% endif %}
+
+            {% if config.about_ww %}
+            <i class="icon-comments-alt"></i>&nbsp;&nbsp;<abbr title="Words">{{ config.about_ww }}</abbr><br />
+            {% endif %}
+            </address>
+
+            <!-- 标签云 -->
+            <h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    {% for d in g.api.blog_get_tags_list().data %}
+                    <a href="#"><span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span></a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- 博客信息 -->
+            {% set statistics = g.api.blog_get_statistics() %}
+            <h4><scan class="icon-info-sign icon-1x"> 博客统计</scan></h4>
+            <div class="panel-group" id="panel-579972">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                         <a class="panel-title" data-toggle="collapse" data-parent="#panel-579972" href="#panel-element-612038">文章数据</a>
+                    </div>
+                    <div id="panel-element-612038" class="panel-collapse in">
+                        <div class="panel-body">
+                            文章总数：{{ statistics.ArticleTotal }}篇<br/>
+                            分类总数：{{ statistics.CatalogTotal }}个<br/>
+                            标签总数：{{ statistics.TagTotal }}个<br/>
+                            <!--评论总数：{{ statistics.CommentTotal }}条<br/>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                         <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-579972" href="#panel-element-266807">访问数据</a>
+                    </div>
+                    <div id="panel-element-266807" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <p class="bg-primary">{{ request.headers.get("User-Agent") }}</p>
+                            <p class="bg-info">访问地址: {{ request.headers.get('X-Real-Ip', request.remote_addr) }}</p>
+                            <p class="bg-danger">当前路径: {{ request.url }}</p>
+                            <p class="bg-success">当前时间: <span id="localtime"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 友情链接 -->
+            <h4><scan class="icon-link icon-1x"> 友情链接</scan></h4>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                     <button type="button" class="btn btn-default btn-link">按钮</button>
+                </div>
+            </div>
+        </div>
     </div>
-    </nav>
+
 </div>
 
-<script src="{{ url_for('ui.static', filename='js/jquery-3.1.0.min.js') }}"></script>
-<script src="{{ url_for('ui.static', filename='js/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('ui.static', filename='layer/layer.js') }}"></script>
+<div id="footer" class="container">
+<nav class="navbar navbar-default text-center">
+    <div class="navbar-inner navbar-content-center">
+        <p class="text-muted credit" style="padding: 10px;">
+              Copyright &copy; 2017 SaintIC.&nbsp;&nbsp;
+              All rights reserved.&nbsp;&nbsp;
+              Originate by <a href="https://github.com/staugur/EauDouce/" target="_blank" title="{{ g.sysInfo.Doc }}">EauDouce</a>&nbsp;
+              <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
+              <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ g.sysInfo.Email }}">{{ g.sysInfo.Author }}</a>
+        </p>
+    </div>
+</nav>
+</div>
+
+<div id="goTopBtn"></div>
+<script src="{{ url_for('front.static', filename='js/jquery-3.1.0.min.js') }}"></script>
+<script src="{{ url_for('front.static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('front.static', filename='layer/layer.js') }}"></script>
 {% block script %}{% endblock %}
+<script type="text/javascript">
+$(document).ready(function(){
+    dropdownOpen();//调用
+});
+
+function dropdownOpen() {
+    /*
+    * 鼠标划过就展开子菜单，免得需要点击才能展开
+    */
+    var $dropdownLi = $('li.dropdown');
+    $dropdownLi.mouseover(function() {
+        $(this).addClass('open');
+    }).mouseout(function() {
+        $(this).removeClass('open');
+    });
+}
+
+function showLocale(objD)  
+{  
+    var str,colorhead,colorfoot;  
+    var yy = objD.getYear();  
+    if(yy<1900) yy = yy+1900;  
+    var MM = objD.getMonth()+1;  
+    if(MM<10) MM = '0' + MM;  
+    var dd = objD.getDate();  
+    if(dd<10) dd = '0' + dd;  
+    var hh = objD.getHours();  
+    if(hh<10) hh = '0' + hh;  
+    var mm = objD.getMinutes();  
+    if(mm<10) mm = '0' + mm;  
+    var ss = objD.getSeconds();  
+    if(ss<10) ss = '0' + ss;  
+    var ww = objD.getDay();  
+    if  ( ww==0 )  colorhead="<font color=\"red\">";  
+    if  ( ww > 0 && ww < 6 )  colorhead="<font color=\"red\">";  
+    if  ( ww==6 )  colorhead="<font color=\"red\">";  
+    if  (ww==0)  ww="星期日";  
+    if  (ww==1)  ww="星期一";  
+    if  (ww==2)  ww="星期二";  
+    if  (ww==3)  ww="星期三";  
+    if  (ww==4)  ww="星期四";  
+    if  (ww==5)  ww="星期五";  
+    if  (ww==6)  ww="星期六";  
+    colorfoot="</font>"  
+    str = colorhead + yy + "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss + "  " + ww + colorfoot;  
+    return(str);  
+};  
+
+function tick()
+{  
+    var today;  
+    today = new Date();  
+    document.getElementById("localtime").innerHTML = showLocale(today);  
+    window.setTimeout("tick()", 1000);  
+};  
+tick();
+
+//返回顶部
+    $(window).scroll(function(){
+      var sc=$(window).scrollTop();
+      var rwidth=$(window).width()
+      if(sc>0){
+        $("#goTopBtn").css("display","block");
+        $("#goTopBtn").css("left",(rwidth-36)+"px");
+      }else{
+        $("#goTopBtn").css("display","none");
+      }
+    })
+    $("#goTopBtn").click(function(){
+      var sc=$(window).scrollTop();
+      $('body,html').animate({scrollTop:0},500);
+    })
+</script>  
+
 </body>
 </html>

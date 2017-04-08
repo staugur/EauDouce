@@ -50,7 +50,6 @@ class BaseApiManager(object):
         else:
             return data
 
-
 class BlogApiManager(BaseApiManager):
 
     def blog_get_sources_data(self, sources, sort="desc", limit=None):
@@ -401,7 +400,6 @@ class MiscApiManager(BaseApiManager):
         logger.info(res)
         return res
 
-
 class UserApiManager(BaseApiManager):
 
     @property
@@ -577,6 +575,22 @@ class SysApiManager(BaseApiManager):
         logger.info(res)
         return res
 
+    def get_sys_config(self):
+        "查询系统配置"
+
+        res = {"code": 0, "msg": None, "data": None}
+        sql = "SELECT * FROM sys_config"
+        logger.info("query config data with sql: " + sql)
+        try:
+            data = self.mysql.get(sql)
+        except Exception,e:
+            logger.error(e)
+            res.update(msg="query config data error", code=4000.2)
+        else:
+            res.update(data=data)
+
+        logger.info(res)
+        return res
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
     pass

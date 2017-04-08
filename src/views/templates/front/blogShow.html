@@ -1,0 +1,44 @@
+{% extends "base/base.html" %}
+
+{% block title %}{{ data['title'] }}{% endblock %}
+
+{% block head %}
+    {%- if g.plugins['CodeHighlighting'] %}
+    <link href="{{ url_for('front.static', filename='highlight/styles/googlecode.css') }}" rel="stylesheet">
+    <script src="{{ url_for('front.static', filename='highlight/highlight.pack.js') }}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    {% endif -%}
+
+    <style type="text/css">
+        fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid silver}
+        legend{padding:.5em;border:0;width:auto}
+    </style>
+{% endblock %}
+
+{% block PathNavigation %}
+			<ul class="breadcrumb">
+				<li>
+					 <a href="{{ url_for('front.index') }}">Home</a>
+				</li>
+				<li class="active">
+					BlogDetail
+				</li>
+			</ul>
+{% endblock %}
+
+{% block container %}
+            <!-- 文章详情 -->
+            <article>
+                <header>
+			        <h3 class="text-center text-success">{{ data['title'] }}</h3>
+			    </header>
+                <fieldset>
+                    <legend><em class="text-info">功能区</em></legend>
+                </fieldset>
+			    <section>
+			    <p>
+				    {{ data['content'] | safe }}
+				</p>
+			    </section>
+			</article>
+{% endblock %}

@@ -1,0 +1,11 @@
+/* 返回顶部 */
+#goTopBtn {
+  position: fixed;
+  line-height:36px;
+  width:36px;
+  bottom:35px;
+  height:36px;
+  cursor:pointer;
+  display:none;
+  background:url(/static/img/gototop.png);
+}

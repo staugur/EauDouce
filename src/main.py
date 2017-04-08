@@ -2,7 +2,7 @@
 
 import json, datetime, SpliceURL, time
 from flask import Flask, request, g, jsonify, redirect, make_response, url_for
-from config import GLOBAL, SSO
+from config import GLOBAL, SSO, PLUGINS
 from utils.tool import logger, isLogged_in, md5, login_required
 from urllib import urlencode
 from libs.api import ApiManager
@@ -30,23 +30,21 @@ def before_request():
     g.signin    = isLogged_in('.'.join([ g.username, g.expires, g.sessionId ]))
     g.sysInfo   = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__}
     g.api       = api
+    g.plugins   = PLUGINS
     app.logger.info(app.url_map)
     app.logger.debug(dir(g.api))
 
 @app.after_request
 def after_request(response):
     logger.info(json.dumps({
-        "AccessLog": {
-            "status_code": response.status_code,
-            "method": request.method,
-            "ip": request.headers.get('X-Real-Ip', request.remote_addr),
-            "url": request.url,
-            "referer": request.headers.get('Referer'),
-            "agent": request.headers.get("User-Agent"),
-            "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
-            }
-        }
-    ))
+        "status_code": response.status_code,
+        "method": request.method,
+        "ip": request.headers.get('X-Real-Ip', request.remote_addr),
+        "url": request.url,
+        "referer": request.headers.get('Referer'),
+        "agent": request.headers.get("User-Agent"),
+        "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
+    }))
     return response
 
 @app.errorhandler(404)
