@@ -12,6 +12,7 @@
     <style type="text/css">
         fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid silver}
         legend{padding:.5em;border:0;width:auto}
+        img{width: 100%}
     </style>
 {% endblock %}
 
@@ -32,13 +33,16 @@
                 <header>
 			        <h3 class="text-center text-success">{{ data['title'] }}</h3>
 			    </header>
-                <fieldset>
-                    <legend><em class="text-info">功能区</em></legend>
-                </fieldset>
 			    <section>
-			    <p>
-				    {{ data['content'] | safe }}
-				</p>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" class="btn btn-default">编辑文章</button>
+                        <button type="button" class="btn btn-default">置顶文章</button>
+                        <button type="button" class="btn btn-default">推荐文章</button>
+                    </div>
 			    </section>
+                <fieldset>
+                    <legend><small class="text-info text-lowercase">正文</small></legend>
+				    {{ data['content'] | safe }}
+                </fieldset>
 			</article>
 {% endblock %}
