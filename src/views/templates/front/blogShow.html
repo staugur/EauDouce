@@ -10,7 +10,7 @@
     {% endif -%}
 
     <style type="text/css">
-        fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid silver}
+        fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid #009;border-radius:5px;}
         legend{padding:.5em;border:0;width:auto}
         img{width: 100%}
     </style>
@@ -33,15 +33,39 @@
                 <header>
 			        <h3 class="text-center text-success">{{ data['title'] }}</h3>
 			    </header>
-			    <section>
+                <fieldset>
+                    <legend><small class="text-info text-lowercase">功能区</small></legend>
                     <div class="btn-group" role="group" aria-label="...">
                         <button type="button" class="btn btn-default">编辑文章</button>
                         <button type="button" class="btn btn-default">置顶文章</button>
                         <button type="button" class="btn btn-default">推荐文章</button>
                     </div>
-			    </section>
+                    <h6>
+                        {% if data.author %}
+                        <i class="icon-user icon-1x"></i><a href="" title="由{{ data.author }}发布" style="color: #999">&nbsp;{{ data.author }}</a>&nbsp;
+                        {% endif %}
+
+                        {% if data.catalog %}
+                        <i class="icon-folder-open icon-1x"></i><a href="" title="查看{{ data.catalog }}分类中所有文章" style="color: #999">&nbsp;{{ data.catalog }}</a>&nbsp;
+                        {% endif %}
+
+                        {% if data.tag %}
+                        <i class="icon-tag icon-1x"></i>
+                        {% for tag in data.tag.split() %}
+                            <a href="" title="查看{{ data.tag }}标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
+                        {% endfor %}
+                        {% endif %}
+
+                        {% if data.create_time %}
+                        <i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ data.create_time }}</scan>&nbsp;
+                        {% endif %}
+
+                        <i class="icon-eye-open icon-1x"></i><scan style="color: #999">&nbsp;阅读N次</scan>&nbsp;
+                        <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ data.title }}》上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;
+                    </h6>
+                </fieldset>
                 <fieldset>
-                    <legend><small class="text-info text-lowercase">正文</small></legend>
+                    <legend><small class="text-success text-lowercase">正文区</small></legend>
 				    {{ data['content'] | safe }}
                 </fieldset>
 			</article>
