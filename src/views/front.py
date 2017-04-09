@@ -7,7 +7,7 @@ from flask import Blueprint, g, render_template, request, redirect, url_for, mak
 from utils.tool import login_required
 
 
-front_blueprint = Blueprint("front", __name__, template_folder="templates", static_folder='static')
+front_blueprint = Blueprint("front", __name__)
 
 @front_blueprint.route("/")
 def index():
@@ -22,7 +22,7 @@ def blogShow(bid):
         return abort(404)
 
 @login_required
-@front_blueprint.route("/blog/write/")
+@front_blueprint.route("/write/")
 def blogWrite():
     return render_template("front/blogWrite.html")
 

@@ -1,0 +1,189 @@
+{% extends "base/front.html" %}
+
+{% block title %}创作{% endblock %}
+
+{% block head %}
+{% if request.args.get("editor", "wangEditor") == "wangEditor" %}
+  <!-- 引入wangEditor.css -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wangEditor/css/wangEditor.min.css') }}">
+{% else %}
+  <!-- 引入Editor.md.css -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Editor.md/css/editormd.min.css') }}">
+{% endif %}
+{% endblock %}
+
+{% block PathNavigation %}
+            <ul class="breadcrumb">
+                <li>
+                     <a href="{{ url_for('front.index') }}">Home</a>
+                </li>
+                <li class="active">
+                    BlogWrite
+                </li>
+            </ul>
+{% endblock %}
+
+{% block container %}
+<div>
+    <h1>创作文章</h1>
+    {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
+    <h3>当前使用<a href="http://www.wangeditor.com/" target="_blank">wangEditor</a>富文本编辑器<sub><a href="{{ url_for('front.blogWrite', editor='Editor.md') }}">&nbsp;切换&nbsp;</a></sub></h3>
+    <form id="CreateBlogFormId" method="" action="">
+        <p>标题：<input type="text" style="width:300px;height:20px" name="title" placeholder="请在此处填写文章标题" required /><em style="color:red; front-size:bold">*</em></p>
+        <p>标签：<input type="text" style="width:300px;height:20px" name="tag" placeholder="请在此处输入标签并以空格分割" required /></p>
+        <p>分类：<input type="text" style="width:300px;height:20px" name="catalog" placeholder="请自定义输入分类或选择列表内条目" list="blog_catalogs" required /></p>
+        <datalist id="blog_catalogs">
+        </datalist>
+        <p>类型：
+            <input type="radio" name="sources" value="原创" checked="checked">原创
+            <input type="radio" name="sources" value="转载">转载 
+            <input type="radio" name="sources" value="翻译">翻译
+        </p>
+        <textarea id="editor" style="height:500px; max-height:640;" name="content">
+           <p>请输入文章内容...</p>
+        </textarea>
+        <input type="hidden" name="author" value="{{ g.username }}">
+        <input type="hidden" name="editor" value="wangEditor">
+        <input onclick=postForm() type="button" value="提交博客" class="button green" />
+    </form>
+    {% else%}
+    <h3>当前使用<a href="http://pandao.github.io/editor.md/" target="_blank">Editor.md</a>富文本编辑器<sub><a href="{{ url_for('front.blogWrite', editor='wangEditor') }}">&nbsp;切换&nbsp;</a></sub></h3>
+    <form id="CreateBlogFormId" method="" action="">
+        <p>标题：<input type="text" style="width:300px;height:20px" name="title" placeholder="请在此处填写文章标题" required /><em style="color:red; front-size:bold">*</em></p>
+        <p>标签：<input type="text" style="width:300px;height:20px" name="tag" placeholder="请在此处输入标签并以空格分割" required /></p>
+        <p>分类：<input type="text" style="width:300px;height:20px" name="catalog" placeholder="请自定义输入分类或选择列表内条目" list="blog_catalogs" required /></p>
+        <datalist id="blog_catalogs">
+        </datalist>
+        <p>类型：
+            <input type="radio" name="sources" value="原创" checked="checked">原创
+            <input type="radio" name="sources" value="转载">转载 
+            <input type="radio" name="sources" value="翻译">翻译
+        </p>
+        <div id="editor">
+            <textarea style="display:none;" name="content"># 请输入文章内容...</textarea>
+        </div>
+        <input type="hidden" name="author" value="{{ g.username }}">
+        <input type="hidden" name="editor" value="Editor.md">
+        <input onclick=postForm() type="button" value="提交博客" class="button green" />
+    </form>
+    {% endif -%}
+</div>
+
+{% endblock %}
+
+{% block script %}
+{% if request.args.get("editor", "wangEditor") == "wangEditor" %}
+<!--引入jquery和wangEditor.js-->
+<script type="text/javascript" src="{{ url_for('static', filename='wangEditor/js/wangEditor.min.js') }}"></script>
+<script type="text/javascript">
+    // 获取元素
+    var div = document.getElementById('editor');
+    // 生成编辑器
+    var editor = new wangEditor(div);
+
+    // 为当前的editor配置密钥
+    editor.config.mapAk = 'rsG1HfOkrldOGdI53TMI9rAdxGuzb0PI';
+
+    // 取消粘贴过滤
+    editor.config.pasteFilter = true;
+
+    // 插入代码时的默认语言
+    editor.config.codeDefaultLang = 'python';
+
+    /*
+       上传图片功能，文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/113990；
+       后台文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/115736;
+       后台需要配置一个获取表单上传图片并保存的路由。
+    */
+    editor.config.uploadImgUrl = "#";
+    editor.config.uploadImgFileName = 'WriteBlogImage';
+
+    // 创建编辑器
+    editor.create();
+</script>
+{% else %}
+<!--引入jquery和Editor.md.js-->
+<script type="text/javascript" src="{{ url_for('static', filename='Editor.md/js/editormd.min.js') }}"></script>
+<script type="text/javascript">
+    var Editor;
+    $(function() {
+        Editor = editormd({
+                id      : "editor",
+                width   : "100%",
+                height  : 500,
+                syncScrolling : "single",
+                path    : "/static/Editor.md/lib/",
+                // 开启上传图片功能
+                imageUpload : true,
+                imageFormats : ['png', 'jpg', 'jpeg', 'gif'],
+                imageUploadURL : "#",
+                /*
+                     上传的后台只需要返回一个 JSON 数据，结构如下：
+                     {
+                        success : 0 | 1,           // 0 表示上传失败，1 表示上传成功
+                        message : "提示的信息，上传成功或上传失败及错误信息等。",
+                        url     : "图片地址"        // 上传成功时才返回
+                     }
+                */
+                emoji : true,                 // Emoji表情
+                saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
+                searchReplace : true,
+                flowChart : true,             // 开启流程图支持，默认关闭
+                sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+        });
+    });
+</script>
+{% endif %}
+
+<script type="text/javascript">
+    // 获取文章分类信息
+    $.ajax({
+        url: "{{ g.apiurl }}/blog?get_catalog_list=true",
+        method: 'GET',
+        datatype: 'json',
+        success: function(res) {
+            console.log(res);
+            var data = res.data;
+            var str2 = '<option>未分类</option>';
+            for(i=0; i<data.length; i++) {
+                catalog = data[i];
+                str2 += '<option>' + catalog + '</option>';
+            };
+            document.getElementById('blog_catalogs').innerHTML=str2;
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+    // 提交文章数据
+    function postForm() {
+        {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
+        blog = $('#CreateBlogFormId').serialize();
+        {% else %}
+        data = $('#CreateBlogFormId').serializeArray();
+        blog = {"title": data[0].value, "tag": data[1].value, "catalog": data[2].value, "sources": data[3].value, "content": Editor.getHTML(), "author": data[6].value};
+        {% endif -%}
+        console.log(blog);
+        $.ajax({
+            url: '{{ g.apiurl }}/blog/',
+            method: 'POST',
+            datatype: 'json',
+            data: blog,
+            success: function(res) {
+                console.log(res);
+                if (res.code == 0){
+                    alert("提交文章成功！")
+                    if ( isNaN(res.data) ) {
+                        location.reload(true);
+                    } else {
+                        window.location="/blog/" + res.data + ".html";
+                    }
+                } else {
+                    alert("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg);
+                }
+            },
+        });
+    };
+</script>
+{% endblock %}
