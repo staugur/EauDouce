@@ -409,35 +409,49 @@ class UserApiManager(BaseApiManager):
             return True
         return False
 
-    def get(self):
-        """Public func, no token, with url args:
-        1. num, 展现的数量,默认是10条,可为all
-        2. username|email, 用户名或邮箱，数据库主键，唯一。
+    def user_get_all(self):
+        "获取所有用户资料"
 
-        返回数据样例，{'msg':'success or error(errmsg)', 'code':'result code', 'data':data, 'success': True or False}
-        """
-        res = {"code": 200, "msg": None, "data": None}
-        username     = request.args.get("username")
-        getalluser   = True if request.args.get("getalluser") in ("True", "true", True) else False
-        getadminuser = True if request.args.get("getadminuser") in ("True", "true", True) else False
-        
-        if getalluser:
-            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a"
-            data = mysql.query(sql)
-        elif getadminuser:
-            sql  = "SELECT username FROM user_profile WHERE isAdmin=%s"
-            data = mysql.query(sql, 'true')
-            data = [ _["username"] for _ in data if _.get("username") ]
-        elif username:
-            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
-            data= mysql.get(sql, username)
-            if not data:
-                sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_lauth b ON a.username = b.lauth_username WHERE a.username=%s"
-                data = mysql.get(sql, username)
+        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a"
+        logger.info("get all user and profile sql: "+ sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.info(e, exc_info=True)
+            res.update(msg="get all user error", code=3000.1)
         else:
-            sql, data = None, {}
-        logger.info(sql)
+            res.update(data=data)
+
+        logger.info(res)
+        return res
+
+    def user_get_one_profile(self, username):
+        "查询用户资料"
+
+        res = {"code": 200, "msg": None, "data": {}}        
+        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
+        data = self.mysql.get(sql, username)
+        if not data:
+            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_lauth b ON a.username = b.lauth_username WHERE a.username=%s"
+            data = self.mysql.get(sql, username)
+        logger.info("get username profile sql: " + sql)
         res.update(data=data)
+        logger.info(res)
+        return res
+
+    def user_get_admins(self):
+        "获取管理员列表"
+        res = {"code": 0, "msg": None, "data": []}
+        sql = "SELECT username FROM user_profile WHERE isAdmin='true'"
+        logger.info("query admin sql: " + sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="query admin account error", code=3000.1)
+        else:
+            res.update(data= [ _["username"] for _ in data if _.get("username") ])
+
         logger.info(res)
         return res
 

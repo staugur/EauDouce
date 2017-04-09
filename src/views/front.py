@@ -4,9 +4,6 @@ import requests, datetime, SpliceURL
 from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
-#from config import SSO, PLUGINS, BLOG
-#from utils.public import logger, md5, BaiduActivePush
-#from libs import get_blogId_data, get_user_profile, get_user_blog, get_index_list, get_index_data
 from utils.tool import login_required
 
 
