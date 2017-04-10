@@ -4,11 +4,11 @@
 
 {% block head %}
 {% if request.args.get("editor", "wangEditor") == "wangEditor" %}
-  <!-- 引入wangEditor.css -->
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wangEditor/css/wangEditor.min.css') }}">
+    <!-- 引入wangEditor.css -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wangEditor/css/wangEditor.min.css') }}">
 {% else %}
-  <!-- 引入Editor.md.css -->
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Editor.md/css/editormd.min.css') }}">
+    <!-- 引入Editor.md.css -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Editor.md/css/editormd.min.css') }}">
 {% endif %}
 {% endblock %}
 
@@ -24,23 +24,28 @@
 {% endblock %}
 
 {% block container %}
-<div>
-    {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
-            <form class="form-horizontal" role="form" id="WriteBlogForm">
+        <div>
+            <form class="form-horizontal" role="form" id="CreateBlogFormId">
                 <center><h3>
                     <scan class="help-block"><i class="icon-pencil icon-1x"></i>&nbsp;创作文章
-                    <button type="submit" class="btn btn-success btn-xs">Submit</button></scan>
+                    <input type="button" onclick=postForm() value="提交文章" class="btn btn-success btn-xs" />
+                    {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
+                        <a href="{{ url_for('front.blogWrite', editor='Editor.md') }}" class="btn btn-info btn-xs" role="button">&nbsp;切换编辑器</a>
+                    {% else %}
+                        <a href="{{ url_for('front.blogWrite', editor='wangEditor') }}" class="btn btn-info btn-xs" role="button">&nbsp;切换编辑器</a>
+                    {% endif -%}
+                    </scan>
                 </h3></center>
                 <div class="form-group">
                     <label for="blogTitle" class="col-sm-2 control-label"><i class="icon-ok-sign"></i>&nbsp;文章标题</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="blogTitle" />
+                        <input type="text" class="form-control" id="blogTitle" placeholder="请在此处填写文章标题" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="blogTag" class="col-sm-2 control-label"><i class="icon-tags"></i>&nbsp;文章标签</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="blogTag" />
+                        <input type="text" class="form-control" id="blogTag" placeholder="请在此处输入标签并以空格分割" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -69,9 +74,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <textarea class="form-control" id="editor" style="height:500px; max-height:640; width: 100%" name="content">
-                        <p>请输入文章内容...</p>
-                    </textarea>
+                {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
+                    <textarea class="form-control" id="editor" style="height:500px; max-height:640; width: 100%" name="content"><p>请输入文章内容...</p></textarea>
+                {% else %}
+                    <div id="editor">
+                        <textarea style="display:none;" name="content"># 请输入文章内容...</textarea>
+                    </div>
+                {% endif -%}
                 </div>
                 <div class="form-group">
                     <input type="hidden" class="form-control" name="author" value="{{ g.username }}">
@@ -80,67 +89,41 @@
                     <input type="hidden" class="form-control" name="editor" value="wangEditor">
                 </div>
             </form>
-    {% else%}
-    <form id="CreateBlogFormId" method="" action="">
-        <p>标题：<input type="text" style="width:300px;height:20px" name="title" placeholder="请在此处填写文章标题" required /><em style="color:red; front-size:bold">*</em></p>
-        <p>标签：<input type="text" style="width:300px;height:20px" name="tag" placeholder="请在此处输入标签并以空格分割" required /></p>
-        <p>分类：<input type="text" style="width:300px;height:20px" name="catalog" placeholder="请自定义输入分类或选择列表内条目" list="blog_catalogs" required /></p>
-        <datalist id="blog_catalogs">
-        </datalist>
-        <p>类型：
-            <input type="radio" name="sources" value="原创" checked="checked">原创
-            <input type="radio" name="sources" value="转载">转载 
-            <input type="radio" name="sources" value="翻译">翻译
-        </p>
-        <div id="editor">
-            <textarea style="display:none;" name="content"># 请输入文章内容...</textarea>
         </div>
-        <input type="hidden" name="author" value="{{ g.username }}">
-        <input type="hidden" name="editor" value="Editor.md">
-        <input onclick=postForm() type="button" value="提交博客" class="button green" />
-    </form>
-    {% endif -%}
-</div>
-
 {% endblock %}
 
 {% block script %}
 {% if request.args.get("editor", "wangEditor") == "wangEditor" %}
-<!--引入jquery和wangEditor.js-->
-<script type="text/javascript" src="{{ url_for('static', filename='wangEditor/js/wangEditor.min.js') }}"></script>
-<script type="text/javascript">
-    // 获取元素
-    var div = document.getElementById('editor');
-    // 生成编辑器
-    var editor = new wangEditor(div);
-
-    // 为当前的editor配置密钥
-    editor.config.mapAk = 'rsG1HfOkrldOGdI53TMI9rAdxGuzb0PI';
-
-    // 取消粘贴过滤
-    editor.config.pasteFilter = true;
-
-    // 插入代码时的默认语言
-    editor.config.codeDefaultLang = 'python';
-
-    /*
-       上传图片功能，文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/113990；
-       后台文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/115736;
-       后台需要配置一个获取表单上传图片并保存的路由。
-    */
-    editor.config.uploadImgUrl = "#";
-    editor.config.uploadImgFileName = 'WriteBlogImage';
-
-    // 创建编辑器
-    editor.create();
-</script>
+    <!--引入jquery和wangEditor.js-->
+    <script type="text/javascript" src="{{ url_for('static', filename='wangEditor/js/wangEditor.min.js') }}"></script>
+    <script type="text/javascript">
+        // 获取元素
+        var div = document.getElementById('editor');
+        // 生成编辑器
+        var editor = new wangEditor(div);
+        // 为当前的editor配置密钥
+        editor.config.mapAk = 'rsG1HfOkrldOGdI53TMI9rAdxGuzb0PI';
+        // 取消粘贴过滤
+        editor.config.pasteFilter = true;
+        // 插入代码时的默认语言
+        editor.config.codeDefaultLang = 'python';
+        /*
+        上传图片功能，文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/113990；
+        后台文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/115736;
+        后台需要配置一个获取表单上传图片并保存的路由。
+        */
+        editor.config.uploadImgUrl = "#";
+        editor.config.uploadImgFileName = 'WriteBlogImage';
+        // 创建编辑器
+        editor.create();
+    </script>
 {% else %}
-<!--引入jquery和Editor.md.js-->
-<script type="text/javascript" src="{{ url_for('static', filename='Editor.md/js/editormd.min.js') }}"></script>
-<script type="text/javascript">
-    var Editor;
-    $(function() {
-        Editor = editormd({
+    <!--引入jquery和Editor.md.js-->
+    <script type="text/javascript" src="{{ url_for('static', filename='Editor.md/js/editormd.min.js') }}"></script>
+    <script type="text/javascript">
+        var Editor;
+        $(function() {
+            Editor = editormd({
                 id      : "editor",
                 width   : "100%",
                 height  : 500,
@@ -163,41 +146,24 @@
                 searchReplace : true,
                 flowChart : true,             // 开启流程图支持，默认关闭
                 sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+            });
         });
-    });
-</script>
+    </script>
 {% endif %}
 
 <script type="text/javascript">
-    // 获取文章分类信息
-    $.ajax({
-        url: "{{ g.apiurl }}/blog?get_catalog_list=true",
-        method: 'GET',
-        datatype: 'json',
-        success: function(res) {
-            console.log(res);
-            var data = res.data;
-            var str2 = '<option>未分类</option>';
-            for(i=0; i<data.length; i++) {
-                catalog = data[i];
-                str2 += '<option>' + catalog + '</option>';
-            };
-            document.getElementById('blog_catalogs').innerHTML=str2;
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
-
     // 提交文章数据
     function postForm() {
-        {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
-        blog = $('#CreateBlogFormId').serialize();
-        {% else %}
-        data = $('#CreateBlogFormId').serializeArray();
-        blog = {"title": data[0].value, "tag": data[1].value, "catalog": data[2].value, "sources": data[3].value, "content": Editor.getHTML(), "author": data[6].value};
-        {% endif -%}
+    {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
+        //blog = $('#CreateBlogFormId').serialize();
+        blog = $('#CreateBlogFormId').serializeArray();
+    {% else %}
+        blog = $('#CreateBlogFormId').serializeArray();
+        //blog = $('#CreateBlogFormId').serialize();
+        //blog = {"title": data[0].value, "tag": data[1].value, "catalog": data[2].value, "sources": data[3].value, "content": Editor.getHTML(), "author": data[6].value};
+    {% endif -%}
         console.log(blog);
+        /*
         $.ajax({
             url: '{{ g.apiurl }}/blog/',
             method: 'POST',
@@ -217,6 +183,7 @@
                 }
             },
         });
+        */
     };
 </script>
 {% endblock %}
