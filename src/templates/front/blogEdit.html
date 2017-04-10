@@ -1,0 +1,119 @@
+{% extends "base/front.html" %}
+
+{% block title %}编辑{% endblock %}
+
+{% block head %}
+  <!--引入wangEditor.css-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wangEditor/css/wangEditor.min.css') }}">
+{% endblock %}
+
+{% block container %}
+<div>
+    <h1>编辑文章</h1>
+    <form id="UpdateBlogFormId" method="" action="">
+        <p>标题：<input type="text" style="width:300px;height:20px" name="title" value="{{ data.get('title') }}" required /></p>
+        <p>标签：<input type="text" style="width:300px;height:20px" name="tag" value="{{ data.get('tag') }}" required /></p>
+        <p>分类：<input type="text" style="width:300px;height:20px" name="catalog" value="{{ data.get('catalog') }}" list="blog_catalogs" required /></p>
+        <datalist id="blog_catalogs">
+        </datalist>
+        <p>类型：
+          {% if data.get('sources') == '原创' %}
+            <input type="radio" name="sources" value="原创" checked="checked">原创
+            <input type="radio" name="sources" value="转载">转载
+            <input type="radio" name="sources" value="翻译">翻译
+          {% elif data.get('sources') == '转载' %}
+            <input type="radio" name="sources" value="原创">原创
+            <input type="radio" name="sources" value="转载" checked="checked">转载
+            <input type="radio" name="sources" value="翻译">翻译
+          {% elif data.get('sources') == '翻译' %}
+            <input type="radio" name="sources" value="原创">原创
+            <input type="radio" name="sources" value="转载">转载
+            <input type="radio" name="sources" value="翻译" checked="checked">翻译
+          {% endif %}
+        </p>
+        <textarea id="editor" style="height:500px; max-height:640px;" name="content">
+           <p>{{ data.get("content") }}</p>
+        </textarea>
+        {% if g.username == data.get('author') %}
+            <input type="hidden" name="author" value="{{ g.username }}">
+        {% else %}
+            <input type="hidden" name="author" value="{{ data.get('author') }}">
+        {% endif %}
+        <input type="hidden" name="blogId" value="{{ blogId }}">
+        <input onclick=postForm() type="button" value="更新博客" class="button green" />
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<!--引入jquery和wangEditor.js-->   <!--注意：javascript必须放在body最后，否则可能会出现问题-->
+<script type="text/javascript" src="{{ url_for('static', filename='wangEditor/js/wangEditor.min.js') }}"></script>
+<script type="text/javascript">
+    // 获取元素
+    var div = document.getElementById('editor');
+
+    // 生成编辑器
+    var editor = new wangEditor(div);
+
+    // 为当前的editor配置密钥
+    editor.config.mapAk = 'rsG1HfOkrldOGdI53TMI9rAdxGuzb0PI';
+
+    // 取消粘贴过滤
+    editor.config.pasteFilter = true;
+
+    // 插入代码时的默认语言
+    editor.config.codeDefaultLang = 'python'
+
+    /*
+       上传图片功能，文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/113990；
+       后台文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/115736;
+       后台需要配置一个获取表单上传图片并保存的路由，demo地址：https://github.com/staugur/flask-wangEditor-demo
+    */
+    editor.config.uploadImgUrl = '#';
+    editor.config.uploadImgFileName = 'WriteBlogImage';
+
+    // 创建编辑器
+    editor.create();
+
+    // 获取文章分类信息
+    $.ajax({
+        url: "#",
+        method: 'GET',
+        datatype: 'json',
+        success: function(res) {
+            console.log(res);
+            var data = res.data;
+            var str2 = '<option>未分类</option>';
+            for(i=0; i<data.length; i++) {
+                catalog = data[i];
+                str2 += '<option>' + catalog + '</option>';
+            };
+            document.getElementById('blog_catalogs').innerHTML=str2;
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+    // 更新文章数据
+    function postForm() {
+        $.ajax({
+            url: '#',
+            method: 'PUT',
+            datatype: 'json',
+            data: $('#UpdateBlogFormId').serialize(),
+            success: function(res) {
+                console.log(res);
+                if (res.success == true){
+                    alert("更新文章成功！");
+                    window.location="/blog/{{ blogId }}.html";
+                } else {
+                    alert("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg);
+                    //location.reload(true);
+                }
+            },
+        });
+    };
+</script>
+
+{% endblock %}

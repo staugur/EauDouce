@@ -26,16 +26,15 @@ def blogShow(bid):
 def blogWrite():
     return render_template("front/blogWrite.html")
 
-'''
-@front_blueprint.route("/blog/edit/")
+
+@front_blueprint.route("/edit/")
 def blogEdit():
     blogId = request.args.get("blogId")
     if g.signin and blogId:
-        data = get_blogId_data(blogId)
+        data = g.api.blog_get_id(blogId).get("data")
         if data and g.username == data.get("author") or g.username in g.admins:
             return render_template("front/blogEdit.html", blogId=blogId, data=data)
     return redirect(url_for(".login"))
-
 
 @front_blueprint.route("/home/")
 @front_blueprint.route("/home/<user>/")
@@ -105,4 +104,3 @@ def webscan_360_cn():
 @front_blueprint.route("/openSource/")
 def openSource():
     return render_template("front/openSource.html")
-'''

@@ -25,29 +25,62 @@
 
 {% block container %}
 <div>
-    <h1>创作文章</h1>
     {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
-    <h3>当前使用<a href="http://www.wangeditor.com/" target="_blank">wangEditor</a>富文本编辑器<sub><a href="{{ url_for('front.blogWrite', editor='Editor.md') }}">&nbsp;切换&nbsp;</a></sub></h3>
-    <form id="CreateBlogFormId" method="" action="">
-        <p>标题：<input type="text" style="width:300px;height:20px" name="title" placeholder="请在此处填写文章标题" required /><em style="color:red; front-size:bold">*</em></p>
-        <p>标签：<input type="text" style="width:300px;height:20px" name="tag" placeholder="请在此处输入标签并以空格分割" required /></p>
-        <p>分类：<input type="text" style="width:300px;height:20px" name="catalog" placeholder="请自定义输入分类或选择列表内条目" list="blog_catalogs" required /></p>
-        <datalist id="blog_catalogs">
-        </datalist>
-        <p>类型：
-            <input type="radio" name="sources" value="原创" checked="checked">原创
-            <input type="radio" name="sources" value="转载">转载 
-            <input type="radio" name="sources" value="翻译">翻译
-        </p>
-        <textarea id="editor" style="height:500px; max-height:640;" name="content">
-           <p>请输入文章内容...</p>
-        </textarea>
-        <input type="hidden" name="author" value="{{ g.username }}">
-        <input type="hidden" name="editor" value="wangEditor">
-        <input onclick=postForm() type="button" value="提交博客" class="button green" />
-    </form>
+            <form class="form-horizontal" role="form" id="WriteBlogForm">
+                <center><h3>
+                    <scan class="help-block"><i class="icon-pencil icon-1x"></i>&nbsp;创作文章
+                    <button type="submit" class="btn btn-success btn-xs">Submit</button></scan>
+                </h3></center>
+                <div class="form-group">
+                    <label for="blogTitle" class="col-sm-2 control-label"><i class="icon-ok-sign"></i>&nbsp;文章标题</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="blogTitle" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="blogTag" class="col-sm-2 control-label"><i class="icon-tags"></i>&nbsp;文章标签</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="blogTag" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="blogCatalog" class="col-sm-2 control-label"><i class="icon-folder-open"></i>&nbsp;文章分类</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="blogCatalog">
+                            <option>未分类</option>
+                            {% for catalog in g.api.blog_get_catalog_list().data %}
+                            <option>{{ catalog }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="blogSource" class="col-sm-2 control-label"><i class="icon-info-sign"></i>&nbsp;文章来源</label>
+                    <div class="col-sm-10">
+                        <label class="radio-inline">
+                            <input type="radio" name="sources" value="原创" checked="checked">原创
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sources" value="转载">转载 
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sources" value="翻译">翻译
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="editor" style="height:500px; max-height:640; width: 100%" name="content">
+                        <p>请输入文章内容...</p>
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" class="form-control" name="author" value="{{ g.username }}">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" class="form-control" name="editor" value="wangEditor">
+                </div>
+            </form>
     {% else%}
-    <h3>当前使用<a href="http://pandao.github.io/editor.md/" target="_blank">Editor.md</a>富文本编辑器<sub><a href="{{ url_for('front.blogWrite', editor='wangEditor') }}">&nbsp;切换&nbsp;</a></sub></h3>
     <form id="CreateBlogFormId" method="" action="">
         <p>标题：<input type="text" style="width:300px;height:20px" name="title" placeholder="请在此处填写文章标题" required /><em style="color:red; front-size:bold">*</em></p>
         <p>标签：<input type="text" style="width:300px;height:20px" name="tag" placeholder="请在此处输入标签并以空格分割" required /></p>
