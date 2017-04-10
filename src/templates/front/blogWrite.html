@@ -163,9 +163,8 @@
         //blog = {"title": data[0].value, "tag": data[1].value, "catalog": data[2].value, "sources": data[3].value, "content": Editor.getHTML(), "author": data[6].value};
     {% endif -%}
         console.log(blog);
-        /*
         $.ajax({
-            url: '{{ g.apiurl }}/blog/',
+            url: '{{ url_for("front.blogWrite") }}',
             method: 'POST',
             datatype: 'json',
             data: blog,
@@ -183,7 +182,6 @@
                 }
             },
         });
-        */
     };
 </script>
 {% endblock %}

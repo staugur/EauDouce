@@ -9,7 +9,7 @@ from utils.tool import logger
 class Blog(Resource):
 
     def get(self):
-        """/blog资源，参数是
+        """
         1.num|limit(int, str), 限制列出数据数量，另外可设置为all，列出所有blog， 全局参数。
         2.sort(str), 数据排序, 全局参数。
         3.blogId(int), 查询某一个id的文章, 独立参数。
@@ -75,60 +75,11 @@ class Blog(Resource):
 
     def post(self):
         """ 创建博客文章接口 """
-        #get blog form informations.
-        blog_title   = request.form.get('title')
-        blog_content = request.form.get('content')
-        blog_ctime   = get_today()
-        blog_tag     = request.form.get("tag")
-        blog_catalog = request.form.get("catalog", "linux")
-        blog_sources = request.form.get("sources", "原创")
-        blog_author  = request.form.get("author")
-        logger.info("blog_title:%s, blog_content:%s, blog_ctime:%s, blog_tag:%s, blog_catalog:%s, blog_sources:%s, blog_author:%s" %(blog_title, blog_content, blog_ctime, blog_tag, blog_catalog, blog_sources, blog_author))
-        if blog_title and blog_content and blog_ctime and blog_author:
-            sql = 'INSERT INTO blog_article (title,content,create_time,tag,catalog,sources,author) VALUES (%s, %s, %s, %s, %s, %s, %s)'
-            logger.info(sql %(blog_title, blog_content, blog_ctime, blog_tag, blog_catalog, blog_sources, blog_author))
-            try:
-                blog_id  = mysql.insert(sql, blog_title, blog_content, blog_ctime, blog_tag, blog_catalog, blog_sources, blog_author)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res = {"code": 3, "data": None, "msg": "blog write error."}
-            else:
-                res = {"code": 0, "data": blog_id, "msg": "blog write success."}
-        else:
-            res = {"code": 4, "data": None, "msg": "data form error."}
-        logger.info(res)
-        return res
+        return g.api.blog_create(request.form)
 
     def put(self):
         """ 更新博客文章接口 """
-        blog_title   = request.form.get('title')
-        blog_content = request.form.get('content')
-        blog_utime   = get_today()
-        blog_tag     = request.form.get("tag")
-        blog_catalog = request.form.get("catalog", "linux")
-        blog_sources = request.form.get("sources", "原创")
-        blog_author  = request.form.get("author")
-        blog_blogId  = request.form.get("blogId")
-        logger.info("Update blog, blog_title:%s, blog_content:%s, blog_utime:%s, blog_tag:%s, blog_catalog:%s, blog_sources:%s, blog_author:%s, blog_blogId:%s" %(blog_title, blog_content, blog_utime, blog_tag, blog_catalog, blog_sources, blog_author, blog_blogId))
-        try:
-            blog_blogId = int(blog_blogId)
-        except ValueError,e:
-            logger.error(e, exc_info=True)
-            res = {"code": 5, "msg": "blog form error."}
-        else:
-            if blog_title and blog_content and blog_utime and blog_author:
-                sql = "UPDATE blog SET title=%s,content=%s,update_time=%s,tag=%s,catalog=%s,sources=%s,author=%s WHERE id=%s"
-                try:
-                    mysql.update(sql, blog_title, blog_content, blog_utime, blog_tag, blog_catalog, blog_sources, blog_author, blog_blogId)
-                except Exception,e:
-                    logger.error(e, exc_info=True)
-                    res = {"code": 6, "msg": "blog write error."}
-                else:
-                    res = {"code": 0, "success": True, "msg": None}
-            else:
-                res = {"code": 7, "success": False, "msg": "blog form error."}
-        logger.info(res)
-        return res
+        return g.api.blog_update(request.form)
 
 class Misc(Resource):
 
