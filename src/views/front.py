@@ -86,9 +86,8 @@ def sitemap():
 @front_blueprint.route("/feed")
 @front_blueprint.route("/feed/")
 def feed():
-    data = get_index_data(limit=10)
-    logger.debug(data)
-    feed = AtomFeed('Interest.blog Feed', feed_url=request.url, url=request.url_root, subtitle="From the latest article in www.saintic.com")
+    data = g.api.blog_get_all(limit=10).get("data")
+    feed = AtomFeed(u'清水蓝天博客源', feed_url=request.url, url=request.url_root, subtitle="From the latest article in EauDouce")
     for article in data:
         feed.add(article['title'], unicode(article['content']),
                  content_type='html',
