@@ -36,7 +36,7 @@
                 <fieldset>
                     <legend><small class="text-info text-lowercase">功能区</small></legend>
                     <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" class="btn btn-default">编辑文章</button>
+                        <button type="button" class="btn btn-default"><a href="{{ url_for('front.blogEdit', blogId=blogId) }}" target="_blank">编辑文章</a></button>
                         <button type="button" class="btn btn-default">置顶文章</button>
                         <button type="button" class="btn btn-default">推荐文章</button>
                     </div>
