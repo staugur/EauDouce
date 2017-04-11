@@ -2,7 +2,7 @@
 
 import time
 from torndb import IntegrityError
-from flask import request, g, Blueprint
+from flask import request, g, Blueprint, abort
 from flask_restful import Api, Resource
 from utils.tool import logger
 
@@ -81,45 +81,33 @@ class Blog(Resource):
         """ 更新博客文章接口 """
         return g.api.blog_update(request.form)
 
+    def delete(self):
+        """ 删除博客文章接口 """
+
+        blogId = request.args.get("blogId")
+        if g.username in g.api.user_get_admins().get("data"):
+            return g.api.blog_delete(blogId)
+        else:
+            return abort(403)
+
 class Misc(Resource):
 
     def post(self):
         """
-        设置->
+        设置或取消->
         推荐文章: Recommended articles 
         置顶文章: Sticky articles 
         """
-        res    = {"url": request.url, "msg": None, "success": False, "code": 0}
         blogId = request.args.get("blogId")
         action = request.args.get("action")
         value  = request.args.get("value", "true")
-        logger.info("blogId: %s, action: %s, value: %s" %(blogId, action, value) )
 
-        #check params
-        if not value in ("true", "True", True, "false", "False", False):
-            res.update(msg="illegal parameter value", code=-1)
-        try:
-            blogId = int(blogId)
-        except:
-            res.update(msg="illegal parameter blogId", code=-1)
-        if not action in ("recommend", "top"):
-            res.update(msg="illegal parameter action", code=-1)
-        if res['msg']:
-            logger.info(res)
-            return res
-
-        try:
-            sql = "UPDATE blog_article SET update_time='%s',%s='%s' WHERE id=%d" %(get_today(), action, value, blogId)
-            logger.info(sql)
-            mysql.update(sql)
-        except Exception,e:
-            logger.error(e, exc_info=True)
-            res.update(success=False)
+        if action == "recommend":
+            return g.api.misc_set_recommend(blogId, value)
+        elif action == "top":
+            return g.api.misc_set_top(blogId, value)
         else:
-            res.update(success=True)
-
-        logger.info(res)
-        return res
+            return {"msg": "illegal parameter action", "code": -1}
 
 class User(Resource):
 
@@ -293,7 +281,7 @@ class Sys(Resource):
         logger.info(res)
         return res
 
-api_blueprint = Blueprint(__name__, __name__)
+api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)
 api.add_resource(Blog, '/blog', '/blog/', endpoint='blog')
 api.add_resource(Misc, '/misc', '/misc/', endpoint='misc')

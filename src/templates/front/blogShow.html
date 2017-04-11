@@ -19,10 +19,10 @@
 {% block PathNavigation %}
 			<ul class="breadcrumb">
 				<li>
-					 <a href="{{ url_for('front.index') }}">Home</a>
+					 <a href="{{ url_for('front.index') }}">首页</a>
 				</li>
 				<li class="active">
-					BlogDetail
+					详情
 				</li>
 			</ul>
 {% endblock %}
@@ -36,24 +36,34 @@
                 <fieldset>
                     <legend><small class="text-info text-lowercase">功能区</small></legend>
                     <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" class="btn btn-default"><a href="{{ url_for('front.blogEdit', blogId=blogId) }}" target="_blank">编辑文章</a></button>
-                        <button type="button" class="btn btn-default">置顶文章</button>
-                        <button type="button" class="btn btn-default">推荐文章</button>
-                        <button type="button" class="btn btn-danger">删除文章</button>
+                        <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" target="_blank" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
+                        {% if g.username in g.api.user_get_admins().data %}
+                            {% if data.top in ('true', 'True', True) %}
+                                <a href="javascript:setTop(false)" style='color:blue'><button type="button" class="btn btn-primary">取消置顶</button></a>
+                            {% else %}
+                                <a href="javascript:setTop(true)" style='color:blue'><button type="button" class="btn btn-primary">置顶文章</button></a>
+                            {% endif %}
+                            {% if data.recommend in ('true', 'True', True) %}
+                                <a href="javascript:setRecommend(false)" style='color:blue'><button type="button" class="btn btn-info">取消推荐</button></a>
+                            {% else %}
+                                <a href="javascript:setRecommend(true)" style='color:blue'><button type="button" class="btn btn-info">推荐文章</button></a>
+                            {% endif %}
+                            <a href="javascript:delBlog()" style='color:blue'><button type="button" class="btn btn-danger">删除文章</button></a>
+                        {% endif %}
                     </div>
                     <h6>
                         {% if data.author %}
-                        <i class="icon-user icon-1x"></i><a href="" title="由{{ data.author }}发布" style="color: #999">&nbsp;{{ data.author }}</a>&nbsp;
+                        <i class="icon-user icon-1x"></i><a href="" title="由 {{ data.author }} 发布" style="color: #999">&nbsp;{{ data.author }}</a>&nbsp;
                         {% endif %}
 
                         {% if data.catalog %}
-                        <i class="icon-folder-open icon-1x"></i><a href="" title="查看{{ data.catalog }}分类中所有文章" style="color: #999">&nbsp;{{ data.catalog }}</a>&nbsp;
+                        <i class="icon-folder-open icon-1x"></i><a href="" title="查看 {{ data.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ data.catalog }}</a>&nbsp;
                         {% endif %}
 
                         {% if data.tag %}
                         <i class="icon-tag icon-1x"></i>
                         {% for tag in data.tag.split() %}
-                            <a href="" title="查看{{ data.tag }}标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
+                            <a href="" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
                         {% endfor %}
                         {% endif %}
 
@@ -62,7 +72,7 @@
                         {% endif %}
 
                         <i class="icon-eye-open icon-1x"></i><scan style="color: #999">&nbsp;阅读N次</scan>&nbsp;
-                        <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ data.title }}》上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;
+                        <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ data.title }}》 上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;
                     </h6>
                 </fieldset>
                 <fieldset>
@@ -70,4 +80,98 @@
 				    {{ data['content'] | safe }}
                 </fieldset>
 			</article>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+{% if g.username in g.api.user_get_admins().data %}
+// 设置或取消置顶文章
+function setTop(value) {
+    $.ajax({
+        url: "{{ url_for('api.misc') }}?action=top&blogId={{ blogId }}&value=" + value,
+        method: 'POST',
+        datatype: 'json',
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                if(value==false) {
+                    layer.msg("取消置顶成功！");
+                } else {
+                    layer.msg("置顶文章成功！");
+                }
+            } else {
+                if(value==false) {
+                    layer.msg("取消置顶失败！"+res.msg, {icon: 2, time: 15*1000});
+                } else {
+                    layer.msg("置顶文章失败！"+res.msg, {icon: 2, time: 15*1000});
+                }
+            }
+            document.location.reload()
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+// 设置或取消推荐文章
+function setRecommend(value) {
+    $.ajax({
+        url: "{{ url_for('api.misc') }}?action=recommend&blogId={{ blogId }}&value=" + value,
+        method: 'POST',
+        datatype: 'json',
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                if(value==false) {
+                    layer.msg("取消推荐成功！");
+                } else {
+                    layer.msg("推荐文章成功！");
+                }
+            } else {
+                if(value==false) {
+                    layer.msg("取消推荐失败！"+res.msg, {icon: 2, time: 15*1000});
+                } else {
+                    layer.msg("推荐文章失败！"+res.msg, {icon: 2, time: 15*1000});
+                }
+            }
+            document.location.reload()
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+// 删除文章
+function delBlog() {
+    layer.confirm('你确定要删除此文章?', {
+        btn: ['确认删除','我再想想']
+    }, function(){
+        console.warn("将要删除节点"+{{ blogId }});
+        $.ajax({
+            url: "{{ url_for('api.blog', blogId=blogId) }}",
+            method: 'DELETE',
+            async: false,
+            datatype: 'json',
+            success: function(res) {
+                console.log(res);
+                if (res.success==true) {
+                    layer.msg("删除文章成功！", {icon: 1, time: 3*1000});
+                    window.location.href="{{ url_for('front.index') }}";
+                } else {
+                    layer.msg("删除文章失败！"+res.msg, {icon: 2, time: 15*1000});
+                }
+            },
+            error: function(error){
+                console.log(error);
+                layer.alert(res.statusText);
+            }
+        });
+    }, function() {
+        console.log("canel delete blog");
+    });
+}
+{% endif %}
+</script>
 {% endblock %}

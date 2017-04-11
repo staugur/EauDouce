@@ -348,6 +348,23 @@ class BlogApiManager(BaseApiManager):
         logger.info(res)
         return res
 
+    def blog_delete(self, blogId):
+        "删除文章"
+
+        res = {"msg": None, "success": False, "code": 0}
+        sql = "DELETE FROM blog_article WHERE id={}".format(blogId)
+        logger.info("delete blog sql: "+sql)
+        try:
+            data = self.mysql.execute(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="delete blog error", code=1000.18)
+        else:
+            res.update(success=True)
+
+        logger.info(res)
+        return res
+
     def blog_get_statistics(self):
         "统计数据查询"
         data = {
@@ -361,39 +378,67 @@ class BlogApiManager(BaseApiManager):
 
 class MiscApiManager(BaseApiManager):
 
-
-    def post(self):
+    def misc_set_recommend(self, blogId, value="true"):
         """
-        设置->
-        推荐文章: Recommended articles 
-        置顶文章: Sticky articles 
+        推荐或取消推荐文章: Recommended articles 
+        #blogId: 文章ID;
+        #value: 动作结果，true为推荐文章，false为取消推荐。
         """
-        res    = {"url": request.url, "msg": None, "success": False, "code": 0}
-        blogId = request.args.get("blogId")
-        action = request.args.get("action")
-        value  = request.args.get("value", "true")
-        logger.info("blogId: %s, action: %s, value: %s" %(blogId, action, value) )
+        res = { "msg": None, "success": False, "code": 0}
+        logger.info("blogId: %s, value: %s" %(blogId, value))
 
         #check params
         if not value in ("true", "True", True, "false", "False", False):
-            res.update(msg="illegal parameter value", code=-1)
+            res.update(msg="illegal parameter value", code=2000.1)
         try:
             blogId = int(blogId)
         except:
-            res.update(msg="illegal parameter blogId", code=-1)
-        if not action in ("recommend", "top"):
-            res.update(msg="illegal parameter action", code=-1)
+            res.update(msg="illegal parameter blogId", code=2000.2)
         if res['msg']:
             logger.info(res)
             return res
 
         try:
-            sql = "UPDATE blog_article SET update_time='%s',%s='%s' WHERE id=%d" %(get_today(), action, value, blogId)
+            #sql = "UPDATE blog_article SET update_time='%s',%s='%s' WHERE id=%d" %(get_today(), value, value, blogId)
+            sql = "UPDATE blog_article SET recommend='{}' WHERE id={}".format(value, blogId)
             logger.info(sql)
-            mysql.update(sql)
+            self.mysql.update(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(success=False)
+            res.update(msg="set or unset recommend error", success=False, code=2000.3)
+        else:
+            res.update(success=True)
+
+        logger.info(res)
+        return res
+
+    def misc_set_top(self, blogId, value="true"):
+        """
+        置顶或取消置顶文章: Top articles 
+        #blogId: 文章ID;
+        #value: 动作结果，true为置顶文章，false为取消置顶。
+        """
+        res = {"msg": None, "success": False, "code": 0}
+        logger.info("blogId: %s, value: %s" %(blogId, value))
+
+        #check params
+        if not value in ("true", "True", True, "false", "False", False):
+            res.update(msg="illegal parameter value", code=2000.4)
+        try:
+            blogId = int(blogId)
+        except:
+            res.update(msg="illegal parameter blogId", code=2000.5)
+        if res['msg']:
+            logger.info(res)
+            return res
+
+        try:
+            sql = "UPDATE blog_article SET top='{}' WHERE id={}".format(value, blogId)
+            logger.info(sql)
+            self.mysql.update(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(success=False, msg="set or unset top error", code=2000.6)
         else:
             res.update(success=True)
 

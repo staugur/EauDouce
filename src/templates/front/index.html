@@ -1,11 +1,11 @@
 {% extends "base/front.html" %}
 
-{% block title %}Index{% endblock %}
+{% block title %}首页{% endblock %}
 
 {% block PathNavigation %}
 			<ul class="breadcrumb">
 				<li class="active">
-					 <a href="{{ url_for('front.index') }}">Home</a>
+					 <a href="{{ url_for('front.index') }}">首页</a>
 				</li>
 			</ul>
 {% endblock %}
@@ -36,17 +36,17 @@
 					</p>
 					<h6>
 					    {% if blog.author %}
-					    <i class="icon-user icon-1x"></i><a href="" title="由{{ blog.author }}发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
+					    <i class="icon-user icon-1x"></i><a href="" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
 					    {% endif %}
 
                         {% if blog.catalog %}
-					    <i class="icon-folder-open icon-1x"></i><a href="" title="查看{{ blog.catalog }}分类中所有文章" style="color: #999">&nbsp;{{ blog.catalog }}</a>&nbsp;
+					    <i class="icon-folder-open icon-1x"></i><a href="" title="查看 {{ blog.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ blog.catalog }}</a>&nbsp;
 					    {% endif %}
 
                         {% if blog.tag %}
 					    <i class="icon-tag icon-1x"></i>
 					    {% for tag in blog.tag.split() %}
-					        <a href="" title="查看{{ blog.tag }}标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
+					        <a href="" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
 					    {% endfor %}
 					    {% endif %}
 
@@ -55,7 +55,7 @@
 					    {% endif %}
 
 					    <i class="icon-eye-open icon-1x"></i><scan style="color: #999">&nbsp;阅读N次</scan>&nbsp;
-					    <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ blog.title }}》上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;
+					    <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ blog.title }}》 上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;
 					</h6>
 				</div>
 			</div>
