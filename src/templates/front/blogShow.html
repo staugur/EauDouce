@@ -19,8 +19,11 @@
 {% block PathNavigation %}
 			<ul class="breadcrumb">
 				<li>
-					 <a href="{{ url_for('front.index') }}">首页</a>
+					<a href="{{ url_for('front.index') }}">首页</a>
 				</li>
+                <li>
+                    <a href="" title="查看 {{ data.catalog }} 分类中所有文章">{{ data.catalog }}</a>
+                </li>
 				<li class="active">
 					{{ data.title }}
 				</li>
