@@ -89,19 +89,12 @@ def feed():
     data = g.api.blog_get_all(limit=10).get("data")
     feed = AtomFeed(u'清水蓝天博客源', feed_url=request.url, url=request.url_root, subtitle="From the latest article in EauDouce")
     for article in data:
+        updated = article['update_time'][:10] if article['update_time'] else article['create_time'][:10]
         feed.add(article['title'], unicode(article['content']),
                  content_type='html',
                  author=article['author'],
                  id=article['id'],
                  url=urljoin(request.url_root, url_for(".blogShow", bid=article['id'])),
-                 updated=datetime.datetime.strptime(article['update_time'] or article['create_time'],"%Y-%m-%d"),
-                 published=datetime.datetime.strptime(article['create_time'],"%Y-%m-%d"))
+                 updated=datetime.datetime.strptime(updated, "%Y-%m-%d"),
+                 published=datetime.datetime.strptime(article['create_time'][:10], "%Y-%m-%d"))
     return feed.get_response()
-
-@front_blueprint.route("/webscan_360_cn.html")
-def webscan_360_cn():
-    return render_template("public/webscan_360_cn.html")
-
-@front_blueprint.route("/openSource/")
-def openSource():
-    return render_template("front/openSource.html")

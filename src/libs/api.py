@@ -52,6 +52,24 @@ class BaseApiManager(object):
 
 class BlogApiManager(BaseApiManager):
 
+    def blog_get_catalog_data(self, catalog, sort="desc", limit=None):
+        "查询分类目录数据"
+
+        res   = {"msg": None, "data": [], "code": 0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""
+        sql   = "SELECT id,title,catalog FROM blog_article WHERE catalog='%s' ORDER BY id %s %s" %(catalog, sort, LIMIT)
+        logger.info("query catalog data SQL: %s" %sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="Catalog data query fail", code=100009)
+        else:
+            res.update(data=data)
+
+        logger.info(res)
+        return res
+
     def blog_get_sources_data(self, sources, sort="desc", limit=None):
         "查询原创、转载、翻译文章"
 
@@ -72,26 +90,50 @@ class BlogApiManager(BaseApiManager):
                 data = self.mysql.query(sql)
             except Exception,e:
                 logger.error(e, exc_info=True)
-                res.update(msg="Sources data query fail", code=1000.1)
+                res.update(msg="Sources data query fail", code=100001)
             else:
                 res.update(data=data)
 
         logger.info(res)
         return res
 
-    def blog_get_recommend_data(self, sort="desc", limit=None):
-        "查询推荐文章"
-        res   = {"msg": None, "data": [], "code": 0}
-        LIMIT = "LIMIT " + str(limit) if limit else ""
-        sql   = "SELECT id,title,create_time,update_time,recommend FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
-        logger.info("query recommend data SQL: {}".format(sql))
+    def blog_get_tag_data(self, tag, sort="desc"):
+        "查询某个tag的文章"
+
+        res = {"msg": None, "data": [], "code": 0}
+        sql = "SELECT id,title,tag FROM blog_article ORDER BY id {}".format(sort)
+        logger.info("query tag data SQL: {}".format(sql))
         try:
             data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="Recommend data query fail", code=1000.2)
+            res.update(msg="Tag data query fail", code=100004)
         else:
-            res.update(data=[ _ for _ in data if _.get("recommend") in ("true", "True", True) ])
+            tagData = []
+            for _ in data:
+                #if get_tags_data.decode('utf-8') in _.get('tag').split():
+                if tag in _.get('tag').split():
+                    tagData.append(_)
+            res.update(data=tagData)
+
+        logger.info(res)
+        return res
+
+
+    def blog_get_update_data(self, sort="desc", limit=None):
+        "查询更新过的文章"
+
+        res   = {"msg": None, "data": [], "code": 0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""      
+        sql   = "SELECT id,title,create_time,update_time,tag FROM blog_article WHERE update_time IS NOT NULL ORDER BY update_time %s %s" %(sort, LIMIT)
+        logger.info("query update_time data SQL: %s" %sql)
+        try:
+            data = mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="query update data fail", code=100007)
+        else:
+            res.update(data=data)
 
         logger.info(res)
         return res
@@ -107,31 +149,46 @@ class BlogApiManager(BaseApiManager):
             data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="Top data query fail", code=1000.3)
+            res.update(msg="Top data query fail", code=100003)
         else:
             res.update(data=[ _ for _ in data if _.get("top") in ("true", "True", True) ])
 
         logger.info(res)
         return res
 
-    def blog_get_tag_data(self, tag, sort="desc"):
-        "查询某个tag的文章"
-
-        res = {"msg": None, "data": [], "code": 0}
-        sql = "SELECT id,title,tag FROM blog_article ORDER BY id {}".format(sort)
-        logger.info("query tag data SQL: {}".format(sql))
+    def blog_get_recommend_data(self, sort="desc", limit=None):
+        "查询推荐文章"
+        res   = {"msg": None, "data": [], "code": 0}
+        LIMIT = "LIMIT " + str(limit) if limit else ""
+        sql   = "SELECT id,title,create_time,update_time,recommend FROM blog_article ORDER BY update_time %s %s" %(sort, LIMIT)
+        logger.info("query recommend data SQL: {}".format(sql))
         try:
             data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="Tag data query fail", code=1000.4)
+            res.update(msg="Recommend data query fail", code=100002)
         else:
-            tagData = []
-            for _ in data:
-                #if get_tags_data.decode('utf-8') in _.get('tag').split():
-                if tag in _.get('tag').split():
-                    tagData.append(_)
-            res.update(data=tagData)
+            res.update(data=[ _ for _ in data if _.get("recommend") in ("true", "True", True) ])
+
+        logger.info(res)
+        return res
+
+
+    def blog_get_catalog_list(self):
+        "获取分类目录列表"
+
+        res = {"msg": None, "data": [], "code": 0}
+        sql = 'SELECT catalog FROM blog_catalog'
+        logger.info("query catalog list SQL: %s" %sql)
+        try:
+            data = self.mysql.query(sql)
+            data = list(set([ v for _ in data for v in _.values() if v ]))
+            #data = [ v.split(",")[0] for i in data for v in i.values() if v and v.split(",")[0] ]
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="query catalog data fail", code=100008)
+        else:
+            res.update(data=data)
 
         logger.info(res)
         return res
@@ -148,7 +205,7 @@ class BlogApiManager(BaseApiManager):
             data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="Tag list query fail", code=1000.5)
+            res.update(msg="Tag list query fail", code=100005)
         else:
             tags = []
             for _ in data:
@@ -159,6 +216,7 @@ class BlogApiManager(BaseApiManager):
 
         logger.info(res)
         return res
+
 
     def blog_get_single_index(self, sort="desc", limit=None):
         "获取所有文章简单数据索引"
@@ -171,62 +229,7 @@ class BlogApiManager(BaseApiManager):
             data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="query single index fail", code=1000.6)
-        else:
-            res.update(data=data)
-
-        logger.info(res)
-        return res
-
-    def blog_get_update_data(self, sort="desc", limit=None):
-        "查询更新过的文章"
-
-        res   = {"msg": None, "data": [], "code": 0}
-        LIMIT = "LIMIT " + str(limit) if limit else ""      
-        sql   = "SELECT id,title,create_time,update_time,tag FROM blog_article WHERE update_time IS NOT NULL ORDER BY update_time %s %s" %(sort, LIMIT)
-        logger.info("query update_time data SQL: %s" %sql)
-        try:
-            data = mysql.query(sql)
-        except Exception,e:
-            logger.error(e, exc_info=True)
-            res.update(msg="query update data fail", code=1000.7)
-        else:
-            res.update(data=data)
-
-        logger.info(res)
-        return res
-
-    def blog_get_catalog_list(self):
-        "获取分类目录列表"
-
-        res = {"msg": None, "data": [], "code": 0}
-        sql = 'SELECT catalog FROM blog_catalog'
-        logger.info("query catalog list SQL: %s" %sql)
-        try:
-            data = self.mysql.query(sql)
-            data = list(set([ v for _ in data for v in _.values() if v ]))
-            #data = [ v.split(",")[0] for i in data for v in i.values() if v and v.split(",")[0] ]
-        except Exception,e:
-            logger.error(e, exc_info=True)
-            res.update(msg="query catalog data fail", code=1000.8)
-        else:
-            res.update(data=data)
-
-        logger.info(res)
-        return res
-
-    def blog_get_catalog_data(self, catalog, sort="desc", limit=None):
-        "查询分类目录数据"
-
-        res   = {"msg": None, "data": [], "code": 0}
-        LIMIT = "LIMIT " + str(limit) if limit else ""
-        sql   = "SELECT id,title,catalog FROM blog_article WHERE catalog='%s' ORDER BY id %s %s" %(catalog, sort, LIMIT)
-        logger.info("query catalog data SQL: %s" %sql)
-        try:
-            data = self.mysql.query(sql)
-        except Exception,e:
-            logger.error(e, exc_info=True)
-            res.update(msg="Catalog data query fail", code=1000.9)
+            res.update(msg="query single index fail", code=100006)
         else:
             res.update(data=data)
 
@@ -241,15 +244,16 @@ class BlogApiManager(BaseApiManager):
         sql   = "SELECT id,title,create_time,update_time,tag,catalog,sources,author from blog_article WHERE author='%s' ORDER BY id %s %s" %(user, sort, LIMIT)
         logger.info("query user blog SQL: %s" %sql)
         try:
-            data = mysql.query(sql)
+            data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update( msg="User blog data query fail", code=1000.10)
+            res.update( msg="User blog data query fail", code=1000010)
         else:
             res.update(data=data)
         
         logger.info(res)
         return res
+
 
     def blog_get_id(self, blogId):
         "查询某个id的博客数据"
@@ -261,7 +265,7 @@ class BlogApiManager(BaseApiManager):
             data = self.mysql.get(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="get blog error", code=1000.11)
+            res.update(msg="get blog error", code=1000011)
         else:
             res.update(data=data)
 
@@ -279,12 +283,13 @@ class BlogApiManager(BaseApiManager):
             data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="get all blog error", code=1000.12)
+            res.update(msg="get all blog error", code=1000012)
         else:
             res.update(data=data)
 
         logger.info(res)
         return res
+
 
     def blog_create(self, **kwargs):
         "创建博客文章接口"
@@ -305,11 +310,11 @@ class BlogApiManager(BaseApiManager):
                 blog_id  = self.mysql.insert(sql, blog_title, blog_content, blog_ctime, blog_tag, blog_catalog, blog_sources, blog_author)
             except Exception,e:
                 logger.error(e, exc_info=True)
-                res.update(msg="Blog article failed to write, please try to resubmit.", code=1000.13)
+                res.update(msg="Blog article failed to write, please try to resubmit.", code=1000013)
             else:
-                res.update(msg="blog write success.", success=True)
+                res.update(msg="blog write success.", success=True, data=blog_id)
         else:
-            res.update(msg="data in wrong format.", code=1000.14)
+            res.update(msg="data in wrong format.", code=1000014)
 
         logger.info(res)
         return res
@@ -331,7 +336,7 @@ class BlogApiManager(BaseApiManager):
             blog_blogId = int(blog_blogId)
         except ValueError,e:
             logger.error(e, exc_info=True)
-            res.update(msg="blogId form error.", code=1000.15)
+            res.update(msg="blogId form error.", code=1000015)
         else:
             if blog_title and blog_content and blog_utime and blog_author:
                 sql = "UPDATE blog_article SET title=%s,content=%s,update_time=%s,tag=%s,catalog=%s,sources=%s,author=%s WHERE id=%s"
@@ -339,11 +344,11 @@ class BlogApiManager(BaseApiManager):
                     self.mysql.update(sql, blog_title, blog_content, blog_utime, blog_tag, blog_catalog, blog_sources, blog_author, blog_blogId)
                 except Exception,e:
                     logger.error(e, exc_info=True)
-                    res.update(msg="blog update error.", code=1000.16)
+                    res.update(msg="blog update error.", code=1000016)
                 else:
                     res.update(success=True)
             else:
-                res.update(msg="blog form error.", code=1000.17)
+                res.update(msg="blog form error.", code=1000017)
 
         logger.info(res)
         return res
@@ -358,7 +363,7 @@ class BlogApiManager(BaseApiManager):
             data = self.mysql.execute(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="delete blog error", code=1000.18)
+            res.update(msg="delete blog error", code=1000018)
         else:
             res.update(success=True)
 
@@ -389,11 +394,11 @@ class MiscApiManager(BaseApiManager):
 
         #check params
         if not value in ("true", "True", True, "false", "False", False):
-            res.update(msg="illegal parameter value", code=2000.1)
+            res.update(msg="illegal parameter value", code=200001)
         try:
             blogId = int(blogId)
         except:
-            res.update(msg="illegal parameter blogId", code=2000.2)
+            res.update(msg="illegal parameter blogId", code=200002)
         if res['msg']:
             logger.info(res)
             return res
@@ -405,7 +410,7 @@ class MiscApiManager(BaseApiManager):
             self.mysql.update(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="set or unset recommend error", success=False, code=2000.3)
+            res.update(msg="set or unset recommend error", success=False, code=200003)
         else:
             res.update(success=True)
 
@@ -423,11 +428,11 @@ class MiscApiManager(BaseApiManager):
 
         #check params
         if not value in ("true", "True", True, "false", "False", False):
-            res.update(msg="illegal parameter value", code=2000.4)
+            res.update(msg="illegal parameter value", code=200004)
         try:
             blogId = int(blogId)
         except:
-            res.update(msg="illegal parameter blogId", code=2000.5)
+            res.update(msg="illegal parameter blogId", code=200005)
         if res['msg']:
             logger.info(res)
             return res
@@ -438,7 +443,7 @@ class MiscApiManager(BaseApiManager):
             self.mysql.update(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(success=False, msg="set or unset top error", code=2000.6)
+            res.update(success=False, msg="set or unset top error", code=200006)
         else:
             res.update(success=True)
 
@@ -463,7 +468,7 @@ class UserApiManager(BaseApiManager):
             data = self.mysql.query(sql)
         except Exception,e:
             logger.info(e, exc_info=True)
-            res.update(msg="get all user error", code=3000.1)
+            res.update(msg="get all user error", code=300001)
         else:
             res.update(data=data)
 
@@ -493,7 +498,7 @@ class UserApiManager(BaseApiManager):
             data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e, exc_info=True)
-            res.update(msg="query admin account error", code=3000.1)
+            res.update(msg="query admin account error", code=300001)
         else:
             res.update(data= [ _["username"] for _ in data if _.get("username") ])
 
@@ -627,7 +632,7 @@ class SysApiManager(BaseApiManager):
             data = self.mysql.query(sql)
         except Exception,e:
             logger.error(e)
-            res.update(msg="query notice data error", code=4000.1)
+            res.update(msg="query notice data error", code=400001)
         else:
             res.update(data=[ _.get("msg") for _ in data if _.get("msg") ])
 
@@ -644,7 +649,7 @@ class SysApiManager(BaseApiManager):
             data = self.mysql.get(sql)
         except Exception,e:
             logger.error(e)
-            res.update(msg="query config data error", code=4000.2)
+            res.update(msg="query config data error", code=400002)
         else:
             res.update(data=data)
 

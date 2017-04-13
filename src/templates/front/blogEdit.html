@@ -29,19 +29,19 @@
                 <div class="form-group">
                     <label for="blogTitle" class="col-sm-2 control-label"><i class="icon-ok-sign"></i>&nbsp;文章标题</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="blogTitle" placeholder="请在此处填写文章标题" value="{{ data.title }}" />
+                        <input type="text" class="form-control" id="blogTitle" name="title" placeholder="请在此处填写文章标题" value="{{ data.title }}" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="blogTag" class="col-sm-2 control-label"><i class="icon-tags"></i>&nbsp;文章标签</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="blogTag" placeholder="请在此处输入标签并以空格分割" value="{{ data.tag }}"/>
+                        <input type="text" class="form-control" id="blogTag" name="tag" placeholder="请在此处输入标签并以空格分割" value="{{ data.tag }}"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="blogCatalog" class="col-sm-2 control-label"><i class="icon-folder-open"></i>&nbsp;文章分类</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="blogCatalog">
+                        <select class="form-control" id="blogCatalog" name="catalog">
                             <option>{{ data.catalog }}</option>
                             {% for catalog in g.api.blog_get_catalog_list().data %}
                                 {% if data.catalog != catalog %}
@@ -160,53 +160,20 @@
 {% endif %}
 
 <script type="text/javascript">
-    // 提交文章数据
-    function postForm() {
-    {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
-        //blog = $('#CreateBlogFormId').serialize();
-        blog = $('#CreateBlogFormId').serializeArray();
-    {% else %}
-        blog = $('#CreateBlogFormId').serializeArray();
-        //blog = $('#CreateBlogFormId').serialize();
-        //blog = {"title": data[0].value, "tag": data[1].value, "catalog": data[2].value, "sources": data[3].value, "content": Editor.getHTML(), "author": data[6].value};
-    {% endif -%}
-        console.log(blog);
-        $.ajax({
-            url: '{{ url_for("front.blogWrite") }}',
-            method: 'POST',
-            datatype: 'json',
-            data: blog,
-            success: function(res) {
-                console.log(res);
-                if (res.code == 0){
-                    alert("提交文章成功！")
-                    if ( isNaN(res.data) ) {
-                        location.reload(true);
-                    } else {
-                        window.location="/blog/" + res.data + ".html";
-                    }
-                } else {
-                    alert("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg);
-                }
-            },
-        });
-    };
-
-
     // 更新文章数据
     function putForm() {
         $.ajax({
-            url: '#',
+            url: '{{ url_for("api.blog") }}',
             method: 'PUT',
             datatype: 'json',
             data: $('#UpdateBlogFormId').serialize(),
             success: function(res) {
                 console.log(res);
                 if (res.success == true){
-                    alert("更新文章成功！");
+                    layer.alert("更新文章成功！", {icon: 1, time: 3*1000});
                     window.location="/blog/{{ blogId }}.html";
                 } else {
-                    alert("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg);
+                    layer.alert("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
                     //location.reload(true);
                 }
             },
