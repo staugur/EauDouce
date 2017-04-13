@@ -170,10 +170,10 @@
             success: function(res) {
                 console.log(res);
                 if (res.success == true){
-                    layer.alert("更新文章成功！", {icon: 1, time: 3*1000});
+                    layer.msg("更新文章成功！", {icon: 1, time: 3*1000});
                     window.location="/blog/{{ blogId }}.html";
                 } else {
-                    layer.alert("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
+                    layer.msg("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
                     //location.reload(true);
                 }
             },

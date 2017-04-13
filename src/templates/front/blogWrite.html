@@ -169,14 +169,14 @@
             success: function(res) {
                 console.log(res);
                 if (res.code == 0){
-                    layer.alert("提交文章成功！", {icon: 1, time: 3*1000})
+                    layer.msg("提交文章成功！", {icon: 1, time: 3*1000})
                     if ( isNaN(res.data) ) {
                         location.reload(true);
                     } else {
                         window.location="/blog/" + res.data + ".html";
                     }
                 } else {
-                    layer.alert("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
+                    layer.msg("提交文章失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
                 }
             },
         });
