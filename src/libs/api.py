@@ -656,5 +656,22 @@ class SysApiManager(BaseApiManager):
         logger.info(res)
         return res
 
+    def get_sys_friendlink(self):
+        "查询系统中的友链"
+
+        res = {"code": 0, "msg": None, "data": None}
+        sql = "SELECT id,link,title FROM sys_friendlink"
+        logger.info("query friend link data with sql: " + sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e)
+            res.update(msg="query friend link data error", code=400003)
+        else:
+            res.update(data=data)
+
+        logger.info(res)
+        return res
+
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
     pass

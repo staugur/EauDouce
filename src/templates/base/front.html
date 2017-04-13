@@ -251,7 +251,9 @@
             <h4><scan class="icon-link icon-1x"> 友情链接</scan></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
-                     <button type="button" class="btn btn-default btn-link">按钮</button>
+                    {% for fl in g.api.get_sys_friendlink().data %}
+                        <p class="text-success"><scan class="icon-external-link"></scan>&nbsp;<a href="{{ fl.link }}" title="{{ fl.title }}">{{ fl.title }}</a></p>
+                    {% endfor %}
                 </div>
             </div>
         </div>
