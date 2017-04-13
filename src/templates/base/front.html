@@ -117,7 +117,7 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="item">
-                        <img alt="" src="{{ url_for('static', filename='img/slide/1.jpg') }}" />
+                        <img alt="" src="https://img.saintic.com/EauDouce/slide/1.jpg" />
                         <div class="carousel-caption">
                             <h4>
                                 First Thumbnail label
@@ -128,7 +128,7 @@
                         </div>
                     </div>
                     <div class="item">
-                        <img alt="" src="{{ url_for('static', filename='img/slide/2.jpg') }}" />
+                        <img alt="" src="https://img.saintic.com/EauDouce/slide/2.jpg" />
                         <div class="carousel-caption">
                             <h4>
                                 Second Thumbnail label
@@ -139,7 +139,7 @@
                         </div>
                     </div>
                     <div class="item active">
-                        <img alt="" src="{{ url_for('static', filename='img/slide/3.jpg') }}" />
+                        <img alt="" src="https://img.saintic.com/EauDouce/slide/3.jpg" />
                         <div class="carousel-caption">
                             <h4>
                                 Third Thumbnail label
@@ -189,19 +189,19 @@
             </p>
             <address>
             {% if config.about_address %}
-            <i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;<abbr title="Address">{{ config.about_address }}</abbr><br />
+            <i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;{{ config.about_address }}<br />
             {% endif %}
 
             {% if config.about_phone %}
-            <i class="icon-mobile-phone"></i>&nbsp;&nbsp;&nbsp;&nbsp;<abbr title="Phone">{{ config.about_phone }}</abbr><br />
+            <i class="icon-mobile-phone"></i>&nbsp;&nbsp;&nbsp;&nbsp;{{ config.about_phone }}<br />
             {% endif %}
 
             {% if config.about_email %}
-            <i class="icon-envelope"></i>&nbsp;&nbsp;<abbr title="Email">{{ config.about_email }}</abbr><br />
+            <i class="icon-envelope"></i>&nbsp;&nbsp;{{ config.about_email }}<br />
             {% endif %}
 
             {% if config.about_ww %}
-            <i class="icon-comments-alt"></i>&nbsp;&nbsp;<abbr title="Words">{{ config.about_ww }}</abbr><br />
+            <i class="icon-comments-alt"></i>&nbsp;&nbsp;{{ config.about_ww }}<br />
             {% endif %}
             </address>
 
