@@ -25,15 +25,14 @@
 
             <!-- 文章列表缩略 -->
             <h3><scan class="icon-book icon-large"> 最新文章</scan></h3>
-            {% for blog in g.api.blog_get_single_index(limit=request.args.get("limit", "6")).data %}
+            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 5)) %}
+            {% for blog in blogs.data %}
             <blockquote>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 					<h4 class="text-left text-success">
 						<a href="/blog/{{ blog.id }}.html" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
 					</h4>
-					<p class="text-left text-info">
-					</p>
 					<h6>
 					    {% if blog.author %}
 					    <i class="icon-user icon-1x"></i><a href="" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
@@ -60,33 +59,31 @@
 				</div>
 			</div>
 			</blockquote>
-			<p></p>
 			{% endfor %}
 
 			<!-- 分页 -->
+			{% set prev = blogs.page.page - 1 %}
+			{% set next = blogs.page.page + 1 %}
+			{% set last = blogs.page.PageCount - 1 %}
 			<center>
 			<ul class="pagination pagination-lg">
-				<li>
-					 <a href="#">Prev</a>
-				</li>
-				<li>
-					 <a href="#">1</a>
-				</li>
-				<li>
-					 <a href="#">2</a>
-				</li>
-				<li>
-					 <a href="#">3</a>
-				</li>
-				<li>
-					 <a href="#">4</a>
-				</li>
-				<li>
-					 <a href="#">5</a>
-				</li>
-				<li>
-					 <a href="#">Next</a>
-				</li>
+			    {%- if blogs.page.page == 0 %}
+				<li class="disabled"><a>Prev</a></li>
+				{% else -%}
+				<li><a href="{{ url_for('front.index', page=prev) }}">Prev</a></li>
+				{% endif -%}
+				{%- for p in range(blogs.page.PageCount) %}
+				    {%- if blogs.page.page == p -%}
+				        <li class="disabled"><a>{{ p }}</a></li>
+				    {%- else -%}
+				        <li><a href="{{ url_for('front.index', page=p) }}">{{ p }}</a></li>
+				    {% endif -%}
+                {% endfor -%}
+			    {% if blogs.page.page == last %}
+				<li class="disabled"><a>Next</a></li>
+				{% else %}
+				<li><a href="{{ url_for('front.index', page=next) }}">Next</a></li>
+				{%- endif %}
 			</ul>
 			</center>
 {% endblock %}

@@ -67,7 +67,9 @@ class Blog(Resource):
         if get_user:
             return g.api.blog_get_user_blog(get_user, sort, limit)
         if get_index:
-            return g.api.blog_get_single_index(sort, limit)
+            page   = int(request.args.get("page", 0))
+            length = int(request.args.get("length", 5))
+            return g.api.blog_get_single_index(sort, limit, page, length)
 
     def post(self):
         """ 创建博客文章接口 """

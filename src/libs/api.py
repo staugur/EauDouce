@@ -3,7 +3,7 @@
 from config import MYSQL
 from random import choice
 from torndb import IntegrityError, Connection
-from utils.tool import logger, ParseMySQL, get_today
+from utils.tool import logger, ParseMySQL, get_today, ListEqualSplit
 
 
 class BaseApiManager(object):
@@ -218,20 +218,25 @@ class BlogApiManager(BaseApiManager):
         return res
 
 
-    def blog_get_single_index(self, sort="desc", limit=None):
+    def blog_get_single_index(self, sort="desc", limit=None, page=0, length=5):
         "获取所有文章简单数据索引"
 
-        res   = {"msg": None, "data": [], "code": 0}
+        res   = {"msg": None, "data": [], "code": 0, "page": {}}
         LIMIT = "LIMIT " + str(limit) if limit else ""
         sql   = "SELECT id,title,create_time,update_time,tag,author,catalog FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
         logger.info("query single index SQL: %s" %sql)
         try:
-            data = self.mysql.query(sql)
+            page = int(page)
+            data = ListEqualSplit(self.mysql.query(sql), length)
+            length = int(length)
         except Exception,e:
             logger.error(e, exc_info=True)
             res.update(msg="query single index fail", code=100006)
         else:
-            res.update(data=data)
+            if page < len(data):
+                res.update(data=data[page], page={"page": page, "limit": limit, "length": length, "PageCount": len(data)})
+            else:
+                logger.info("get single index, but IndexOut with page "+page)
 
         logger.info(res)
         return res

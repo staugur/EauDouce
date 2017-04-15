@@ -18,6 +18,7 @@ gen_token       = lambda n=32:b32encode(uuid4().hex)[:n]
 gen_requestId   = lambda :str(uuid4())
 get_today       = lambda :datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 gen_rnd_filename= lambda :"%s%s" %(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), str(random.randrange(1000, 10000)))
+ListEqualSplit  = lambda l,n=5: [ l[i:i+n] for i in range(0,len(l), n) ]
 
 
 def ip_check(ip):
