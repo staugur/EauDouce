@@ -9,3 +9,14 @@
   display:none;
   background:url(/static/img/gototop.png);
 }
+
+.TransparentBar {
+	width: 180px; 
+	height: 260px; 
+	margin:0px auto; 
+	padding:30px 30px;
+	background:rgba(255, 255, 255, 0.6)!important;
+    filter:Alpha(opacity=60); background:#fff; 
+    /*　使用IE专属滤镜实现IE背景透明*/ }
+
+.TransparentBar p { position:relative; } /*实现IE文字不透明*/

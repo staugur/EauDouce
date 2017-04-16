@@ -6,7 +6,6 @@
     <!-- 引入 Bootstrap -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
-    {% block head %}{% endblock %}
     <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
     <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
     <!--[if lt IE 9]>
@@ -15,20 +14,8 @@
     <![endif]-->
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
-
-    <style type="text/css">
-    /* 返回顶部 */
-    #goTopBtn {
-        position: fixed;
-        line-height:36px;
-        width:36px;
-        bottom:35px;
-        height:36px;
-        cursor:pointer;
-        display:none;
-        background:url({{ url_for('static', filename='img/gototop.png') }});
-     }
-     </style>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    {% block head %}{% endblock %}
 </head>
 </head>
 <body>
@@ -63,16 +50,16 @@
                     <ul class="nav navbar-nav navbar-right">
                         {% if g.signin %}
                         <li class="dropdown">
-                            <a href="#" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
+                            <a href="{{ url_for('front.blogHome', user=g.username) }}" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Signed in as <strong>{{ g.username }}</strong></a></li>
+                                <li><a href="{{ url_for('front.blogHome', user=g.username) }}">Signed in as <strong>{{ g.username }}</strong></a></li>
                                 <li class="divider"></li>
-                                <li><a id="modal-616688" href="#modal-container-616688" role="button" data-toggle="modal">我的资料</a></li>
-                                <li><a href="#">我的文章</a></li>
-                                <li><a href="#">修改头像</a></li>
-                                <li><a href="#">修改密码</a></li>
+                                <li><a href="{{ url_for('front.blogHome', user=g.username) }}">我的主页</a></li>
+                                <li><a href="{{ url_for('front.blogHome', user=g.username) }}#blog">我的文章</a></li>
+                                <li class="disabled"><a href="#">修改头像</a></li>
+                                <li class="disabled"><a href="#">修改密码</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
+                                <li class="disabled"><a href="#" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
                                 <li><a href="{{ url_for('logout') }}" title="Sign Out">注销&nbsp;<i class="icon-signout icon-1x"></i></a></li>
                             </ul>
                         </li>
@@ -84,28 +71,8 @@
                 </div>
             </nav>
 
-            <!--遮罩窗体触发资料显示-->
-            <div class="modal fade" id="modal-container-616688" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title" id="myModalLabel">
-                                我的资料({{ g.username }})
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-                            内容...
-                            <img alt="140x140" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/140/140/default.jpg" class="img-circle" />
-                        </div>
-                        <div class="modal-footer">
-                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!--首页轮番图-->
+            {% block AlternateDiagram %}
             <div class="carousel slide" id="carousel-394119">
                 <ol class="carousel-indicators">
                     <li data-slide-to="0" data-target="#carousel-394119">
@@ -151,15 +118,18 @@
                     </div>
                 </div> <a class="left carousel-control" href="#carousel-394119" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-394119" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
+            {% endblock %}
         </div>
     </div>
 
     <!-- 公告 -->
+    {% block notice %}
     <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
         {% for msg in g.api.get_sys_notice().data %}
         <i class="icon-bullhorn"></i>&nbsp;{{ msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         {% endfor %}
     </marquee>
+    {% endblock %}
 
     <div class="row clearfix">
         <div class="col-md-8 column">
@@ -169,17 +139,20 @@
             </p>
 
             <!-- 搜索 -->
+            {% block search %}
             <form class="form-search form-horizontal" action="?q=" method="" id="SearchForm">
                 <div class="input-group search-input-group">
                     <button type="submit" class="btn btn-success" style="height: 30px"><i class="icon-search"></i></button>
                     <input type="text" name="q" placeholder="搜索博客文章" style="height: 27px;">
                 </div>
             </form>
+            {% endblock %}
 
             {% block container %}{% endblock %}
         </div>
 
         <!-- 右侧 -->
+        {% block aside %}
         <div class="col-md-4 column">
             <!-- 关于本站 -->
             <h4><scan class="icon-flag icon-1x"> 关于本站</scan></h4>
@@ -269,6 +242,7 @@
                 </div>
             </div>
         </div>
+        {% endblock %}
     </div>
 
 </div>
@@ -347,7 +321,6 @@ function tick()
     document.getElementById("localtime").innerHTML = showLocale(today);  
     window.setTimeout("tick()", 1000);  
 };  
-tick();
 
 //返回顶部
     $(window).scroll(function(){
@@ -364,6 +337,9 @@ tick();
       var sc=$(window).scrollTop();
       $('body,html').animate({scrollTop:0},500);
     })
+
+//右侧动态时间
+tick();
 </script>  
 
 </body>

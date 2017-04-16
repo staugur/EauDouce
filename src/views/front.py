@@ -11,9 +11,9 @@ front_blueprint = Blueprint("front", __name__)
 
 @front_blueprint.route("/")
 def index():
-    return render_template("front/index.html")
+    return render_template("front/blogIndex.html")
 
-@front_blueprint.route('/<int:bid>.html')
+@front_blueprint.route('/blog/<int:bid>.html')
 def blogShow(bid):
     data = g.api.blog_get_id(bid).get("data")
     if data:
@@ -22,11 +22,11 @@ def blogShow(bid):
         return abort(404)
 
 @login_required
-@front_blueprint.route("/write/")
+@front_blueprint.route("/blog/write/")
 def blogWrite():
     return render_template("front/blogWrite.html")
 
-@front_blueprint.route("/edit/")
+@front_blueprint.route("/blog/edit/")
 def blogEdit():
     blogId = request.args.get("blogId")
     if g.signin and blogId:
@@ -37,22 +37,15 @@ def blogEdit():
         return abort(404)
     return redirect(url_for("login"))
 
-@front_blueprint.route("/resource/")
+@front_blueprint.route("/blog/resource/")
 def blogResource():
     return render_template("front/blogResource.html")
 
-###
-@front_blueprint.route("/home/")
-@front_blueprint.route("/home/<user>/")
-def home(user=None):
+@front_blueprint.route("/user/<user>/")
+def blogHome(user=None):
     logger.debug(user)
-    if g.signin:
-        user = get_user_profile(g.username)
-        blog = get_user_blog(g.username)
-        return render_template("front/home.html", user=user, blog=blog)
-    else:
-        return redirect(url_for(".login"))
-
+    return render_template("front/blogHome.html", user=user)
+##
 @front_blueprint.route("/user/profile/")
 def profile():
     if g.signin:

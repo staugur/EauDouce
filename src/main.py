@@ -18,7 +18,7 @@ __version__ = '0.0.1'
 
 app = Flask(__name__)
 api = ApiManager()
-app.register_blueprint(front_blueprint, url_prefix="/blog")
+app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 
 @app.before_request
@@ -31,8 +31,6 @@ def before_request():
     g.sysInfo   = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__}
     g.api       = api
     g.plugins   = PLUGINS
-    app.logger.info(app.url_map)
-    app.logger.debug(dir(g.api))
 
 @app.after_request
 def after_request(response):
@@ -57,14 +55,10 @@ def not_found(error=None):
     resp.status_code = 404
     return resp
 
-@app.route('/')
-def index():
-    return redirect(url_for("front.index"))
-
 @app.route('/login/')
 def login():
     if g.signin:
-        return redirect(url_for("index"))
+        return redirect(url_for("front.index"))
     else:
         query = {"sso": True,
            "sso_r": SpliceURL.Modify(request.url_root, "/sso/").geturl,
@@ -95,7 +89,7 @@ def sso():
         UnixExpires = None
     else:
         UnixExpires = datetime.datetime.strptime(expires,"%Y-%m-%d")
-    resp = make_response(redirect(url_for("index")))
+    resp = make_response(redirect(url_for("front.index")))
     resp.set_cookie(key='logged_in', value="yes", expires=UnixExpires)
     resp.set_cookie(key='username',  value=username, expires=UnixExpires)
     resp.set_cookie(key='sessionId', value=sessionId, expires=UnixExpires)
