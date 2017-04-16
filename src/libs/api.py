@@ -227,8 +227,10 @@ class BlogApiManager(BaseApiManager):
         logger.info("query single index SQL: %s" %sql)
         try:
             page = int(page)
-            data = ListEqualSplit(self.mysql.query(sql), length)
+            blog = self.mysql.query(sql)
+            data = ListEqualSplit(blog, length)
             length = int(length)
+            res.update(statistics=len(blog))
         except Exception,e:
             logger.error(e, exc_info=True)
             res.update(msg="query single index fail", code=100006)
@@ -378,7 +380,7 @@ class BlogApiManager(BaseApiManager):
     def blog_get_statistics(self):
         "统计数据查询"
         data = {
-            "ArticleTotal": len(self.blog_get_single_index().get("data")),
+            "ArticleTotal": len(self.blog_get_single_index().get("statistics")),
             "CatalogTotal": len(self.blog_get_catalog_list().get("data")),
             "TagTotal": len(self.blog_get_tags_list().get("data")),
             "CommentTotal": None,
