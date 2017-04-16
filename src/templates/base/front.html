@@ -224,7 +224,7 @@
                     <div id="panel-element-266807" class="panel-collapse collapse">
                         <div class="panel-body">
                             <p class="bg-primary">{{ request.headers.get("User-Agent") }}</p>
-                            <p class="bg-info">访问地址: {{ request.headers.get('X-Real-Ip', request.remote_addr) }}</p>
+                            <p class="bg-info">来源地址: {{ request.headers.get('X-Real-Ip', request.remote_addr) }}</p>
                             <p class="bg-danger">当前路径: {{ request.url }}</p>
                             <p class="bg-success">当前时间: <span id="localtime"></span></p>
                         </div>
