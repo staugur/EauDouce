@@ -28,7 +28,7 @@
             <form class="form-horizontal" role="form" id="CreateBlogFormId">
                 <center><h3>
                     <scan class="help-block"><i class="icon-pencil icon-1x"></i>&nbsp;创作文章
-                    <input type="button" onclick=postForm() value="提交文章" class="btn btn-success btn-xs" />
+                    <input type="button" onclick=postForm() value="提交文章" class="btn btn-success btn-xs" disabled="disabled" />
                     {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
                         <a href="{{ url_for('front.blogWrite', editor='Editor.md') }}" class="btn btn-info btn-xs" role="button">&nbsp;切换编辑器</a>
                     {% else %}
