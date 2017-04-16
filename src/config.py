@@ -7,7 +7,7 @@ GLOBAL={
     "Host": os.getenv("eaudouce_host", "0.0.0.0"),
     #Application run network address, you can set it `0.0.0.0`, `127.0.0.1`, ``.
 
-    "Port": os.getenv("eaudouce_port", 10141),
+    "Port": os.getenv("eaudouce_port", 10140),
     #Application run port, default port.
 
     "LogLevel": os.getenv("eaudouce_loglevel", "DEBUG"),
