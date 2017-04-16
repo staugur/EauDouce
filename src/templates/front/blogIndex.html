@@ -2,6 +2,39 @@
 
 {% block title %}首页{% endblock %}
 
+{% block head %}
+<style type="text/css">
+blockquote {
+    color:#888;
+	background-color: #eae6f3;
+	border-left: 1em solid #5236a0;
+	padding: 1em 1.5em 1em 1.5em;
+	position: relative;
+	font-family: 'Roboto', sans-serif;
+	line-height: 150%;
+	text-indent: 35px;
+}
+blockquote:before {
+  color: #392570;
+  content: "\201C";
+  font-size: 5em;
+  position:absolute;
+  left:-15px;
+  top: 40px;
+  line-height: 0.1em;
+}
+blockquote:after {
+   color: #392570;
+  content: "\201D";
+  font-size: 5em;
+  position:absolute;
+  right:15px;
+  bottom: 0em;
+  line-height: 0.1em;
+}
+</style> 
+{% endblock %}
+
 {% block PathNavigation %}
 			<ul class="breadcrumb">
 				<li class="active">
@@ -26,40 +59,41 @@
             <!-- 文章列表缩略 -->
             <h3><scan class="icon-book icon-large"> 最新文章</scan></h3>
             {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 6)) %}
-            {% for blog in blogs.data %}
             <blockquote>
+            {% for blog in blogs.data %}
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 					<h4 class="text-left text-success">
 						<a href="{{ url_for('front.blogShow', bid=blog.id) }}" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
 					</h4>
-					<h6>
+					<h5>
 					    {% if blog.author %}
-					    <i class="icon-user icon-1x"></i><a href="" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
+					    <small><i class="icon-user icon-1x"></i><a href="" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
 					    {% endif %}
 
                         {% if blog.catalog %}
-					    <i class="icon-folder-open icon-1x"></i><a href="" title="查看 {{ blog.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ blog.catalog }}</a>&nbsp;
+					    <small><i class="icon-folder-open icon-1x"></i><a href="" title="查看 {{ blog.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ blog.catalog }}</a>&nbsp;</small>
 					    {% endif %}
 
                         {% if blog.tag %}
-					    <i class="icon-tag icon-1x"></i>
+					    <small><i class="icon-tag icon-1x"></i>
 					    {% for tag in blog.tag.split() %}
 					        <a href="" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
 					    {% endfor %}
+					    </small>
 					    {% endif %}
 
                         {% if blog.create_time %}
-					    <i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;
+					    <small><i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;</small>
 					    {% endif %}
 
-					    <i class="icon-eye-open icon-1x"></i><scan style="color: #999">&nbsp;阅读N次</scan>&nbsp;
-					    <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ blog.title }}》 上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;
-					</h6>
+					    <small><i class="icon-eye-open icon-1x"></i><scan style="color: #999">&nbsp;阅读N次</scan>&nbsp;</small>
+					    <small><i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ blog.title }}》 上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;</small>
+					</h5>
 				</div>
 			</div>
-			</blockquote>
 			{% endfor %}
+			</blockquote>
 
 			<!-- 分页 -->
 			{% set prev = blogs.page.page - 1 %}
