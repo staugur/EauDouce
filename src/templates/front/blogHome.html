@@ -18,34 +18,6 @@
 fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid #009;border-radius:5px;}
 legend{padding:.5em;border:0;width:auto}
 
-blockquote {
-    color:#888;
-	background-color: #eae6f3;
-	border-left: 1em solid #5236a0;
-	padding: 1em 1.5em 1em 1.5em;
-	position: relative;
-	font-family: 'Roboto', sans-serif;
-	line-height: 150%;
-	text-indent: 35px;
-}
-blockquote:before {
-  color: #392570;
-  content: "\201C";
-  font-size: 5em;
-  position:absolute;
-  left:-15px;
-  top: 40px;
-  line-height: 0.1em;
-}
-blockquote:after {
-   color: #392570;
-  content: "\201D";
-  font-size: 5em;
-  position:absolute;
-  right:15px;
-  bottom: 0em;
-  line-height: 0.1em;
-}
 </style> 
 {% endblock %}
 
@@ -111,12 +83,12 @@ blockquote:after {
 				<div class="col-md-12 column">
 					<p class="text-left">
 						<a href="{{ url_for('front.blogShow', bid=blog.id) }}" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
-					    <small><i class="icon-user icon-1x"></i><a href="" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
+					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.blogHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
 					    <small><i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;</small>
 					    {% if blog.tag %}
 					    <small><i class="icon-tag icon-1x"></i>
 					    {% for tag in blog.tag.split() %}
-					        <a href="" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
+					        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
 					    {% endfor %}
 					    </small>
 					    {% endif %}

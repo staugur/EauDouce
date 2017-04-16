@@ -20,3 +20,32 @@
     /*　使用IE专属滤镜实现IE背景透明*/ }
 
 .TransparentBar p { position:relative; } /*实现IE文字不透明*/
+
+blockquote {
+    color:#888;
+  background-color: #eae6f3;
+  border-left: 1em solid #5236a0;
+  padding: 1em 1.5em 1em 1.5em;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+  line-height: 150%;
+  text-indent: 35px;
+}
+blockquote:before {
+  color: #392570;
+  content: "\201C";
+  font-size: 5em;
+  position:absolute;
+  left:-15px;
+  top: 40px;
+  line-height: 0.1em;
+}
+blockquote:after {
+   color: #392570;
+  content: "\201D";
+  font-size: 5em;
+  position:absolute;
+  right:15px;
+  bottom: 0em;
+  line-height: 0.1em;
+}

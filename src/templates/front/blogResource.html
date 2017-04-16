@@ -42,7 +42,7 @@
 					</h4>
 					<h6>
 					    {% if blog.author %}
-					    <i class="icon-user icon-1x"></i><a href="" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
+					    <i class="icon-user icon-1x"></i><a href="{{ url_for('front.blogHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
 					    {% endif %}
 
                         {% if blog.create_time %}

@@ -2,39 +2,6 @@
 
 {% block title %}首页{% endblock %}
 
-{% block head %}
-<style type="text/css">
-blockquote {
-    color:#888;
-	background-color: #eae6f3;
-	border-left: 1em solid #5236a0;
-	padding: 1em 1.5em 1em 1.5em;
-	position: relative;
-	font-family: 'Roboto', sans-serif;
-	line-height: 150%;
-	text-indent: 35px;
-}
-blockquote:before {
-  color: #392570;
-  content: "\201C";
-  font-size: 5em;
-  position:absolute;
-  left:-15px;
-  top: 40px;
-  line-height: 0.1em;
-}
-blockquote:after {
-   color: #392570;
-  content: "\201D";
-  font-size: 5em;
-  position:absolute;
-  right:15px;
-  bottom: 0em;
-  line-height: 0.1em;
-}
-</style> 
-{% endblock %}
-
 {% block PathNavigation %}
 			<ul class="breadcrumb">
 				<li class="active">
@@ -68,17 +35,17 @@ blockquote:after {
 					</h4>
 					<h5>
 					    {% if blog.author %}
-					    <small><i class="icon-user icon-1x"></i><a href="" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
+					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.blogHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
 					    {% endif %}
 
                         {% if blog.catalog %}
-					    <small><i class="icon-folder-open icon-1x"></i><a href="" title="查看 {{ blog.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ blog.catalog }}</a>&nbsp;</small>
+					    <small><i class="icon-folder-open icon-1x"></i><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=blog.catalog) }}" title="查看 {{ blog.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ blog.catalog }}</a>&nbsp;</small>
 					    {% endif %}
 
                         {% if blog.tag %}
 					    <small><i class="icon-tag icon-1x"></i>
 					    {% for tag in blog.tag.split() %}
-					        <a href="" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
+					        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
 					    {% endfor %}
 					    </small>
 					    {% endif %}
