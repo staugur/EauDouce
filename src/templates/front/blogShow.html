@@ -39,7 +39,9 @@
                 <fieldset>
                     <legend><small class="text-info text-lowercase">功能区</small></legend>
                     <div class="btn-group" role="group" aria-label="...">
+                        {% if g.signin and g.username == data.author %}
                         <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" target="_blank" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
+                        {% endif %}
                         {% if g.username in g.api.user_get_admins().data %}
                             {% if data.top in ('true', 'True', True) %}
                                 <a href="javascript:setTop(false)" style='color:blue'><button type="button" class="btn btn-primary">取消置顶</button></a>
