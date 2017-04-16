@@ -1,0 +1,56 @@
+{% extends "base/front.html" %}
+
+{% block title %}资源列表{% endblock %}
+
+{% block PathNavigation %}
+			<ul class="breadcrumb">
+				<li>
+					 <a href="{{ url_for('front.index') }}">首页</a>
+				</li>
+				<li>
+					{{ request.args.get("resource_type") }}
+				</li>
+				<li class="active">
+					{% if request.args.get("resource_data") == "1" %}
+					    原创
+					{% elif request.args.get("resource_data") == "2" %}
+					    转载
+					{% elif request.args.get("resource_data") == "3" %}
+                        翻译
+					{% else %}
+					    {{ request.args.get("resource_data") }}
+					{% endif %}
+				</li>
+			</ul>
+{% endblock %}
+
+{% block container %}
+            <!-- 资源列表 -->
+            {% if request.args.get("resource_type") == "catalog" %}
+                {% set data = g.api.blog_get_catalog_data(request.args.get("resource_data")).data %}
+            {% elif request.args.get("resource_type") == "sources" %}
+                {% set data = g.api.blog_get_sources_data(request.args.get("resource_data")).data %}
+            {% else %}
+                {% set data = g.api.blog_get_tag_data(request.args.get("resource_data")).data %}
+            {% endif %}
+            {% for blog in data %}
+            <blockquote>
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<h4 class="text-left text-success">
+						<a href="{{ url_for('front.blogShow', bid=blog.id) }}" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
+					</h4>
+					<h6>
+					    {% if blog.author %}
+					    <i class="icon-user icon-1x"></i><a href="" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
+					    {% endif %}
+
+                        {% if blog.create_time %}
+					    <i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;
+					    {% endif %}
+					</h6>
+				</div>
+			</div>
+			</blockquote>
+			{% endfor %}
+{% endblock %}

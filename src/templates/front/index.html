@@ -17,7 +17,7 @@
 				    <h3><scan class="icon-fire icon-large"> 置顶文章</scan></h3>
 				    <ol>
                     {% for blog in g.api.blog_get_top_data().data %}
-			            <li><a href="{{ blog.id }}.html">{{ blog.title }}</a></li>
+			            <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}">{{ blog.title }}</a></li>
                     {% endfor %}
                     </ol>
 				</div>
@@ -31,7 +31,7 @@
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 					<h4 class="text-left text-success">
-						<a href="/blog/{{ blog.id }}.html" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
+						<a href="{{ url_for('front.blogShow', bid=blog.id) }}" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
 					</h4>
 					<h6>
 					    {% if blog.author %}

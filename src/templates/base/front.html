@@ -51,12 +51,12 @@
                             <a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="icon-folder-open icon-1x"></i></a>
                             <ul class="dropdown-menu">
                                 {% for catalog in g.api.blog_get_catalog_list().data %}
-                                <li><a href="#">{{ catalog }}</a></li>
+                                <li><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=catalog) }}">{{ catalog }}</a></li>
                                 {% endfor %}
                                 <li class="divider"></li>
-                                <li><a href="#">原创</a></li>
-                                <li><a href="#">转载</a></li>
-                                <li><a href="#">翻译</a></li>
+                                <li><a href="{{ url_for('front.blogResource', resource_type='sources', resource_data=1) }}">原创</a></li>
+                                <li><a href="{{ url_for('front.blogResource', resource_type='sources', resource_data=2) }}">转载</a></li>
+                                <li><a href="{{ url_for('front.blogResource', resource_type='sources', resource_data=3) }}">翻译</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -210,8 +210,20 @@
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     {% for d in g.api.blog_get_tags_list().data %}
-                    <a href="#"><span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span></a>
+                    <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=d.tag) }}"><span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span></a>
                     {% endfor %}
+                </div>
+            </div>
+
+            <!-- 推荐文章列表 -->
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <h4><scan class="icon-refresh icon-spin icon-large"></scan> 推荐文章</h4>
+                    <ol>
+                    {% for blog in g.api.blog_get_recommend_data().data %}
+                        <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}">{{ blog.title }}</a></li>
+                    {% endfor %}
+                    </ol>
                 </div>
             </div>
 
@@ -252,7 +264,7 @@
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     {% for fl in g.api.get_sys_friendlink().data %}
-                        <p class="text-success"><scan class="icon-external-link"></scan>&nbsp;<a href="{{ fl.link }}" title="{{ fl.title }}">{{ fl.title }}</a></p>
+                        <p class="text-success"><scan class="icon-external-link"></scan>&nbsp;<a href="{{ fl.link }}" title="{{ fl.title }}" target="_blank">{{ fl.title }}</a></p>
                     {% endfor %}
                 </div>
             </div>

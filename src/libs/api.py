@@ -57,7 +57,7 @@ class BlogApiManager(BaseApiManager):
 
         res   = {"msg": None, "data": [], "code": 0}
         LIMIT = "LIMIT " + str(limit) if limit else ""
-        sql   = "SELECT id,title,catalog FROM blog_article WHERE catalog='%s' ORDER BY id %s %s" %(catalog, sort, LIMIT)
+        sql   = "SELECT id,title,catalog,author,create_time FROM blog_article WHERE catalog='%s' ORDER BY id %s %s" %(catalog, sort, LIMIT)
         logger.info("query catalog data SQL: %s" %sql)
         try:
             data = self.mysql.query(sql)
@@ -84,7 +84,7 @@ class BlogApiManager(BaseApiManager):
                 sources = '翻译'
             #Original reproduced translation
 
-            sql = "SELECT id,title,sources FROM blog_article WHERE sources='%s' ORDER BY id %s %s" %(sources, sort, LIMIT)
+            sql = "SELECT id,title,sources,author,create_time FROM blog_article WHERE sources='%s' ORDER BY id %s %s" %(sources, sort, LIMIT)
             logger.info("query sources data SQL: {}".format(sql))
             try:
                 data = self.mysql.query(sql)
@@ -101,7 +101,7 @@ class BlogApiManager(BaseApiManager):
         "查询某个tag的文章"
 
         res = {"msg": None, "data": [], "code": 0}
-        sql = "SELECT id,title,tag FROM blog_article ORDER BY id {}".format(sort)
+        sql = "SELECT id,title,tag,author,create_time FROM blog_article ORDER BY id {}".format(sort)
         logger.info("query tag data SQL: {}".format(sql))
         try:
             data = self.mysql.query(sql)

@@ -31,12 +31,16 @@ def blogEdit():
     blogId = request.args.get("blogId")
     if g.signin and blogId:
         data = g.api.blog_get_id(blogId).get("data")
-        logger.error(data)
         if data:
             if g.username == data.get("author") or g.username in g.api.user_get_admins().get("data"):
                 return render_template("front/blogEdit.html", blogId=blogId, data=data)
         return abort(404)
     return redirect(url_for("login"))
+
+@front_blueprint.route("/resource/")
+def blogResource():
+    return render_template("front/blogResource.html")
+
 ###
 @front_blueprint.route("/home/")
 @front_blueprint.route("/home/<user>/")
