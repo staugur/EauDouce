@@ -3,7 +3,7 @@
 import json, datetime, SpliceURL, time
 from flask import Flask, request, g, jsonify, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS
-from utils.tool import logger, isLogged_in, md5, login_required
+from utils.tool import logger, isLogged_in, md5
 from urllib import urlencode
 from libs.api import ApiManager
 from views.front import front_blueprint

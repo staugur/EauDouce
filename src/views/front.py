@@ -4,7 +4,7 @@ import requests, datetime, SpliceURL
 from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
-from utils.tool import login_required,logger
+from utils.tool import login_required, logger
 
 
 front_blueprint = Blueprint("front", __name__)
@@ -21,21 +21,21 @@ def blogShow(bid):
     else:
         return abort(404)
 
-@login_required
 @front_blueprint.route("/blog/write/")
+@login_required
 def blogWrite():
     return render_template("front/blogWrite.html")
 
 @front_blueprint.route("/blog/edit/")
+@login_required
 def blogEdit():
     blogId = request.args.get("blogId")
-    if g.signin and blogId:
+    if blogId:
         data = g.api.blog_get_id(blogId).get("data")
         if data:
             if g.username == data.get("author") or g.username in g.api.user_get_admins().get("data"):
                 return render_template("front/blogEdit.html", blogId=blogId, data=data)
         return abort(404)
-    return redirect(url_for("login"))
 
 @front_blueprint.route("/blog/resource/")
 def blogResource():
@@ -80,7 +80,6 @@ def sitemap():
     resp.headers["Content-Type"] = "application/xml"    
     return resp
 
-@front_blueprint.route("/feed")
 @front_blueprint.route("/feed/")
 def feed():
     data = g.api.blog_get_all(limit=10).get("data")
