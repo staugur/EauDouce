@@ -8,6 +8,7 @@ from urllib import urlencode
 from libs.api import ApiManager
 from views.front import front_blueprint
 from views.api import api_blueprint
+from views.upload import upload_blueprint
 
 __author__  = 'Mr.tao'
 __email__   = 'staugur@saintic.com'
@@ -20,6 +21,7 @@ app = Flask(__name__)
 api = ApiManager()
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
+app.register_blueprint(upload_blueprint, url_prefix="/upload")
 
 @app.before_request
 def before_request():

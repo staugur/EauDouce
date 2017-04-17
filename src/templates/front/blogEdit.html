@@ -23,7 +23,7 @@
             <form class="form-horizontal" role="form" id="UpdateBlogFormId">
                 <center><h3>
                     <scan class="help-block"><i class="icon-pencil icon-1x"></i>&nbsp;编辑文章
-                    <input type="button" onclick=putForm() value="提交文章" class="btn btn-success btn-xs" />
+                    <input type="button" onclick=putForm() value="提交更新" class="btn btn-success btn-xs" />
                     </scan>
                 </h3></center>
                 <div class="form-group">
@@ -101,63 +101,31 @@
 {% endblock %}
 
 {% block script %}
-{% if request.args.get("editor", "wangEditor") == "wangEditor" %}
-    <!--引入jquery和wangEditor.js-->
-    <script type="text/javascript" src="{{ url_for('static', filename='wangEditor/js/wangEditor.min.js') }}"></script>
-    <script type="text/javascript">
-        // 获取元素
-        var div = document.getElementById('editor');
-        // 生成编辑器
-        var editor = new wangEditor(div);
-        // 为当前的editor配置密钥
-        editor.config.mapAk = 'rsG1HfOkrldOGdI53TMI9rAdxGuzb0PI';
-        // 取消粘贴过滤
-        editor.config.pasteFilter = true;
-        // 插入代码时的默认语言
-        editor.config.codeDefaultLang = 'python';
-        /*
+
+<!--引入jquery和wangEditor.js-->
+<script type="text/javascript" src="{{ url_for('static', filename='wangEditor/js/wangEditor.min.js') }}"></script>
+<script type="text/javascript">
+    // 获取元素
+    var div = document.getElementById('editor');
+    // 生成编辑器
+    var editor = new wangEditor(div);
+    // 为当前的editor配置密钥
+    editor.config.mapAk = 'rsG1HfOkrldOGdI53TMI9rAdxGuzb0PI';
+    // 取消粘贴过滤
+    editor.config.pasteFilter = true;
+    // 插入代码时的默认语言
+    editor.config.codeDefaultLang = 'python';
+    /*
         上传图片功能，文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/113990；
         后台文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/115736;
         后台需要配置一个获取表单上传图片并保存的路由。
-        */
-        editor.config.uploadImgUrl = "#";
-        editor.config.uploadImgFileName = 'WriteBlogImage';
-        // 创建编辑器
-        editor.create();
-    </script>
-{% else %}
-    <!--引入jquery和Editor.md.js-->
-    <script type="text/javascript" src="{{ url_for('static', filename='Editor.md/js/editormd.min.js') }}"></script>
-    <script type="text/javascript">
-        var Editor;
-        $(function() {
-            Editor = editormd({
-                id      : "editor",
-                width   : "100%",
-                height  : 500,
-                syncScrolling : "single",
-                path    : "/static/Editor.md/lib/",
-                // 开启上传图片功能
-                imageUpload : true,
-                imageFormats : ['png', 'jpg', 'jpeg', 'gif'],
-                imageUploadURL : "#",
-                /*
-                     上传的后台只需要返回一个 JSON 数据，结构如下：
-                     {
-                        success : 0 | 1,           // 0 表示上传失败，1 表示上传成功
-                        message : "提示的信息，上传成功或上传失败及错误信息等。",
-                        url     : "图片地址"        // 上传成功时才返回
-                     }
-                */
-                emoji : true,                 // Emoji表情
-                saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
-                searchReplace : true,
-                flowChart : true,             // 开启流程图支持，默认关闭
-                sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
-            });
-        });
-    </script>
-{% endif %}
+    */
+    editor.config.uploadImgUrl = "{{ url_for('upload.UploadBlogImage', editorType='wangEditor') }}";
+    editor.config.uploadImgFileName = 'WriteBlogImage';
+    // 创建编辑器
+    editor.create();
+</script>
+
 
 <script type="text/javascript">
     // 更新文章数据

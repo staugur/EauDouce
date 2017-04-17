@@ -28,7 +28,7 @@
             <form class="form-horizontal" role="form" id="CreateBlogFormId">
                 <center><h3>
                     <scan class="help-block"><i class="icon-pencil icon-1x"></i>&nbsp;创作文章
-                    <input type="button" onclick=postForm() value="提交文章" class="btn btn-success btn-xs" disabled="disabled" />
+                    <input type="button" onclick=postForm() value="提交文章" class="btn btn-success btn-xs" />
                     {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
                         <a href="{{ url_for('front.blogWrite', editor='Editor.md') }}" class="btn btn-info btn-xs" role="button">&nbsp;切换编辑器</a>
                     {% else %}
@@ -112,7 +112,7 @@
         后台文档地址：http://www.kancloud.cn/wangfupeng/wangeditor2/115736;
         后台需要配置一个获取表单上传图片并保存的路由。
         */
-        editor.config.uploadImgUrl = "#";
+        editor.config.uploadImgUrl = "{{ url_for('upload.UploadBlogImage', editorType='wangEditor') }}";
         editor.config.uploadImgFileName = 'WriteBlogImage';
         // 创建编辑器
         editor.create();
@@ -132,7 +132,7 @@
                 // 开启上传图片功能
                 imageUpload : true,
                 imageFormats : ['png', 'jpg', 'jpeg', 'gif'],
-                imageUploadURL : "#",
+                imageUploadURL : "{{ url_for('upload.UploadBlogImage', editorType='Editor.md') }}",
                 /*
                      上传的后台只需要返回一个 JSON 数据，结构如下：
                      {

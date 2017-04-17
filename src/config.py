@@ -44,7 +44,7 @@ PLUGINS={
     #代码高亮插件
 
     "ChangyanComment": {
-        "enable": os.getenv("eaudouce_ChangyanComment_enable", True),
+        "enable": os.getenv("eaudouce_ChangyanComment_enable", False),
         "appid": os.getenv("eaudouce_ChangyanComment_appid", "cysX1azO3"),
         "appkey": os.getenv("eaudouce_ChangyanComment_appkey", "23503a7fdbfe37d50048a5c91d93627d")
     },
@@ -76,10 +76,7 @@ PLUGINS={
         "bucket": os.getenv("eaudouce_UpYunStorage_bucket", ""),
         "username": os.getenv("eaudouce_UpYunStorage_username", ""),
         "password": os.getenv("eaudouce_UpYunStorage_password", ""),
-        "secret": os.getenv("eaudouce_UpYunStorage_secret", ""),
-        "timeout": os.getenv("eaudouce_UpYunStorage_timeout", 10),
         "dn": os.getenv("eaudouce_UpYunStorage_dn", "https://img.saintic.com"),
-        "allow-file-type": "jpg,jpeg,png,gif"
     },
     #又拍云存储插件
 }

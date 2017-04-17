@@ -42,7 +42,7 @@
                     {% set admins = g.api.user_get_admins().data %}
                     <div class="btn-group" role="group" aria-label="...">
                         {% if g.signin and g.username == data.author or g.username in admins %}
-                            <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" target="_blank" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
+                            <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
                             <a href="javascript:delBlog()" style='color:blue'><button type="button" class="btn btn-danger">删除文章</button></a>
                         {% endif %}
                         {% if g.username in admins %}
