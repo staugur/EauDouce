@@ -22,7 +22,7 @@ def UploadBlogImage():
     if f and allowed_file(f.filename):
         filename = secure_filename(gen_rnd_filename() + "." + f.filename.split('.')[-1]) #随机命名
         if PLUGINS['UpYunStorage']['enable']:
-            imgUrl = "/EauDouce/test/" + filename
+            imgUrl = "/EauDouce/blog/" + filename
             upres  = UploadImage2Upyun(imgUrl, f.stream.read())
             imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
             logger.info("Blog to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
