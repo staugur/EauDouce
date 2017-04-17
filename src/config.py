@@ -63,10 +63,10 @@ PLUGINS={
     #百度统计插件
 
     "BaiduActivePush": {
-        "enable":  os.getenv("eaudouce_BaiduActivePush_enable", True),
+        "enable":  os.getenv("eaudouce_BaiduActivePush_enable", False),
         "callUrl": os.getenv("eaudouce_BaiduActivePush_callUrl", "http://data.zz.baidu.com/urls?site=www.saintic.com&token=QbriJ4Iv7TGi8yOF")
     },
-    #百度主动推送(实时)插件
+    #百度主动实时推送插件
 
     "BackupBlog": os.getenv("eaudouce_BackupBlog", False),
     #备份文章插件

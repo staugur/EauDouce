@@ -4,7 +4,7 @@ import re, requests, hashlib, datetime, random
 from uuid import uuid4
 from log import Syslog
 from base64 import b32encode
-from config import SSO
+from config import SSO, PLUGINS
 from functools import wraps
 from flask import g, request, redirect, url_for
 
@@ -60,5 +60,23 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def UploadImage2Upyun(file, imgurl, kwargs=PLUGINS['UpYunStorage']):
+    """ Upload image to Upyun Cloud with Api """
 
+    logger.info({"UploadFile": file, "imgurl": imgurl, "kwargs": kwargs})
 
+    up = upyun.UpYun(kwargs.get("bucket"), username=kwargs.get("username"), password=kwargs.get("password"), secret=kwargs.get("secret"), timeout=kwargs.get("timeout", 10))
+
+    formkw = { 'allow-file-type': kwargs.get('allow-file-type', 'jpg,jpeg,png,gif') }
+
+    with open(file, "rb") as f:
+        res = up.put(imgurl, f, checksum=True, need_resume=True, form=True, **formkw)
+
+    return res
+
+def BaiduActivePush(pushUrl, original=True, callUrl=PLUGINS['BaiduActivePush']['callUrl']):
+    """百度主动推送(实时)接口提交链接"""
+    callUrl = callUrl + "&type=original" if original else callUrl
+    res = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
+    logger.debug("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
+    return res

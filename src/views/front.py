@@ -4,7 +4,7 @@ import requests, datetime, SpliceURL
 from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
-from utils.tool import login_required, logger
+from utils.tool import login_required, logger, BaiduActivePush
 
 
 front_blueprint = Blueprint("front", __name__)
@@ -17,6 +17,10 @@ def index():
 def blogShow(bid):
     data = g.api.blog_get_id(bid).get("data")
     if data:
+        logger.debug(g.plugins['BaiduActivePush']['enable'])
+        if g.plugins['BaiduActivePush']['enable'] in ("true", "True", True):
+            original = True if data.get("sources") == "原创" else False
+            BaiduActivePush(request.url, original=original)
         return render_template("front/blogShow.html", blogId=bid, data=data)
     else:
         return abort(404)
