@@ -60,7 +60,7 @@ legend{padding:.5em;border:0;width:auto}
 		<div class="col-md-4 column">
 		</div>
         <div class="col-md-4 column">
-            {% if g.signin %}
+            {% if g.signin and g.username == data.username %}
             <br><br><br><br>
             <fieldset>
                 <legend><small class="text-default text-lowercase">站点设置</small></legend>
