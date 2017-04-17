@@ -40,54 +40,46 @@ MYSQL=os.getenv("eaudouce_MYSQL", "mysql://host:port:user:password:database?char
 
 PLUGINS={
 
-    "CodeHighlighting": os.getenv("Interest_blog_CodeHighlighting", True),
+    "CodeHighlighting": os.getenv("eaudouce_CodeHighlighting", True),
     #代码高亮插件
 
-    "DuoshuoComment": {
-        "enable": os.getenv("Interest_blog_DuoshuoComment_enable", False),
-        "shortName": os.getenv("Interest_blog_DuoshuoComment_shortName", "saintic")
+    "ChangyanComment": {
+        "enable": os.getenv("eaudouce_ChangyanComment_enable", True),
+        "appid": os.getenv("eaudouce_ChangyanComment_appid", "cysX1azO3"),
+        "appkey": os.getenv("eaudouce_ChangyanComment_appkey", "23503a7fdbfe37d50048a5c91d93627d")
     },
-    #多说评论插件
+    #畅言评论插件
 
-    "Weather": os.getenv("Interest_blog_Weather", True),
-    #天气显示插件
+    "BaiduShare": os.getenv("eaudouce_BaiduShare", True),
+    #百度分享插件
 
-    "BaiduAutoPush": os.getenv("Interest_blog_BaiduAutoPush", True),
+    "BaiduAutoPush": os.getenv("eaudouce_BaiduAutoPush", True),
     #百度自动推送插件
 
+    "Weather": os.getenv("eaudouce_Weather", True),
+    #天气显示插件
+
+    "BaiduStatistics": os.getenv("eaudouce_BaiduStatistics", True),
+    #百度统计插件
+
     "BaiduActivePush": {
-        "enable":  os.getenv("Interest_blog_BaiduActivePush_enable", True),
-        "callUrl": os.getenv("Interest_blog_BaiduActivePush_callUrl", "http://data.zz.baidu.com/urls?site=www.saintic.com&token=QbriJ4Iv7TGi8yOF")
+        "enable":  os.getenv("eaudouce_BaiduActivePush_enable", True),
+        "callUrl": os.getenv("eaudouce_BaiduActivePush_callUrl", "http://data.zz.baidu.com/urls?site=www.saintic.com&token=QbriJ4Iv7TGi8yOF")
     },
     #百度主动推送(实时)插件
 
-    "BaiduStatistics": os.getenv("Interest_blog_BaiduStatistics", True),
-    #百度统计插件
-
-    "BaiduShare": os.getenv("Interest_blog_BaiduShare", True),
-    #百度分享插件
-
-    "BackupBlog": os.getenv("Interest_blog_BackupBlog", False),
+    "BackupBlog": os.getenv("eaudouce_BackupBlog", False),
     #备份文章插件
 
     "UpYunStorage": {
-        "enable": os.getenv("Interest_blog_UpYunStorage_enable", False),
-        "bucket": os.getenv("Interest_blog_UpYunStorage_bucket", ""),
-        "username": os.getenv("Interest_blog_UpYunStorage_username", ""),
-        "password": os.getenv("Interest_blog_UpYunStorage_password", ""),
-        "secret": os.getenv("Interest_blog_UpYunStorage_secret", ""),
-        "timeout": os.getenv("Interest_blog_UpYunStorage_timeout", 10),
-        "dn": os.getenv("Interest_blog_UpYunStorage_dn", "https://img.saintic.com"),
+        "enable": os.getenv("eaudouce_UpYunStorage_enable", False),
+        "bucket": os.getenv("eaudouce_UpYunStorage_bucket", ""),
+        "username": os.getenv("eaudouce_UpYunStorage_username", ""),
+        "password": os.getenv("eaudouce_UpYunStorage_password", ""),
+        "secret": os.getenv("eaudouce_UpYunStorage_secret", ""),
+        "timeout": os.getenv("eaudouce_UpYunStorage_timeout", 10),
+        "dn": os.getenv("eaudouce_UpYunStorage_dn", "https://img.saintic.com"),
         "allow-file-type": "jpg,jpeg,png,gif"
     },
     #又拍云存储插件
-
-    "ChristmasBlessings": os.getenv("Interest_blog_ChristmasBlessings", False),
-    #圣诞节祝福插件
-
-    "360AutoPush": os.getenv("Interest_blog_360AutoPush", True),
-    #360自动推送插件
-
-    "ShowGitHub": os.getenv("Interest_blog_ShowGitHub", False),
-    #个人中心页展现GitHub代码库插件，最多展现49个
 }

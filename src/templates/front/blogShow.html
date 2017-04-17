@@ -3,7 +3,8 @@
 {% block title %}{{ data['title'] }}{% endblock %}
 
 {% block head %}
-    {%- if g.plugins['CodeHighlighting'] %}
+    {%- if g.plugins.CodeHighlighting in ("true", "True", True) %}
+    <!-- 代码高亮插件 -->
     <link href="{{ url_for('static', filename='highlight/styles/googlecode.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='highlight/highlight.pack.js') }}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
@@ -38,11 +39,13 @@
 			    </header>
                 <fieldset>
                     <legend><small class="text-info text-lowercase">功能区</small></legend>
+                    {% set admins = g.api.user_get_admins().data %}
                     <div class="btn-group" role="group" aria-label="...">
-                        {% if g.signin and g.username == data.author %}
-                        <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" target="_blank" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
+                        {% if g.signin and g.username == data.author or g.username in admins %}
+                            <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" target="_blank" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
+                            <a href="javascript:delBlog()" style='color:blue'><button type="button" class="btn btn-danger">删除文章</button></a>
                         {% endif %}
-                        {% if g.username in g.api.user_get_admins().data %}
+                        {% if g.username in admins %}
                             {% if data.top in ('true', 'True', True) %}
                                 <a href="javascript:setTop(false)" style='color:blue'><button type="button" class="btn btn-primary">取消置顶</button></a>
                             {% else %}
@@ -53,10 +56,10 @@
                             {% else %}
                                 <a href="javascript:setRecommend(true)" style='color:blue'><button type="button" class="btn btn-info">推荐文章</button></a>
                             {% endif %}
-                            <a href="javascript:delBlog()" style='color:blue'><button type="button" class="btn btn-danger">删除文章</button></a>
                         {% endif %}
                         <a href=""><button type="button" class="btn btn-default"><scan class="icon-thumbs-up"></scan>&nbsp;赞</button></a>
                         <!--<a href=""><button type="button" class="btn btn-default"><scan class="icon-thumbs-down"></scan>&nbsp;取消赞</button></a>-->
+                        <a href=""><button type="button" class="btn btn-default"><scan class="icon-thumbs-up"></scan>&nbsp;原创</button></a>
                     </div>
                     <h6>
                         {% if data.author %}
@@ -86,7 +89,32 @@
                     <legend><small class="text-success text-lowercase">正文区</small></legend>
 				    {{ data['content'] | safe }}
                 </fieldset>
-			</article>
+                {%- if data.get("sources") == "原创" %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <b>版权声明</b>：<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;本文为原创文章，由 {{ g.api.get_sys_config().data.about_awi }} 创作和发表，版权所有，转载请注明作者及出处！<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;本文标题是：{{ data['title'] }}， 本文来源地址：<a href="{{ request.url }}" class="alert-link">{{ request.url }}</a>
+                </div>
+                {% endif -%}
+            </article>
+            {%- if g.plugins.BaiduShare in ('true', 'True', True) %}
+                <!-- 百度分享插件 -->
+                <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more">分享给朋友</a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">QQ好友</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_huaban" data-cmd="huaban" title="分享到花瓣">花瓣</a><a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook">Facebook</a><a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter">Twitter</a><a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记">有道云笔记</a><a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享">邮件分享</a></div>
+                <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+            {% endif -%}
+            {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
+                <!-- 畅言评论框插件,PC和WAP自适应版 -->
+                <div id="SOHUCS" sid="{{ blogId }}" ></div> 
+                <script type="text/javascript"> 
+                (function(){ 
+                    var appid = '{{ g.plugins.ChangyanComment.appid }}'; 
+                    var conf = '{{ g.plugins.ChangyanComment.appkey }}'; 
+                    var width = window.innerWidth || document.documentElement.clientWidth; 
+                    if (width < 960) { 
+                        window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); 
+                </script>
+            {% endif -%}
 {% endblock %}
 
 {% block script %}
@@ -180,5 +208,22 @@ function delBlog() {
     });
 }
 {% endif %}
+
+{% if g.plugins.BaiduAutoPush in ("true", "True", True) %}
+// 百度自动推送插件
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+{% endif %}
+
 </script>
 {% endblock %}

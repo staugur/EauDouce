@@ -3,6 +3,9 @@
 <head>
     <title>{% block title %}{% endblock %} | SaintIC EauDouce - 清水蓝天博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="博客,blog,Interest,IT">
+    <meta name="description" content="Linux,NoSQL,DevOps,python,Docker,redis,memcache,MongoDB,LVS,HA,LB,puppet,ansible,func,Cloud,BigData">
+    <link rel="canonical" href="https://www.saintic.com/">
     <!-- 引入 Bootstrap -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
@@ -16,6 +19,19 @@
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     {% block head %}{% endblock %}
+    <meta name="baidu-site-verification" content="mJRkKVNnPF" />
+    {% if g.plugins.BaiduStatistics in ("true", "True", True) %}
+    <!-- 百度统计插件 -->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?88f6d909dd0d8f80bb9748f43ade3ac7";
+            var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    {% endif %}
 </head>
 </head>
 <body>
@@ -200,6 +216,28 @@
                 </div>
             </div>
 
+            {% if g.plugins.Weather in ("true", "True", True) %}
+            <h4><scan class="icon-cloud icon-1x"> 天气播报</scan></h4>
+            <!-- 实时天气查询插件 -->
+            <div id="tp-weather-widget"></div>
+            <script>(function(T,h,i,n,k,P,a,g,e){g=function(){P=h.createElement(i);a=h.getElementsByTagName(i)[0];P.src=k;P.charset="utf-8";P.async=1;a.parentNode.insertBefore(P,a)};T["ThinkPageWeatherWidgetObject"]=n;T[n]||(T[n]=function(){(T[n].q=T[n].q||[]).push(arguments)});T[n].l=+new Date();if(T.attachEvent){T.attachEvent("onload",g)}else{T.addEventListener("load",g,false)}}(window,document,"script","tpwidget","//widget.seniverse.com/widget/chameleon.js"))</script>
+            <script>tpwidget("init", {
+                "flavor": "slim",
+                "location": "WX4FBXXFKE4F",
+                "geolocation": "enabled",
+                "language": "zh-chs",
+                "unit": "c",
+                "theme": "chameleon",
+                "container": "tp-weather-widget",
+                "bubble": "enabled",
+                "alarmType": "badge",
+                "uid": "U617F38FE8",
+                "hash": "ec1620b5f1dacd856964835023ed7f25"
+            });
+            tpwidget("show");
+            </script>
+            {% endif %}
+
             <!-- 博客信息 -->
             {% set statistics = g.api.blog_get_statistics() %}
             <h4><scan class="icon-info-sign icon-1x"> 博客统计</scan></h4>
@@ -247,6 +285,7 @@
 
 </div>
 
+<p></p>
 <div id="footer" class="container">
 <nav class="navbar navbar-default text-center">
     <div class="navbar-inner navbar-content-center">
@@ -255,7 +294,8 @@
               All rights reserved.&nbsp;&nbsp;
               Originate by <a href="https://github.com/staugur/EauDouce/" target="_blank" title="{{ g.sysInfo.Doc }}">EauDouce</a>&nbsp;
               <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
-              <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ g.sysInfo.Email }}">{{ g.sysInfo.Author }}</a>
+              <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ g.sysInfo.Email }}">{{ g.sysInfo.Author }}</a>.&nbsp;&nbsp;
+              <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号"> {{ g.api.get_sys_config().data.about_beian }}</a>.&nbsp;&nbsp;
         </p>
     </div>
 </nav>
