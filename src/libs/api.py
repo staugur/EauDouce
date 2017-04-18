@@ -599,7 +599,7 @@ class UserApiManager(BaseApiManager):
         #logger.info({"User:delete:SQL": sql})
         return {}
 
-    def put(self):
+    def user_update_profile(self):
         """Update user profile"""
         
         res      = {"code": 0, "success": False, "msg": None}
@@ -612,13 +612,29 @@ class UserApiManager(BaseApiManager):
         logger.info("username: %s, sql: %s" %(username, sql))
         if username:
             try:
-                mysql.update(sql, username)
+                self.mysql.update(sql, username)
             except Exception,e:
                 logger.error(e, exc_info=True)
                 success = False
             else:
                 success = True
             res.update(success=success)
+        logger.info(res)
+        return res
+
+    def user_update_avatar(self, username, avatarUrl):
+        """Update user profile"""
+        
+        res = {"code": 0, "success": False, "msg": None}
+        sql = "UPDATE user_profile SET avatar=%s WHERE username=%s"
+        if username:
+            try:
+                self.mysql.update(sql, avatarUrl, username)
+            except Exception,e:
+                logger.error(e, exc_info=True)
+            else:
+                res.update(success=True)
+
         logger.info(res)
         return res
 

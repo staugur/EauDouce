@@ -46,18 +46,16 @@ def blogResource():
     return render_template("front/blogResource.html")
 
 @front_blueprint.route("/user/<user>/")
-def blogHome(user=None):
+def userHome(user=None):
     logger.debug(user)
-    return render_template("front/blogHome.html", user=user)
-##
-@front_blueprint.route("/user/profile/")
-def profile():
-    if g.signin:
-        user = get_user_profile(g.username)
-        return render_template("front/profile.html", user=user)
-    else:
-        return redirect(url_for(".login"))
+    return render_template("front/userHome.html", user=user)
 
+@front_blueprint.route("/user/ChangeAvater/")
+@login_required
+def userChangeAvater():
+    return render_template("front/userChangeAvater.html")
+
+##
 @front_blueprint.route("/user/UpdatePasswd", methods=["POST",])
 def UpdatePasswd():
     if g.signin:

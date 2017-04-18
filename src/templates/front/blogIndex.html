@@ -35,7 +35,7 @@
 					</h4>
 					<h5>
 					    {% if blog.author %}
-					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.blogHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
+					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.userHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
 					    {% endif %}
 
                         {% if blog.catalog %}

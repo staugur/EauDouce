@@ -54,7 +54,7 @@ legend{padding:.5em;border:0;width:auto}
                     <i class="icon-github icon-1x">&nbsp;</i>我的代码: <a href="{% if 'http' in data.get('github') %}{{ data.get('github') }}{% else %}{{ 'http://' + data.get('github') }}{% endif %}" target="_blank">{{ data.get('github') }}</a><br/>
                 {% endif %}
 
-                <i class="icon-link icon-1x">&nbsp;</i>个性地址: {{ request.url_root.strip('/') + url_for('front.blogHome', user=user)  }}<br/>
+                <i class="icon-link icon-1x">&nbsp;</i>个性地址: {{ request.url_root.strip('/') + url_for('front.userHome', user=user)  }}<br/>
             </p>
 		</div>
 		<div class="col-md-4 column">
@@ -65,7 +65,7 @@ legend{padding:.5em;border:0;width:auto}
             <fieldset>
                 <legend><small class="text-default text-lowercase">站点设置</small></legend>
                 <div>
-                    <a href="#" class="btn btn-warning btn-lg btn-block active" role="button">修改头像</a>
+                    <a href="javascript:ChangerAvater()" class="btn btn-warning btn-lg btn-block active" role="button">修改头像</a>
                     <a href="#" class="btn btn-danger btn-lg btn-block active" role="button">修改密码</a>
                     <a href="#" class="btn btn-success btn-lg btn-block active" role="button">修改封面</a>
                     <a href="#" class="btn btn-info btn-lg btn-block active" role="button">修改个人资料</a>
@@ -83,7 +83,7 @@ legend{padding:.5em;border:0;width:auto}
 				<div class="col-md-12 column">
 					<p class="text-left">
 						<a href="{{ url_for('front.blogShow', bid=blog.id) }}" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
-					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.blogHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
+					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.userHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
 					    <small><i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;</small>
 					    {% if blog.tag %}
 					    <small><i class="icon-tag icon-1x"></i>
@@ -108,5 +108,22 @@ legend{padding:.5em;border:0;width:auto}
 
 {% block aside %}{% endblock %}
 
-{% block container %}
+{% block container %}{% endblock %}
+
+{% block script %}
+{% if g.username == user %}
+<script type="text/javascript">
+// iframe层显示更改头像弹窗
+function ChangerAvater() {
+    layer.open({
+        type: 2,
+        title: '更换{{ g.username }}的头像，当前user是 {{ user }}',
+        shadeClose: true,
+        shade: 0.8,
+        area: ['680px', '90%'],
+        content: '{{ url_for("front.userChangeAvater") }}'
+    });
+}
+</script>
+{% endif %}
 {% endblock %}

@@ -21,7 +21,7 @@ def UploadBlogImage():
     f = request.files.get("WriteBlogImage") or request.files.get("editormd-image-file")
     if f and allowed_file(f.filename):
         filename = secure_filename(gen_rnd_filename() + "." + f.filename.split('.')[-1]) #随机命名
-        if PLUGINS['UpYunStorage']['enable']:
+        if PLUGINS['UpYunStorage']['enable'] in ('true', 'True', True):
             imgUrl = "/EauDouce/blog/" + filename
             upres  = UploadImage2Upyun(imgUrl, f.stream.read())
             imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
@@ -55,8 +55,8 @@ def UploadAvatarImage():
     f = request.files.get('file')
     # Check if the file is one of the allowed types/extensions
     if f and allowed_file(f.filename):
-        filename = secure_filename(gen_filename() + "." + f.filename.split('.')[-1]) #随机命名
-        if PLUGINS['UpYunStorage']['enable']:
+        filename = secure_filename(gen_rnd_filename() + "." + f.filename.split('.')[-1]) #随机命名
+        if PLUGINS['UpYunStorage']['enable'] in ('true', 'True', True):
             imgUrl = "/EauDouce/avatar/" + filename
             upres  = UploadImage2Upyun(imgUrl, f.stream.read())
             imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
@@ -64,9 +64,12 @@ def UploadAvatarImage():
         else:
             if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
             f.save(os.path.join(UPLOAD_FOLDER, filename))
-            imgUrl = "/" + UPLOAD_FOLDER + filename
+            imgUrl = "/" + IMAGE_FOLDER + filename
             logger.info("Avatar to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
         # return user home and write avatar url into mysql db.
-        res = requests.put(g.apiurl + "/user/", timeout=5, verify=False, headers={'User-Agent': 'Interest.blog'}, params={"change": "avatar"}, data={"avatar": imgUrl, "username": g.username}).json()
-        logger.info(res)
-    return redirect(url_for('front.home'))
+        res = g.api.user_update_avatar(g.username, imgUrl)
+    else:
+        res = {"success": False, "msg": u"上传失败: 未成功获取文件或格式不允许"}
+
+    logger.info(res)
+    return jsonify(res)
