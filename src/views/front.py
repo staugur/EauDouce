@@ -55,18 +55,10 @@ def userHome(user=None):
 def userChangeAvater():
     return render_template("front/userChangeAvater.html")
 
-##
-@front_blueprint.route("/user/UpdatePasswd", methods=["POST",])
-def UpdatePasswd():
-    if g.signin:
-        logger.debug(request.form)
-        #ImmutableMultiDict([('username', u'admin'), ('new_pass', u''), ('new_repass', u''), ('old_pass', u'')])
-    else:
-        abort(403)
-
-@front_blueprint.route("/google32fd52b6c900160b.html")
-def google_search_console():
-    return render_template("public/google32fd52b6c900160b.html")
+@front_blueprint.route("/user/ChangePassword/")
+@login_required
+def userChangePassword():
+    return render_template("front/userChangePassword.html")
 
 @front_blueprint.route("/robots.txt")
 def robots():
@@ -75,7 +67,7 @@ User-agent: *
 Disallow: 
 Sitemap: http://www.saintic.com/sitemap.xml
     """
-
+##
 @front_blueprint.route("/sitemap.xml")
 def sitemap():
     resp = make_response(render_template("public/sitemap.xml", data=get_index_list()))

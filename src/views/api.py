@@ -257,7 +257,9 @@ class User(Resource):
     def put(self):
         """Update user profile"""
         
-        res      = {"code": 0, "success": False, "msg": None}
+        if request.args.get("ChangeType") == "password":
+            return g.api.user_update_password(request.form.get("username"), request.form.get("OldPassword"), request.form.get("NewPassword"))
+        '''
         data     = { k:v for k,v in request.form.iteritems() if k in ("email", "cname", "avatar", "motto", "url", "weibo", "github", "gender") }
         sql      = "UPDATE User SET "
         username = request.form.get("username")
@@ -276,6 +278,7 @@ class User(Resource):
             res.update(success=success)
         logger.info(res)
         return res
+        '''
 
 class Sys(Resource):
 

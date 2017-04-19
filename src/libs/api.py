@@ -3,7 +3,7 @@
 from config import MYSQL
 from random import choice
 from torndb import IntegrityError, Connection
-from utils.tool import logger, ParseMySQL, get_today, ListEqualSplit
+from utils.tool import logger, ParseMySQL, get_today, ListEqualSplit, md5
 
 
 class BaseApiManager(object):
@@ -466,9 +466,44 @@ class UserApiManager(BaseApiManager):
             return True
         return False
 
+    def user_get_list(self, OAuth=False):
+        "获取用户列表"
+
+        res = {"code": 0, "msg": None, "data": []}
+        sql = "SELECT lauth_username FROM user_lauth UNION SELECT oauth_username FROM user_oauth" if OAuth else "SELECT lauth_username FROM user_lauth"
+        logger.info("get user list sql: "+ sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.info(e, exc_info=True)
+            res.update(msg="get user list error", code=300001)
+        else:
+            res.update(data=[ _["lauth_username"] for _ in data if _.get("lauth_username") ])
+
+        logger.info(res)
+        return res
+
+    def user_get_lauth_passwd(self, username):
+        "获取本地用户密码"
+
+        res = {"code": 0, "msg": None, "data": None}
+        sql = "SELECT lauth_password FROM user_lauth WHERE lauth_username=%s"
+        logger.info("get user password sql: "+ sql)
+        try:
+            data = self.mysql.get(sql, username)
+        except Exception,e:
+            logger.info(e, exc_info=True)
+            res.update(msg="get user password error", code=300001)
+        else:
+            res.update(data=data.get("lauth_password"))
+
+        logger.info(res)
+        return res
+
     def user_get_all(self):
         "获取所有用户资料"
 
+        res = {"code": 0, "msg": None, "data": []}
         sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a"
         logger.info("get all user and profile sql: "+ sql)
         try:
@@ -485,7 +520,7 @@ class UserApiManager(BaseApiManager):
     def user_get_one_profile(self, username):
         "查询用户资料"
 
-        res = {"code": 200, "msg": None, "data": {}}        
+        res = {"code": 0, "msg": None, "data": {}}        
         sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
         data = self.mysql.get(sql, username)
         if not data:
@@ -507,7 +542,7 @@ class UserApiManager(BaseApiManager):
             logger.error(e, exc_info=True)
             res.update(msg="query admin account error", code=300001)
         else:
-            res.update(data= [ _["username"] for _ in data if _.get("username") ])
+            res.update(data=[ _["username"] for _ in data if _.get("username") ])
 
         logger.info(res)
         return res
@@ -623,7 +658,7 @@ class UserApiManager(BaseApiManager):
         return res
 
     def user_update_avatar(self, username, avatarUrl):
-        """Update user profile"""
+        """Update user avatar"""
         
         res = {"code": 0, "success": False, "msg": None}
         sql = "UPDATE user_profile SET avatar=%s WHERE username=%s"
@@ -634,6 +669,28 @@ class UserApiManager(BaseApiManager):
                 logger.error(e, exc_info=True)
             else:
                 res.update(success=True)
+
+        logger.info(res)
+        return res
+
+    def user_update_password(self, username, OldPassword, NewPassword):
+        """Update user password"""
+        
+        res = {"code": 0, "success": False, "msg": None}
+
+        if username in self.user_get_list().get("data", []) and md5(OldPassword) == self.user_get_lauth_passwd(username).get("data"):
+            sql = "UPDATE user_lauth SET lauth_password=%s WHERE lauth_username=%s"
+            if 5 <= len(NewPassword) < 30:
+                try:
+                    self.mysql.update(sql, md5(NewPassword), username)
+                except Exception,e:
+                    logger.error(e, exc_info=True)
+                else:
+                    res.update(success=True)
+            else:
+                res.update(msg='password length requirement is greater than or equal to 5 less than 30', code= 300002)
+        else:
+            res.update(msg="username does not exist or old passwords do not match", code=300002)
 
         logger.info(res)
         return res

@@ -2,20 +2,27 @@
 
 {% block container %}
     {% set user = g.api.user_get_one_profile(g.username).data %}
-    <p>
-        {%- if user.get('avatar') == url_for('static', filename='img/avatar/default.jpg') %}
-            <scan>{{ user.get('cname') or '嘿' }}，你当前使用系统默认头像。</scan>
-        {% else %}
-            <img src="{{ user.get('avatar') }}" onload="if(this.width >= 320){this.width = 320}">
-        {% endif -%}
-    </p>
-    <form role="form" id="UploadAvatarId" enctype="multipart/form-data" action="{{ url_for('upload.UploadAvatarImage') }}" method="post">
-        <div class="form-group">
-            <label for="avatar">选择头像图片(仅支持jpg/jpeg/png/gif)： </label>
-            <input type="file" name="file" id="avatar" />
+    <div class="row clearfix">
+        <div class="col-md-4 column">
+            <form role="form" id="UploadAvatarId" enctype="multipart/form-data" action="{{ url_for('upload.UploadAvatarImage') }}" method="post">
+                <div class="form-group">
+                    <label for="avatar">选择头像图片(仅支持jpg/jpeg/png/gif)： </label>
+                    <input type="file" name="file" id="avatar" />
+                </div>
+                <input type="button" onclick=SubmitUploadAvatar() value="修改头像" class="btn btn-success" />
+            </form>
         </div>
-        <input type="button" onclick=SubmitUploadAvatar() value="修改头像" class="btn btn-success" />
-    </form>
+        <div class="col-md-8 column">
+            <p class="help-block">
+            {%- if user.get('avatar') == url_for('static', filename='img/avatar/default.jpg') %}
+                <scan>{{ user.get('cname') or '嘿' }}，你当前使用系统默认头像。</scan>
+            {% else %}
+                <i class="icon-info"></i>&nbsp;当前头像：<br/>
+                <img src="{{ user.get('avatar') }}" onload="if(this.width >= 320){this.width = 320}">
+            {% endif -%}
+            </p>
+        </div>
+    </div>
 {% endblock %}
 
 {% block script %}
@@ -35,14 +42,14 @@ function SubmitUploadAvatar() {
         success: function(res) {
             console.log(res);
             if (res.success==true) {
-                layer.alert("修改头像成功", {icon: 1, time: 3*1000});
+                layer.msg("修改头像成功", {icon: 1, time: 3*1000});
                 parent.location.reload();
             } else {
-                alert("修改头像失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
+                layer.alert("修改头像失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
             }
         },
         error:function(e){
-            alert("错误！！");
+            layer.alert("服务器错误，请刷新重试或报告错误！", {icon: 2, time: 15*1000});
         }
     });
 }

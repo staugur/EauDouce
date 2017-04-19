@@ -25,7 +25,7 @@ legend{padding:.5em;border:0;width:auto}
     {% set data = g.api.user_get_one_profile(user).data %}
     <div class="bg">
 		<div class="col-md-4 column">
-		  	<img src="{{ data.avatar or 'https://img.saintic.com/EauDouce/avatar/default.jpg' }}" class="img-thumbnail" style="display: block; max-height: 200px" />
+		  	<a href="javascript:ShowAvatar('{{ data.avatar }}')"><img id="avatar" src="{{ data.avatar or 'https://img.saintic.com/EauDouce/avatar/default.jpg' }}" class="img-thumbnail" style="display: block; max-height: 200px" /></a>
 		  	<p class="text-left">
                 <i class="icon-user icon-1x">&nbsp;</i><attr title="{{ data.motto or '' }}">{{ data.cname or data.username }}</attr><br/>
 
@@ -66,7 +66,7 @@ legend{padding:.5em;border:0;width:auto}
                 <legend><small class="text-default text-lowercase">站点设置</small></legend>
                 <div>
                     <a href="javascript:ChangerAvater()" class="btn btn-warning btn-lg btn-block active" role="button">修改头像</a>
-                    <a href="#" class="btn btn-danger btn-lg btn-block active" role="button">修改密码</a>
+                    <a href="javascript:ChangerPassword()" class="btn btn-danger btn-lg btn-block active" role="button">修改密码</a>
                     <a href="#" class="btn btn-success btn-lg btn-block active" role="button">修改封面</a>
                     <a href="#" class="btn btn-info btn-lg btn-block active" role="button">修改个人资料</a>
                 </div>
@@ -117,12 +117,43 @@ legend{padding:.5em;border:0;width:auto}
 function ChangerAvater() {
     layer.open({
         type: 2,
-        title: '更换{{ g.username }}的头像，当前user是 {{ user }}',
+        title: '更换头像',
         shadeClose: true,
         shade: 0.8,
-        area: ['680px', '90%'],
+        area: ['80%', '90%'],
         content: '{{ url_for("front.userChangeAvater") }}'
     });
+}
+
+// iframe层显示更改密码弹窗
+function ChangerPassword() {
+    layer.open({
+        type: 2,
+        title: '修改密码',
+        shadeClose: true,
+        shade: 0.8,
+        area: ['80%', '90%'],
+        content: '{{ url_for("front.userChangePassword") }}'
+    });
+}
+
+
+//页面层-显示头像
+function ShowAvatar(imgUrl) {
+    var img = new Image();
+    img.src=$("#avatar")[0].src;
+    img.onload = function(){
+        console.info("分析图片"+img.src+",宽为"+img.width+",高为"+img.height);
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            skin: 'layui-layer-nobg', //没有背景色
+            shadeClose: true,
+            area: [img.width, img.height],
+            content: '<img src="' + imgUrl +'" />'
+        });
+    }
 }
 </script>
 {% endif %}
