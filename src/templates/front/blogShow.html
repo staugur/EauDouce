@@ -80,7 +80,6 @@
                         <i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ data.create_time }}</scan>&nbsp;
                         {% endif %}
 
-                        <i class="icon-eye-open icon-1x"></i><scan style="color: #999">&nbsp;阅读N次</scan>&nbsp;
                         <i class="icon-comment-alt icon-1x"></i><a href="" title="《{{ data.title }}》 上的评论" style="color: #999">&nbsp;评论N次</a>&nbsp;
                         {% if BaiduActivePushResult %}
                             <scan class="text-success"><i class="icon-ok-circle icon-1x"></i>&nbsp;百度主动推送成功</scan>
@@ -110,6 +109,7 @@
             {% endif -%}
             {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
                 <!-- 畅言评论框插件,PC和WAP自适应版 -->
+                {% set scheme = request.url_root.split("://")[0] %}
                 <div id="SOHUCS" sid="{{ blogId }}" ></div> 
                 <script type="text/javascript"> 
                 (function(){ 
@@ -117,7 +117,7 @@
                     var conf = '{{ g.plugins.ChangyanComment.appkey }}'; 
                     var width = window.innerWidth || document.documentElement.clientWidth; 
                     if (width < 960) { 
-                        window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); 
+                        window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="{{ scheme }}://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("{{ scheme }}://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); 
                 </script>
             {% endif -%}
 {% endblock %}
