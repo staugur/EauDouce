@@ -79,4 +79,7 @@ PLUGINS={
         "dn": os.getenv("eaudouce_UpYunStorage_dn", "https://img.saintic.com"),
     },
     #又拍云存储插件
+
+    "Like": os.getenv("eaudouce_Like", True),
+    #点赞插件
 }
