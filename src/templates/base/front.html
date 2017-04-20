@@ -193,9 +193,9 @@
             </div>
 
             <!-- 推荐文章列表 -->
+            <h4><scan class="icon-refresh icon-spin icon-large"></scan> 推荐文章</h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
-                    <h4><scan class="icon-refresh icon-spin icon-large"></scan> 推荐文章</h4>
                     <ol>
                     {% for blog in g.api.blog_get_recommend_data().data %}
                         <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}">{{ blog.title }}</a></li>
@@ -203,6 +203,8 @@
                     </ol>
                 </div>
             </div>
+
+            <!-- 广告位 -->
 
             {% if g.plugins.Weather in ("true", "True", True) %}
             <h4><scan class="icon-cloud icon-1x"> 天气播报</scan></h4>

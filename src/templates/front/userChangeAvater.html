@@ -12,23 +12,16 @@
                 <input type="button" onclick=SubmitUploadAvatar() value="修改头像" class="btn btn-success" />
             </form>
         </div>
-        <div class="col-md-8 column">
-            <p class="help-block">
-            {%- if user.get('avatar') == url_for('static', filename='img/avatar/default.jpg') %}
-                <scan>{{ user.get('cname') or '嘿' }}，你当前使用系统默认头像。</scan>
-            {% else %}
-                <i class="icon-info"></i>&nbsp;当前头像：<br/>
-                <img src="{{ user.get('avatar') }}" onload="if(this.width >= 320){this.width = 320}">
-            {% endif -%}
-            </p>
-        </div>
     </div>
 {% endblock %}
 
 {% block script %}
 <script type="text/javascript">
 function SubmitUploadAvatar() {
-    //var form = new FormData(document.getElementById("UploadAvatarId"));
+    if(document.getElementById("avatar").value=="") {
+        layer.alert("请选择头像！", {icon: 2, time: 15*1000});
+        return;
+    }
     var form = new FormData($("#UploadAvatarId")[0]);
     console.log(form);
     $.ajax({
