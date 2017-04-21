@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-import time, requests
+import time
 from torndb import IntegrityError
 from flask import request, g, Blueprint, abort
 from flask_restful import Api, Resource
@@ -307,24 +307,7 @@ class Comment(Resource):
         """
         查询blogId的评论数
         """
-        res    = {"code": 0, "data": {}, "msg": None}
-        blogId = request.args.get("blogId")
-
-        if blogId:
-            url = "http://changyan.sohu.com/api/2/topic/count?client_id={}&topic_source_id={}".format(g.plugins['ChangyanComment']['appid'], blogId)
-            try:
-                data = requests.get(url).json().get("result").get(str(blogId))
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(msg="Comment Api Error", code=-1)
-            else:
-                res.update(data=data)
-        else:
-            res.update(msg="illegal parameter action", code=-1)
-
-        logger.info(res)
-        return res
-
+        return g.api.misc_get_commend(request.args.get("blogId"))
 
 api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)

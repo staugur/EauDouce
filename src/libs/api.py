@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from config import MYSQL
+import requests
+from config import MYSQL, PLUGINS
 from random import choice
 from torndb import IntegrityError, Connection
 from utils.tool import logger, ParseMySQL, get_today, ListEqualSplit, md5
@@ -457,6 +458,27 @@ class MiscApiManager(BaseApiManager):
         logger.info(res)
         return res
 
+    def misc_get_commend(self, blogId):
+        """
+        查询blogId的评论数
+        """
+        res = {"code": 0, "data": {}, "msg": None}
+
+        if blogId:
+            url = "http://changyan.sohu.com/api/2/topic/count?client_id={}&topic_source_id={}".format(PLUGINS['ChangyanComment']['appid'], blogId)
+            try:
+                data = requests.get(url).json().get("result").get(str(blogId))
+            except Exception,e:
+                logger.error(e, exc_info=True)
+                res.update(msg="Comment Api Error", code=-1)
+            else:
+                res.update(data=data)
+        else:
+            res.update(msg="illegal parameter action", code=-1)
+
+        logger.info(res)
+        return res
+
 class UserApiManager(BaseApiManager):
 
     @property
@@ -752,6 +774,7 @@ class SysApiManager(BaseApiManager):
 
         logger.info(res)
         return res
+
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
     pass

@@ -55,9 +55,7 @@
 					    {% endif %}
 
 					    {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
-                        <small><i class="icon-comment-alt icon-1x"></i><a href="{{ url_for('front.blogShow', bid=blog.id) }}#SOHUCS" title="《{{ blog.title }}》 上的评论" style="color: #999">&nbsp;评论<span id = "sourceId::{{ blog.id }}" class = "cy_cmt_count" ></span>次</a>&nbsp;</small>
-                        <!--评论页外获取评论数-->
-                        <script id="cy_cmt_num" src="http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId={{ g.plugins.ChangyanComment.appid }}"></script>
+                        <small><i class="icon-comment-alt icon-1x"></i><a href="{{ url_for('front.blogShow', bid=blog.id) }}#SOHUCS" title="《{{ blog.title }}》 上的评论" style="color: #999">&nbsp;评论{{ g.api.misc_get_commend(blog.id).data.comments }}次</a>&nbsp;</small>
                         {% endif -%}
 					</h5>
 				</div>
