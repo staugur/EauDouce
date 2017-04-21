@@ -301,6 +301,26 @@ class Sys(Resource):
         logger.info(res)
         return res
 
+class Co(Resource):
+
+    def post(self):
+        """
+        设置或取消->
+        推荐文章: Recommended articles 
+        置顶文章: Sticky articles 
+        """
+        blogId = request.args.get("blogId")
+        action = request.args.get("action")
+        value  = request.args.get("value", "true")
+
+        if action == "recommend":
+            return g.api.misc_set_recommend(blogId, value)
+        elif action == "top":
+            return g.api.misc_set_top(blogId, value)
+        else:
+            return {"msg": "illegal parameter action", "code": -1}
+
+
 api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)
 api.add_resource(Blog, '/blog', '/blog/', endpoint='blog')
