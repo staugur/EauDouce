@@ -60,6 +60,15 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def admin_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.signin and g.username in g.api.user_get_admins().get("data", []):
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('login', next=request.url))
+    return decorated_function
+
 def UploadImage2Upyun(FilePath, FileData, kwargs=PLUGINS['UpYunStorage']):
     """ Upload image to Upyun Cloud with Api """
 

@@ -11,7 +11,7 @@
 	padding: 50px 0;
 	text-align: center;
 	color: #fff !important;
-	background: url(/static/img/bg.jpg) no-repeat top center;
+	
 	background-color: #000;
 	background-size: cover;
 }
@@ -23,7 +23,7 @@ legend{padding:.5em;border:0;width:auto}
 
 {% block AlternateDiagram %}
     {% set data = g.api.user_get_one_profile(user).data %}
-    <div class="bg">
+    <div class="bg" style="background: url({{ data.cover }}) no-repeat top center;">
 		<div class="col-md-4 column">
 		  	<a href="javascript:ShowAvatar('{{ data.avatar }}')"><img id="avatar" src="{{ data.avatar or 'https://img.saintic.com/EauDouce/avatar/default.jpg' }}" class="img-thumbnail" style="display: block; max-height: 200px" /></a>
 		  	<p class="text-left">
@@ -63,11 +63,12 @@ legend{padding:.5em;border:0;width:auto}
             {% if g.signin and g.username == data.username %}
             <br><br><br><br>
             <fieldset>
-                <legend><small class="text-default text-lowercase">站点设置</small></legend>
+                <a name="Setting"></a>
+                <legend><small class="text-default text-lowercase">个人设置</small></legend>
                 <div>
                     <a href="javascript:ChangerAvater()" class="btn btn-warning btn-lg btn-block active" role="button">修改头像</a>
                     <a href="javascript:ChangerPassword()" class="btn btn-danger btn-lg btn-block active" role="button">修改密码</a>
-                    <a href="#" class="btn btn-success btn-lg btn-block active" role="button">修改封面</a>
+                    <a href="javascript:ChangerCover()" class="btn btn-success btn-lg btn-block active" role="button">修改封面</a>
                     <a href="#" class="btn btn-info btn-lg btn-block active" role="button">修改个人资料</a>
                 </div>
             </fieldset>
@@ -111,8 +112,8 @@ legend{padding:.5em;border:0;width:auto}
 {% block container %}{% endblock %}
 
 {% block script %}
-{% if g.username == user %}
 <script type="text/javascript">
+{% if g.username == user %}
 // iframe层显示更改头像弹窗
 function ChangerAvater() {
     layer.open({
@@ -137,6 +138,18 @@ function ChangerPassword() {
     });
 }
 
+// iframe层显示更改封面弹窗
+function ChangerCover() {
+    layer.open({
+        type: 2,
+        title: '更换封面',
+        shadeClose: true,
+        shade: 0.8,
+        area: ['300px', '260px'],
+        content: '{{ url_for("front.userChangeCover") }}'
+    });
+}
+{% endif %}
 
 //页面层-显示头像
 function ShowAvatar(imgUrl) {
@@ -156,5 +169,4 @@ function ShowAvatar(imgUrl) {
     }
 }
 </script>
-{% endif %}
 {% endblock %}

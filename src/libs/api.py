@@ -526,7 +526,7 @@ class UserApiManager(BaseApiManager):
         "获取所有用户资料"
 
         res = {"code": 0, "msg": None, "data": []}
-        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a"
+        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a"
         logger.info("get all user and profile sql: "+ sql)
         try:
             data = self.mysql.query(sql)
@@ -543,10 +543,10 @@ class UserApiManager(BaseApiManager):
         "查询用户资料"
 
         res = {"code": 0, "msg": None, "data": {}}        
-        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
+        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
         data = self.mysql.get(sql, username)
         if not data:
-            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_lauth b ON a.username = b.lauth_username WHERE a.username=%s"
+            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_lauth b ON a.username = b.lauth_username WHERE a.username=%s"
             data = self.mysql.get(sql, username)
         logger.info("get username profile sql: " + sql)
         res.update(data=data)
@@ -687,6 +687,22 @@ class UserApiManager(BaseApiManager):
         if username:
             try:
                 self.mysql.update(sql, avatarUrl, username)
+            except Exception,e:
+                logger.error(e, exc_info=True)
+            else:
+                res.update(success=True)
+
+        logger.info(res)
+        return res
+
+    def user_update_cover(self, username, coverUrl):
+        """Update user cover"""
+        
+        res = {"code": 0, "success": False, "msg": None}
+        sql = "UPDATE user_profile SET cover=%s WHERE username=%s"
+        if username:
+            try:
+                self.mysql.update(sql, coverUrl, username)
             except Exception,e:
                 logger.error(e, exc_info=True)
             else:

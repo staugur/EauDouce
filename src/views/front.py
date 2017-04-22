@@ -60,6 +60,11 @@ def userChangeAvater():
 def userChangePassword():
     return render_template("front/userChangePassword.html")
 
+@front_blueprint.route("/user/ChangeCover/")
+@login_required
+def userChangeCover():
+    return render_template("front/userChangeCover.html")
+
 @front_blueprint.route("/robots.txt")
 def robots():
     return """

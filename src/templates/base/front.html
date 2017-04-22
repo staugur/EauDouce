@@ -3,9 +3,8 @@
 <head>
     <title>{% block title %}{% endblock %} | SaintIC EauDouce - 清水蓝天博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="博客,blog,Interest,IT">
-    <meta name="description" content="Linux,NoSQL,DevOps,python,Docker,redis,memcache,MongoDB,LVS,HA,LB,puppet,ansible,func,Cloud,BigData">
-    <link rel="canonical" href="https://www.saintic.com/">
+    <meta name="keywords" content="{{ g.api.get_sys_config().data.seo_keywords }}">
+    <meta name="description" content="{{ g.api.get_sys_config().data.seo_description }}">
     <!-- 引入 Bootstrap -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
@@ -68,14 +67,19 @@
                         <li class="dropdown">
                             <a href="{{ url_for('front.userHome', user=g.username) }}" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('front.userHome', user=g.username) }}">Signed in as <strong>{{ g.username }}</strong></a></li>
+                                <li><center><small>Signed in as <strong>{{ g.username }}</strong></small></center></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}">我的主页</a></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}#blog">我的文章</a></li>
-                                <li class="disabled"><a href="#">修改头像</a></li>
-                                <li class="disabled"><a href="#">修改密码</a></li>
+                                <!--
+                                <li><a href="javascript:ChangerAvater()">修改头像</a></li>
+                                <li><a href="javascript:ChangerPassword()">修改密码</a></li>
+                                -->
+                                {% if g.username in g.api.user_get_admins().data %}
+                                <li><a href="{{ url_for('admin.index') }}">后台管理</a></li>
+                                {% endif %}
                                 <li class="divider"></li>
-                                <li class="disabled"><a href="#" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
+                                <li><a href="{{ url_for('front.userHome', user=g.username) }}#Setting" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
                                 <li><a href="{{ url_for('logout') }}" title="Sign Out">注销&nbsp;<i class="icon-signout icon-1x"></i></a></li>
                             </ul>
                         </li>
@@ -285,7 +289,7 @@
               Originate by <a href="https://github.com/staugur/EauDouce/" target="_blank" title="{{ g.sysInfo.Doc }}">EauDouce</a>&nbsp;
               <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
               <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ g.sysInfo.Email }}">{{ g.sysInfo.Author }}</a>.&nbsp;&nbsp;
-              <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号"> {{ g.api.get_sys_config().data.about_beian }}</a>.&nbsp;&nbsp;
+              <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.api.get_sys_config().data.about_beian }}</a>.&nbsp;&nbsp;
         </p>
     </div>
 </nav>
