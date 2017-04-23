@@ -26,7 +26,7 @@ legend{padding:.5em;border:0;width:auto}
     <div class="bg" style="background: url({{ data.cover }}) no-repeat top center;">
 		<div class="col-md-4 column">
 		  	<a href="javascript:ShowAvatar('{{ data.avatar }}')"><img id="avatar" src="{{ data.avatar or 'https://img.saintic.com/EauDouce/avatar/default.jpg' }}" class="img-thumbnail" style="display: block; max-height: 200px" /></a>
-		  	<p class="text-left">
+		  	<p class="text-left text-default">
                 <i class="icon-user icon-1x">&nbsp;</i><attr title="{{ data.motto or '' }}">{{ data.cname or data.username }}</attr><br/>
 
                 {% if data.get('gender') == '男' %}
@@ -69,7 +69,7 @@ legend{padding:.5em;border:0;width:auto}
                     <a href="javascript:ChangerAvater()" class="btn btn-warning btn-lg btn-block active" role="button">修改头像</a>
                     <a href="javascript:ChangerPassword()" class="btn btn-danger btn-lg btn-block active" role="button">修改密码</a>
                     <a href="javascript:ChangerCover()" class="btn btn-success btn-lg btn-block active" role="button">修改封面</a>
-                    <a href="#" class="btn btn-info btn-lg btn-block active" role="button">修改个人资料</a>
+                    <a href="javascript:ChangerProfile()" class="btn btn-info btn-lg btn-block active" role="button">修改个人资料</a>
                 </div>
             </fieldset>
             {% endif %}
@@ -147,6 +147,18 @@ function ChangerCover() {
         shade: 0.8,
         area: ['300px', '260px'],
         content: '{{ url_for("front.userChangeCover") }}'
+    });
+}
+
+// iframe层显示更改个人资料
+function ChangerProfile() {
+    layer.open({
+        type: 2,
+        title: '修改个人资料',
+        shadeClose: true,
+        shade: 0.8,
+        area: ['70%', '90%'],
+        content: '{{ url_for("front.userChangeProfile") }}'
     });
 }
 {% endif %}

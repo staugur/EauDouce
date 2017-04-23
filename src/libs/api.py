@@ -656,13 +656,12 @@ class UserApiManager(BaseApiManager):
         #logger.info({"User:delete:SQL": sql})
         return {}
 
-    def user_update_profile(self):
+    def user_update_profile(self, username, **data):
         """Update user profile"""
-        
-        res      = {"code": 0, "success": False, "msg": None}
-        data     = { k:v for k,v in request.form.iteritems() if k in ("email", "cname", "avatar", "motto", "url", "weibo", "github", "gender") }
-        sql      = "UPDATE User SET "
-        username = request.form.get("username")
+
+        res  = {"code": 0, "success": False, "msg": None}
+        #data = { k:v for k,v in kwargs.iteritems() if k in ("email", "cname", "avatar", "motto", "url", "weibo", "github", "gender") }
+        sql  = "UPDATE user_profile SET "
         for k,v in data.iteritems():
             sql += "%s='%s'," %(k, v)
         sql = sql.strip(",") + " WHERE username=%s"
@@ -790,7 +789,6 @@ class SysApiManager(BaseApiManager):
 
         logger.info(res)
         return res
-
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
     pass

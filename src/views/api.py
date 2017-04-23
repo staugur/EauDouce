@@ -128,13 +128,6 @@ class Misc(Resource):
 
 class User(Resource):
 
-    @property
-    def AlreadyLogged(self):
-        ticket = request.form.get("ticket", request.args.get("ticket"))
-        if isLogged_in(ticket) in ("True", True):
-            return True
-        return False
-
     def get(self):
         """Public func, no token, with url args:
         1. num, 展现的数量,默认是10条,可为all
@@ -259,26 +252,9 @@ class User(Resource):
         
         if request.args.get("ChangeType") == "password":
             return g.api.user_update_password(request.form.get("username"), request.form.get("OldPassword"), request.form.get("NewPassword"))
-        '''
-        data     = { k:v for k,v in request.form.iteritems() if k in ("email", "cname", "avatar", "motto", "url", "weibo", "github", "gender") }
-        sql      = "UPDATE User SET "
-        username = request.form.get("username")
-        for k,v in data.iteritems():
-            sql += "%s='%s'," %(k, v)
-        sql = sql.strip(",") + " WHERE username=%s"
-        logger.info("username: %s, sql: %s" %(username, sql))
-        if username:
-            try:
-                mysql.update(sql, username)
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                success = False
-            else:
-                success = True
-            res.update(success=success)
-        logger.info(res)
-        return res
-        '''
+        elif request.args.get("ChangeType") == "profile":
+            data = { k:v for k,v in request.form.iteritems() if k in ("email", "cname", "avatar", "motto", "url", "weibo", "github", "gender") }
+            return g.api.user_update_profile(username=request.form.get("username", None), **data)
 
 class Sys(Resource):
 
