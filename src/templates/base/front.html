@@ -67,7 +67,7 @@
                         <li class="dropdown">
                             <a href="{{ url_for('front.userHome', user=g.username) }}" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
                             <ul class="dropdown-menu">
-                                <li><center><small>Signed in as <strong>{{ g.username }}</strong></small></center></li>
+                                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>Signed in as <strong>{{ g.username }}</strong></small></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}">我的主页</a></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}#blog">我的文章</a></li>

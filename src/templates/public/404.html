@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>你所访问的页面不存在 (404)</title>
+  <link href="{{ url_for('static', filename='css/404.css') }}" media="screen" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <h1>404</h1>
+  <h3>你所访问的页面不存在.</h3>
+  <hr/>
+  <p>资源不存在或者没有访问权限 <a href="{{ url_for('front.index') }}">返回首页</a> 或 <a href="{{ url_for('login') }}">登录</a></p>
+</body>
+</html>

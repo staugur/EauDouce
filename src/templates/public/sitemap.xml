@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset>
+	{% for blog in data %}
+	<url>
+		<loc>http://www.saintic.com/blog/{{ blog.id }}.html</loc>
+		<lastmod>{{ blog.update_time or blog.create_time }}</lastmod>
+		<changefreq>always</changefreq>
+		<data>
+			<display>
+				<title>{{ blog.title }}</title>
+				<tag>{{ blog.tag }}</tag>
+				<pubTime>{{ blog.create_time }}T08:00:00</pubTime>
+			</display>
+		</data>
+	</url>
+	{% endfor %}
+</urlset>

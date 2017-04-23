@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 import json, datetime, SpliceURL, time
-from flask import Flask, request, g, jsonify, redirect, make_response, url_for
+from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS
 from utils.tool import logger, isLogged_in, md5
 from urllib import urlencode
@@ -22,7 +22,7 @@ app = Flask(__name__)
 api = ApiManager()
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
-app.register_blueprint(admin_blueprint, url_prefix="/admin")
+app.register_blueprint(admin_blueprint, url_prefix="{}".format(GLOBAL["BackendRouting"].strip()))
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
 
 @app.before_request
@@ -52,13 +52,7 @@ def after_request(response):
 
 @app.errorhandler(404)
 def not_found(error=None):
-    message = {
-        'code': 404,
-        'msg': 'Not Found: ' + request.url,
-    }
-    resp = jsonify(message)
-    resp.status_code = 404
-    return resp
+    return render_template('public/404.html')
 
 @app.route('/login/')
 def login():

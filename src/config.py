@@ -12,6 +12,8 @@ GLOBAL={
 
     "LogLevel": os.getenv("eaudouce_loglevel", "DEBUG"),
     #Application to write the log level, currently has DEBUG, INFO, WARNING, ERROR, CRITICAL.
+
+    "BackendRouting": os.getenv("eaudouce_BackendRouting", "/AdminManager"),
 }
 
 
