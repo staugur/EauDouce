@@ -6,6 +6,7 @@ from config import GLOBAL, SSO, PLUGINS
 from utils.tool import logger, isLogged_in, md5
 from urllib import urlencode
 from libs.api import ApiManager
+from libs.cache import CacheManager
 from views.api import api_blueprint
 from views.front import front_blueprint
 from views.admin import admin_blueprint

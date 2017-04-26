@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-group">
                 {%- if request.args.get("editor", "wangEditor") == "wangEditor" %}
-                    <textarea class="form-control" id="editor" style="height:500px; max-height:640; width: 100%" name="content"><p>请输入文章内容...</p></textarea>
+                    <textarea class="form-control" id="editor" style="height:600px; max-height:700px; width: 100%" name="content"><p>请输入文章内容...</p></textarea>
                 {% else %}
                     <div id="editor">
                         <textarea style="display:none;" name="content"># 请输入文章内容...</textarea>

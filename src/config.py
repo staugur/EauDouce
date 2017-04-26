@@ -40,6 +40,13 @@ SSO={
 MYSQL=os.getenv("eaudouce_MYSQL", "mysql://host:port:user:password:database?charset=&timezone=")
 
 
+REDIS=os.getenv("eaudouce_REDIS", "redis://host:port")
+#Redis数据库连接信息，格式：
+#redis://host:port:password@db
+#redis_cluster://host:port,host:port
+#host, port必填项
+
+
 PLUGINS={
 
     "CodeHighlighting": os.getenv("eaudouce_CodeHighlighting", True),

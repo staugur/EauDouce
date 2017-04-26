@@ -40,6 +40,7 @@ def isLogged_in(cookie_str):
         return False
 
 def ParseMySQL(mysql, callback="dict"):
+    """解析MYSQL配置段"""
     protocol, dburl = mysql.split("://")
     if "?" in mysql:
         dbinfo, dbargs  = dburl.split("?")
@@ -52,6 +53,33 @@ def ParseMySQL(mysql, callback="dict"):
     else:
         return {"Protocol": protocol, "Host": host, "Port": port, "Database": database, "User": user, "Password": password, "Charset": charset, "Timezone": timezone}
 
+def ParseRedis(redis):
+    """解析REDIS配置段"""
+    protocol, dburl = redis.split("://")
+    #["redis", "host:port:password@db"], ["redis_cluster", "host:port,host:port"]
+    if protocol == "redis":
+        if "@" in dburl:
+            dbinfo, db = dburl.split("@")
+            #["host:port:password", "db"]
+        else:
+            db = 0
+            dbinfo = dburl.split("@")[0]
+            #["host:port:password", 0]
+        if len(dbinfo.split(":")) == 2:
+            password = None
+            host, port = dbinfo.split(":")
+        else:
+            host, port, password = dbinfo.split(":")
+        data = {"host": host, "port": port, "password": password, "db": db}
+
+    elif protocol == "redis_cluster":
+        dbinfo = re.split(comma_pat, dburl)
+        #['host:port', 'host:port']
+        data = [ {"host": i.split(":")[0], "port": i.split(":")[-1] } for i in dbinfo ]
+
+    logger.debug("REDIS INFO: {}".format(data))
+    return data
+        
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
