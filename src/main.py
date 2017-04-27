@@ -38,10 +38,12 @@ def before_request():
     g.api       = api
     g.cache     = cache
     g.plugins   = PLUGINS
+    g.hitCache  = False
     app.logger.debug(app.url_map)
 
 @app.after_request
 def after_request(response):
+    response.headers["X-Cache-Hit"] = g.hitCache
     logger.info(json.dumps({
         "status_code": response.status_code,
         "method": request.method,

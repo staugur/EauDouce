@@ -50,9 +50,10 @@ class CacheManager(object):
         sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog_article WHERE id=%s" %blogId
         data= self.mysql.get(sql)
         return self.redis.set(key, json.dumps(data))
-        #return self.redis.set(key, data)
 
     def get_cache_blog(self, blogId):
         key = self.setKey(blogId)
-        return json.loads(self.redis.get(key))
-        #return self.redis.get(key)
+        if self.redis.exists(key):
+            return json.loads(self.redis.get(key))
+        else:
+            return False

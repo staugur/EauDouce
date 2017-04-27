@@ -43,7 +43,12 @@ class Blog(Resource):
         get_index = True if request.args.get("get_index") in ("true", "True", True) else False
 
         if blogId:
-            return g.api.blog_get_id(blogId)
+            data = g.cache.get_cache_blog(blogId)
+            if data:
+                g.hitCache = True 
+                return data
+            else:
+                return g.api.blog_get_id(blogId)
 
         if get_catalog_data:
             return g.api.blog_get_catalog_data(get_catalog_data, sort, limit)
@@ -288,7 +293,9 @@ class Comment(Resource):
 class Cache(Resource):
 
     def get(self):
-        return g.cache.get_cache_blog(request.args.get("blogId"))
+        data = g.cache.get_cache_blog(request.args.get("blogId"))
+        g.hitCache = True if data else False
+        return data
 
     def post(self):
         return g.cache.post_cache_blog(request.args.get("blogId"))
