@@ -285,6 +285,14 @@ class Comment(Resource):
         """
         return g.api.misc_get_commend(request.args.get("blogId"))
 
+class Cache(Resource):
+
+    def get(self):
+        return g.cache.get_cache_blog(request.args.get("blogId"))
+
+    def post(self):
+        return g.cache.post_cache_blog(request.args.get("blogId"))
+
 api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)
 api.add_resource(Blog, '/blog', '/blog/', endpoint='blog')
@@ -292,3 +300,4 @@ api.add_resource(Misc, '/misc', '/misc/', endpoint='misc')
 api.add_resource(User, '/user', '/user/', endpoint='user')
 api.add_resource(Sys, '/sys', '/sys/', endpoint='sys')
 api.add_resource(Comment, '/comment', '/comment/', endpoint='comment')
+api.add_resource(Cache, "/cache/", "/cache", endpoint="cache")

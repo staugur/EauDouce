@@ -19,8 +19,9 @@ __date__    = '2017-03-26'
 __org__     = 'SaintIC'
 __version__ = '0.0.1'
 
-app = Flask(__name__)
-api = ApiManager()
+app   = Flask(__name__)
+api   = ApiManager()
+cache = CacheManager()
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="{}".format(GLOBAL["BackendRouting"].strip()))
@@ -35,6 +36,7 @@ def before_request():
     g.signin    = isLogged_in('.'.join([ g.username, g.expires, g.sessionId ]))
     g.sysInfo   = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__}
     g.api       = api
+    g.cache     = cache
     g.plugins   = PLUGINS
     app.logger.debug(app.url_map)
 
