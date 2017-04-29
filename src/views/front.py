@@ -6,7 +6,6 @@ from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
 from utils.tool import login_required, logger, BaiduActivePush
 
-
 front_blueprint = Blueprint("front", __name__)
 
 @front_blueprint.route("/")
@@ -19,8 +18,7 @@ def blogShow(bid):
     if data:
         BaiduActivePushResult = False
         if g.plugins['BaiduActivePush']['enable'] in ("true", "True", True):
-            original = True if data.get("sources") == "原创" else False
-            BaiduActivePushResult = True if BaiduActivePush(request.url, original=original).get("success") == 1 else False
+            BaiduActivePushResult = True if BaiduActivePush(request.url, original=True if data.get("sources") == "原创" else False).get("success") == 1 else False
         return render_template("front/blogShow.html", blogId=bid, data=data, BaiduActivePushResult=BaiduActivePushResult)
     else:
         return abort(404)
@@ -80,7 +78,7 @@ Sitemap: http://www.saintic.com/sitemap.xml
 ##
 @front_blueprint.route("/sitemap.xml")
 def sitemap():
-    resp = make_response(render_template("public/sitemap.xml", data=get_index_list()))
+    resp = make_response(render_template("public/sitemap.xml", data=[]))
     resp.headers["Content-Type"] = "application/xml"    
     return resp
 

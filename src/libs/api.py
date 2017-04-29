@@ -526,7 +526,7 @@ class UserApiManager(BaseApiManager):
         "获取所有用户资料"
 
         res = {"code": 0, "msg": None, "data": []}
-        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a"
+        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin, a.isAuthor FROM user_profile a"
         logger.info("get all user and profile sql: "+ sql)
         try:
             data = self.mysql.query(sql)
@@ -543,10 +543,10 @@ class UserApiManager(BaseApiManager):
         "查询用户资料"
 
         res = {"code": 0, "msg": None, "data": {}}        
-        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
+        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin, a.isAuthor FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
         data = self.mysql.get(sql, username)
         if not data:
-            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_lauth b ON a.username = b.lauth_username WHERE a.username=%s"
+            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin, a.isAuthor FROM user_profile a INNER JOIN user_lauth b ON a.username = b.lauth_username WHERE a.username=%s"
             data = self.mysql.get(sql, username)
         logger.info("get username profile sql: " + sql)
         res.update(data=data)
@@ -563,6 +563,22 @@ class UserApiManager(BaseApiManager):
         except Exception,e:
             logger.error(e, exc_info=True)
             res.update(msg="query admin account error", code=300001)
+        else:
+            res.update(data=[ _["username"] for _ in data if _.get("username") ])
+
+        logger.info(res)
+        return res
+
+    def user_get_authors(self):
+        "获取作者列表"
+        res = {"code": 0, "msg": None, "data": []}
+        sql = "SELECT username FROM user_profile WHERE isAuthor='true'"
+        logger.info("query author sql: " + sql)
+        try:
+            data = self.mysql.query(sql)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="query author account error", code=300002)
         else:
             res.update(data=[ _["username"] for _ in data if _.get("username") ])
 

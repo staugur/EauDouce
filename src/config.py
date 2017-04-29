@@ -5,40 +5,40 @@ import os
 GLOBAL={
 
     "Host": os.getenv("eaudouce_host", "0.0.0.0"),
-    #Application run network address, you can set it `0.0.0.0`, `127.0.0.1`, ``.
+    #应用绑定的IP, 如`0.0.0.0`, `127.0.0.1`, ``.
 
     "Port": os.getenv("eaudouce_port", 10140),
-    #Application run port, default port.
+    #应用绑定的Port.
 
     "LogLevel": os.getenv("eaudouce_loglevel", "DEBUG"),
-    #Application to write the log level, currently has DEBUG, INFO, WARNING, ERROR, CRITICAL.
+    #应用日志记录级别, 依次为 DEBUG, INFO, WARNING, ERROR, CRITICAL.
 
     "BackendRouting": os.getenv("eaudouce_BackendRouting", "/AdminManager"),
+    #后台网址,以/开头,末尾不要带/
 }
 
 
 PRODUCT={
 
     "ProcessName": "EauDouce",
-    #Custom process, you can see it with "ps aux|grep ProcessName".
+    #自定义进程名.
 
     "ProductType": os.getenv("eaudouce_producttype", "tornado"),
-    #Production environment starting method, optional `gevent`, `tornado`.
+    #生产环境启动方式, 可选`gevent`, `tornado`.
 }
 
 
 SSO={
 
     "SSO.URL": os.getenv("eaudouce_ssourl", "https://passport.saintic.com"),
-    #The passport(SSO Authentication System) Web Site URL.
+    #认证中心地址
 
     "SSO.PROJECT": PRODUCT["ProcessName"],
-    #SSO request application.
 }
 
 
 MYSQL=os.getenv("eaudouce_MYSQL", "mysql://host:port:user:password:database?charset=&timezone=")
-
+#MYSQL数据库连接信息
 
 REDIS=os.getenv("eaudouce_REDIS", "redis://host:port")
 #Redis数据库连接信息，格式：

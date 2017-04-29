@@ -43,12 +43,7 @@ class Blog(Resource):
         get_index = True if request.args.get("get_index") in ("true", "True", True) else False
 
         if blogId:
-            data = g.cache.get_cache_blog(blogId)
-            if data:
-                g.hitCache = True 
-                return data
-            else:
-                return g.api.blog_get_id(blogId)
+           return g.api.blog_get_id(blogId)
 
         if get_catalog_data:
             return g.api.blog_get_catalog_data(get_catalog_data, sort, limit)
@@ -78,6 +73,9 @@ class Blog(Resource):
 
     def post(self):
         """ 创建博客文章接口 """
+        if g.username not in g.api.user_get_authors().get("data"):
+            return {"code": 403, "msg": "Permission denied, not author"}, 403
+
         data = dict(
             title   = request.form.get('title'),
             content = request.form.get('content'),
@@ -91,17 +89,20 @@ class Blog(Resource):
 
     def put(self):
         """ 更新博客文章接口 """
-        data = dict(
-            title   = request.form.get('title'),
-            content = request.form.get('content'),
-            tag     = request.form.get("tag"),
-            catalog = request.form.get("catalog", "未分类"),
-            sources = request.form.get("sources", "原创"),
-            author  = request.form.get("author", "admin"),
-            blogId  = request.form.get("blogId")
-        )
-        logger.debug(data)
-        return g.api.blog_update(**data)
+        if g.username == request.form.get("author") or g.username in g.api.user_get_admins().get("data"):#可能伪造author
+            data = dict(
+                title   = request.form.get('title'),
+                content = request.form.get('content'),
+                tag     = request.form.get("tag"),
+                catalog = request.form.get("catalog", "未分类"),
+                sources = request.form.get("sources", "原创"),
+                author  = request.form.get("author", "admin"),
+                blogId  = request.form.get("blogId")
+            )
+            logger.debug(data)
+            return g.api.blog_update(**data)
+        else:
+            return {"code": 403, "msg": "Permission denied"}, 403
 
     def delete(self):
         """ 删除博客文章接口 """
@@ -144,24 +145,7 @@ class User(Resource):
         username     = request.args.get("username")
         getalluser   = True if request.args.get("getalluser") in ("True", "true", True) else False
         getadminuser = True if request.args.get("getadminuser") in ("True", "true", True) else False
-        
-        if getalluser:
-            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a"
-            data = mysql.query(sql)
-        elif getadminuser:
-            sql  = "SELECT username FROM user_profile WHERE isAdmin=%s"
-            data = mysql.query(sql, 'true')
-            data = [ _["username"] for _ in data if _.get("username") ]
-        elif username:
-            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
-            data= mysql.get(sql, username)
-            if not data:
-                sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin FROM user_profile a INNER JOIN user_lauth b ON a.username = b.lauth_username WHERE a.username=%s"
-                data = mysql.get(sql, username)
-        else:
-            sql, data = None, {}
-        logger.info(sql)
-        res.update(data=data)
+
         logger.info(res)
         return res
 

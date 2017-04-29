@@ -25,6 +25,13 @@
 
 {% block container %}
         <div>
+        {% if g.username not in g.api.user_get_authors().data %}
+            <center>
+            <div class="alert alert-warning" role="alert">
+                <a href="mailto:staugur@saintic.com" title="当前通过邮件申请" class="alert-link alert-warning">抱歉, 您当前没有权限创作, 请申请!</a>
+            </div>
+            </center>
+        {% else %}
             <form class="form-horizontal" role="form" id="CreateBlogFormId">
                 <center><h3>
                     <scan class="help-block"><i class="icon-pencil icon-1x"></i>&nbsp;创作文章
@@ -89,6 +96,7 @@
                     <input type="hidden" class="form-control" name="editor" value="wangEditor">
                 </div>
             </form>
+        {% endif %}
         </div>
 {% endblock %}
 

@@ -3,7 +3,6 @@
 from flask import Blueprint, g, render_template
 from utils.tool import admin_login_required, logger
 
-
 admin_blueprint = Blueprint("admin", __name__)
 
 @admin_blueprint.route("/")

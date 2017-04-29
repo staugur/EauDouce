@@ -7,6 +7,7 @@ from werkzeug import secure_filename
 from config import PLUGINS
 
 upload_blueprint = Blueprint("upload", __name__)
+#文件上传文件夹, 相对于项目根目录, 请勿改动static/部分
 IMAGE_FOLDER     = 'static/img/upload/'
 UPLOAD_FOLDER    = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), IMAGE_FOLDER)
 
@@ -49,6 +50,7 @@ def UploadBlogImage():
     res.headers["Charset"] = "utf-8"
     return res
 
+#对头像图片上传进行响应
 @upload_blueprint.route('/avatar/', methods=['POST','OPTIONS'])
 def UploadAvatarImage():
     logger.debug(request.files)
@@ -74,6 +76,7 @@ def UploadAvatarImage():
     logger.info(res)
     return jsonify(res)
 
+#对封面图片上传进行响应
 @upload_blueprint.route('/cover/', methods=['POST','OPTIONS'])
 def UploadCoverImage():
     logger.debug(request.files)

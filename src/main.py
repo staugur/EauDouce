@@ -20,8 +20,11 @@ __org__     = 'SaintIC'
 __version__ = '0.0.1'
 
 app   = Flask(__name__)
+#初始化接口管理器
 api   = ApiManager()
+#初始化缓存管理器
 cache = CacheManager()
+#注册蓝图, 其中后台蓝图可通过config.py配置路径, 要以/开头
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="{}".format(GLOBAL["BackendRouting"].strip()))
