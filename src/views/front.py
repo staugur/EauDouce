@@ -85,7 +85,7 @@ def sitemap():
 @front_blueprint.route("/feed/")
 def feed():
     data = g.api.blog_get_all(limit=10).get("data")
-    feed = AtomFeed(u'清水蓝天博客源', feed_url=request.url, url=request.url_root, subtitle="From the latest article in EauDouce")
+    feed = AtomFeed(u'陶先森de博客源', feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))
     for article in data:
         updated = article['update_time'][:10] if article['update_time'] else article['create_time'][:10]
         feed.add(article['title'], unicode(article['content']),
