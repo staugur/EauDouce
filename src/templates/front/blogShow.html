@@ -5,7 +5,7 @@
 {% block head %}
     {%- if g.plugins.CodeHighlighting in ("true", "True", True) %}
     <!-- 代码高亮插件 -->
-    <link href="{{ url_for('static', filename='highlight/styles/googlecode.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='highlight/styles/') }}{{ request.args.get('ShowStyle', 'googlecode') }}.css" rel="stylesheet">
     <script src="{{ url_for('static', filename='highlight/highlight.pack.js') }}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     {% endif -%}
