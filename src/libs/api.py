@@ -806,5 +806,21 @@ class SysApiManager(BaseApiManager):
         logger.info(res)
         return res
 
+    def ClickMysqlWrite(self, data):
+        if isinstance(data, dict):
+            if data.get("ip") and data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
+                try:
+                    Ipd = requests.get("http://ip.taobao.com/service/getIpInfo.php?ip={}".format(data.get("ip")), timeout=5, headers={"Use-Agent": data.get("agent")}).json().get("data", {})
+                except Exception,e:
+                    logger.debug(e)
+                    Ipd = {}
+                sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, isp=%s"
+                try:
+                    self.mysql.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), "{} {} {} {} {}".format(Ipd.get("country"), Ipd.get("area"), Ipd.get("region"), Ipd.get("city"), Ipd.get("isp")))
+                except Exception, e:
+                    logger.warn(e, exc_info=True)
+        else:
+            logger.debug("Do not record this log")
+
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
     pass

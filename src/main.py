@@ -47,7 +47,7 @@ def before_request():
 @app.after_request
 def after_request(response):
     response.headers["X-Cache-Hit"] = g.hitCache
-    logger.info(json.dumps({
+    data = {
         "status_code": response.status_code,
         "method": request.method,
         "ip": request.headers.get('X-Real-Ip', request.remote_addr),
@@ -55,7 +55,9 @@ def after_request(response):
         "referer": request.headers.get('Referer'),
         "agent": request.headers.get("User-Agent"),
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
-    }))
+    }
+    #logger.info(json.dumps(data))
+    #g.api.ClickMysqlWrite(data)
     return response
 
 @app.errorhandler(404)

@@ -96,3 +96,7 @@ def feed():
                  updated=datetime.datetime.strptime(updated, "%Y-%m-%d"),
                  published=datetime.datetime.strptime(article['create_time'][:10], "%Y-%m-%d"))
     return feed.get_response()
+
+@front_blueprint.route('/003680a0026db29da59f3eaea56f5632.txt')
+def aliyuntest():
+    return render_template('public/003680a0026db29da59f3eaea56f5632.txt')
