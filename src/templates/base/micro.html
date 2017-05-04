@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <title>{% block title %}{% endblock %} | SaintIC EauDouce - 陶先森de博客</title>
+    <title>{% block title %}{% endblock %} | {{ g.api.get_sys_config().data.site_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="博客,blog,Interest,IT">
     <meta name="description" content="Linux,NoSQL,DevOps,python,Docker,redis,memcache,MongoDB,LVS,HA,LB,puppet,ansible,func,Cloud,BigData">
