@@ -1,5 +1,6 @@
 Flask==0.10.1
-Flask-RESTful==0.3.5
+Flask-RESTful
+Flask-Cache
 setproctitle
 gevent
 tornado

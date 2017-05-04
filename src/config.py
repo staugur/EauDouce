@@ -12,9 +12,6 @@ GLOBAL={
 
     "LogLevel": os.getenv("eaudouce_loglevel", "DEBUG"),
     #应用日志记录级别, 依次为 DEBUG, INFO, WARNING, ERROR, CRITICAL.
-
-    "BackendRouting": os.getenv("eaudouce_BackendRouting", "/AdminManager"),
-    #后台网址,以/开头,末尾不要带/
 }
 
 
@@ -37,14 +34,16 @@ SSO={
 }
 
 
-MYSQL=os.getenv("eaudouce_MYSQL", "mysql://host:port:user:password:database?charset=&timezone=")
+MYSQL=os.getenv("eaudouce_MYSQL")
 #MYSQL数据库连接信息
+#mysql://host:port:user:password:database?charset=&timezone=
 
-REDIS=os.getenv("eaudouce_REDIS", "redis://host:port")
+
+REDIS=os.getenv("eaudouce_REDIS")
 #Redis数据库连接信息，格式：
 #redis://host:port:password@db
 #redis_cluster://host:port,host:port
-#host, port必填项
+#host,port必填项
 
 
 PLUGINS={
@@ -78,7 +77,7 @@ PLUGINS={
     #天气显示插件
 
     "BackupBlog": os.getenv("eaudouce_BackupBlog", False),
-    #备份文章插件
+    #备份文章插件,如果开启了又拍云存储插件,将会存储到又拍云上,否则存到本地
 
     "UpYunStorage": {
         "enable": os.getenv("eaudouce_UpYunStorage_enable", False),
@@ -91,4 +90,9 @@ PLUGINS={
 
     "Like": os.getenv("eaudouce_Like", True),
     #点赞插件
+
+    "Cache": os.getenv("eaudouce_Cache", "redis")
+    #缓存插件,可选redis、simple。
+    #1. redis:  详情配置参考REDIS键值项;
+    #2. simple: 简单本地缓存,不需要设置其他键值.
 }

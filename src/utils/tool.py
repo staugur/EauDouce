@@ -41,6 +41,7 @@ def isLogged_in(cookie_str):
 
 def ParseMySQL(mysql, callback="dict"):
     """解析MYSQL配置段"""
+    if not mysql:return None
     protocol, dburl = mysql.split("://")
     if "?" in mysql:
         dbinfo, dbargs  = dburl.split("?")
@@ -55,6 +56,7 @@ def ParseMySQL(mysql, callback="dict"):
 
 def ParseRedis(redis):
     """解析REDIS配置段"""
+    if not redis:return None
     protocol, dburl = redis.split("://")
     #["redis", "host:port:password@db"], ["redis_cluster", "host:port,host:port"]
     if protocol == "redis":

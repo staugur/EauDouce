@@ -2,15 +2,16 @@
 
 import json, datetime, SpliceURL, time
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
-from config import GLOBAL, SSO, PLUGINS
-from utils.tool import logger, isLogged_in, md5
+from config import GLOBAL, SSO, PLUGINS, REDIS
+from utils.tool import logger, isLogged_in, md5, ParseRedis
 from urllib import urlencode
+from libs.cache import cache
 from libs.api import ApiManager
-from libs.cache import CacheManager
 from views.api import api_blueprint
 from views.front import front_blueprint
 from views.admin import admin_blueprint
 from views.upload import upload_blueprint
+
 
 __author__  = 'Mr.tao'
 __email__   = 'staugur@saintic.com'
@@ -19,15 +20,16 @@ __date__    = '2017-03-26'
 __org__     = 'SaintIC'
 __version__ = '0.0.1'
 
-app   = Flask(__name__)
+logger.info(ParseRedis(REDIS))
+app = Flask(__name__)
 #初始化接口管理器
-api   = ApiManager()
+api = ApiManager()
 #初始化缓存管理器
-cache = CacheManager()
-#注册蓝图, 其中后台蓝图可通过config.py配置路径, 要以/开头
+cache.init_app(app)
+#注册蓝图路由,可以修改前缀
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
-app.register_blueprint(admin_blueprint, url_prefix="{}".format(GLOBAL["BackendRouting"].strip()))
+app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
 
 @app.before_request
@@ -39,14 +41,13 @@ def before_request():
     g.signin    = isLogged_in('.'.join([ g.username, g.expires, g.sessionId ]))
     g.sysInfo   = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__}
     g.api       = api
-    g.cache     = cache
     g.plugins   = PLUGINS
     g.hitCache  = False
     app.logger.debug(app.url_map)
 
 @app.after_request
 def after_request(response):
-    response.headers["X-Cache-Hit"] = g.hitCache
+    response.headers["X-Api-Cache-Hit"] = g.hitCache
     data = {
         "status_code": response.status_code,
         "method": request.method,
@@ -56,7 +57,7 @@ def after_request(response):
         "agent": request.headers.get("User-Agent"),
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
     }
-    #logger.info(json.dumps(data))
+    logger.info(json.dumps(data))
     #g.api.ClickMysqlWrite(data)
     return response
 

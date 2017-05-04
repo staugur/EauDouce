@@ -1,10 +1,11 @@
 # -*- coding: utf8 -*-
 
-import requests, datetime, SpliceURL
+import datetime
 from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
 from utils.tool import login_required, logger, BaiduActivePush
+from libs.cache import cache
 
 front_blueprint = Blueprint("front", __name__)
 
@@ -13,6 +14,7 @@ def index():
     return render_template("front/blogIndex.html")
 
 @front_blueprint.route('/blog/<int:bid>.html')
+@cache.cached(timeout=60)
 def blogShow(bid):
     data = g.api.blog_get_id(bid).get("data")
     if data:
@@ -40,10 +42,12 @@ def blogEdit():
         return abort(404)
 
 @front_blueprint.route("/blog/resource/")
+@cache.cached(timeout=60)
 def blogResource():
     return render_template("front/blogResource.html")
 
 @front_blueprint.route("/user/<user>/")
+@cache.cached(timeout=60)
 def userHome(user=None):
     logger.debug(user)
     return render_template("front/userHome.html", user=user)
@@ -69,20 +73,23 @@ def userChangeProfile():
     return render_template("front/userChangeProfile.html")
 
 @front_blueprint.route("/robots.txt")
+@cache.cached(timeout=60)
 def robots():
     return """
 User-agent: *
 Disallow: 
 Sitemap: http://www.saintic.com/sitemap.xml
     """
-##
+
 @front_blueprint.route("/sitemap.xml")
+@cache.cached(timeout=60)
 def sitemap():
     resp = make_response(render_template("public/sitemap.xml", data=[]))
     resp.headers["Content-Type"] = "application/xml"    
     return resp
 
 @front_blueprint.route("/feed/")
+@cache.cached(timeout=60)
 def feed():
     data = g.api.blog_get_all(limit=10).get("data")
     feed = AtomFeed(u'陶先森de博客源', feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))
@@ -96,7 +103,3 @@ def feed():
                  updated=datetime.datetime.strptime(updated, "%Y-%m-%d"),
                  published=datetime.datetime.strptime(article['create_time'][:10], "%Y-%m-%d"))
     return feed.get_response()
-
-@front_blueprint.route('/003680a0026db29da59f3eaea56f5632.txt')
-def aliyuntest():
-    return render_template('public/003680a0026db29da59f3eaea56f5632.txt')
