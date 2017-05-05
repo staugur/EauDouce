@@ -61,6 +61,13 @@
                                 <li><a href="{{ url_for('front.blogResource', resource_type='sources', resource_data=3) }}">翻译</a></li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">站点地图&nbsp;<i class="icon-sitemap icon-1x"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('front.sitemapxml') }}">站点地图XML版</a></li>
+                                <li><a href="{{ url_for('front.sitemaphtml') }}">站点地图HTML版</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if g.signin %}
@@ -151,7 +158,7 @@
             <form class="form-search form-horizontal" action="?q=" method="" id="SearchForm">
                 <div class="input-group search-input-group">
                     <button type="submit" class="btn btn-success" style="height: 30px"><i class="icon-search"></i></button>
-                    <input type="text" name="q" placeholder="搜索博客文章: 此服务暂不可用" style="height: 27px;">
+                    <input type="text" name="q" placeholder="搜索博客文章: 此服务暂不可用" style="height: 28px; min-width: 250px">
                 </div>
             </form>
             {% endblock %}
@@ -284,7 +291,7 @@
 <nav class="navbar navbar-default text-center">
     <div class="navbar-inner navbar-content-center">
         <p class="text-muted credit" style="padding: 10px;">
-              Copyright &copy; 2017 SaintIC.&nbsp;&nbsp;
+              Copyright &copy; 2017.&nbsp;&nbsp;
               All rights reserved.&nbsp;&nbsp;
               Originate by <a href="https://github.com/staugur/EauDouce/" target="_blank" title="{{ g.sysInfo.Doc }}">EauDouce</a>&nbsp;
               <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
