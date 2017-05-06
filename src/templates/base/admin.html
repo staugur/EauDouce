@@ -1,64 +1,244 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}后台管理{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin/css/common.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin/css/main.css') }}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='admin/js/libs/modernizr.min.js') }}"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>{% block title %}{% endblock %} | EauDouce - 后台管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <link href="/static/admin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/admin/css/animate.css" rel="stylesheet">
+    <link href="/static/admin/css/style.css?v=4.1.0" rel="stylesheet">
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+    {% block head %}{% endblock %}
 </head>
-<body>
-<div class="topbar-wrap white">
-    <div class="topbar-inner clearfix">
-        <div class="topbar-logo-wrap clearfix">
-            <h1 class="topbar-logo none"><a href="index.html" class="navbar-brand">后台管理</a></h1>
-            <ul class="navbar-list clearfix">
-                <li><a class="on" href="{{ url_for('admin.index') }}">首页</a></li>
-                <li><a href="{{ url_for('front.index') }}" target="_blank">网站首页</a></li>
-            </ul>
-        </div>
-        <div class="top-info-wrap">
-            <ul class="top-info-list clearfix">
-                <li><a href="{{ url_for('front.userHome', user=g.username) }}">欢迎您管理员</a></li>
-                <li><a href="{{ url_for('logout') }}">退出</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-<div class="container clearfix">
-    <div class="sidebar-wrap">
-        <div class="sidebar-content">
-            <ul class="sidebar-list">
-                <li>
-                    <i class="icon-font">&#xe018;</i>系统管理
-                    <ul class="sub-menu">
-                        <li><a href="{{ url_for('admin.index') }}"><i class="icon-font">&#xe022;</i>系统信息</a></li>
-                        <li><a href="{{ url_for('admin.system') }}"><i class="icon-font">&#xe017;</i>系统设置</a></li>
+
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+    <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="nav-close"><i class="fa fa-times-circle"></i></div>
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+
+                    <!--Logo or Title-->
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="{{ url_for('admin.index') }}">
+                                <span class="clear">
+                                    <span class="block m-t-xs" style="font-size:20px;">
+                                        <strong class="font-bold">EauDouce&nbsp;Admin</strong>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="logo-element">后台</div>
+                    </li>
+
+                    <!-- 导航大致分类 -->
+                    <li>
+                        <a class="J_menuItem" href="{{ url_for('admin.index') }}">
+                            <i class="fa fa-dashboard"></i><span class="nav-label">仪表盘</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa fa-bar-chart-o"></i><span class="nav-label">统计图</span>
+                        </a>
+                    </li>
+
+                    <!-- 基础管理分类 -->
+                    <li class="line dk"></li>
+                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                        <span class="ng-scope">基础</span>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-linux"></i> <span class="nav-label">博客管理</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a class="J_menuItem" href="{{ url_for('admin.basic_blog') }}">
+                                    <i class="fa fa-book"></i> <span class="nav-label">文章管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="{{ url_for('admin.basic_user') }}">
+                                    <i class="fa fa-user"></i> <span class="nav-label">用户管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="{{ url_for('admin.basic_catalog') }}">
+                                    <i class="fa fa-folder-open"></i> <span class="nav-label">分类管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="http://changyan.kuaizhan.com/overview" target="_blank">
+                                    <i class="fa fa-commenting"></i> <span class="nav-label">评论管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="{{ url_for('admin.basic_project') }}">
+                                    <i class="fa fa-github"></i> <span class="nav-label">开源项目管理</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin.basic_team') }}">
+                            <i class="fa fa-group"></i> <span class="nav-label">团队管理</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin.basic_filemanager') }}">
+                            <i class="fa fa-file-image-o"></i> <span class="nav-label">上传图片管理</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin.basic_plugin') }}">
+                            <i class="fa fa-connectdevelop"></i> <span class="nav-label">插件配置管理</span>
+                        </a>
+                    </li>
+
+                    <!-- 系统管理分类 -->
+                    <li class="line dk"></li>
+                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                        <span class="ng-scope">系统</span>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin.system_config') }}">
+                            <img src="/static/admin/img/flask.png" /> <span class="nav-label">系统配置</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin.system_notice') }}">
+                            <i class="fa fa-bullhorn"></i> <span class="nav-label">公告管理</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin.system_friendlink') }}">
+                            <i class="fa fa-link"></i> <span class="nav-label">友情链接管理</span>
+                        </a>
+                    </li>
+
+                    <!-- 左侧导航底部 -->
+                    <li class="line dk"></li>
+                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs"></li>
+                    <li>
+                        <center>
+                            <i class="fa fa-child" style="font-size:20px;color:white"></i>&nbsp;<scan style="font-size:10px;color:green;">欢迎: <font size="2px">{{ g.username }}</font></scan>
+                            <p class="text-muted credit" style="padding: 10px;">
+                                &copy; 2017<br />
+                                SaintIC, All rights reserved.
+                            </p>
+                        </center>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-info " href="#"><i class="fa fa-bars"></i> </a>
+                        <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
+                            </div>
+                        </form>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li><a href="{{ url_for('front.index') }}" target="_blank"><i class="fa fa-home"></i>前台</a></li>
+                        <!--消息导航-->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-bell"></i>消息&nbsp;&nbsp;<span class="label label-primary">8</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-alerts">
+                                <li>
+                                    <a href="mailbox.html">
+                                        <div>
+                                            <i class="fa fa-envelope fa-fw"></i> 您有16条未读消息
+                                            <span class="pull-right text-muted small">4分钟前</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="profile.html">
+                                        <div>
+                                            <i class="fa fa-qq fa-fw"></i> 3条新回复
+                                            <span class="pull-right text-muted small">12分钟钱</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="text-center link-block">
+                                        <a class="J_menuItem" href="notifications.html">
+                                            <strong>查看所有 </strong>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!--用户导航-->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-user"></i><span>管理员</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><center><small>Signed in as <strong>{{ g.username }}</strong></small></center></li>
+                                <li class="divider"></li>
+                                <li><a href="#">我的资料</a></li>
+                                <li><a href="{{ url_for('front.userHome', user=g.username) }}">我的主页</a></li>
+                                <li><a href="{{ url_for('front.userHome', user=g.username) }}#blog">我的文章</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{ url_for('front.userHome', user=g.username) }}#Setting" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
+                                <li><a href="{{ url_for('logout') }}" title="Sign Out">注销&nbsp;<i class="icon-signout icon-1x"></i></a></li>
+                            </ul>
+                        </li>
                     </ul>
-                </li>
-                <li>
-                    <i class="icon-font">&#xe003;</i>博客管理
-                    <ul class="sub-menu">
-                        <li><a href="{{ url_for('admin.blog') }}"><i class="icon-font">&#xe005;</i>博文管理</a></li>
-                        <li><a href="design.html"><i class="icon-font">&#xe006;</i>分类管理</a></li>
-                        <li><a href="design.html"><i class="icon-font">&#xe052;</i>友情链接</a></li>
-                        <li><a href="design.html"><i class="icon-font">&#xe033;</i>广告管理</a></li>
-                        <li><a href="http://changyan.kuaizhan.com/overview"><i class="icon-font">&#xe012;</i>评论管理</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <i class="icon-font">&#xe018;</i>用户管理
-                    <ul class="sub-menu">
-                        <li><a href="#"><i class="icon-font">&#xe037;</i>用户管理</a></li>
-                    </ul>
-                </li>
-            </ul>
+                </nav>
+            </div>
+            <!--<div class="row J_mainContent" id="content-main">
+                <iframe id="J_iframe" width="100%" height="100%" src="index_v1.html?v=4.0" frameborder="0" data-id="index_v1.html" seamless></iframe>
+            </div>-->
+            <div class="wrapper wrapper-content">
+                {% block content %}{% endblock %}
+            </div>
         </div>
+        <!--右侧部分结束-->
     </div>
 
-    {% block sidebar %}{% endblock %}
-</div>
+    <!-- 全局js -->
+    <script src="/static/admin/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/admin/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/static/admin/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/admin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/static/layer/layer.js"></script>
+
+    <!-- 自定义js:导航相关 -->
+    <script src="/static/admin/js/hAdmin.js?v=4.1.0"></script>
+
+
+    {% block script %}{% endblock %}
+
 </body>
+
 </html>

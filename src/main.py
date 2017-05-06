@@ -65,6 +65,10 @@ def after_request(response):
 def not_found(error=None):
     return render_template('public/404.html')
 
+@app.errorhandler(500)
+def server_error(error=None):
+    return render_template('public/500.html')
+
 @app.route('/login/')
 def login():
     if g.signin:
