@@ -1,375 +1,89 @@
-<!DOCTYPE html>
-<html>
+{% extends "base/admin.html" %}
 
-<head>
+{% block title %}文章管理{% endblock %}
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block head %}
+    <!-- Data Tables -->
+    <link href="/static/admin/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
 
-
-    <title> - 联系人</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-
-    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
-
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css?v=4.1.0" rel="stylesheet">
-
-</head>
-
-<body class="gray-bg">
-    <div class="wrapper wrapper-content animated fadeInRight">
+{% block content %}
+        {% set data = g.api.user_get_all().data %}
         <div class="row">
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
-                                <div class="m-t-xs font-bold">CTO</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>奔波儿灞</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 甘肃·兰州</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a1.jpg">
-                                <div class="m-t-xs font-bold">营销总监</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>灞波儿奔</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 四川·成都</p>
-                            <address>
-                            <strong>Taobao, Inc.</strong><br>
-                            E-mail:xxx@taobao.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a3.jpg">
-                                <div class="m-t-xs font-bold">Marketing manager</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>Monica Smith</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a4.jpg">
-                                <div class="m-t-xs font-bold">攻城师</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>Michael Zimber</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a5.jpg">
-                                <div class="m-t-xs font-bold">射鸡师</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>作家崔成浩</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a6.jpg">
-                                <div class="m-t-xs font-bold">射鸡师</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>韩寒</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a1.jpg">
-                                <div class="m-t-xs font-bold">CEO</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>郭敬明</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
-                                <div class="m-t-xs font-bold">射鸡师</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>马云</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a3.jpg">
-                                <div class="m-t-xs font-bold">市场总监</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>范爷</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a4.jpg">
-                                <div class="m-t-xs font-bold">攻城师</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>李彦宏</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a5.jpg">
-                                <div class="m-t-xs font-bold">射鸡师</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>小马哥</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a6.jpg">
-                                <div class="m-t-xs font-bold">射鸡师</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>乔峰</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a1.jpg">
-                                <div class="m-t-xs font-bold">CEO</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>慕容晓晓</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="contact-box">
-                    <a href="profile.html">
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
-                                <div class="m-t-xs font-bold">射鸡师</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong>高圆圆</strong></h3>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
-                            <address>
-                            <strong>Baidu, Inc.</strong><br>
-                            E-mail:xxx@baidu.com<br>
-                            Weibo:<a href="">http://weibo.com/xxx</a><br>
-                            <abbr title="Phone">Tel:</abbr> (123) 456-7890
-                        </address>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>文章管理</h5><small><a href="{{ url_for('front.blogWrite') }}" target="_blank">&nbsp;创作</a></small>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                <!-- a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin, a.isAuthor -->
+                                    <th>标题</th>
+                                    <th>创作</th>
+                                    <th>更新</th>
+                                    <th>标签</th>
+                                    <th>分类</th>
+                                    <th>作者</th>
+                                    <th>推荐</th>
+                                    <th>置顶</th>
+                                    <th>动作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for blog in data %}
+                                <tr>
+                                    <td>{{ blog.title }}</td>
+                                    <td>{{ blog.create_time }}</td>
+                                    <td>{{ blog.update_time }}</td>
+                                    <td>{{ blog.tag }}</td>
+                                    <td>{{ blog.sources }}: {{ blog.catalog }}</td>
+                                    <td>{{ blog.author }}</td>
+                                    <td>{% if blog.top in ('true', 'True', True) %}已置顶{% else %}未置顶{% endif %}</td>
+                                    <td>{% if blog.recommend in ('true', 'True', True) %}已推荐{% else %}未推荐{% endif %}</td>
+                                    <td class="center">
+                                        <div class="btn-group">
+                                            <button data-toggle="dropdown" class="btn btn-success dropdown-toggle btn-rounded btn-outline" aria-expanded="false">{{ blog.id }}<span class="caret"></span></button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}" target="_blank"><scan class="text-muted">查看此文章</scan></a></li>
+                                                <li><a href="{{ url_for('front.blogEdit', blogId=blog.id) }}" target="_blank"><scan class="text-warning">编辑此文章</scan></a></li>
+                                            {% if blog.top in ('true', 'True', True) %}
+                                                <li><a href="javascript:setTop({{ blog.id}}, false)"><scan class="text-primary">取消置顶此文章</scan></a></li>
+                                            {% else %}
+                                                <li><a href="javascript:setTop({{ blog.id}}, true)"><scan class="text-primary">置顶此文章</scan></a></li>
+                                            {% endif %}
+                                            {% if blog.recommend in ('true', 'True', True) %}
+                                                <li><a href="javascript:setRecommend({{ blog.id}}, false)"><scan class="text-info">取消推荐此文章</scan></a></li>
+                                            {% else %}
+                                                <li><a href="javascript:setRecommend({{ blog.id}}, true)"><scan class="text-info">推荐此文章</scan></a></li>
+                                            {% endif %}
+                                                <li><a href="javascript:delBlog({{ blog.id}})"><scan class="text-danger">删除此文章</scan></a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+{% endblock %}
 
-    <!-- 全局js -->
-    <script src="js/jquery.min.js?v=2.1.4"></script>
-    <script src="js/bootstrap.min.js?v=3.3.6"></script>
-
-
-
-    <!-- 自定义js -->
-    <script src="js/content.js?v=1.0.0"></script>
-
-
-
+{% block script %}
+    <!-- Data Tables -->
+    <script src="/static/admin/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="/static/admin/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <!-- Page-Level Scripts -->
     <script>
         $(document).ready(function () {
-            $('.contact-box').each(function () {
-                animationHover(this, 'pulse');
-            });
+            $('.dataTables-example').dataTable();
+
+            /* Init DataTables */
+            var oTable = $('#editable').dataTable();
         });
     </script>
 
-    
-    
-
-</body>
-
-</html>
+{% endblock %}

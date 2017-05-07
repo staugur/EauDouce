@@ -337,7 +337,7 @@ class BlogApiManager(BaseApiManager):
 
         res   = {"msg": None, "data": [], "code": 0}
         LIMIT = "LIMIT " + str(limit) if limit else ""
-        sql   = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
+        sql   = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
         logger.info("query all blog SQL: %s" %sql)
         try:
             data = self.mysql.query(sql)
