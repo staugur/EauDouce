@@ -14,7 +14,6 @@ def index():
     return render_template("front/blogIndex.html")
 
 @front_blueprint.route('/blog/<int:bid>.html')
-@cache.cached(timeout=60)
 def blogShow(bid):
     data = g.api.blog_get_id(bid).get("data")
     if data:
@@ -90,7 +89,7 @@ def sitemaphtml():
     return render_template("public/sitemap.html")
 
 @front_blueprint.route("/feed/")
-@cache.cached(timeout=30)
+@cache.cached(timeout=60)
 def feed():
     data = g.api.blog_get_all(limit=10).get("data")
     feed = AtomFeed(g.api.get_sys_config().get("data").get("site_feedname"), feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))
