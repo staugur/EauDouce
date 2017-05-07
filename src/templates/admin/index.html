@@ -62,20 +62,18 @@
                             </div>
                         </div>
                     </div>
-                    <!--标签-->
-                    <div class="col-sm-4">
+                    <!--置顶文章-->
+                    <div class="col-md-4">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>标签云<span class="badge badge-danger">{{ statistics.TagTotal }}</span></h5>
+                                <h5>置顶文章列表</h5>
                             </div>
                             <div class="ibox-content">
-                                <div class="row clearfix">
-                                    <div class="col-md-12 column">
-                                    {% for d in g.api.blog_get_tags_list().data %}
-                                        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=d.tag) }}"><span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span></a>
-                                    {% endfor %}
-                                    </div>
-                                </div>
+                                <ol>
+                                {% for blog in g.api.blog_get_top_data().data %}
+                                    <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}"><p class="text-danger">{{ blog.title }}</p></a></li>
+                                {% endfor %}
+                                </ol>
                             </div>
                         </div>
                     </div>
@@ -101,18 +99,20 @@
                             </div>
                         </div>
                     </div>
-                    <!--置顶文章-->
-                    <div class="col-md-4">
+                    <!--标签云-->
+                    <div class="col-sm-4">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>置顶文章列表</h5>
+                                <h5>标签云<span class="badge badge-danger">{{ statistics.TagTotal }}</span></h5>
                             </div>
                             <div class="ibox-content">
-				                <ol>
-                                {% for blog in g.api.blog_get_top_data().data %}
-			                        <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}"><p class="text-danger">{{ blog.title }}</p></a></li>
-                                {% endfor %}
-                                </ol>
+                                <div class="row clearfix">
+                                    <div class="col-md-12 column">
+                                    {% for d in g.api.blog_get_tags_list().data %}
+                                        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=d.tag) }}"><span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span></a>
+                                    {% endfor %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
