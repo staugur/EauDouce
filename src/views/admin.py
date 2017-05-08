@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from flask import Blueprint, g, render_template
+from flask import Blueprint, g, render_template, request
 from utils.tool import admin_login_required, logger
 
 admin_blueprint = Blueprint("admin", __name__)
@@ -9,6 +9,15 @@ admin_blueprint = Blueprint("admin", __name__)
 @admin_login_required
 def index():
     return render_template("admin/index.html")
+
+@admin_blueprint.route("/profile/")
+@admin_login_required
+def profile():
+    user = request.args.get("user")
+    if user:
+        return render_template("admin/profile.html", user=user)
+    else:
+        return ""
 
 @admin_blueprint.route("/basic/blog/")
 @admin_login_required
