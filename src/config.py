@@ -73,6 +73,9 @@ PLUGINS={
     },
     #百度主动推送(实时)插件
 
+    "BaiduIncludedCheck": os.getenv("eaudouce_BaiduIncludedCheck", True),
+    #百度收录检测插件
+
     "Weather": os.getenv("eaudouce_Weather", True),
     #天气显示插件
 

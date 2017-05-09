@@ -4,7 +4,7 @@ import time
 from torndb import IntegrityError
 from flask import request, g, Blueprint, abort
 from flask_restful import Api, Resource
-from utils.tool import logger
+from utils.tool import logger, BaiduIncludedCheck
 
 class Blog(Resource):
 
@@ -114,6 +114,17 @@ class Blog(Resource):
             return abort(403)
 
 class Misc(Resource):
+
+    def get(self):
+        """查询收录URL情况"""
+
+        res = {"code": 0, "msg": None, "Included": False}
+        url = request.args.get("url")
+        if "http://" in url or "https://" in url:
+            result = BaiduIncludedCheck(url)
+            res.update(Included=True)
+        logger.info(res)
+        return res
 
     def post(self):
         """
