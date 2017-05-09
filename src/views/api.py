@@ -117,14 +117,7 @@ class Misc(Resource):
 
     def get(self):
         """查询收录URL情况"""
-
-        res = {"code": 0, "msg": None, "Included": False}
-        url = request.args.get("url")
-        if "http://" in url or "https://" in url:
-            result = BaiduIncludedCheck(url)
-            res.update(Included=True)
-        logger.info(res)
-        return res
+        return g.api.misc_get_baiduincludedcheck(request.args.get("url", ""))
 
     def post(self):
         """
@@ -175,72 +168,6 @@ class User(Resource):
         password = request.form.get("password")
         email    = request.form.get("email", NULL)
         action   = request.args.get("action") #log or reg (登录or注册)
-
-        #chck username and password value
-        if not username or not password:
-            res.update(msg="Invaild username or password", code=10001)
-            logger.info(res)
-            return res
-
-        #check username and password length
-        if 5 <= len(username) < 30 and 5 <= len(password) < 30:
-            MD5password = md5(password)
-        else:
-            res.update({'msg': 'username or password length requirement is greater than or equal to 5 less than 30', 'code': 10002})
-            logger.warn(res)
-            return res
-
-        #check username pattern
-        if not user_pat.match(username):
-            res.update({'msg': 'username is not valid', 'code': 10003})
-            logger.warn(res)
-            return res
-
-        if email and mail_pat.match(email) == None:
-            res.update({'msg': "email format error", 'code': 10004})
-            logger.warn(res)
-            return res
-
-        #Start Action with (log, reg)
-        if action == 'SignIn':
-            logger.debug(RegisteredUser())
-            logger.debug("MD5password: %s, DBpassword: %s, username: %s" %(MD5password, RegisteredUserInfo(username).get("lauth_password"),username))
-            if username in RegisteredUser():
-                if MD5password == RegisteredUserInfo(username).get("lauth_password"):
-                    res.update({'msg': 'Password authentication success at sign in', 'code': 0, "success": True})
-                else:
-                    res.update({'msg': 'Password authentication failed at sign in', 'code': 10005, "success": False})
-            else:
-                res.update({'msg':'username not exists', 'code': 10006})
-            logger.info(res)
-            return res
-
-        elif action == 'SignUp':
-            try:
-                AuthSQL = "INSERT INTO LAuth (lauth_username, lauth_password) VALUES(%s, %s)"
-                logger.info(AuthSQL)
-                mysql.insert(AuthSQL, username, MD5password)
-                UserSQL = "INSERT INTO User (username, email, time, avatar) VALUES(%s, %s, %s, %s)"
-                mysql.insert(UserSQL, username, email, get_today(), "/static/img/avatar/default.jpg")
-            except IntegrityError, e:
-                logger.error(e, exc_info=True)
-                res.update({'msg': 'username already exists, cannot be registered!', 'code': 10007})
-                logger.warn(res)
-                return res
-            except Exception,e:
-                logger.error(e, exc_info=True)
-                res.update(msg="server error", code=-1)
-                logger.error(res)
-                return res
-            else:
-                res.update({'code': 0, 'msg': 'Sign up success', "success": True})
-                logger.info(res)
-                return res
-
-        else:
-            res.update({'msg': 'Request action error', 'code': 10008})
-            logger.info(res)
-            return res
 
     def delete(self):
         #sql = "DELETE FROM user WHERE username=%s"

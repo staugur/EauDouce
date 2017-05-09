@@ -7,7 +7,7 @@ from base64 import b32encode
 from config import SSO, PLUGINS
 from functools import wraps
 from flask import g, request, redirect, url_for
-from bs4 import BeautifulSoup as bs
+from bs4 import BeautifulSoup
 
 ip_pat          = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
 mail_pat        = re.compile(r"([0-9a-zA-Z\_*\.*\-*]+)@([a-zA-Z0-9\-*\_*\.*]+)\.([a-zA-Z]+$)")
@@ -126,7 +126,7 @@ def BaiduIncludedCheck(url):
     # 构建百度搜索URL；因为是查收录，所以只显示了前10个搜索结果，还可以通过rn参数来调整搜索结果的数量
     b_url = 'http://www.baidu.com/s?wd=%s&rn=1' % url
     # 初始化BeautifulSoup
-    soup = bs(requests.get(b_url, headers=headers, timeout=2).content, "html.parser")
+    soup = BeautifulSoup(requests.get(b_url, headers=headers, timeout=2).content, "html.parser")
     # 获取URL的特征值是通过class="t"
     b_links = [tag.a['href'] for tag in soup.find_all('h3', {'class': 't'})]
     # 分析搜索结果中的真实URL,使用requests库获取了最终URL，而不是快照URL

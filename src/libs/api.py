@@ -4,7 +4,7 @@ import requests
 from config import REDIS, MYSQL, PLUGINS
 from random import choice
 from torndb import IntegrityError, Connection
-from utils.tool import logger, ParseRedis, ParseMySQL, get_today, ListEqualSplit, md5
+from utils.tool import logger, ParseRedis, ParseMySQL, get_today, ListEqualSplit, md5, BaiduIncludedCheck
 
 
 class CacheManager(object):
@@ -531,6 +531,16 @@ class MiscApiManager(BaseApiManager):
         logger.info(res)
         return res
 
+    def misc_get_baiduincludedcheck(self, url):
+        """查询收录URL情况"""
+
+        res = {"code": 0, "msg": None, "Included": False}
+        if "http://" in url or "https://" in url:
+            result = BaiduIncludedCheck(url)
+            res.update(Included=True)
+
+        logger.info(res)
+        return res
 
 class UserApiManager(BaseApiManager):
 

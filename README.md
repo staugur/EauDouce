@@ -28,12 +28,11 @@ upyun>=2.4.2
 
 ```
 
-0. Depend:
-    0.0 Deploy Api(https://github.com/staugur/Api)
-    0.1 Deploy Passport(https://github.com/staugur/passport)
+0. Depend Deploy Passport:
+    Please redirect to https://github.com/staugur/passport
 
 1. Requirement:
-    1.0 yum install -y gcc gcc-c++ python-devel libffi-devel openssl-devel
+    1.0 yum install -y gcc gcc-c++ python-devel libffi-devel openssl-devel mysql-devel
     1.1 pip install -r requirements.txt
 
 2. modify config.py or add environment variables(os.getenv key in the reference configuration item):

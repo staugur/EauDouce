@@ -61,12 +61,12 @@ PLUGINS={
     "BaiduShare": os.getenv("eaudouce_BaiduShare", True),
     #百度分享插件
 
-    "BaiduAutoPush": os.getenv("eaudouce_BaiduAutoPush", True),
-    #百度自动推送插件
-
     "BaiduStatistics": os.getenv("eaudouce_BaiduStatistics", False),
     #百度统计插件
 
+    "BaiduAutoPush": os.getenv("eaudouce_BaiduAutoPush", True),
+    #百度自动推送插件
+    
     "BaiduActivePush": {
         "enable":  os.getenv("eaudouce_BaiduActivePush_enable", False),
         "callUrl": os.getenv("eaudouce_BaiduActivePush_callUrl", "http://data.zz.baidu.com/urls?site=www.saintic.com&token=QbriJ4Iv7TGi8yOF")
