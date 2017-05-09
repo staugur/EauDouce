@@ -266,6 +266,14 @@ class Sys(Resource):
         logger.info(res)
         return res
 
+class Author(Resource):
+
+    def get(self):
+        return g.api.get_apply_author()
+
+    def post(self):
+        return g.api.post_apply_author(request.args.get("username"))
+
 class Comment(Resource):
 
     def get(self):
@@ -292,3 +300,4 @@ api.add_resource(User, '/user', '/user/', endpoint='user')
 api.add_resource(Sys, '/sys', '/sys/', endpoint='sys')
 api.add_resource(Comment, '/comment', '/comment/', endpoint='comment')
 api.add_resource(Cache, "/cache/", "/cache", endpoint="cache")
+api.add_resource(Author, "/author/", "/author", endpoint="author")

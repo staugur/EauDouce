@@ -531,6 +531,7 @@ class MiscApiManager(BaseApiManager):
         logger.info(res)
         return res
 
+
 class UserApiManager(BaseApiManager):
 
     @property
@@ -873,6 +874,53 @@ class SysApiManager(BaseApiManager):
                     logger.warn(e, exc_info=True)
         else:
             logger.debug("Do not record this log")
+
+    def post_apply_author(self, username):
+        """
+        申请成为作者
+        #username(str): 用户名
+        """
+
+        res = {"msg": None, "code": 0}
+        if username and username in self.user_get_list(True).get("data"):
+            if username in self.user_get_authors().get("data"):
+                res.update(msg="The current user is the author")
+            else:
+                sql = "INSERT INTO blog_applyauthor (username, req_time) VALUES(%s, %s)"
+                try:
+                    mid = self.mysql.insert(sql, username, get_today())
+                except IntegrityError,e:
+                    logger.debug(e)
+                    res.update(msg="The author has applied.", code=400006)
+                except Exception,e:
+                    logger.error(e, exc_info=True)
+                    res.update(msg="server error", code=400004)
+                else:
+                    res.update(success=True, data=mid)
+        else:
+            res.update(msg="No author username", code=400005)
+
+        logger.info(res)
+        return res
+
+    def get_apply_author(self, isActive=1):
+        """
+        查询有效的作者申请
+        #isActive(int), 查询是否有效的申请, 0无效, 1有效
+        """
+
+        res = {"code": 0, "msg": None, "data": None}
+        sql = "SELECT id,username,req_time FROM blog_applyauthor WHERE isActive=%s AND req_state='wait'"
+        try:
+            data = self.mysql.query(sql, isActive)
+        except Exception,e:
+            logger.error(e, exc_info=True)
+            res.update(msg="server error", code=400007)
+        else:
+            res.update(data=data)
+
+        logger.info(res)
+        return res
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
     pass
