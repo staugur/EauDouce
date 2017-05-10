@@ -63,11 +63,11 @@ def after_request(response):
 
 @app.errorhandler(404)
 def not_found(error=None):
-    return render_template('public/404.html')
+    return render_template('public/404.html'),404
 
 @app.errorhandler(500)
 def server_error(error=None):
-    return render_template('public/500.html')
+    return render_template('public/500.html'),500
 
 @app.route('/login/')
 def login():
