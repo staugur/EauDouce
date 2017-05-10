@@ -10,3 +10,4 @@ torndb>=0.3
 requests
 beautifulsoup4
 upyun
+redis
