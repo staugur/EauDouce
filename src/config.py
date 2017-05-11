@@ -4,8 +4,8 @@ import os
 
 GLOBAL={
 
-    "Host": os.getenv("eaudouce_host", "0.0.0.0"),
-    #应用绑定的IP, 如`0.0.0.0`, `127.0.0.1`, ``.
+    "ProcessName": "EauDouce",
+    #自定义进程名.
 
     "Port": os.getenv("eaudouce_port", 10140),
     #应用绑定的Port.
@@ -15,22 +15,12 @@ GLOBAL={
 }
 
 
-PRODUCT={
-
-    "ProcessName": "EauDouce",
-    #自定义进程名.
-
-    "ProductType": os.getenv("eaudouce_producttype", "tornado"),
-    #生产环境启动方式, 可选`gevent`, `tornado`.
-}
-
-
 SSO={
 
     "SSO.URL": os.getenv("eaudouce_ssourl", "https://passport.saintic.com"),
     #认证中心地址
 
-    "SSO.PROJECT": PRODUCT["ProcessName"],
+    "SSO.PROJECT": GLOBAL["ProcessName"],
 }
 
 

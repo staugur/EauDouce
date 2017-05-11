@@ -116,6 +116,5 @@ def signup():
     return redirect(SSO.get("SSO.URL").strip("/") + "/SignUp")
 
 if __name__ == '__main__':
-    Host  = GLOBAL.get('Host')
     Port  = GLOBAL.get('Port')
-    app.run(host = Host, port = int(Port), debug = True)
+    app.run(host="0.0.0.0", port=int(Port), debug=True)

@@ -1,35 +1,38 @@
-#!/bin/sh
+#!/bin/bash
+#
+#使用uwsgi启动, 要求系统安装了uwsgi, 可以pip install uwsgi，也可以编译安装、yum安装
+#
 
 dir=$(cd $(dirname $0); pwd)
-log_dir=${dir}/src/logs
-[ -d $log_dir ] || mkdir $log_dir
-procname=$(grep '"ProcessName":' ${dir}/src/config.py | awk '{print $2}' | awk -F \" '{print $2}'|head -1)
-pidfile=${log_dir}/${procname}.pid
+cd $dir
 
+host="0.0.0.0"
+port=$(python -c "from config import GLOBAL;print GLOBAL['Port']")
+proc=$(python -c "from config import GLOBAL;print GLOBAL['ProcessName']")
+procname=$proc
+cpu_count=$(cat /proc/cpuinfo | grep "processor" | wc -l)
+logfile=${dir}/logs/uwsgi.log
+pidfile=${dir}/logs/${proc}.pid
 
 case $1 in
 start)
     if [ -f $pidfile ]; then
-        if [[ $(ps aux | grep $(cat $pidfile) | grep -v grep | wc -l) -lt 1 ]]; then
-            $(which python) -O ${dir}/src/Product.py &>> ${log_dir}/output.log &
-            pid=$!
-            echo $pid > $pidfile
-            echo "$procname start over."
-        fi
+        echo "Has pid($(cat $pidfile)) in $pidfile, please check, exit." ; exit 1
     else
-        $(which python) -O ${dir}/src/Product.py &>> ${log_dir}/output.log &
+        uwsgi --http ${host}:${port} --module main --callable app --master --procname-master ${proc}.master --procname ${proc}.worker -p $cpu_count --chdir $dir &>> $logfile &
         pid=$!
         echo $pid > $pidfile
-        echo "$procname start over."
+        echo "$procname start over with pid ${pid}"
     fi
     ;;
 
 stop)
-    pid=$(cat $pidfile)
-    kill $pid
-    retval=$?
-    rm -f $pidfile
-    echo "$procname stop over."
+    if [ -e $pidfile ];then
+        kill -9 $(cat $pidfile) || exit 1
+        #for pid in $(ps aux | grep $proc | grep -v grep | awk '{print $2}'); do kill -9 $pid ;done
+        rm -f $pidfile
+        echo "$procname stop over."
+    fi
     ;;
 
 status)
@@ -59,6 +62,7 @@ restart)
     ;;
 
 *)
-    sh $0 start
+    echo "Usage: $0 start|stop|restart|status"
     ;;
 esac
+
