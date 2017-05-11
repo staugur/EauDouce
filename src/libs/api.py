@@ -19,6 +19,7 @@ class CacheManager(object):
         else:
             from rediscluster import StrictRedisCluster
             self.redis = StrictRedisCluster(startup_nodes=self._info, decode_responses=True, socket_timeout=timeout)
+        #读写mysql连接
         self.mysql = Connection(
                     host     = "%s:%s" %(ParseMySQL(MYSQL).get('Host', '127.0.0.1'), ParseMySQL(MYSQL).get('Port', 3306)),
                     user     = ParseMySQL(MYSQL).get('User', 'root'),
@@ -28,6 +29,8 @@ class CacheManager(object):
                     charset  = ParseMySQL(MYSQL).get('Charset', 'utf8'),
                     connect_timeout=3,
                     max_idle_time=2)
+        self.mysql_write= self.mysql
+        self.mysql_read = self.mysql
 
     def setKey(self, key):
         return "{}_{}".format(self.index, key)
@@ -72,6 +75,8 @@ class BaseApiManager(object):
                     charset  = ParseMySQL(MYSQL).get('Charset', 'utf8'),
                     connect_timeout=3,
                     max_idle_time=2)
+        self.mysql_write= self.mysql
+        self.mysql_read = self.mysql
 
     @property
     def RegisteredUser(self):
