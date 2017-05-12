@@ -19,13 +19,19 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                         <div class="ibox-content profile-content">
-                            <h4><strong>Beaut-zihan</strong></h4>
-                            <p><i class="fa fa-map-marker"></i> 上海市闵行区绿地科技岛广场A座2606室</p>
+                            <h4><strong>{{ UserData.cname or UserData.username }}</strong></h4>
+                            <p><i class="fa fa-map-marker"></i>{{ UserData.address }}</p>
                             <h5>
-                                    关于我
-                                </h5>
+                                关于我
+                            </h5>
                             <p>
-                                会点前端技术，div+css啊，jQuery之类的，不是很精；热爱生活，热爱互联网，热爱新技术；有一个小的团队，在不断的寻求新的突破。
+                                {{ UserData.motto }}
+                            </p>
+                            <h5>
+                                个人网址
+                            </h5>
+                            <p>
+                                {{ UserData.url }},{{ UserData.github }},{{ UserData.weibo }},{{ UserData.github }}
                             </p>
                             <div class="row m-t-lg">
                                 <div class="col-sm-4">
