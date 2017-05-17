@@ -26,7 +26,7 @@ start)
         pid=$!
     fi
     echo $pid > $pidfile
-    echo "$procname start over with pid ${pid}"
+    echo "$proc start over with pid ${pid}"
     ;;
 
 stop)
@@ -34,7 +34,7 @@ stop)
         kill -9 $(cat $pidfile) || exit 1
         #for pid in $(ps aux | grep $proc | grep -v grep | awk '{print $2}'); do kill -9 $pid ;done
         rm -f $pidfile
-        echo "$procname stop over."
+        echo "$proc stop over."
     fi
     ;;
 
