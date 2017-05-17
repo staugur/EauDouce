@@ -20,7 +20,6 @@ __date__    = '2017-03-26'
 __org__     = 'SaintIC'
 __version__ = '0.0.1'
 
-logger.info(ParseRedis(REDIS))
 app = Flask(__name__)
 #初始化接口管理器
 api = ApiManager()

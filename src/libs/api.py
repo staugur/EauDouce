@@ -5,32 +5,15 @@ from config import REDIS, MYSQL, PLUGINS
 from random import choice
 from torndb import IntegrityError, Connection
 from utils.tool import logger, ParseRedis, ParseMySQL, get_today, ListEqualSplit, md5, BaiduIncludedCheck
+from .base import ServiceBase
 
 
-class CacheManager(object):
+class CacheManager(ServiceBase):
 
 
-    def __init__(self, timeout=5):
-        self._info = ParseRedis(REDIS)
+    def __init__(self):
+        super(ServiceBase, self).__init__()
         self.index = "EauDouceBlog"
-        if isinstance(self._info, dict):
-            from redis import Redis
-            self.redis = Redis(host=self._info.get("host", "localhost"), port=self._info.get("port", 6379), db=self._info.get("db", 0), password=self._info.get("password", None), socket_timeout=timeout)
-        else:
-            from rediscluster import StrictRedisCluster
-            self.redis = StrictRedisCluster(startup_nodes=self._info, decode_responses=True, socket_timeout=timeout)
-        #读写mysql连接
-        self.mysql = Connection(
-                    host     = "%s:%s" %(ParseMySQL(MYSQL).get('Host', '127.0.0.1'), ParseMySQL(MYSQL).get('Port', 3306)),
-                    user     = ParseMySQL(MYSQL).get('User', 'root'),
-                    password = ParseMySQL(MYSQL).get('Password'),
-                    database = ParseMySQL(MYSQL).get('Database'),
-                    time_zone= ParseMySQL(MYSQL).get('Timezone','+8:00'),
-                    charset  = ParseMySQL(MYSQL).get('Charset', 'utf8'),
-                    connect_timeout=3,
-                    max_idle_time=2)
-        self.mysql_write= self.mysql
-        self.mysql_read = self.mysql
 
     def setKey(self, key):
         return "{}_{}".format(self.index, key)

@@ -18,11 +18,11 @@ case $1 in
 start)
     if [ -f $pidfile ]; then
         if [[ $(ps aux | grep $(cat $pidfile) | grep -v grep | wc -l) -lt 1 ]]; then
-            gunicorn -w $cpu_count -b ${host}:${port} $procname -k gevent &>> $logfile &
+            gunicorn -w $cpu_count -b ${host}:${port} $procname -k gevent --reload &>> $logfile &
             pid=$!
         fi
     else
-        gunicorn -w $cpu_count -b ${host}:${port} $procname -k gevent &>> $logfile &
+        gunicorn -w $cpu_count -b ${host}:${port} $procname -k gevent --reload &>> $logfile &
         pid=$!
     fi
     echo $pid > $pidfile
