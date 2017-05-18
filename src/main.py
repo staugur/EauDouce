@@ -42,7 +42,6 @@ def before_request():
     g.api       = api
     g.plugins   = PLUGINS
     g.hitCache  = False
-    app.logger.debug(app.url_map)
 
 @app.after_request
 def after_request(response):
@@ -112,7 +111,9 @@ def sso():
 
 @app.route('/SignUp')
 def signup():
-    return redirect(SSO.get("SSO.URL").strip("/") + "/SignUp")
+    regUrl = SSO.get("SSO.URL").strip("/") + "/SignUp"
+    sso_logger.debug(regUrl)
+    return redirect(regUrl)
 
 if __name__ == '__main__':
     Port  = GLOBAL.get('Port')
