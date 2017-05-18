@@ -1,9 +1,6 @@
 Flask==0.10.1
 Flask-RESTful
 Flask-Cache
-setproctitle
-gunicorn
-gevent
 SpliceURL>=1.2
 MySQL-python>=1.2.3
 torndb>=0.3
@@ -11,3 +8,7 @@ requests
 beautifulsoup4
 upyun
 redis
+setproctitle
+gunicorn
+gevent
+uwsgi

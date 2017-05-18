@@ -3,7 +3,7 @@
 import json, datetime, SpliceURL, time
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
-from utils.tool import logger, isLogged_in, md5, ParseRedis
+from utils.tool import sso_logger, access_logger, isLogged_in, md5
 from urllib import urlencode
 from libs.cache import cache
 from libs.api import ApiManager
@@ -56,7 +56,7 @@ def after_request(response):
         "agent": request.headers.get("User-Agent"),
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
     }
-    logger.info(json.dumps(data))
+    access_logger.info(json.dumps(data))
     #g.api.ClickMysqlWrite(data)
     return response
 
@@ -79,7 +79,7 @@ def login():
            "sso_t": md5("%s:%s" %(SSO["SSO.PROJECT"], SpliceURL.Modify(request.url_root, "/sso/").geturl))
         }
         SSOLoginURL = SpliceURL.Modify(url=SSO["SSO.URL"], path="/login/", query=query).geturl
-        logger.info("User request login to SSO: %s" %SSOLoginURL)
+        sso_logger.info("User request login to SSO: %s" %SSOLoginURL)
         return redirect(SSOLoginURL)
 
 @app.route('/logout/')
@@ -96,7 +96,7 @@ def logout():
 @app.route('/sso/')
 def sso():
     ticket = request.args.get("ticket")
-    logger.info("ticket: %s" %ticket)
+    sso_logger.info("ticket: %s" %ticket)
     username, expires, sessionId = ticket.split('.')
     if expires == 'None':
         UnixExpires = None

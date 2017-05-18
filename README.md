@@ -13,9 +13,6 @@ MIT
 Flask==0.10.1
 Flask-RESTful
 Flask-Cache
-setproctitle
-gunicorn
-gevent
 SpliceURL>=1.2
 MySQL-python>=1.2.3
 torndb>=0.3
@@ -23,6 +20,10 @@ requests
 beautifulsoup4
 upyun
 redis
+setproctitle
+gunicorn
+gevent
+uwsgi
 ```
 > 4. 依赖服务:
 
@@ -48,9 +49,9 @@ redis
 3. run:
     3.0 cd src
     3.1 python main.py               #开发环境启动
-    3.2 python -O online_gevent.py   #生产环境前台启动,采用gevent,可使用supervisor守护
+    3.2 python -O online_gevent.py   #生产环境前台启动,采用gevent,不需要额外安装,可使用supervisor守护
     3.3 python -O online_tornado.py  #生产环境前台启动,采用tornado,需要安装:pip install tornado,可使用supervisor守护
-    3.4 sh online_uwsgi.sh start     #生产环境后台启动,采用uwsgi,需要安装:pip install uwsgi
+    3.4 sh online_uwsgi.sh start     #生产环境后台启动,采用uwsgi,不需要额外安装,推荐使用!
     3.5 sh online_gunicorn.sh start  #生产环境后台启动,采用gunicorn+gevent,不需要额外安装,推荐使用!
     3.6 python super_debug.py        #性能调试模式
 ```

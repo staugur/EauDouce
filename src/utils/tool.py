@@ -2,7 +2,7 @@
 
 import re, requests, hashlib, datetime, random, upyun
 from uuid import uuid4
-from log import Syslog
+from log import Logger
 from base64 import b32encode
 from config import SSO, PLUGINS
 from functools import wraps
@@ -13,7 +13,9 @@ ip_pat          = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3
 mail_pat        = re.compile(r"([0-9a-zA-Z\_*\.*\-*]+)@([a-zA-Z0-9\-*\_*\.*]+)\.([a-zA-Z]+$)")
 user_pat        = re.compile(r'[a-zA-Z\_][0-9a-zA-Z\_]')
 comma_pat       = re.compile(r"\s*,\s*")
-logger          = Syslog.getLogger()
+logger          = Logger("sys").getLogger
+sso_logger      = Logger("sso").getLogger
+access_logger   = Logger("access").getLogger
 md5             = lambda pwd:hashlib.md5(pwd).hexdigest()
 gen_token       = lambda n=32:b32encode(uuid4().hex)[:n]
 gen_requestId   = lambda :str(uuid4())
