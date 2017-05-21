@@ -5,7 +5,6 @@ from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
 from utils.tool import login_required, logger, BaiduActivePush
-from libs.cache import cache
 
 front_blueprint = Blueprint("front", __name__)
 
@@ -70,12 +69,10 @@ def userChangeProfile():
     return render_template("front/userChangeProfile.html")
 
 @front_blueprint.route("/robots.txt")
-@cache.cached(timeout=3600)
 def robots():
     return """
 User-agent: *
 Disallow: 
-Sitemap: http://www.saintic.com/sitemap.xml
     """
 
 @front_blueprint.route("/sitemap.xml")
@@ -89,7 +86,6 @@ def sitemaphtml():
     return render_template("public/sitemap.html")
 
 @front_blueprint.route("/feed/")
-@cache.cached(timeout=60)
 def feed():
     data = g.api.blog_get_all(limit=10).get("data")
     feed = AtomFeed(g.api.get_sys_config().get("data").get("site_feedname"), feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))

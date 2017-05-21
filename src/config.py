@@ -81,11 +81,14 @@ PLUGINS={
     },
     #又拍云存储插件
 
-    "Like": os.getenv("eaudouce_Like", True),
-    #点赞插件
-
-    "Cache": os.getenv("eaudouce_Cache", "redis")
+    "Cache": os.getenv("eaudouce_Cache", "redis"),
     #缓存插件,可选redis、simple。
     #1. redis:  详情配置参考REDIS键值项;
     #2. simple: 简单本地缓存,不需要设置其他键值.
+
+    "Like": os.getenv("eaudouce_Like", True),
+    #点赞插件
+
+    "Reward": os.getenv("eaudouce_Reward", True),
+    #打赏插件
 }

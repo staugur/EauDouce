@@ -1,13 +1,12 @@
 # -*- coding: utf8 -*-
 
-import re, requests, hashlib, datetime, random, upyun
+import re, requests, hashlib, datetime, random, upyun, os
 from uuid import uuid4
 from log import Logger
 from base64 import b32encode
 from config import SSO, PLUGINS
 from functools import wraps
 from flask import g, request, redirect, url_for
-from bs4 import BeautifulSoup
 
 ip_pat          = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
 mail_pat        = re.compile(r"([0-9a-zA-Z\_*\.*\-*]+)@([a-zA-Z0-9\-*\_*\.*]+)\.([a-zA-Z]+$)")
@@ -16,10 +15,12 @@ comma_pat       = re.compile(r"\s*,\s*")
 logger          = Logger("sys").getLogger
 sso_logger      = Logger("sso").getLogger
 access_logger   = Logger("access").getLogger
+plugin_logger   = Logger("plugin").getLogger
 md5             = lambda pwd:hashlib.md5(pwd).hexdigest()
 gen_token       = lambda n=32:b32encode(uuid4().hex)[:n]
 gen_requestId   = lambda :str(uuid4())
 get_today       = lambda :datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+get_todayKey    = lambda :datetime.datetime.now().strftime("%Y%m%d")
 gen_rnd_filename= lambda :"%s%s" %(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), str(random.randrange(1000, 10000)))
 ListEqualSplit  = lambda l,n=5: [ l[i:i+n] for i in range(0,len(l), n) ]
 
@@ -119,30 +120,36 @@ def BaiduActivePush(pushUrl, original=True, callUrl=PLUGINS['BaiduActivePush']['
     logger.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
     return res
 
-def BaiduIncludedCheck(url):
-    """
-    get baidu serp links with the url
-    """
-    # 设置UA模拟用户，还可设置多个UA提高搜索成功率
-    headers = {'User-Agent': 'Mozilla/4.0+(compatible;+MSIE+8.0;+Windows+NT+5.1;+Trident/4.0;+GTB7.1;+.NET+CLR+2.0.50727)'}
-    # 构建百度搜索URL；因为是查收录，所以只显示了前10个搜索结果，还可以通过rn参数来调整搜索结果的数量
-    b_url = 'http://www.baidu.com/s?wd=%s&rn=1' % url
-    # 初始化BeautifulSoup
-    soup = BeautifulSoup(requests.get(b_url, headers=headers, timeout=2).content, "html.parser")
-    # 获取URL的特征值是通过class="t"
-    b_links = [tag.a['href'] for tag in soup.find_all('h3', {'class': 't'})]
-    # 分析搜索结果中的真实URL,使用requests库获取了最终URL，而不是快照URL
-    real_links = []
-    for link in b_links:
-        try:
-            r = requests.get(link, headers=headers, timeout=2)
-        except Exception as e:
-            pass
+class Initialization:
+
+    def __init__(self):
+        self.plugins = []
+        self.__loadPlugins()
+
+    def __loadPlugins(self):
+        plugin_logger.info("Initialization Plugins Start")
+        checkPath = os.path.join(os.path.dirname(os.path.split(os.path.realpath(__file__))[0]), "plugins")
+        plugin_logger.info("loadPlugins path: {0}".format(checkPath))
+        if os.path.exists(checkPath):
+            for filename in os.listdir(checkPath):
+                plugin_logger.info("loadPlugin: {0}".format(filename))
+                if not filename.endswith('.py') or filename.startswith('_'):
+                    continue
+                self.__runPlugins(filename)
         else:
-            print r.status_code,r.url
-            real_links.append(r.url)
-    #待查URL是否在百度搜索结果的真实URL列表中，如果在就表示收录，反之未收录
-    if url in real_links:
-        return True
-    else:
-        return False
+            plugin_logger.warning("Plugins directory not in here!")
+
+    def __runPlugins(self, filename):
+        #分离插件(模块)名称
+        plugins_name = os.path.splitext(filename)[0]
+        #动态加载模块
+        plugin = __import__("{0}.{1}".format("plugins", plugins_name), fromlist=[plugins_name])
+        p = plugin.getPluginClass()
+        plugin_logger.info("runPlugin package: {0}.{1}, {2}".format("plugins", plugins_name, p))
+        i = p()
+        if hasattr(i, "run"):
+            i.run()
+            self.plugins.append(i)
+        else:
+            plugin_logger.error("The current class {0} does not have the `run` method".format(i))
+

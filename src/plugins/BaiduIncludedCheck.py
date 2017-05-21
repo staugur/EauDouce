@@ -1,16 +1,18 @@
 # -*- coding: utf8 -*-
 
 import requests
-from libs.base import ServiceBase
 from bs4 import BeautifulSoup
+from libs.base import PluginBase
+from utils.tool import plugin_logger
 
+def getPluginClass():
+    return BaiduIncludedCheckPluginManager
 
-class BaiduIncludedCheckManager(ServiceBase):
-
+class BaiduIncludedCheckPluginManager(PluginBase):
     """ Redis简单队列管理器 """
 
     def __init__(self):
-        super(ServiceBase, self).__init__()
+        super(PluginBase, self).__init__()
         #定义队列名
         self.QueueKey = "EauDouce_Baidu_Url_Sq"
 
@@ -50,3 +52,7 @@ class BaiduIncludedCheckManager(ServiceBase):
                         self._put(url)
                         return True
             return False
+
+    def run(self):
+        """ 运行插件入口 """
+        plugin_logger.info("{0} run!".format(getPluginClass()))

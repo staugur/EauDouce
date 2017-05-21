@@ -4,7 +4,7 @@ import requests
 from config import REDIS, MYSQL, PLUGINS
 from random import choice
 from torndb import IntegrityError, Connection
-from utils.tool import logger, ParseRedis, ParseMySQL, get_today, ListEqualSplit, md5, BaiduIncludedCheck
+from utils.tool import logger, ParseRedis, ParseMySQL, get_today, ListEqualSplit, md5
 from .base import ServiceBase
 
 

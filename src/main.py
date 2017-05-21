@@ -3,15 +3,14 @@
 import json, datetime, SpliceURL, time
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
-from utils.tool import sso_logger, access_logger, isLogged_in, md5
+from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5, Initialization
 from urllib import urlencode
-from libs.cache import cache
 from libs.api import ApiManager
 from views.api import api_blueprint
 from views.front import front_blueprint
 from views.admin import admin_blueprint
 from views.upload import upload_blueprint
-
+from plugins.AccessCount import AccessCountPluginManager
 
 __author__  = 'Mr.tao'
 __email__   = 'staugur@saintic.com'
@@ -20,11 +19,13 @@ __date__    = '2017-03-26'
 __org__     = 'SaintIC'
 __version__ = '0.0.1'
 
-app = Flask(__name__)
+ac = AccessCountPluginManager()
+app  = Flask(__name__)
 #初始化接口管理器
-api = ApiManager()
-#初始化缓存管理器
-cache.init_app(app)
+api  = ApiManager()
+#实例化初始化类并执行
+init = Initialization()
+plugin_logger.info("Initialization Plugins End")
 #注册蓝图路由,可以修改前缀
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
@@ -45,7 +46,6 @@ def before_request():
 
 @app.after_request
 def after_request(response):
-    response.headers["X-Api-Cache-Hit"] = g.hitCache
     data = {
         "status_code": response.status_code,
         "method": request.method,
@@ -56,7 +56,12 @@ def after_request(response):
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
     }
     access_logger.info(json.dumps(data))
+    app.logger.debug(dir(ac))
+    ac.Record_ip_pv(data["ip"])
     #g.api.ClickMysqlWrite(data)
+    if request.endpoint != 'static':
+        return response
+    response.cache_control.max_age = 86400 #1d
     return response
 
 @app.errorhandler(404)
@@ -112,7 +117,6 @@ def sso():
 @app.route('/SignUp')
 def signup():
     regUrl = SSO.get("SSO.URL").strip("/") + "/SignUp"
-    sso_logger.debug(regUrl)
     return redirect(regUrl)
 
 if __name__ == '__main__':

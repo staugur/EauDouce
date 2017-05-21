@@ -5,25 +5,24 @@
 
 from config import REDIS, MYSQL, PLUGINS
 from torndb import Connection
-from utils.tool import logger, ParseRedis, ParseMySQL
+from utils.tool import ParseRedis, ParseMySQL
 
 
 class ServiceBase(object):
-
+    """ 所有服务的基类 """
 
     def __init__(self):
-
         #解析redis配置信息
-        self._info   = ParseRedis(REDIS)
+        self._redis_info = ParseRedis(REDIS)
         #设置全局超时时间(如连接超时)
         self.timeout = 2
         #建立redis单机或集群连接
-        if isinstance(self._info, dict):
+        if isinstance(self._redis_info, dict):
             from redis import Redis
-            self.redis = Redis(host=self._info.get("host", "localhost"), port=self._info.get("port", 6379), db=self._info.get("db", 0), password=self._info.get("password", None), socket_timeout=self.timeout)
+            self.redis = Redis(host=self._redis_info.get("host", "localhost"), port=self._redis_info.get("port", 6379), db=self._redis_info.get("db", 0), password=self._redis_info.get("password", None), socket_timeout=self.timeout)
         else:
             from rediscluster import StrictRedisCluster
-            self.redis = StrictRedisCluster(startup_nodes=self._info, decode_responses=True, socket_timeout=self.timeout)
+            self.redis = StrictRedisCluster(startup_nodes=self._redis_info, decode_responses=True, socket_timeout=self.timeout)
         #解析mysql配置并建立读写分离连接
         self._mysql = Connection(
                     host     = "%s:%s" %(ParseMySQL(MYSQL).get('Host', '127.0.0.1'), ParseMySQL(MYSQL).get('Port', 3306)),
@@ -36,4 +35,18 @@ class ServiceBase(object):
                     max_idle_time=self.timeout)
         self.mysql_read = self._mysql
         self.mysql_write= self._mysql
+
+
+class PluginBase(ServiceBase):
+    """ 定义一个插件基类，其他 插件必须实现这个接口，name 属性必须赋值 """
+
+    name = ''
+    description = ''
+    version = ''
+    
+    def __init__(self):
+        super(PluginBase, self).__init__()
+        
+    def executeFun(self):
+        pass
 

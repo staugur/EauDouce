@@ -4,7 +4,7 @@ import time
 from torndb import IntegrityError
 from flask import request, g, Blueprint, abort
 from flask_restful import Api, Resource
-from utils.tool import logger, BaiduIncludedCheck
+from utils.tool import logger
 
 class Blog(Resource):
 

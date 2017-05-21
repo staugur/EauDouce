@@ -12,7 +12,6 @@ MIT
 ```
 Flask==0.10.1
 Flask-RESTful
-Flask-Cache
 SpliceURL>=1.2
 MySQL-python>=1.2.3
 torndb>=0.3

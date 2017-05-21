@@ -49,3 +49,56 @@ blockquote:after {
   bottom: 0em;
   line-height: 0.1em;
 }
+
+
+/*like and reward css*/
+.thumbs_content{
+    width: 291px;
+    margin: 0 auto;
+}
+.thumbs_button{
+    float: left;
+    width:145px;
+    text-align: center;
+    margin:5px auto;
+    height: 45px;
+    line-height: 45px;
+    background-color:#444;
+    color:#fbfbfb;
+    text-align:center;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:16px;
+    transition: all 0.3s;
+    border-radius: 0 0 0 25px;
+    -webkit-border-radius: 0 0 0 25px;
+    -moz-border-radius: 0 0 0 25px;
+    -o-border-radius: 0 0 0 25px;
+}
+.reward_button{
+    float: left;
+    width:145px;
+    text-align: center;
+    margin:5px auto;
+    height: 45px;
+    line-height: 45px;
+    background-color:#cd4450;
+    color:#fbfbfb;
+    text-align:center;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:16px;
+    border-left:1px solid #fbfbfb;
+    transition: all 0.3s;
+    border-radius: 0 25px 0 0;
+    -webkit-border-radius: 0 25px 0 0;
+    -moz-border-radius: 0 25px 0 0;
+    -o-border-radius: 0 25px 0 0;
+}
+.thumbs_button:hover, .reward_button:hover{
+    opacity:0.8;
+    font-size:18px;
+}
+.thumbs_reward_clear{
+    clear:both;
+} 
