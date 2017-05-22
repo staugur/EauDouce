@@ -53,6 +53,41 @@ uwsgi
     3.4 sh online_uwsgi.sh start     #生产环境后台启动,采用uwsgi,不需要额外安装,推荐使用!
     3.5 sh online_gunicorn.sh start  #生产环境后台启动,采用gunicorn+gevent,不需要额外安装,推荐使用!
     3.6 python super_debug.py        #性能调试模式
+
+4. nginx
+
+server {
+    listen 80 default;
+    server_name www.saintic.com saintic.com;
+    charset utf-8;
+    access_log           logs/www.access.log main;
+    rewrite ^/(.*)$ https://www.saintic.com/$1 permanent;
+}
+server {
+    listen 443 ssl;
+    server_name www.saintic.com saintic.com;
+    charset utf-8;
+    access_log           logs/www.access.log main;
+    ssl     on;
+    ssl_certificate      /etc/letsencrypt/live/saintic.com/fullchain.pem;
+    ssl_certificate_key  /etc/letsencrypt/live/saintic.com/privkey.pem;
+    location / {
+       proxy_pass http://127.0.0.1:10140;
+       proxy_set_header Host $host;
+       proxy_set_header X-Real-IP $remote_addr;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header X-Forwarded-Proto $scheme;
+       proxy_headers_hash_max_size 51200;
+       proxy_headers_hash_bucket_size 6400;
+    }
+    location /static {
+        root /data/github/eaudouce/src/;
+    }
+    location ~.*\.(js|css|jpeg|png|jpg)$ {
+        root /data/github/eaudouce/src/;
+        expires    3d;
+    }
+}
 ```
 亦可参考：[http://www.saintic.com/blog/201.html](http://www.saintic.com/blog/201.html "http://www.saintic.com/blog/201.html")
 
