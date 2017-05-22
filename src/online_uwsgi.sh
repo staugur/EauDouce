@@ -13,6 +13,7 @@ procname=$proc
 cpu_count=$(cat /proc/cpuinfo | grep "processor" | wc -l)
 logfile=${dir}/logs/uwsgi.log
 pidfile=${dir}/logs/${proc}.pid
+[ -d ${dir}/logs ] || mkdir -p ${dir}/logs
 
 case $1 in
 start)
