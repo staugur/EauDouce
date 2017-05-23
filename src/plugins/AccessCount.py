@@ -10,13 +10,11 @@ def getPluginClass():
 class AccessCountPluginManager(PluginBase):
     """ 记录与统计每天访问数据 """
 
-    def __init__(self):
-        super(AccessCountPluginManager, self).__init__()
-        self.pvKey = "EauDouce_PV_Statistics_"+get_todayKey()
-        self.ipKey = "EauDouce_IP_Statistics_"+get_todayKey()
-
     def Record_ip_pv(self, ip):
         """ 记录ip、ip """
+
+        self.pvKey = "EauDouce_PV_Statistics_"+get_todayKey()
+        self.ipKey = "EauDouce_IP_Statistics_"+get_todayKey()
         try:
             self.redis.incr(self.pvKey)
             self.redis.sadd(self.ipKey, ip)
