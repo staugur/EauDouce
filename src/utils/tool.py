@@ -14,6 +14,7 @@ user_pat        = re.compile(r'[a-zA-Z\_][0-9a-zA-Z\_]')
 comma_pat       = re.compile(r"\s*,\s*")
 logger          = Logger("sys").getLogger
 sso_logger      = Logger("sso").getLogger
+api_logger      = Logger("api").getLogger
 access_logger   = Logger("access").getLogger
 plugin_logger   = Logger("plugin").getLogger
 md5             = lambda pwd:hashlib.md5(pwd).hexdigest()

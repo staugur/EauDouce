@@ -24,16 +24,15 @@ SSO={
 }
 
 
-MYSQL=os.getenv("eaudouce_MYSQL")
+MYSQL=os.getenv("eaudouce_mysql_url")
 #MYSQL数据库连接信息
 #mysql://host:port:user:password:database?charset=&timezone=
 
 
-REDIS=os.getenv("eaudouce_REDIS")
+REDIS=os.getenv("eaudouce_redis_url")
 #Redis数据库连接信息，格式：
-#redis://host:port:password@db
-#redis_cluster://host:port,host:port
-#host,port必填项
+#redis://[:password]@host:port/db
+#host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
 
 
 PLUGINS={
@@ -80,11 +79,6 @@ PLUGINS={
         "dn": os.getenv("eaudouce_UpYunStorage_dn", "https://img.saintic.com"),
     },
     #又拍云存储插件
-
-    "Cache": os.getenv("eaudouce_Cache", "redis"),
-    #缓存插件,可选redis、simple。
-    #1. redis:  详情配置参考REDIS键值项;
-    #2. simple: 简单本地缓存,不需要设置其他键值.
 
     "Like": os.getenv("eaudouce_Like", True),
     #点赞插件

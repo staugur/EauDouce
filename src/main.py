@@ -1,7 +1,8 @@
 # -*- coding: utf8 -*-
 
-import json, datetime, SpliceURL, time
-from flask import Flask, request, g, render_template, redirect, make_response, url_for
+import json, datetime, SpliceURL, time, os, jinja2
+from flask import request, g, render_template, redirect, make_response, url_for
+from flask_multistatic import MultiStaticFlask
 from config import GLOBAL, SSO, PLUGINS, REDIS
 from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5, Initialization
 from urllib import urlencode
@@ -20,7 +21,19 @@ __org__     = 'SaintIC'
 __version__ = '0.0.1'
 
 ac = AccessCountPluginManager()
-app  = Flask(__name__)
+#初始化定义application
+app  = MultiStaticFlask(__name__)
+#自定义模板文件夹
+loader = jinja2.ChoiceLoader([
+    app.jinja_loader,
+    jinja2.FileSystemLoader(['plugins/p1/templates/','plugins/p2/templates/']),
+])
+app.jinja_loader = loader
+#自定义静态文件夹
+app.static_folder = [
+    os.path.join(app.root_path, 'plugins', "p1", "static"),
+    os.path.join(app.root_path, 'static', 'default')
+]
 #初始化接口管理器
 api  = ApiManager()
 #实例化初始化类并执行

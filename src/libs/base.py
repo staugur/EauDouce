@@ -3,8 +3,10 @@
 # Base class: dependent services, connection information, and public information
 #
 
-from config import REDIS, MYSQL, PLUGINS
+from rq import Queue
+from redis import from_url
 from torndb import Connection
+from config import REDIS, MYSQL, PLUGINS
 from utils.tool import ParseRedis, ParseMySQL
 
 
@@ -12,33 +14,35 @@ class ServiceBase(object):
     """ 所有服务的基类 """
 
     def __init__(self):
-        #解析redis配置信息
-        self._redis_info = ParseRedis(REDIS)
         #设置全局超时时间(如连接超时)
-        self.timeout = 2
+        self.timeout= 2
         #建立redis单机或集群连接
-        if isinstance(self._redis_info, dict):
-            from redis import Redis
-            self.redis = Redis(host=self._redis_info.get("host", "localhost"), port=self._redis_info.get("port", 6379), db=self._redis_info.get("db", 0), password=self._redis_info.get("password", None), socket_timeout=self.timeout)
-        else:
-            from rediscluster import StrictRedisCluster
-            self.redis = StrictRedisCluster(startup_nodes=self._redis_info, decode_responses=True, socket_timeout=self.timeout)
+        self.redis  = from_url(REDIS)
         #解析mysql配置并建立读写分离连接
+        self._minfo = ParseMySQL(MYSQL)
         self._mysql = Connection(
-                    host     = "%s:%s" %(ParseMySQL(MYSQL).get('Host', '127.0.0.1'), ParseMySQL(MYSQL).get('Port', 3306)),
-                    user     = ParseMySQL(MYSQL).get('User', 'root'),
-                    password = ParseMySQL(MYSQL).get('Password'),
-                    database = ParseMySQL(MYSQL).get('Database'),
-                    time_zone= ParseMySQL(MYSQL).get('Timezone','+8:00'),
-                    charset  = ParseMySQL(MYSQL).get('Charset', 'utf8'),
+                    host     = "%s:%s" %(self._minfo.get('Host', '127.0.0.1'), self._minfo.get('Port', 3306)),
+                    user     = self._minfo.get('User', 'root'),
+                    password = self._minfo.get('Password'),
+                    database = self._minfo.get('Database'),
+                    time_zone= self._minfo.get('Timezone','+8:00'),
+                    charset  = self._minfo.get('Charset', 'utf8'),
                     connect_timeout=self.timeout,
                     max_idle_time=self.timeout)
         self.mysql_read = self._mysql
         self.mysql_write= self._mysql
 
 
+class AsyncQueueBase(ServiceBase):
+    """ 异步任务队列 """
+
+    def __init__(self):
+        super(AsyncQueueBase, self).__init__()
+        self.task_queue = Queue(connection=self.redis)
+
+
 class PluginBase(ServiceBase):
-    """ 定义一个插件基类，其他 插件必须实现这个接口，name 属性必须赋值 """
+    """ 定义插件基类 """
 
     name = ''
     description = ''
@@ -49,4 +53,3 @@ class PluginBase(ServiceBase):
         
     def executeFun(self):
         pass
-
