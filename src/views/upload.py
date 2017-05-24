@@ -1,4 +1,13 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.views.upload
+    ~~~~~~~~~~~~~~
+
+    File upload view.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 import os, requests
 from utils.tool import logger, gen_rnd_filename, UploadImage2Upyun

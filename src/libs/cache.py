@@ -1,4 +1,13 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.libs.cache
+    ~~~~~~~~~~~~~~
+
+    Cache class.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 from .base import ServiceBase
 

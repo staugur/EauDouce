@@ -1,44 +1,58 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.main
+    ~~~~~~~~~~~~~~
+
+    This is a blog program based on Flask:
+    This is an entry files, main applications, and some initialization operations.
+
+    Docstring conventions:
+    http://flask.pocoo.org/docs/0.10/styleguide/#docstrings
+
+    Comments:
+    http://flask.pocoo.org/docs/0.10/styleguide/#comments
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
+
+__author__  = 'Mr.tao'
+__email__   = 'staugur@saintic.com'
+__doc__     = 'A flask+mysql+bootstrap blog based on personal interests and hobbies.'
+__date__    = '2017-03-26'
+__version__ = '0.0.1'
+__license__ = 'MIT'
 
 import json, datetime, SpliceURL, time, os, jinja2
-from flask import request, g, render_template, redirect, make_response, url_for
-from flask_multistatic import MultiStaticFlask
+from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
-from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5, Initialization
+from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5
 from urllib import urlencode
 from libs.api import ApiManager
+from libs.plugins import PluginManager
 from views.api import api_blueprint
 from views.front import front_blueprint
 from views.admin import admin_blueprint
 from views.upload import upload_blueprint
 from plugins.AccessCount import AccessCountPluginManager
 
-__author__  = 'Mr.tao'
-__email__   = 'staugur@saintic.com'
-__doc__     = 'A flask+mysql+bootstrap blog based on personal interests and hobbies.'
-__date__    = '2017-03-26'
-__org__     = 'SaintIC'
-__version__ = '0.0.1'
 
 ac = AccessCountPluginManager()
 #初始化定义application
-app  = MultiStaticFlask(__name__)
+app = Flask(__name__)
 #自定义模板文件夹
 loader = jinja2.ChoiceLoader([
     app.jinja_loader,
     jinja2.FileSystemLoader(['plugins/p1/templates/','plugins/p2/templates/']),
 ])
 app.jinja_loader = loader
-#自定义静态文件夹
-app.static_folder = [
-    os.path.join(app.root_path, 'plugins', "p1", "static"),
-    os.path.join(app.root_path, 'static', 'default')
-]
 #初始化接口管理器
-api  = ApiManager()
+api = ApiManager()
+#初始化插件管理器(自动扫描并加载运行)
+plugin = PluginManager()
 #实例化初始化类并执行
-init = Initialization()
-plugin_logger.info("Initialization Plugins End")
+#init = Initialization()
+#plugin_logger.info("Initialization Plugins End")
 #注册蓝图路由,可以修改前缀
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
@@ -71,7 +85,6 @@ def after_request(response):
     access_logger.info(json.dumps(data))
     app.logger.debug(dir(ac))
     ac.Record_ip_pv(data["ip"])
-    #g.api.ClickMysqlWrite(data)
     if request.endpoint != 'static':
         return response
     response.cache_control.max_age = 86400 #1d

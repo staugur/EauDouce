@@ -1,7 +1,14 @@
 #!/usr/bin/python -O
-# -*- coding: utf8 -*-
-#product environment start application with `gevent server`
-#pip install gevent
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.online_gevent
+    ~~~~~~~~~~~~~~
+
+    This is the start of the production environment, using the gevent.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 from main import app
 from config import GLOBAL

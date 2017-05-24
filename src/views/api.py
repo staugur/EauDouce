@@ -1,4 +1,13 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.views.api
+    ~~~~~~~~~~~~~~
+
+    Foreground interface view.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 import time
 from torndb import IntegrityError

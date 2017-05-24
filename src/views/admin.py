@@ -1,4 +1,13 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.views.admin
+    ~~~~~~~~~~~~~~
+
+    Managing background views.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 from flask import Blueprint, g, render_template, request
 from utils.tool import admin_login_required, logger

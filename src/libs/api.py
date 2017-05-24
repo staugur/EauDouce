@@ -1,4 +1,13 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.libs.api
+    ~~~~~~~~~~~~~~
+
+    Interface class.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 import requests
 from config import REDIS, MYSQL, PLUGINS
@@ -9,6 +18,7 @@ from .base import ServiceBase
 
 
 class BlogApiManager(ServiceBase):
+
 
     def blog_get_catalog_data(self, catalog, sort="desc", limit=None):
         "查询分类目录数据"

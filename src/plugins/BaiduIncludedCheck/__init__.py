@@ -1,18 +1,33 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.plugins.BaiduIncludedCheck
+    ~~~~~~~~~~~~~~
+
+    Check if Baidu has included a URL plugin.
+
+    :copyright: (c) 2017 by taochengwei.
+    :license: MIT, see LICENSE for more details.
+"""
+
+__name__        = "BaiduIncludedCheck"
+__description__ = "Check if Baidu has included a URL plugin."
+__author__      = "taochengwei <taochengwei@starokay.com>"
+__version__     = "0.1" 
 
 import requests
 from bs4 import BeautifulSoup
 from libs.base import PluginBase
-from utils.tool import plugin_logger
+
 
 def getPluginClass():
-    return BaiduIncludedCheckPluginManager
+    return "BaiduIncludedCheckPluginManager"
+
 
 class BaiduIncludedCheckPluginManager(PluginBase):
     """ Redis简单队列管理器 """
 
     def __init__(self):
-        super(PluginBase, self).__init__()
+        super(BaiduIncludedCheckPluginManager, self).__init__()
         #定义队列名
         self.QueueKey = "EauDouce_Baidu_Url_Sq"
 
@@ -55,4 +70,4 @@ class BaiduIncludedCheckPluginManager(PluginBase):
 
     def run(self):
         """ 运行插件入口 """
-        plugin_logger.info("{0} run!".format(getPluginClass()))
+        self.logger.info("I am BaiduIncludedCheck {0} run!".format(getPluginClass()))

@@ -1,4 +1,13 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.config
+    ~~~~~~~~~~~~~~
+
+    The program configuration file, the preferred configuration item, reads the system environment variable first.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 import os
 

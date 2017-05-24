@@ -1,13 +1,18 @@
-# -*- coding: utf8 -*-
-# 
-# Base class: dependent services, connection information, and public information
-#
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.libs.base
+    ~~~~~~~~~~~~~~
 
-from rq import Queue
+    Base class: dependent services, connection information, and public information.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
+
 from redis import from_url
 from torndb import Connection
 from config import REDIS, MYSQL, PLUGINS
-from utils.tool import ParseRedis, ParseMySQL
+from utils.tool import ParseRedis, ParseMySQL, plugin_logger
 
 
 class ServiceBase(object):
@@ -33,23 +38,13 @@ class ServiceBase(object):
         self.mysql_write= self._mysql
 
 
-class AsyncQueueBase(ServiceBase):
-    """ 异步任务队列 """
-
-    def __init__(self):
-        super(AsyncQueueBase, self).__init__()
-        self.task_queue = Queue(connection=self.redis)
-
-
 class PluginBase(ServiceBase):
-    """ 定义插件基类 """
-
+    """ 插件基类: 提供插件所需要的公共接口与扩展点 """
+    
     name = ''
     description = ''
     version = ''
-    
+
     def __init__(self):
         super(PluginBase, self).__init__()
-        
-    def executeFun(self):
-        pass
+        self.logger = plugin_logger

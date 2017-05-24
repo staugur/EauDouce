@@ -1,4 +1,13 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.super_debug
+    ~~~~~~~~~~~~~~
+
+    This is the entry file for the flask application performance monitoring and debugging model.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 from main import app
 from config import GLOBAL

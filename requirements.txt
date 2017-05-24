@@ -11,5 +11,3 @@ setproctitle
 gunicorn
 gevent
 uwsgi
-rq
-Flask-MultiStatic

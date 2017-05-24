@@ -1,6 +1,15 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.utils.tool
+    ~~~~~~~~~~~~~~
 
-import re, requests, hashlib, datetime, random, upyun, os
+    Common function.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
+
+import re, requests, hashlib, datetime, random, upyun
 from uuid import uuid4
 from log import Logger
 from base64 import b32encode
@@ -39,12 +48,12 @@ def isLogged_in(cookie_str):
         try:
             success = requests.post(SSOURL+"/sso/", data={"username": username, "time": expires, "sessionId": sessionId}, timeout=3, verify=False, headers={"User-Agent": "SSO.Client"}).json().get("success", False)
         except Exception,e:
-            logger.error(e, exc_info=True)
+            sso_logger.error(e, exc_info=True)
         else:
-            logger.info("check login request, cookie_str: %s, success:%s" %(cookie_str, success))
+            sso_logger.info("check login request, cookie_str: %s, success:%s" %(cookie_str, success))
             return success
     else:
-        logger.info("Not Logged in")
+        sso_logger.info("Not Logged in")
     return False
 
 def ParseMySQL(mysql, callback="dict"):
@@ -120,37 +129,3 @@ def BaiduActivePush(pushUrl, original=True, callUrl=PLUGINS['BaiduActivePush']['
     res = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
     logger.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
     return res
-
-class Initialization:
-
-    def __init__(self):
-        self.plugins = []
-        self.__loadPlugins()
-
-    def __loadPlugins(self):
-        plugin_logger.info("Initialization Plugins Start")
-        checkPath = os.path.join(os.path.dirname(os.path.split(os.path.realpath(__file__))[0]), "plugins")
-        plugin_logger.info("loadPlugins path: {0}".format(checkPath))
-        if os.path.exists(checkPath):
-            for filename in os.listdir(checkPath):
-                plugin_logger.info("loadPlugin: {0}".format(filename))
-                if not filename.endswith('.py') or filename.startswith('_'):
-                    continue
-                self.__runPlugins(filename)
-        else:
-            plugin_logger.warning("Plugins directory not in here!")
-
-    def __runPlugins(self, filename):
-        #分离插件(模块)名称
-        plugins_name = os.path.splitext(filename)[0]
-        #动态加载模块
-        plugin = __import__("{0}.{1}".format("plugins", plugins_name), fromlist=[plugins_name])
-        p = plugin.getPluginClass()
-        plugin_logger.info("runPlugin package: {0}.{1}, {2}".format("plugins", plugins_name, p))
-        i = p()
-        if hasattr(i, "run"):
-            i.run()
-            self.plugins.append(i)
-        else:
-            plugin_logger.error("The current class {0} does not have the `run` method".format(i))
-

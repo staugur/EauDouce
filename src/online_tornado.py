@@ -1,7 +1,14 @@
 #!/usr/bin/python -O
-# -*- coding: utf8 -*-
-#product environment start application with `tornado IOLoop`
-#pip install tornado
+# -*- coding: utf-8 -*-
+"""
+    EauDouce.online_tornado
+    ~~~~~~~~~~~~~~
+
+    This is the start of the production environment, using the tornado.
+
+    :copyright: (c) 2017 by Mr.tao.
+    :license: MIT, see LICENSE for more details.
+"""
 
 from main import app
 from config import GLOBAL
