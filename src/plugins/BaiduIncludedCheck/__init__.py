@@ -9,25 +9,25 @@
     :license: MIT, see LICENSE for more details.
 """
 
+from __future__ import absolute_import
+import requests
+from bs4 import BeautifulSoup
+from libs.base import PluginBase
+
 __name__        = "BaiduIncludedCheck"
 __description__ = "Check if Baidu has included a URL plugin."
 __author__      = "taochengwei <taochengwei@starokay.com>"
 __version__     = "0.1" 
 
-import requests
-from bs4 import BeautifulSoup
-from libs.base import PluginBase
-
 
 def getPluginClass():
-    return "BaiduIncludedCheckPluginManager"
+    return BaiduIncludedCheck
 
-
-class BaiduIncludedCheckPluginManager(PluginBase):
+class BaiduIncludedCheck(PluginBase):
     """ Redis简单队列管理器 """
 
     def __init__(self):
-        super(BaiduIncludedCheckPluginManager, self).__init__()
+        super(BaiduIncludedCheck, self).__init__()
         #定义队列名
         self.QueueKey = "EauDouce_Baidu_Url_Sq"
 
@@ -70,4 +70,4 @@ class BaiduIncludedCheckPluginManager(PluginBase):
 
     def run(self):
         """ 运行插件入口 """
-        self.logger.info("I am BaiduIncludedCheck {0} run!".format(getPluginClass()))
+        self.logger.info("I am BaiduIncludedCheck run!")

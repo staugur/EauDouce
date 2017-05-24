@@ -41,10 +41,6 @@ class ServiceBase(object):
 class PluginBase(ServiceBase):
     """ 插件基类: 提供插件所需要的公共接口与扩展点 """
     
-    name = ''
-    description = ''
-    version = ''
-
     def __init__(self):
         super(PluginBase, self).__init__()
         self.logger = plugin_logger

@@ -34,7 +34,7 @@ class PluginManager(object):
 
     def __init__(self):
         self.plugins     = []
-        self.plugin_path = os.path.join(os.path.dirname(os.path.split(os.path.realpath(__file__))[0]), "plugins")
+        self.plugin_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "plugins")
         self.__scanPlugins()
 
     def __getPluginInfo(self, package, plugin):
@@ -69,7 +69,7 @@ class PluginManager(object):
             "plugin_license_file": license_file,
             "plugin_readme_file": readme_file,
             "plugin_state": "enabled",
-            "plugin_tpl_path": os.path.join(self.plugin_path, package, "templates", package)
+            "plugin_tpl_path": os.path.join("plugins", package, "templates", package)
         }
 
     def __scanPlugins(self):
@@ -79,7 +79,6 @@ class PluginManager(object):
             for package in os.listdir(self.plugin_path):
                 _plugin_path = os.path.join(self.plugin_path, package)
                 if os.path.isdir(_plugin_path):
-                    plugin_logger.debug(_plugin_path)
                     if os.path.isfile(os.path.join(_plugin_path, "__init__.py")):
                         plugin_logger.info("find plugin package: {0}".format(package))
                         self.__runPlugins(package)
@@ -89,18 +88,16 @@ class PluginManager(object):
     def __runPlugins(self, package):
         """ 动态加载插件模块,遵循插件格式的才能被启用并运行,否则删除加载 """
 
-        #: 动态加载模块
-        plugin = __import__("{0}.{1}".format("plugins", package), fromlist=["plugins", package])
-        #plugin = __import__("{0}.{1}".format("plugins", package))
+        #: 动态加载模块(plugins.package): 可以查询自定义的信息, 并通过getPluginClass获取插件的类定义
+        plugin = __import__("{0}.{1}".format("plugins", package), fromlist=["plugins",])
         #: 检测插件信息
         if plugin.__name__ and plugin.__version__ and plugin.__description__ and plugin.__author__:
             #: 获取插件信息
             pluginInfo = self.__getPluginInfo(package, plugin)
             #: 获取插件主类并实例化
-            #p = plugin.getPluginClass()
-            p = __import__("{0}.{1}".format("plugins", plugin.getPluginClass()), fromlist=["plugins", package])
+            p = plugin.getPluginClass()
             i = p()
-            plugin_logger.info("runPlugin package: {0}.{1}, {2}".format("plugins", package, p))
+            plugin_logger.info("runPlugin: package is {0}.{1}, class instance is {2}".format("plugins", package, i))
             #: 更新插件信息
             pluginInfo.update(plugin_instance=i)
             #: 运行插件主类的run方法
@@ -112,3 +109,7 @@ class PluginManager(object):
         else:
             del plugin
             plugin_logger.warning("This plugin `{0}` is not enabled without following the standard plugin format".format(package))
+
+    @property
+    def get_all_plugins(self):
+        return self.plugins

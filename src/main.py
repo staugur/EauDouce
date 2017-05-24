@@ -16,12 +16,12 @@
     :license: MIT, see LICENSE for more details.
 """
 
-__author__  = 'Mr.tao'
-__email__   = 'staugur@saintic.com'
-__doc__     = 'A flask+mysql+bootstrap blog based on personal interests and hobbies.'
-__date__    = '2017-03-26'
-__version__ = '0.0.1'
-__license__ = 'MIT'
+__author__  = "Mr.tao"
+__email__   = "staugur@saintic.com"
+__doc__     = "A flask+mysql+bootstrap blog based on personal interests and hobbies."
+__date__    = "2017-03-26"
+__version__ = "0.0.1"
+__license__ = "MIT"
 
 import json, datetime, SpliceURL, time, os, jinja2
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
@@ -34,25 +34,22 @@ from views.api import api_blueprint
 from views.front import front_blueprint
 from views.admin import admin_blueprint
 from views.upload import upload_blueprint
-from plugins.AccessCount import AccessCountPluginManager
 
 
-ac = AccessCountPluginManager()
 #初始化定义application
 app = Flask(__name__)
+#初始化插件管理器(自动扫描并加载运行)
+plugin = PluginManager()
 #自定义模板文件夹
 loader = jinja2.ChoiceLoader([
     app.jinja_loader,
-    jinja2.FileSystemLoader(['plugins/p1/templates/','plugins/p2/templates/']),
+    jinja2.FileSystemLoader([ p.get("plugin_tpl_path") for p in plugin.get_all_plugins ]),
 ])
 app.jinja_loader = loader
 #初始化接口管理器
 api = ApiManager()
 #初始化插件管理器(自动扫描并加载运行)
-plugin = PluginManager()
-#实例化初始化类并执行
-#init = Initialization()
-#plugin_logger.info("Initialization Plugins End")
+#plugin = PluginManager()
 #注册蓝图路由,可以修改前缀
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
@@ -83,8 +80,6 @@ def after_request(response):
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
     }
     access_logger.info(json.dumps(data))
-    app.logger.debug(dir(ac))
-    ac.Record_ip_pv(data["ip"])
     if request.endpoint != 'static':
         return response
     response.cache_control.max_age = 86400 #1d

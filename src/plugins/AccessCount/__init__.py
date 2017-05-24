@@ -9,6 +9,10 @@
     :license: MIT, see LICENSE for more details.
 """
 
+from __future__ import absolute_import
+import requests, datetime
+from libs.base import PluginBase
+
 __name__        = "AccessCount"
 __description__ = "PV and IP plugins for statistical access."
 __author__      = "taochengwei"
@@ -18,15 +22,10 @@ __license_file__= "LICENSE"
 __readme_file__ = "README"
 
 
-import requests, datetime
-from libs.base import PluginBase
-
-
 def getPluginClass():
-    return "AccessCountPluginManager"
+    return AccessCount
 
-
-class AccessCountPluginManager(PluginBase):
+class AccessCount(PluginBase):
     """ 记录与统计每天访问数据 """
 
     @property
@@ -48,4 +47,4 @@ class AccessCountPluginManager(PluginBase):
 
     def run(self):
         """ 运行插件入口 """
-        self.logger.info("I am AccessCount, {0} run!".format(getPluginClass()))
+        self.logger.info("I am AccessCount, run!")
