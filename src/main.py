@@ -25,8 +25,8 @@ __license__ = "MIT"
 
 import json, datetime, SpliceURL, time, os, jinja2
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
-from config import GLOBAL, SSO, PLUGINS, REDIS
-from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5
+from config import GLOBAL, SSO, PLUGINS
+from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5, ChoiceColor
 from urllib import urlencode
 from libs.api import ApiManager
 from libs.plugins import PluginManager
@@ -38,23 +38,36 @@ from views.upload import upload_blueprint
 
 #初始化定义application
 app = Flask(__name__)
+
 #初始化插件管理器(自动扫描并加载运行)
 plugin = PluginManager()
-#自定义模板文件夹
+
+#自定义添加多模板文件夹
 loader = jinja2.ChoiceLoader([
     app.jinja_loader,
-    jinja2.FileSystemLoader([ p.get("plugin_tpl_path") for p in plugin.get_all_plugins ]),
+    jinja2.FileSystemLoader([ p.get("plugin_tpl_path") for p in plugin.get_enabled_plugins if os.path.isdir(os.path.join(app.root_path, p["plugin_tpl_path"])) ]),
 ])
 app.jinja_loader = loader
+
+#注册全局模板扩展点
+for tep_name,tep_func in plugin.get_all_tep.iteritems():
+    app.add_template_global(tep_func, tep_name)
+    logger.info("add a template global for {0}".format(tep_func))
+
 #初始化接口管理器
 api = ApiManager()
-#初始化插件管理器(自动扫描并加载运行)
-#plugin = PluginManager()
+
 #注册蓝图路由,可以修改前缀
 app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
+
+@app.context_processor  
+def GlobalTemplateVariables():  
+    data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor}
+    data.update(Plugins=[ (p["plugin_name"], p["plugin_author"], p["plugin_description"], p["plugin_version"]) for p in plugin.get_enabled_plugins ])
+    return data
 
 @app.before_request
 def before_request():
@@ -63,10 +76,14 @@ def before_request():
     g.username  = request.cookies.get("username", "")
     g.expires   = request.cookies.get("time", "")
     g.signin    = isLogged_in('.'.join([ g.username, g.expires, g.sessionId ]))
-    g.sysInfo   = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__}
     g.api       = api
     g.plugins   = PLUGINS
     g.hitCache  = False
+    #上下文扩展点之请求后(返回前)
+    before_request_hook = plugin.get_all_cep.get("before_request_hook")
+    for cep_func in before_request_hook():
+        cep_func(request=request, g=g)
+        logger.info("exec a before cep function for {0}".format(cep_func))
 
 @app.after_request
 def after_request(response):
@@ -82,7 +99,12 @@ def after_request(response):
     access_logger.info(json.dumps(data))
     if request.endpoint != 'static':
         return response
-    response.cache_control.max_age = 86400 #1d
+    response.cache_control.max_age = 86400#1d
+    #上下文扩展点之请求后(返回前)
+    after_request_hook = plugin.get_all_cep.get("after_request_hook")
+    for cep_func in after_request_hook():
+        cep_func(request=request, response=response)
+        logger.info("exec an after cep function for {0}".format(cep_func))
     return response
 
 @app.errorhandler(404)

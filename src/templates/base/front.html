@@ -19,17 +19,15 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     {% block head %}{% endblock %}
     <meta name="baidu-site-verification" content="mJRkKVNnPF" />
-    {% if g.plugins.BaiduStatistics in ("true", "True", True) %}
-    <!-- 百度统计插件 -->
-    <script>
-        var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?88f6d909dd0d8f80bb9748f43ade3ac7";
-            var s = document.getElementsByTagName("script")[0]; 
-        s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
+    {% if base_front_header_include %}
+        {% for hi in base_front_header_include() %}
+            {% include hi %}
+        {% endfor %}
+    {% endif %}
+    {% if base_front_header_string %}
+        {% for hs in base_front_header_string() %}
+            {{ hs|safe }}
+        {% endfor %}
     {% endif %}
 </head>
 </head>
@@ -68,6 +66,16 @@
                                 <li><a href="{{ url_for('front.sitemaphtml') }}">站点地图HTML版</a></li>
                             </ul>
                         </li>
+                        {% if base_front_navigation_include %}
+                            {% for ni in base_front_navigation_include() %}
+                                {% include ni %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if base_front_navigation_string %}
+                            {% for ns in base_front_navigation_string() %}
+                                {{ ns|safe }}
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if g.signin %}
@@ -197,8 +205,8 @@
             <h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
-                    {% for d in g.api.blog_get_tags_list().data %}
-                    <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=d.tag) }}"><span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span></a>
+                    {% for tag in g.api.blog_get_tags_list().data %}
+                    <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签下的文章"><span class="label label-{{ ChoiceColor() }}">{{ tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=tag).data|length }}</strong></span></a>
                     {% endfor %}
                 </div>
             </div>
@@ -218,8 +226,8 @@
             <!-- 广告位 -->
 
             {% if g.plugins.Weather in ("true", "True", True) %}
-            <h4><scan class="icon-cloud icon-1x"> 天气播报</scan></h4>
             <!-- 实时天气查询插件 -->
+            <h4><scan class="icon-cloud icon-1x"> 天气播报</scan></h4>
             <div id="tp-weather-widget"></div>
             <script>(function(T,h,i,n,k,P,a,g,e){g=function(){P=h.createElement(i);a=h.getElementsByTagName(i)[0];P.src=k;P.charset="utf-8";P.async=1;a.parentNode.insertBefore(P,a)};T["ThinkPageWeatherWidgetObject"]=n;T[n]||(T[n]=function(){(T[n].q=T[n].q||[]).push(arguments)});T[n].l=+new Date();if(T.attachEvent){T.attachEvent("onload",g)}else{T.addEventListener("load",g,false)}}(window,document,"script","tpwidget","//widget.seniverse.com/widget/chameleon.js"))</script>
             <script>tpwidget("init", {
@@ -238,6 +246,15 @@
             tpwidget("show");
             </script>
             {% endif %}
+
+            <!-- 插件列表 -->
+            <h4><scan class="icon-cogs icon-1x"> 插件列表</scan></h4>
+            <dl class="dl-horizontal">
+            {% for plugin in Plugins %}
+                <dt><attr title="关于这个插件:&#10;作者: {{ plugin[1] }}&#10;版本: {{ plugin[3] }}"><code>{{ plugin[0] }}</code></attr></dt>
+                <dd><var>{{ plugin[2] }}</var></dd>
+            {% endfor %}
+            </dl>
 
             <!-- 博客信息 -->
             {% set statistics = g.api.blog_get_statistics() %}
@@ -291,12 +308,22 @@
 <nav class="navbar navbar-default text-center">
     <div class="navbar-inner navbar-content-center">
         <p class="text-muted credit" style="padding: 10px;">
-              Copyright &copy; 2017.&nbsp;&nbsp;
-              SaintIC, All rights reserved.&nbsp;&nbsp;
-              Originate by <a href="https://github.com/staugur/EauDouce/" target="_blank" title="{{ g.sysInfo.Doc }}">EauDouce</a>&nbsp;
-              <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
-              <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ g.sysInfo.Email }}">{{ g.sysInfo.Author }}</a>.&nbsp;&nbsp;
-              <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.api.get_sys_config().data.about_beian }}</a>.&nbsp;&nbsp;
+            Copyright &copy; 2017.&nbsp;&nbsp;
+            SaintIC, All rights reserved.&nbsp;&nbsp;
+            Originate by <a href="https://github.com/staugur/EauDouce/" target="_blank" title="{{ Doc }}">EauDouce</a>&nbsp;
+            <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
+            <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ Email }}">{{ Author }}</a>.&nbsp;&nbsp;
+            <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.api.get_sys_config().data.about_beian }}</a>.&nbsp;&nbsp;
+            {% if base_front_footer_include %}
+                {% for fi in base_front_footer_include() %}
+                    {% include fi %}
+                {% endfor %}
+            {% endif %}
+            {% if base_front_footer_string %}
+                {% for fs in base_front_footer_string() %}
+                    {{ fs|safe }}
+                {% endfor %}
+            {% endif %}
         </p>
     </div>
 </nav>
@@ -307,6 +334,16 @@
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='layer/layer.js') }}"></script>
 {% block script %}{% endblock %}
+{% if base_front_script_include %}
+    {% for si in base_front_script_include() %}
+        {% include si %}
+    {% endfor %}
+{% endif %}
+{% if base_front_script_string %}
+    {% for ss in base_front_script_string() %}
+        {{ ss|safe }}
+    {% endfor %}
+{% endif %}
 <script type="text/javascript">
 $(document).ready(function(){
     dropdownOpen();//调用

@@ -25,7 +25,7 @@
 
             <!-- 文章列表缩略 -->
             <h3><scan class="icon-book icon-large"> 最新文章</scan></h3>
-            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 6)) %}
+            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 8)) %}
             <blockquote>
             {% for blog in blogs.data %}
 			<div class="row clearfix">

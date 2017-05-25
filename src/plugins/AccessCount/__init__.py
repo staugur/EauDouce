@@ -10,16 +10,14 @@
 """
 
 from __future__ import absolute_import
-import requests, datetime
 from libs.base import PluginBase
+import datetime
 
 __name__        = "AccessCount"
 __description__ = "PV and IP plugins for statistical access."
-__author__      = "taochengwei"
+__author__      = "Mr.tao"
 __version__     = "0.1" 
 __license__     = "MIT"
-__license_file__= "LICENSE"
-__readme_file__ = "README"
 
 
 def getPluginClass():
@@ -32,9 +30,11 @@ class AccessCount(PluginBase):
     def get_todayKey(self):
         return datetime.datetime.now().strftime("%Y%m%d")
 
-    def Record_ip_pv(self, ip):
+    def Record_ip_pv(self, **kwargs):
         """ 记录ip、ip """
 
+        request    = kwargs.get("request")
+        ip         = request.headers.get('X-Real-Ip', request.remote_addr)
         self.pvKey = "EauDouce_PV_Statistics_" + self.get_todayKey
         self.ipKey = "EauDouce_IP_Statistics_" + self.get_todayKey
         try:
@@ -45,6 +45,5 @@ class AccessCount(PluginBase):
         else:
             return True
 
-    def run(self):
-        """ 运行插件入口 """
-        self.logger.info("I am AccessCount, run!")
+    def register_cep(self):
+        return {"before_request_hook": self.Record_ip_pv}

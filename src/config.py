@@ -89,7 +89,7 @@ PLUGINS={
     },
     #又拍云存储插件
 
-    "Like": os.getenv("eaudouce_Like", True),
+    "Like": os.getenv("eaudouce_Like", False),
     #点赞插件
 
     "Reward": os.getenv("eaudouce_Reward", True),

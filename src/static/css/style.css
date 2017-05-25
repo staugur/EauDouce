@@ -101,4 +101,40 @@ blockquote:after {
 }
 .thumbs_reward_clear{
     clear:both;
-} 
+}
+
+/* 带边框透明按钮 */
+.btn-outline {
+    color: inherit;
+    background-color: transparent;
+    -webkit-transition: all .5s;
+    transition: all .5s;
+}
+
+.btn-primary.btn-outline {
+    color: #58666e !important;
+}
+
+.btn-success.btn-outline {
+    color: #58666e !important;
+}
+
+.btn-info.btn-outline {
+    color: #58666e !important;
+}
+
+.btn-warning.btn-outline {
+    color: #58666e !important;
+}
+
+.btn-danger.btn-outline {
+    color: #58666e !important;
+}
+
+.btn-primary.btn-outline:hover,
+.btn-success.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-warning.btn-outline:hover,
+.btn-danger.btn-outline:hover {
+    color: #fff;
+}

@@ -11,7 +11,6 @@
 
 import requests
 from config import REDIS, MYSQL, PLUGINS
-from random import choice
 from torndb import IntegrityError, Connection
 from utils.tool import api_logger, get_today, ListEqualSplit, md5
 from .base import ServiceBase
@@ -166,7 +165,6 @@ class BlogApiManager(ServiceBase):
 
         res   = {"msg": None, "data": [], "code": 0}
         sql   = "SELECT tag FROM blog_article"
-        color = ["default", "primary", "success", "info", "warning", "danger"] 
         api_logger.info("query tag list SQL: "+ sql)
 
         try:
@@ -180,7 +178,7 @@ class BlogApiManager(ServiceBase):
                 if _.get('tag'):
                     tags += _.get("tag").split()
             data = list(set(tags))
-            res.update(data=[ {"tag": tag, "color": choice(color)} for tag in data ])
+            res.update(data=data)
 
         api_logger.info(res)
         return res

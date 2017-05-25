@@ -67,7 +67,3 @@ class BaiduIncludedCheck(PluginBase):
                         self._put(url)
                         return True
             return False
-
-    def run(self):
-        """ 运行插件入口 """
-        self.logger.info("I am BaiduIncludedCheck run!")

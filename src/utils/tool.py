@@ -129,3 +129,8 @@ def BaiduActivePush(pushUrl, original=True, callUrl=PLUGINS['BaiduActivePush']['
     res = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
     logger.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
     return res
+
+def ChoiceColor():
+    """ 模板中随机选择bootstrap内置颜色 """
+    color = ["default", "primary", "success", "info", "warning", "danger"]
+    return random.choice(color)

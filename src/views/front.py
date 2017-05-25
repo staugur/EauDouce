@@ -54,7 +54,6 @@ def blogResource():
 
 @front_blueprint.route("/user/<user>/")
 def userHome(user=None):
-    logger.debug(user)
     return render_template("front/userHome.html", user=user)
 
 @front_blueprint.route("/user/ChangeAvater/")
