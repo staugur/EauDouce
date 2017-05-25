@@ -108,8 +108,8 @@
                             <div class="ibox-content">
                                 <div class="row clearfix">
                                     <div class="col-md-12 column">
-                                    {% for d in g.api.blog_get_tags_list().data %}
-                                        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=d.tag) }}"><span class="label label-{{ d.color }}">{{ d.tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=d.tag).data|length }}</strong></span></a>
+                                    {% for tag in g.api.blog_get_tags_list().data %}
+                                        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}"><span class="label label-{{ ChoiceColor() }}">{{ tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=tag).data|length }}</strong></span></a>
                                     {% endfor %}
                                     </div>
                                 </div>
