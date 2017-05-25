@@ -22,10 +22,10 @@ from config import PLUGINS
 __name__        = "Reward"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
-__description__ = "给博客添加模仿百度打赏的打赏组件"
+__description__ = "Add a reward component to a blog that mimics Baidu's reward"
 #: Plugin Author
 #: 插件作者
-__author__      = "张戈"
+__author__      = "zhangge.net"
 #: Plugin Version
 #: 插件版本
 __version__     = "0.1" 
