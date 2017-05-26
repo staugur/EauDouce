@@ -37,9 +37,9 @@ __url__         = "http://zhangge.net/5110.html"
 __license__     = "MIT"
 #: 插件状态, enabled、disabled, 默认enabled
 if PLUGINS["Reward"] in ("true", "True", True):
-    __state__       = "enabled"
+    __state__   = "enabled"
 else:
-    __state__       = "disabled"
+    __state__   = "disabled"
 
 #: 返回插件主类
 def getPluginClass():

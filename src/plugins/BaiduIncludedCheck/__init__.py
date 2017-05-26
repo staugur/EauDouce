@@ -10,15 +10,15 @@
 """
 
 from __future__ import absolute_import
+from libs.base import PluginBase
 import requests
 from bs4 import BeautifulSoup
-from libs.base import PluginBase
 
 __name__        = "BaiduIncludedCheck"
 __description__ = "Check if Baidu has included a URL plugin."
 __author__      = "taochengwei <taochengwei@starokay.com>"
 __version__     = "0.1" 
-
+__state__       = "disabled"
 
 def getPluginClass():
     return BaiduIncludedCheck

@@ -6,7 +6,7 @@
     Baidu social sharing service
 
     :copyright: (c) 2017 by Ivan Sagalaev.
-    :license: BSD-3-Clause, see LICENSE for more details.
+    :license: MIT, see LICENSE for more details.
 """
 
 #: Importing these two modules is the first and must be done.
@@ -37,9 +37,9 @@ __url__         = "https://www.saintic.com/"
 __license__     = "MIT"
 #: 插件状态, enabled、disabled, 默认enabled
 if PLUGINS["BaiduShare"] in ("true", "True", True):
-    __state__       = "enabled"
+    __state__   = "enabled"
 else:
-    __state__       = "disabled"
+    __state__   = "disabled"
 
 #: 返回插件主类
 def getPluginClass():

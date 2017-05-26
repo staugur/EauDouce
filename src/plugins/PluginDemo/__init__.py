@@ -43,7 +43,7 @@ __license_file__= "LICENSE"
 #: 插件自述文件
 __readme_file__ = "README"
 #: 插件状态, enabled、disabled, 默认enabled
-__state__       = "enabled"
+__state__       = "disabled"
 
 
 #: 返回插件主类

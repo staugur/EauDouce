@@ -44,9 +44,9 @@ __license_file__= "LICENSE"
 __readme_file__ = "README"
 #: 插件状态, enabled、disabled, 默认enabled
 if PLUGINS["BaiduStatistics"] in ("true", "True", True):
-    __state__       = "enabled"
+    __state__   = "enabled"
 else:
-    __state__       = "disabled"
+    __state__   = "disabled"
 
 #: 返回插件主类
 def getPluginClass():

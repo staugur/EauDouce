@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-    EauDouce.plugins.CodeHighlighting
+    EauDouce.plugins.BaiduAutoPush
     ~~~~~~~~~~~~~~
 
-    highlight.js: Syntax highlighting for the Web, https://highlightjs.org.
-    : 174 languages and 77 styles
-    : automatic language detection
-    : multi-language code highlighting
-    : available for node.js
-    : works with any markup
-    : compatible with any js framework
+    Baidu automatic push plugin
 
     :copyright: (c) 2017 by Ivan Sagalaev.
-    :license: BSD-3-Clause, see LICENSE for more details.
+    :license: MIT, see LICENSE for more details.
 """
 
 #: Importing these two modules is the first and must be done.
@@ -25,35 +19,35 @@ from config import PLUGINS
 
 #：Your plug-in name must be consistent with the plug-in directory name.
 #：你的插件名称，必须和插件目录名称等保持一致.
-__name__        = "CodeHighlighting"
+__name__        = "BaiduAutoPush"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
-__description__ = "Using highlight's code highlighting plugin"
+__description__ = "Baidu automatic push plugin"
 #: Plugin Author
 #: 插件作者
-__author__      = "Ivan Sagalaev"
+__author__      = "Mr.tao"
 #: Plugin Version
 #: 插件版本
-__version__     = "9.7.0" 
+__version__     = "0.1" 
 #: Plugin Url
 #: 插件主页
-__url__         = "https://highlightjs.org/"
+__url__         = "https://www.saintic.com/"
 #: Plugin License
 #: 插件许可证
-__license__     = "BSD-3-Clause"
+__license__     = "MIT"
 #: 插件状态, enabled、disabled, 默认enabled
-if PLUGINS["CodeHighlighting"] in ("true", "True", True):
+if PLUGINS["BaiduAutoPush"] in ("true", "True", True):
     __state__   = "enabled"
 else:
     __state__   = "disabled"
 
 #: 返回插件主类
 def getPluginClass():
-    return CodeHighlighting_Highlight
+    return BaiduAutoPush
 
-class CodeHighlighting_Highlight(PluginBase):
+class BaiduAutoPush(PluginBase):
     
     __doc__ = __description__
 
     def register_tep(self):
-        return {"blog_show_header_include": "CodeHighlighting/CodeHighlighting.html"}
+        return {"blog_show_script_include": "BaiduAutoPush/BaiduAutoPush.html"}
