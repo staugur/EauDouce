@@ -23,7 +23,7 @@ from config import PLUGINS
 __name__        = "BaiduStatistics"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
-__description__ = "Access statistics using third party Baidu statistical services statistics"
+__description__ = "百度统计插件"
 #: Plugin Author
 #: 插件作者
 __author__      = "Mr.tao <staugur@saintic.com>"

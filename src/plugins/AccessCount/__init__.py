@@ -14,7 +14,7 @@ from libs.base import PluginBase
 import datetime
 
 __name__        = "AccessCount"
-__description__ = "PV and IP plugins for statistical access."
+__description__ = "IP、PV统计插件"
 __author__      = "Mr.tao"
 __version__     = "0.1" 
 __license__     = "MIT"

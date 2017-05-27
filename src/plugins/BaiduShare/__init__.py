@@ -22,7 +22,7 @@ from config import PLUGINS
 __name__        = "BaiduShare"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
-__description__ = "Baidu social sharing service"
+__description__ = "百度社会化分享插件"
 #: Plugin Author
 #: 插件作者
 __author__      = "Mr.tao"

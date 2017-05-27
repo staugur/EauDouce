@@ -28,7 +28,7 @@ from config import PLUGINS
 __name__        = "CodeHighlighting"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
-__description__ = "Using highlight's code highlighting plugin"
+__description__ = "代码高亮插件"
 #: Plugin Author
 #: 插件作者
 __author__      = "Ivan Sagalaev"
