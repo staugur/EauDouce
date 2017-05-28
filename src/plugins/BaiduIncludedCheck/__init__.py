@@ -40,4 +40,6 @@ class BaiduIncludedCheck(PluginBase):
 
     def register_bep(self):
         return {"prefix": "/BaiduIncludedCheck", "blueprint": BaiduIncludedCheckBlueprint}
-        
+
+    def register_tep(self):
+        return {"blog_show_script_include": "BaiduCheckJs.html"}

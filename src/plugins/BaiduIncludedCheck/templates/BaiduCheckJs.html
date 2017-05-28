@@ -1,0 +1,24 @@
+<script type="text/javascript">
+$(document).ready(function () {
+    var BaiduIncludedCheck = document.getElementById("BaiduIncludedCheck");
+    $.ajax({
+        url: "{{ url_for('BaiduIncludedCheck.index', url=request.url) }}",
+        method: 'GET',
+        datatype: 'json',
+        success: function(res) {
+            console.log(res);
+            if (res.Included==true) {
+                BaiduIncludedCheck.setAttribute("class", "text-success");
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录成功';
+            } else {
+                BaiduIncludedCheck.setAttribute("class", "text-danger");
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录失败';
+            }
+        },
+        error: function(error){
+                BaiduIncludedCheck.setAttribute("class", "text-danger");
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件发生未知错误';
+        }
+    });
+});
+</script>
