@@ -36,6 +36,7 @@ class PluginManager(object):
         self.plugins     = []
         self.plugin_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "plugins")
         self.__scanPlugins()
+        plugin_logger.debug(self.plugins)
 
     def __getPluginInfo(self, package, plugin):
         """ 组织插件信息 """
@@ -75,8 +76,9 @@ class PluginManager(object):
             "plugin_readme_file": readme_file,
             "plugin_state": plugin_state,
             "plugin_tpl_path": os.path.join("plugins", package, "templates"),
-            "plugin_tpl_tep": {},
-            "plugin_cep": {}
+            "plugin_tep": {},
+            "plugin_cep": {},
+            "plugin_bep": {}
         }
 
     def __scanPlugins(self):
@@ -115,7 +117,7 @@ class PluginManager(object):
                 tep = i.register_tep()
                 plugin_logger.info("The plugin {0} wants to register the following template extension points: {1}".format(package, tep))
                 if isinstance(tep, dict):
-                    pluginInfo.update(plugin_tpl_tep=tep)
+                    pluginInfo.update(plugin_tep=tep)
                     plugin_logger.info("Register TEP Success")
                 else:
                     plugin_logger.error("Register TEP Failed, not a dict")
@@ -128,8 +130,17 @@ class PluginManager(object):
                     plugin_logger.info("Register CEP Success")
                 else:
                      plugin_logger.error("Register CEP Failed, not a dict")
+            #: 注册蓝图扩展点
+            if hasattr(i, "register_bep"):
+                bep = i.register_bep()
+                plugin_logger.info("The plugin {0} wants to register the following blueprint extension points: {1}".format(package, bep))
+                if isinstance(bep, dict):
+                    pluginInfo.update(plugin_bep=bep)
+                    plugin_logger.info("Register BEP Success")
+                else:
+                    plugin_logger.error("Register BEP Failed, not a dict")
             #: 加入全局插件中
-            if hasattr(i, "run") or hasattr(i, "register_tep") or hasattr(i, "register_cep"):
+            if hasattr(i, "run") or hasattr(i, "register_tep") or hasattr(i, "register_cep") or hasattr(i, "register_bep"):
                 self.plugins.append(pluginInfo)
             else:
                 plugin_logger.error("The current class {0} does not have the `run` or `register_tep` or `register_cep` method".format(i))
@@ -163,18 +174,18 @@ class PluginManager(object):
         TEP: blog_show_content_include
         """
         return dict(
-            base_front_header_include     = lambda: [ plugin["plugin_tpl_tep"].get("base_front_header_include") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("base_front_header_include") ],
-            base_front_header_string      = lambda: [ plugin["plugin_tpl_tep"].get("base_front_header_string") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("base_front_header_string") ],
-            base_front_navigation_include = lambda: [ plugin["plugin_tpl_tep"].get("base_front_navigation_include") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("base_front_navigation_include") ],
-            base_front_navigation_string  = lambda: [ plugin["plugin_tpl_tep"].get("base_front_navigation_string") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("base_front_navigation_string") ],
-            base_front_footer_include     = lambda: [ plugin["plugin_tpl_tep"].get("base_front_footer_include") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("base_front_footer_include") ],
-            base_front_footer_string      = lambda: [ plugin["plugin_tpl_tep"].get("base_front_footer_string") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("base_front_footer_string") ],
-            base_front_script_include     = lambda: [ plugin["plugin_tpl_tep"].get("base_front_script_include") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("base_front_script_include") ],
-            base_front_script_string      = lambda: [ plugin["plugin_tpl_tep"].get("base_front_script_string") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("base_front_script_string") ],
-            blog_show_header_include      = lambda: [ plugin["plugin_tpl_tep"].get("blog_show_header_include") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("blog_show_header_include") ],
-            blog_show_header_string       = lambda: [ plugin["plugin_tpl_tep"].get("blog_show_header_string") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("blog_show_header_string") ],
-            blog_show_content_include     = lambda: [ plugin["plugin_tpl_tep"].get("blog_show_content_include") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("blog_show_content_include") ],
-            blog_show_script_include     = lambda: [ plugin["plugin_tpl_tep"].get("blog_show_script_include") for plugin in self.get_enabled_plugins if plugin["plugin_tpl_tep"].get("blog_show_script_include") ],
+            base_front_header_include     = lambda: [ plugin["plugin_tep"].get("base_front_header_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("base_front_header_include") ],
+            base_front_header_string      = lambda: [ plugin["plugin_tep"].get("base_front_header_string") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("base_front_header_string") ],
+            base_front_navigation_include = lambda: [ plugin["plugin_tep"].get("base_front_navigation_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("base_front_navigation_include") ],
+            base_front_navigation_string  = lambda: [ plugin["plugin_tep"].get("base_front_navigation_string") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("base_front_navigation_string") ],
+            base_front_footer_include     = lambda: [ plugin["plugin_tep"].get("base_front_footer_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("base_front_footer_include") ],
+            base_front_footer_string      = lambda: [ plugin["plugin_tep"].get("base_front_footer_string") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("base_front_footer_string") ],
+            base_front_script_include     = lambda: [ plugin["plugin_tep"].get("base_front_script_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("base_front_script_include") ],
+            base_front_script_string      = lambda: [ plugin["plugin_tep"].get("base_front_script_string") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("base_front_script_string") ],
+            blog_show_header_include      = lambda: [ plugin["plugin_tep"].get("blog_show_header_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_header_include") ],
+            blog_show_header_string       = lambda: [ plugin["plugin_tep"].get("blog_show_header_string") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_header_string") ],
+            blog_show_content_include     = lambda: [ plugin["plugin_tep"].get("blog_show_content_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_content_include") ],
+            blog_show_script_include     = lambda: [ plugin["plugin_tep"].get("blog_show_script_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_script_include") ],
         )
 
     @property
@@ -191,4 +202,4 @@ class PluginManager(object):
     @property
     def get_all_bep(self):
         """蓝图扩展点"""
-        pass
+        return [ plugin["plugin_bep"] for plugin in self.get_enabled_plugins if plugin["plugin_bep"] ]

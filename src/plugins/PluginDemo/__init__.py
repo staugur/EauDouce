@@ -46,6 +46,23 @@ __readme_file__ = "README"
 __state__       = "disabled"
 
 
+from flask import Blueprint, request
+from flask_restful import Api, Resource
+
+#: Example No.1
+plugin_blueprint = Blueprint("PluginDemo", "PluginDemo")
+@plugin_blueprint.route("/plugin/")
+def plugin():
+    return "plugin demo"
+
+#: Example No.2
+class ApiDemo(Resource):
+    def get(self):
+        return True
+pluginApi_blueprint = Blueprint("PluginDemo", "PluginDemo")
+api = Api(pluginApi_blueprint)
+api.add_resource(ApiDemo, '/api', '/api/', endpoint='ApiDemoPoint')
+
 #: 返回插件主类
 def getPluginClass():
     return PluginDemoMain
@@ -55,7 +72,7 @@ class PluginDemoMain(PluginBase):
     """ 继承自PluginBase基类 """
 
     def run(self):
-        """ 运行插件入口 """
+        """ 插件一般运行入口 """
         self.logger.info("I am PluginDemoMain, run!")
 
     def register_tep(self):
@@ -70,3 +87,8 @@ class PluginDemoMain(PluginBase):
         """注册上下文入口, 返回扩展点名称及执行的函数"""
         cep = {"after_request_hook": self._hook}
         return cep
+
+    def register_bep(self):
+        """注册蓝图入口, 返回蓝图路由前缀及蓝图名称"""
+        bep = {"prefix": "/pluginDemo", "blueprint": plugin_blueprint}
+        return bep

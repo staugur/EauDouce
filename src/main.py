@@ -62,6 +62,11 @@ app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
+for bep in plugin.get_all_bep:
+    prefix = bep["prefix"]
+    if prefix in ("/api", "/admin", "/upload"): continue
+    app.register_blueprint(bep["blueprint"], url_prefix=prefix)
+    logger.info("add a blueprint for {0}".format(prefix))
 
 @app.context_processor  
 def GlobalTemplateVariables():  
@@ -84,6 +89,7 @@ def before_request():
     for cep_func in before_request_hook():
         cep_func(request=request, g=g)
         logger.info("exec a before cep function for {0}".format(cep_func))
+    app.logger.info(app.url_map)
 
 @app.after_request
 def after_request(response):
