@@ -98,7 +98,7 @@ def ParseRedis(redis):
 
     logger.debug("REDIS INFO: {}".format(data))
     return data
-        
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -123,12 +123,30 @@ def UploadImage2Upyun(FilePath, FileData, kwargs=PLUGINS['UpYunStorage']):
     res = up.put(FilePath, FileData)
     return res
 
+def UploadRealFile2Upyun(file, imgurl, kwargs=PLUGINS['UpYunStorage']):
+    """ Upload image to Upyun Cloud with Api """
+
+    up = upyun.UpYun(kwargs.get("bucket"), username=kwargs.get("username"), password=kwargs.get("password"), timeout=10, endpoint=upyun.ED_AUTO)
+    formkw = { 'allow-file-type': kwargs.get('allow-file-type', 'jpg,jpeg,png,gif') }
+    with open(file, "rb") as f:
+        res = up.put(imgurl, f, checksum=True, need_resume=True, form=True, **formkw)
+    return res
+
 def BaiduActivePush(pushUrl, original=True, callUrl=PLUGINS['BaiduActivePush']['callUrl']):
     """百度主动推送(实时)接口提交链接"""
     callUrl = callUrl + "&type=original" if original else callUrl
     res = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
     logger.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
     return res
+
+def ClickMysqlWrite(data):
+    if isinstance(data, dict):
+        if data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
+            sql = "insert into clickLog set requestId=%s, url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s"
+            try:
+                mysql.insert(sql, data.get("requestId"), data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"))
+            except Exception, e:
+                logger.warn(e, exc_info=True)
 
 def ChoiceColor():
     """ 模板中随机选择bootstrap内置颜色 """

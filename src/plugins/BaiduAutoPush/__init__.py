@@ -22,7 +22,7 @@ from config import PLUGINS
 __name__        = "BaiduAutoPush"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
-__description__ = "百度自动推送(实时)插件"
+__description__ = "百度自动推送插件"
 #: Plugin Author
 #: 插件作者
 __author__      = "Mr.tao"

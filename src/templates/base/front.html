@@ -30,6 +30,9 @@
             {{ hs|safe }}
         {% endfor %}
     {% endif %}
+    <style type="text/css">
+        body { padding-top: 70px; }
+    </style>
 </head>
 </head>
 <body>
@@ -38,9 +41,9 @@
 
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <nav class="navbar navbar-default navbar-inverse" role="navigation">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div class="navbar-header">
-                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}" title="清水蓝天">EauDouce&nbsp;<i class="icon-home icon-1x"></i></a>
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}">EauDouce&nbsp;<i class="icon-home icon-1x"></i></a>
                 </div>
                 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -83,7 +86,7 @@
                         <li class="dropdown">
                             <a href="{{ url_for('front.userHome', user=g.username) }}" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
                             <ul class="dropdown-menu">
-                                <li><center><small>Signed in as <strong>{{ g.username }}</strong></small></center></li>
+                                <li><center><small>Welcome <strong>{{ g.username }}</strong></small></center></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}">我的主页</a></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}#blog">我的文章</a></li>

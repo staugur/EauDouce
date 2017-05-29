@@ -12,13 +12,17 @@
 from __future__ import absolute_import
 from libs.base import PluginBase
 import datetime
+from config import PLUGINS
 
 __name__        = "AccessCount"
 __description__ = "IP、PV统计插件"
 __author__      = "Mr.tao"
 __version__     = "0.1" 
 __license__     = "MIT"
-
+if PLUGINS["AccessCount"] in ("true", "True", True):
+    __state__   = "enabled"
+else:
+    __state__   = "disabled"
 
 def getPluginClass():
     return AccessCount

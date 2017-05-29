@@ -43,7 +43,7 @@ REDIS=os.getenv("eaudouce_redis_url")
 #redis://[:password]@host:port/db
 #host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
 
-
+#内置插件
 PLUGINS={
 
     "CodeHighlighting": os.getenv("eaudouce_CodeHighlighting", True),
@@ -62,7 +62,7 @@ PLUGINS={
     "BaiduStatistics": os.getenv("eaudouce_BaiduStatistics", False),
     #百度统计插件
 
-    "BaiduAutoPush": os.getenv("eaudouce_BaiduAutoPush", True),
+    "BaiduAutoPush": os.getenv("eaudouce_BaiduAutoPush", False),
     #百度自动推送插件
     
     "BaiduActivePush": {
@@ -71,7 +71,7 @@ PLUGINS={
     },
     #百度主动推送(实时)插件
 
-    "BaiduIncludedCheck": os.getenv("eaudouce_BaiduIncludedCheck", True),
+    "BaiduIncludedCheck": os.getenv("eaudouce_BaiduIncludedCheck", False),
     #百度收录检测插件
 
     "Weather": os.getenv("eaudouce_Weather", True),
@@ -94,4 +94,7 @@ PLUGINS={
 
     "Reward": os.getenv("eaudouce_Reward", True),
     #打赏插件
+
+    "AccessCount": os.getenv("eaudouce_AccessCount", True),
+    #访问统计插件
 }

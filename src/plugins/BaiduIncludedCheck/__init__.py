@@ -13,12 +13,16 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 from flask import Blueprint, jsonify, request
 from .util import BaiduIncludedCheckUtil
+from config import PLUGINS
 
 __name__        = "BaiduIncludedCheck"
 __description__ = "检查百度是否收录某URL的插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
 __version__     = "0.1" 
-__state__       = "enabled"
+if PLUGINS["BaiduIncludedCheck"] in ("true", "True", True):
+    __state__   = "enabled"
+else:
+    __state__   = "disabled"
 
 tool = BaiduIncludedCheckUtil()
 BaiduIncludedCheckBlueprint = Blueprint("BaiduIncludedCheck", "BaiduIncludedCheck")
