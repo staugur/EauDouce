@@ -185,7 +185,7 @@ class PluginManager(object):
             blog_show_header_include      = lambda: [ plugin["plugin_tep"].get("blog_show_header_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_header_include") ],
             blog_show_header_string       = lambda: [ plugin["plugin_tep"].get("blog_show_header_string") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_header_string") ],
             blog_show_content_include     = lambda: [ plugin["plugin_tep"].get("blog_show_content_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_content_include") ],
-            blog_show_script_include     = lambda: [ plugin["plugin_tep"].get("blog_show_script_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_script_include") ],
+            blog_show_script_include      = lambda: [ plugin["plugin_tep"].get("blog_show_script_include") for plugin in self.get_enabled_plugins if plugin["plugin_tep"].get("blog_show_script_include") ],
         )
 
     @property

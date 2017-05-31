@@ -41,17 +41,8 @@ class AccessCount(PluginBase):
         data  = kwargs.get("access_data")
         pvKey = "EauDouce_PV_Statistics_" + self.get_todayKey
         ipKey = "EauDouce_IP_Statistics_" + self.get_todayKey
-        '''
-        try:
-            self.redis.incr(pvKey)
-            self.redis.sadd(ipKey, data.get("ip"))
-        except Exception,e:
-            self.logger.error(e, exc_info=True)
-        else:
-            return True
-        '''
-        self.asyncQueue.enqueue(Click2Redis, self.redis, data, pvKey, ipKey)
-        self.asyncQueue.enqueue(Click2MySQL, self.mysql_write, data)
+        self.asyncQueue.enqueue(Click2Redis, data, pvKey, ipKey)
+        self.asyncQueue.enqueue(Click2MySQL, data)
 
     def register_cep(self):
         return {"after_request_hook": self.Record_ip_pv}

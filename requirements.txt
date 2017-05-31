@@ -11,3 +11,4 @@ setproctitle
 gunicorn
 gevent
 uwsgi
+rq

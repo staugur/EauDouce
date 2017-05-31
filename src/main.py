@@ -104,9 +104,6 @@ def after_request(response):
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
     }
     access_logger.info(json.dumps(data))
-    if request.endpoint != 'static':
-        return response
-    response.cache_control.max_age = 86400#1d
     #上下文扩展点之请求后(返回前)
     after_request_hook = plugin.get_all_cep.get("after_request_hook")
     for cep_func in after_request_hook():
