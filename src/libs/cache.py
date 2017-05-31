@@ -15,7 +15,7 @@ class CacheManager(ServiceBase):
 
 
     def __init__(self):
-        super(ServiceBase, self).__init__()
+        super(CacheManager, self).__init__()
         self.index = "EauDouce:cache"
 
     def setKey(self, key):

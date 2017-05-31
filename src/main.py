@@ -62,6 +62,7 @@ app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
+#注册蓝图扩展点
 for bep in plugin.get_all_bep:
     prefix = bep["prefix"]
     if prefix in ("/api", "/admin", "/upload"): continue
