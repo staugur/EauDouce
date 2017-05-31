@@ -13,6 +13,7 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 import datetime
 from config import PLUGINS
+from .util import Click2MySQL, Click2Redis
 
 __name__        = "AccessCount"
 __description__ = "IP、PV统计插件"
@@ -37,17 +38,20 @@ class AccessCount(PluginBase):
     def Record_ip_pv(self, **kwargs):
         """ 记录ip、ip """
 
-        request    = kwargs.get("request")
-        ip         = request.headers.get('X-Real-Ip', request.remote_addr)
-        self.pvKey = "EauDouce_PV_Statistics_" + self.get_todayKey
-        self.ipKey = "EauDouce_IP_Statistics_" + self.get_todayKey
+        data  = kwargs.get("access_data")
+        pvKey = "EauDouce_PV_Statistics_" + self.get_todayKey
+        ipKey = "EauDouce_IP_Statistics_" + self.get_todayKey
+        '''
         try:
-            self.redis.incr(self.pvKey)
-            self.redis.sadd(self.ipKey, ip)
+            self.redis.incr(pvKey)
+            self.redis.sadd(ipKey, data.get("ip"))
         except Exception,e:
             self.logger.error(e, exc_info=True)
         else:
             return True
+        '''
+        self.asyncQueue.enqueue(Click2Redis, self.redis, data, pvKey, ipKey)
+        self.asyncQueue.enqueue(Click2MySQL, self.mysql_write, data)
 
     def register_cep(self):
-        return {"before_request_hook": self.Record_ip_pv}
+        return {"after_request_hook": self.Record_ip_pv}

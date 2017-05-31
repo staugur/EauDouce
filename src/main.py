@@ -110,7 +110,7 @@ def after_request(response):
     #上下文扩展点之请求后(返回前)
     after_request_hook = plugin.get_all_cep.get("after_request_hook")
     for cep_func in after_request_hook():
-        cep_func(request=request, response=response)
+        cep_func(request=request, response=response, access_data=data)
         logger.info("exec an after cep function for {0}".format(cep_func))
     return response
 

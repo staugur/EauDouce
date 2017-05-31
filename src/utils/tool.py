@@ -139,15 +139,6 @@ def BaiduActivePush(pushUrl, original=True, callUrl=PLUGINS['BaiduActivePush']['
     logger.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
     return res
 
-def ClickMysqlWrite(data):
-    if isinstance(data, dict):
-        if data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
-            sql = "insert into clickLog set requestId=%s, url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s"
-            try:
-                mysql.insert(sql, data.get("requestId"), data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"))
-            except Exception, e:
-                logger.warn(e, exc_info=True)
-
 def ChoiceColor():
     """ 模板中随机选择bootstrap内置颜色 """
     color = ["default", "primary", "success", "info", "warning", "danger"]
