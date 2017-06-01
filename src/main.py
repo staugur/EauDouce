@@ -26,7 +26,7 @@ __license__ = "MIT"
 import rq_dashboard
 import json, datetime, SpliceURL, time, os, jinja2
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
-from config import GLOBAL, SSO, PLUGINS
+from config import GLOBAL, SSO, PLUGINS, REDIS
 from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5, ChoiceColor
 from urllib import urlencode
 from libs.api import ApiManager
@@ -39,6 +39,7 @@ from views.upload import upload_blueprint
 
 #初始化定义application
 app = Flask(__name__)
+app.config["REDIS_URL"] = REDIS
 
 #初始化插件管理器(自动扫描并加载运行)
 plugin = PluginManager()
