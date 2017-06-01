@@ -12,3 +12,4 @@ gunicorn
 gevent
 uwsgi
 rq
+rq-dashboard

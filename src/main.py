@@ -23,6 +23,7 @@ __date__    = "2017-03-26"
 __version__ = "0.0.1"
 __license__ = "MIT"
 
+import rq_dashboard
 import json, datetime, SpliceURL, time, os, jinja2
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS
@@ -62,6 +63,7 @@ app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
+app.register_blueprint(rq_dashboard.blueprint, url_prefix="/rq")
 #注册蓝图扩展点
 for bep in plugin.get_all_bep:
     prefix = bep["prefix"]
