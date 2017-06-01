@@ -22,7 +22,7 @@ class BlogApiManager(ServiceBase):
     def blog_search(self, q):
         "搜索文章标题"
         res    = {"msg": None, "data": [], "code": 0}
-        sql    = "SELECT id,title,create_time,update_time,tag,author, FROM blog_article"
+        sql    = "SELECT id,title,create_time,update_time,tag,author FROM blog_article"
         data   = self.mysql_read.query(sql)
         res.update(data=[ blog for blog in data if q in blog["title"] ])
         api_logger.info(res)
