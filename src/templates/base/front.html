@@ -167,11 +167,11 @@
 
             <!-- 搜索 -->
             {% block search %}
-            <form class="form-search form-horizontal" action="?q=" method="" id="SearchForm">
-                <div class="input-group search-input-group">
-                    <button type="submit" class="btn btn-success" style="height: 30px"><i class="icon-search"></i></button>
-                    <input type="text" name="q" placeholder="搜索博客文章: 此服务暂不可用" style="height: 28px; min-width: 250px">
-                </div>
+            <form class="form-search form-horizontal" id="SearchForm">
+            <div class="input-group search-input-group">
+                <button type="button" style="height: 30px" onclick=SearchBlogTitle() class="btn btn-success"><i class="icon-search"></i></button>
+                <input type="text" name="q" placeholder="搜索私有仓镜像">
+            </div>
             </form>
             {% endblock %}
 
@@ -422,6 +422,15 @@ function tick()
 
 //右侧动态时间
 tick();
+
+// 搜索
+function SearchBlogTitle() {
+    var search = $('#SearchForm').serialize();
+    console.log(search);
+    if (search) {
+        window.location.href="{{ url_for('front.blogSearch') }}?"+search;
+    }
+}
 </script>  
 
 </body>

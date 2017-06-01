@@ -13,7 +13,7 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 import datetime
 from config import PLUGINS
-from .util import Click2MySQL, Click2Redis
+from utils.qf import Click2MySQL, Click2Redis
 
 __name__        = "AccessCount"
 __description__ = "IP、PV统计插件"

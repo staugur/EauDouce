@@ -52,6 +52,10 @@ def blogEdit():
 def blogResource():
     return render_template("front/blogResource.html")
 
+@front_blueprint.route("/blog/search/")
+def blogSearch():
+    return render_template("front/blogSearch.html")
+
 @front_blueprint.route("/user/<user>/")
 def userHome(user=None):
     return render_template("front/userHome.html", user=user)

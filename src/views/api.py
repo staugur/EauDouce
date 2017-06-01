@@ -32,10 +32,12 @@ class Blog(Resource):
         11.get_top_data(bool)，查询置顶文章
         12.get_recommend_data(bool)，查询推荐文章
         13.get_tags_data(str)，查询某标签下的文章
+        14.q(str), 查询标题
         """
         limit  = request.args.get('limit', None)
         sort   = request.args.get('sort', 'desc')
         blogId = request.args.get('blogId', None)
+        q      = request.args.get('q')
 
         get_catalog_data  = request.args.get("get_catalog_data")
         get_sources_data  = request.args.get("get_sources_data")
@@ -79,6 +81,9 @@ class Blog(Resource):
             page   = int(request.args.get("page", 0))
             length = int(request.args.get("length", 5))
             return g.api.blog_get_single_index(sort, limit, page, length)
+
+        if q:
+            return g.api.blog_search(q)
 
     def post(self):
         """ 创建博客文章接口 """
