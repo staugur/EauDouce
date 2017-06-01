@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block container %}
-            {% for blog in g.api.blog_search(request.args.get("q")).data %}
+            {% for blog in g.api.blog_search(request.args.get("q", "")).data %}
             <blockquote>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
