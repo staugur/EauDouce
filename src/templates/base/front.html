@@ -169,8 +169,7 @@
             {% block search %}
             <form class="form-search form-horizontal" id="SearchForm" method="GET" action="{{ url_for('front.blogSearch') }}">
             <div class="input-group search-input-group">
-                <!--<button type="button" style="height: 30px;min-width: 50%" onclick=SearchBlogTitle() class="btn btn-success"><i class="icon-search"></i></button>-->
-                <input type="button" style="height: 30px;min-width: 50%" onClick="jump()" class="btn btn-success"><i class="icon-search"></i></button>
+                <input type="button" style="height: 30px;" onClick="jump()" class="btn btn-success"><i class="icon-search"></i></button>
                 <input type="text" name="q" id="input" placeholder="搜索">
             </div>
             <script type="text/javascript">
@@ -431,14 +430,6 @@ function tick()
 //右侧动态时间
 tick();
 
-// 搜索
-function SearchBlogTitle() {
-    var search = $('#SearchForm').serialize();
-    console.log(search);
-    if (search) {
-        window.location.href="{{ url_for('front.blogSearch') }}?"+search;
-    }
-}
 </script>  
 
 </body>
