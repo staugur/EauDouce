@@ -167,11 +167,19 @@
 
             <!-- 搜索 -->
             {% block search %}
-            <form class="form-search form-horizontal" id="SearchForm">
+            <form class="form-search form-horizontal" id="SearchForm" method="GET" action="{{ url_for('front.blogSearch') }}">
             <div class="input-group search-input-group">
-                <button type="button" style="height: 30px" onclick=SearchBlogTitle() class="btn btn-success"><i class="icon-search"></i></button>
-                <input type="text" name="q" placeholder="搜索私有仓镜像">
+                <!--<button type="button" style="height: 30px;min-width: 50%" onclick=SearchBlogTitle() class="btn btn-success"><i class="icon-search"></i></button>-->
+                <input type="button" style="height: 30px;min-width: 50%" onClick="jump()" class="btn btn-success"><i class="icon-search"></i></button>
+                <input type="text" name="q" id="input" placeholder="搜索">
             </div>
+            <script type="text/javascript">
+                function jump(){
+                    var f = document.getElementById("SearchForm");
+                    f.action = f.action+"?q="+document.getElementById("input").value;
+                    window.location.href=f.action;
+                }
+            </script>
             </form>
             {% endblock %}
 
