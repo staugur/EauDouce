@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block container %}
-            {% set data = g.api.blog_search(request.args.get("q", "")).data }
+            {% set data = g.api.blog_search(request.args.get("q", "")).data %}
             {% if not data %}
                 <p class="text-warning">抱歉, 没有搜索到匹配内容！</p>
             {% endif %}
