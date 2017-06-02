@@ -9,7 +9,7 @@
     :license: MIT, see LICENSE for more details.
 """
 
-import requests
+import requests, sys
 from config import REDIS, MYSQL, PLUGINS
 from torndb import IntegrityError, Connection
 from utils.tool import api_logger, get_today, ListEqualSplit, md5
@@ -21,11 +21,15 @@ class BlogApiManager(ServiceBase):
 
     def blog_search(self, q):
         "搜索文章标题"
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
+        #q = unicode(q)
         res = {"msg": None, "data": [], "code": 0}
+        api_logger.debug("blog_search query: {0}, query type: {1}".format(q, type(q)))
         if ";" in q:
             res.update(msg="Parameter is not legal", code=-1)
         else:
-            sql  = "SELECT id,title,create_time,update_time,tag,author FROM blog_article WHERE title LIKE '%%{0}%%' AND content LIKE '%%{0}%%';".format(q)
+            sql  = "SELECT id,title,create_time,update_time,tag,author FROM blog_article WHERE title LIKE '%%{0}%%' OR content LIKE '%%{0}%%';".format(q)
             data = self.mysql_read.query(sql)
             #res.update(data=[ blog for blog in data if q in blog["title"] ])
             res.update(data=data)
