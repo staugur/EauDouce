@@ -21,10 +21,15 @@ class BlogApiManager(ServiceBase):
 
     def blog_search(self, q):
         "搜索文章标题"
-        res    = {"msg": None, "data": [], "code": 0}
-        sql    = "SELECT id,title,create_time,update_time,tag,author FROM blog_article"
-        data   = self.mysql_read.query(sql)
-        res.update(data=[ blog for blog in data if q in blog["title"] ])
+        res = {"msg": None, "data": [], "code": 0}
+        if ";" in q:
+            res.update(msg="Parameter is not legal", code=-1)
+        else:
+            sql  = "SELECT id,title,create_time,update_time,tag,author FROM blog_article WHERE title LIKE '%{0}%' AND content LIKE '%{0}%';".format(q)
+            data = self.mysql_read.query(sql)
+            #res.update(data=[ blog for blog in data if q in blog["title"] ])
+            res.update(data=data)
+            api_logger.info(sql)
         api_logger.info(res)
         return res
 
