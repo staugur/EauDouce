@@ -93,8 +93,3 @@ server {
 
 ## Plugin
 
-## Design
-![Design][1]
-
-[1]: ./misc/design.png
-

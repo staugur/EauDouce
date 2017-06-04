@@ -1,8 +1,8 @@
 ##TODO
 
-> 1. 异步队列任务: rq(https://github.com/nvie/rq), rq-dashboard(https://github.com/eoranged/rq-dashboard)
+# 1. 异步队列任务: rq(https://github.com/nvie/rq), rq-dashboard(https://github.com/eoranged/rq-dashboard)
 
-> 2. 插件式架构
+# 2. 插件式架构
 
 > 3. 初始化任务： 
   ```

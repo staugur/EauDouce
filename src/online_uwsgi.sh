@@ -20,7 +20,7 @@ start)
     if [ -f $pidfile ]; then
         echo "Has pid($(cat $pidfile)) in $pidfile, please check, exit." ; exit 1
     else
-        uwsgi --http ${host}:${port} --module main --callable app --master --procname-master ${proc}.master --procname ${proc}.worker -p $cpu_count --chdir $dir --threads 2 &>> $logfile &
+        uwsgi --http ${host}:${port} --module main --callable app --master --procname-master ${proc}.master --procname ${proc}.worker -p $cpu_count --chdir $dir --threads 10 --listen 1024 &>> $logfile &
         pid=$!
         echo $pid > $pidfile
         echo "$procname start over with pid ${pid}"
