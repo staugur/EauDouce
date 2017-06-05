@@ -25,13 +25,19 @@ def Click2MySQL(data):
                 logger.warn(e, exc_info=True)
 
 
-def Click2Redis(data, pvKey, ipKey):
+def Click2Redis(data, pvKey, ipKey, urlKey):
     """ 记录ip、ip """
 
     if isinstance(data, dict):
         try:
-            _sb.redis.incr(pvKey)
-            _sb.redis.sadd(ipKey, data.get("ip"))
+            pipe  = _sb.redis.pipeline()
+            pipe.incr(pvKey)
+            pipe.sadd(ipKey, data.get("ip"))
+            key   = data.get("url")
+            value = int(pipe.hgetall(urlKey).get(key) or 0)
+            value += 1
+            pipe.hset(urlKey, key, value)
+            pipe.execute()
         except Exception,e:
             logger.error(e, exc_info=True)
         else:

@@ -9,3 +9,5 @@
   3.1 缓存Users Profile、缓存Blog、缓存Config
   3.2 
   ```
+
+> 4. 模板内插件式注册事件

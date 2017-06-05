@@ -11,12 +11,12 @@
 
 from __future__ import absolute_import
 from libs.base import PluginBase
-import datetime
 from config import PLUGINS
+from utils.tool import get_today
 from utils.qf import Click2MySQL, Click2Redis
 
 __name__        = "AccessCount"
-__description__ = "IP、PV统计插件"
+__description__ = "IP、PV、UV统计插件"
 __author__      = "Mr.tao"
 __version__     = "0.1" 
 __license__     = "MIT"
@@ -31,18 +31,21 @@ def getPluginClass():
 class AccessCount(PluginBase):
     """ 记录与统计每天访问数据 """
 
-    @property
-    def get_todayKey(self):
-        return datetime.datetime.now().strftime("%Y%m%d")
+    pvKey = "EauDouce:AccessCount:pv:" + get_today("%Y%m%d")
+    ipKey = "EauDouce:AccessCount:ip:" + get_today("%Y%m%d")
+    urlKey= "EauDouce:AccessCount:uv"
 
     def Record_ip_pv(self, **kwargs):
         """ 记录ip、ip """
 
         data  = kwargs.get("access_data")
-        pvKey = "EauDouce_PV_Statistics_" + self.get_todayKey
-        ipKey = "EauDouce_IP_Statistics_" + self.get_todayKey
-        self.asyncQueue.enqueue(Click2Redis, data, pvKey, ipKey)
+        self.asyncQueue.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
         self.asyncQueue.enqueue(Click2MySQL, data)
 
+    def QueueUV(self, **kwargs):
+        g = kwargs.get("g")
+        r = kwargs.get("request")
+        g.QueueUV = self.redis.hgetall(urlKey).get(request.headers.get('X-Real-Ip', request.remote_addr))
+
     def register_cep(self):
-        return {"after_request_hook": self.Record_ip_pv}
+        return {"after_request_hook": self.Record_ip_pv, "before_request_hook": self.QueueUV}

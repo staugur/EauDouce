@@ -29,8 +29,7 @@ plugin_logger   = Logger("plugin").getLogger
 md5             = lambda pwd:hashlib.md5(pwd).hexdigest()
 gen_token       = lambda n=32:b32encode(uuid4().hex)[:n]
 gen_requestId   = lambda :str(uuid4())
-get_today       = lambda :datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-get_todayKey    = lambda :datetime.datetime.now().strftime("%Y%m%d")
+get_today       = lambda format="%Y-%m-%d %H:%M":datetime.datetime.now().strftime(format)
 gen_rnd_filename= lambda :"%s%s" %(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), str(random.randrange(1000, 10000)))
 ListEqualSplit  = lambda l,n=5: [ l[i:i+n] for i in range(0,len(l), n) ]
 
