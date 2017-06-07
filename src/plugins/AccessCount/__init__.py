@@ -43,7 +43,6 @@ class AccessCount(PluginBase):
         self.asyncQueue.enqueue(Click2MySQL, data)
 
     def QueueUV(self, g, url):
-        self.logger.debug("exec QueueUV")
         g.QueueUV = self.redis.hgetall(self.urlKey).get(url)
         self.logger.info(g.QueueUV)
 

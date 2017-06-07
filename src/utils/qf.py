@@ -31,19 +31,20 @@ def Click2Redis(data, pvKey, ipKey, urlKey):
     logger.debug('start click2redis')
     if isinstance(data, dict):
         try:
-            _sb.redis.incr(pvKey)
-            _sb.redis.sadd(ipKey, data.get("ip"))
+            pipe = _sb.redis.pipeline()
+            #_sb.redis.incr(pvKey)
+            #_sb.redis.sadd(ipKey, data.get("ip"))
+            pipe.incr(pvKey)
+            pipe.sadd(ipKey, data.get("ip"))
             key   = data.get("url")
             value = _sb.redis.hgetall(urlKey).get(key)
-            if value:
-                try:
-                    value = int(value) + 1
-                except:
-                    value = 1
-            else:
-                value = 1
-            logger.debug("click2redis uv key:{0}, value:{1}".format(key, value))
-            _sb.redis.hset(urlKey, key, value)
+            try:
+                value = int(value)
+            except ValueError:
+                value = 0
+            value += 1
+            pipe.hset(urlKey, key, value)
+            pipe.execute()
         except Exception,e:
             logger.error(e, exc_info=True)
         else:
