@@ -42,10 +42,10 @@ class AccessCount(PluginBase):
         self.asyncQueue.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
         self.asyncQueue.enqueue(Click2MySQL, data)
 
-    def QueueUV(self, **kwargs):
-        g = kwargs.get("g")
-        r = kwargs.get("request")
-        g.QueueUV = self.redis.hgetall(urlKey).get(request.headers.get('X-Real-Ip', request.remote_addr))
+    def QueueUV(self, g, url):
+        self.logger.debug("exec QueueUV")
+        g.QueueUV = self.redis.hgetall(self.urlKey).get(url)
+        self.logger.info(g.QueueUV)
 
     def register_cep(self):
-        return {"after_request_hook": self.Record_ip_pv, "before_request_hook": self.QueueUV}
+        return {"after_request_hook": self.Record_ip_pv, "before_request_hook": lambda request,g:self.QueueUV(g, request.url)}
