@@ -40,7 +40,7 @@ def Click2Redis(data, pvKey, ipKey, urlKey):
             value = _sb.redis.hgetall(urlKey).get(key)
             try:
                 value = int(value)
-            except ValueError:
+            except Exception:
                 value = 0
             value += 1
             pipe.hset(urlKey, key, value)
