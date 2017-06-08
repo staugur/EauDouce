@@ -41,7 +41,7 @@ def Click2Redis(data, pvKey, ipKey, urlKey):
             try:
                 value = int(value)
             except Exception:
-                value = 0
+                value = 1
             value += 1
             pipe.hset(urlKey, key, value)
             pipe.execute()
