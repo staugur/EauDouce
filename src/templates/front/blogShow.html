@@ -103,7 +103,16 @@
                             <scan id="BaiduIncludedCheck"></scan>
                         {% endif %}
 
-                        {{g.QueueUV}}
+                        {% if blog_show_funcarea_include %}
+                            {% for sfi in blog_show_funcarea_include() %}
+                                {% include sfi %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if blog_show_funcarea_string %}
+                            {% for sfs in blog_show_funcarea_string() %}
+                                {{ sfs|safe }}
+                            {% endfor %}
+                        {% endif %}
                     </h6>
                 </fieldset>
                 <fieldset>

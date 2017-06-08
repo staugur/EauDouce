@@ -48,3 +48,8 @@ class AccessCount(PluginBase):
 
     def register_cep(self):
         return {"after_request_hook": self.Record_ip_pv, "before_request_hook": lambda request,g:self.QueueUV(g, request.url)}
+
+    def register_tep(self):
+        """注册博客详情页功能区代码"""
+        tep = {"blog_show_funcarea_string": '<i class="icon-eye-open icon-1x"></i><scan style="color: #999">&nbsp;{{ g.QueueUV }}</scan>&nbsp;'}
+        return tep
