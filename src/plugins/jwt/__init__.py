@@ -16,7 +16,7 @@ from libs.base import PluginBase
 #: Import the other modules here, and if it's your own module, use the relative Import. eg: from .lib import Lib
 #: 在这里导入其他模块, 如果有自定义包目录, 使用相对导入, 如: from .lib import Lib
 from .utils import JWTUtil, JWTException
-from flask import Blueprint, request
+from flask import Blueprint, request, g
 from flask_restful import Api, Resource
 
 
@@ -64,11 +64,16 @@ class JWTApiCreate(Resource, PluginBase):
 
     def _getAuthentication(self, username, password):
         """ 登录认证 """
-        return True
+        return g.api.user_get_lauth_passwd(username).get("data") == self.jwt.md5(password)
 
     def _getUserData(self, username):
         """ 返回公开的简单的用户数据 """
-        return {"username": username, "uid": 0}
+        data = g.api.user_get_one_profile(username).get("data")
+        data.pop("time")
+        data.pop("extra")
+        data.pop("isAdmin")
+        data.pop("isAuthor")
+        return data
 
     def post(self):
         """token生成流程:
@@ -84,9 +89,9 @@ class JWTApiCreate(Resource, PluginBase):
         _authRes = self._getAuthentication(username, password)
         #2.
         if _authRes:
-            _data= self._getUserData(username)
+            _user= self._getUserData(username)
             #3.
-            token= self.jwt.createJWT(_data, expiredSeconds=3600)
+            token= self.jwt.createJWT(_user, expiredSeconds=3600)
             return {"token": token}
         else:
             return {"msg": "Authentication failed"}

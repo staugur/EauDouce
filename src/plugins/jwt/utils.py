@@ -32,7 +32,6 @@ class JWTUtil(object):
             iat: 签发时间，UNIX时间戳
             jti: 唯一身份标识
         """
-        self.md5      = lambda pwd:hashlib.md5(pwd).hexdigest()
         self.secretkey= secretkey
         self._header  = {
             "typ": "JWT",
@@ -46,6 +45,9 @@ class JWTUtil(object):
         }
         self._payloadkey = ("iss", "sub", "aud", "exp", "nbf", "iat", "jti")
         #logging.info("header: {0}, payload: {1}".format(self._header, self._payload))
+
+    def md5(self, pwd):
+        return hashlib.md5(pwd).hexdigest()
 
     def get_current_timestamp(self):
         """ 获取本地当前时间戳: Unix timestamp：是从1970年1月1日（UTC/GMT的午夜）开始所经过的秒数，不考虑闰秒 """
