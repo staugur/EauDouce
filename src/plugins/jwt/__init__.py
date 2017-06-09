@@ -137,6 +137,16 @@ class JWTPlugin(PluginBase):
         """ 插件一般运行入口 """
         pass
 
+    def bindToken(self):
+        """ 绑定解析token """
+        token = request.cookies.get("token") or request.header.get("authentication")
+        g.token = _JwtInstance.analysisJWT(token) if token else None
+
+    def register_cep(self):
+        """注册上下文入口, 返回扩展点名称及执行的函数"""
+        cep = {"before_request_hook": self.bindToken}
+        return cep
+
     def register_bep(self):
         """注册蓝图入口, 返回蓝图路由前缀及蓝图名称"""
         bep = {"prefix": "/jwt", "blueprint": JWTApi_blueprint}

@@ -95,6 +95,8 @@ def before_request():
         cep_func(request=request, g=g)
         logger.info("exec a before cep function for {0}".format(cep_func))
     app.logger.info(app.url_map)
+    if hasattr(g, "token"):
+        logger.info(g.token)
 
 @app.after_request
 def after_request(response):
