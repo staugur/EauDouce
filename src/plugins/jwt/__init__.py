@@ -110,7 +110,7 @@ class JWTApiVerify(Resource, PluginBase):
         """
         res = {"success": False}
         #1.
-        token = request.cookies.get("token") or request.header.get("authentication")
+        token = request.cookies.get("token") or request.headers.get("authentication")
         #2.
         try:
             self.jwt.verifyJWT(token)
@@ -139,7 +139,7 @@ class JWTPlugin(PluginBase):
 
     def bindToken(self, **kwargs):
         """ 绑定解析token """
-        token = request.cookies.get("token") or request.header.get("authentication")
+        token = request.cookies.get("token") or request.headers.get("authentication")
         g.token = _JwtInstance.analysisJWT(token) if token else None
 
     def register_cep(self):
