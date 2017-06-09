@@ -119,9 +119,9 @@ class JWTUtil(object):
         """ 解析token, 返回解码后的header、payload、signature等 """
         _header, _payload, _signature = token.split(".")
         data = {
-            "header": json.loads(base64.urlsafe_b64decode(_header)),
-            "payload": json.loads(base64.urlsafe_b64decode(_payload)),
-            "signature": base64.urlsafe_b64decode(_signature)
+            "header": json.loads(base64.urlsafe_b64decode(str(_header))),
+            "payload": json.loads(base64.urlsafe_b64decode(str(_payload))),
+            "signature": base64.urlsafe_b64decode(str(_signature))
         }
         logging.debug("analysis token: {0}".format(data))
         return data
