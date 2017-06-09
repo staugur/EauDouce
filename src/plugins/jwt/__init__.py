@@ -137,7 +137,7 @@ class JWTPlugin(PluginBase):
         """ 插件一般运行入口 """
         pass
 
-    def bindToken(self):
+    def bindToken(self, **kwargs):
         """ 绑定解析token """
         token = request.cookies.get("token") or request.header.get("authentication")
         g.token = _JwtInstance.analysisJWT(token) if token else None
