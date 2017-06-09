@@ -51,7 +51,7 @@ __state__       = "enabled"
 #: 使用者，加密串
 _Audience   = "SaintIC Inc."
 _SecretKey  = "D1D5EB327D55D83EB96EAD9CDD1394E8"
-_JwtInstance= JWTUtil(self.SecretKey, self.Audience)
+_JwtInstance= JWTUtil(_SecretKey, _Audience)
 
 #: JWT Blueprint
 JWTApi_blueprint = Blueprint("jwt", "jwt")
