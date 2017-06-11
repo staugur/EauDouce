@@ -164,7 +164,7 @@ class JWTPlugin(PluginBase):
     def bindToken(self, **kwargs):
         """ 绑定解析token """
         token = request.cookies.get("token") or request.headers.get("authentication")
-        g.token = _JwtInstance.analysisJWT(token) if token else None
+        g.token = _JwtInstance.analysisJWT(token)["payload"] if token else None
 
     def register_cep(self):
         """注册上下文入口, 返回扩展点名称及执行的函数"""
