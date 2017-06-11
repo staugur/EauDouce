@@ -15,6 +15,7 @@ from log import Logger
 from base64 import b32encode
 from config import SSO, PLUGINS
 from functools import wraps
+from threading import Thread
 from flask import g, request, redirect, url_for
 
 ip_pat          = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
@@ -142,3 +143,10 @@ def ChoiceColor():
     """ 模板中随机选择bootstrap内置颜色 """
     color = ["default", "primary", "success", "info", "warning", "danger"]
     return random.choice(color)
+
+def async(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        thr = Thread(target=f, args=args, kwargs=kwargs)
+        thr.start()
+    return wrapper
