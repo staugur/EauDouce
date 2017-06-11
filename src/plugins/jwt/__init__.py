@@ -55,6 +55,17 @@ _JwtInstance= JWTUtil(_SecretKey, _Audience)
 
 #: JWT Blueprint
 JWTApi_blueprint = Blueprint("jwt", "jwt")
+#: 可视化简单登录页
+@JWTApi_blueprint.route("/login/")
+def getToken():
+    return """
+        <form action="{0}" method="post">
+            <p><input type="text" id="username" name="username" autofocus="autofocus" required="required" autocomplete="off" placeholder="请输入用户名" value="" /></p>
+            <p><input type="password" id="password" name="password" required="required" placeholder="请输入密码" value="" /></p>
+            <p><input type="checkbox" name="remember" value="true">Remember Me 7d</p>
+            <input type="submit" value="登录">
+        </form>""".format(url_for("jwt.login"))
+
 class JWTApiCreate(Resource, PluginBase):
     """JWT Api Route: create token"""
 
