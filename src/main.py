@@ -89,6 +89,7 @@ def before_request():
     g.api       = api
     g.plugins   = PLUGINS
     g.hitCache  = False
+    g.token     = {}
     #上下文扩展点之请求后(返回前)
     before_request_hook = plugin.get_all_cep.get("before_request_hook")
     for cep_func in before_request_hook():

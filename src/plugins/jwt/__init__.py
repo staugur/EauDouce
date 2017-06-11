@@ -16,7 +16,7 @@ from libs.base import PluginBase
 #: Import the other modules here, and if it's your own module, use the relative Import. eg: from .lib import Lib
 #: 在这里导入其他模块, 如果有自定义包目录, 使用相对导入, 如: from .lib import Lib
 from .utils import JWTUtil, JWTException
-from flask import Blueprint, request, g
+from flask import Blueprint, request, g, redirect, make_response, jsonify
 from flask_restful import Api, Resource
 
 
@@ -34,7 +34,7 @@ __author__      = "taochengwei <staugur@saintic.com>"
 __version__     = "0.1" 
 #: Plugin Url
 #: 插件主页
-__url__         = "https://www.saintic.com/plugins/jwt/"
+__url__         = "https://github.com/staugur/jwt/"
 #: Plugin License
 #: 插件许可证
 __license__     = "MIT"
@@ -43,7 +43,7 @@ __license__     = "MIT"
 __license_file__= "LICENSE"
 #: Plugin Readme File
 #: 插件自述文件
-__readme_file__ = "README"
+__readme_file__ = "README.md"
 #: Plugin state, enabled or disabled, default: enabled
 #: 插件状态, enabled、disabled, 默认enabled
 __state__       = "enabled"
@@ -85,16 +85,29 @@ class JWTApiCreate(Resource, PluginBase):
         #1.
         username = request.form.get("username")
         password = request.form.get("password")
-        #expire time(seconds)
-        _authRes = self._getAuthentication(username, password)
+        expires  = 7200
+        if username and password:
+            _authRes = self._getAuthentication(username, password)
+        else:
+            return {"msg": "invalid username or password"}
         #2.
         if _authRes:
             _user= self._getUserData(username)
             #3.
-            token= self.jwt.createJWT(_user, expiredSeconds=3600)
-            return {"token": token}
+            try:
+                token = self.jwt.createJWT(_user, expiredSeconds=expires)
+            except Exception:
+                response = make_response(jsonify(msg="Failed to request token"))
+            else:
+                redirect_uri = request.args.get("redirect_uri")
+                if redirect_uri:
+                    response = make_response(redirect(redirect_uri))
+                else:
+                    response = make_response(jsonify({"token": token, "expires_in": expires}))
+                response.set_cookie(key="token", value=token, max_age=expires, httponly=True)
         else:
-            return {"msg": "Authentication failed"}
+            response = make_response(jsonify(msg="Authentication failed"))
+        return response
 
 class JWTApiVerify(Resource, PluginBase):
     """JWT Api Route: verify token"""
