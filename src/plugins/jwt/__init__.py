@@ -22,10 +22,10 @@ from flask_restful import Api, Resource
 
 #：Your plug-in name must be consistent with the plug-in directory name.
 #：你的插件名称，必须和插件目录名称等保持一致.
-__name__        = "JWT"
+__name__        = "jwt"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
-__description__ = "Json Web Token Plugin for User Authentication and Authorization."
+__description__ = "Json Web Token Plugin for User Authentication."
 #: Plugin Author
 #: 插件作者
 __author__      = "taochengwei <staugur@saintic.com>"
