@@ -80,6 +80,13 @@
                     data: data,
                     success: function (data) {
                         $('#circularG').hide();
+                        console.log(data);
+                        if (data.success==true) {
+                            layer.msg("修改头像成功", {icon: 1, time: 3*1000});
+                            parent.location.reload();
+                        } else {
+                            layer.alert("修改头像失败，请重试提交或报告错误！\n错误原因是：" + data.msg, {icon: 2, time: 15*1000});
+                        }
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
 
