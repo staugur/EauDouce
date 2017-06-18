@@ -63,6 +63,7 @@ def userHome(user=None):
 @front_blueprint.route("/user/ChangeAvater/")
 @login_required
 def userChangeAvater():
+    return render_template("front/userChangeAvater2.html")
     return render_template("front/userChangeAvater.html")
 
 @front_blueprint.route("/user/ChangePassword/")
@@ -73,8 +74,7 @@ def userChangePassword():
 @front_blueprint.route("/user/ChangeCover/")
 @login_required
 def userChangeCover():
-    return render_template("front/userChangeCover2.html")
-    #return render_template("front/userChangeCover.html")
+    return render_template("front/userChangeCover.html")
 
 @front_blueprint.route("/user/ChangeProfile/")
 @login_required
