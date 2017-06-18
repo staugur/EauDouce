@@ -113,7 +113,7 @@ def UploadCoverImage():
     return jsonify(res)
 
 #对头像图片裁剪后上传进行响应
-@app.route('/clipper/', methods=['POST','OPTIONS'])
+@upload_blueprint.route('/clipper/', methods=['POST','OPTIONS'])
 def UploadClipperAvatar():
     if request.form.get("action") == "add":
         data     = request.form.get("picStr")
@@ -127,7 +127,7 @@ def UploadClipperAvatar():
         else:
             if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
             file=open(os.path.join(UPLOAD_FOLDER, filename), 'wb')
-            file.write(imgdata)  
+            file.write(imgdata)
             file.close()
             imgUrl = "/" + IMAGE_FOLDER + filename
             logger.info("Avatar to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
