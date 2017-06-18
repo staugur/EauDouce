@@ -16,7 +16,7 @@ GLOBAL={
     "ProcessName": "EauDouce",
     #自定义进程名.
 
-    "Port": os.getenv("eaudouce_port", 10140),
+    "Port": os.getenv("eaudouce_port", 10141),
     #应用绑定的Port.
 
     "LogLevel": os.getenv("eaudouce_loglevel", "DEBUG"),
@@ -38,7 +38,7 @@ MYSQL=os.getenv("eaudouce_mysql_url")
 #mysql://host:port:user:password:database?charset=&timezone=
 
 
-REDIS=os.getenv("eaudouce_redis_url")
+REDIS="redis://:SaintIC@127.0.0.1:16379/2"
 #Redis数据库连接信息，格式：
 #redis://[:password]@host:port/db
 #host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
@@ -59,19 +59,19 @@ PLUGINS={
     "BaiduShare": os.getenv("eaudouce_BaiduShare", True),
     #百度分享插件
 
-    "BaiduStatistics": os.getenv("eaudouce_BaiduStatistics", False),
+    "BaiduStatistics": False,
     #百度统计插件
 
-    "BaiduAutoPush": os.getenv("eaudouce_BaiduAutoPush", False),
+    "BaiduAutoPush": False,
     #百度自动推送插件
     
     "BaiduActivePush": {
-        "enable":  os.getenv("eaudouce_BaiduActivePush_enable", False),
+        "enable": False,
         "callUrl": os.getenv("eaudouce_BaiduActivePush_callUrl", "http://data.zz.baidu.com/urls?site=www.saintic.com&token=QbriJ4Iv7TGi8yOF")
     },
     #百度主动推送(实时)插件
 
-    "BaiduIncludedCheck": os.getenv("eaudouce_BaiduIncludedCheck", False),
+    "BaiduIncludedCheck": False,
     #百度收录检测插件
 
     "Weather": os.getenv("eaudouce_Weather", True),
@@ -95,6 +95,6 @@ PLUGINS={
     "Reward": os.getenv("eaudouce_Reward", True),
     #打赏插件
 
-    "AccessCount": os.getenv("eaudouce_AccessCount", True),
+    "AccessCount": False,
     #访问统计插件
 }

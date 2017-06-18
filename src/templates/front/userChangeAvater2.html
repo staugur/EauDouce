@@ -4,6 +4,11 @@
     <link rel="stylesheet" href="/static/css/clipper.css" type="text/css" />
 {% endblock %}
 
+{% block Jquery %}
+    <script type="text/javascript" src="/static/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/cropbox.js"></script>
+{% endblock %}
+
 {% block container %}
         <div class="imageBox">
             <div class="thumbBox">
@@ -30,8 +35,6 @@
 {% endblock %}
 
 {% block script %}
-    <!--<script type="text/javascript" src="/static/js/jquery-1.11.1.min.js"></script>-->
-    <script type="text/javascript" src="/static/js/cropbox.js"></script>
     <script type="text/javascript">
         $(window).load(function () {
             var options =
@@ -121,5 +124,4 @@
         <div id="circularG_8" class="circularG">
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
