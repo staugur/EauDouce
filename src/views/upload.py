@@ -134,7 +134,7 @@ def UploadClipperAvatar():
         # return user home and write avatar url into mysql db.
         res = g.api.user_update_avatar(g.username, imgUrl)
     else:
-        res = {"success": False, "msg": u"上传失败: 未成功获取文件或格式不允许"}
+        res = {"success": False, "msg": u"不支持的action"}
 
     logger.info(res)
     return jsonify(res)
