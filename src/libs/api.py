@@ -783,7 +783,7 @@ class SysApiManager(ServiceBase):
 
         res = {"code": 0, "msg": None, "data": None}
 
-        sql = "SELECT msg FROM sys_notice"
+        sql = "SELECT id,msg FROM sys_notice"
         api_logger.info("query notice data with sql: " + sql)
         try:
             data = self.mysql_read.query(sql)
