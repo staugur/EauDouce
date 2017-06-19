@@ -100,7 +100,7 @@ class PluginManager(object):
         #: 动态加载模块(plugins.package): 可以查询自定义的信息, 并通过getPluginClass获取插件的类定义
         plugin = __import__("{0}.{1}".format("plugins", package), fromlist=["plugins",])
         #: 检测插件信息
-        if plugin.__name__ and plugin.__version__ and plugin.__description__ and plugin.__author__:
+        if plugin.__name__ and plugin.__version__ and plugin.__description__ and plugin.__author__ and plugin.__state__ == "enabled":
             #: 获取插件信息
             pluginInfo = self.__getPluginInfo(package, plugin)
             #: 获取插件主类并实例化
@@ -143,10 +143,10 @@ class PluginManager(object):
             if hasattr(i, "run") or hasattr(i, "register_tep") or hasattr(i, "register_cep") or hasattr(i, "register_bep"):
                 self.plugins.append(pluginInfo)
             else:
-                plugin_logger.error("The current class {0} does not have the `run` or `register_tep` or `register_cep` method".format(i))
+                plugin_logger.error("The current class {0} does not have the `run` or `register_tep` or `register_cep` or `register_bep` method".format(i))
         else:
             del plugin
-            plugin_logger.warning("This plugin `{0}` is not enabled without following the standard plugin format".format(package))
+            plugin_logger.warning("This plugin `{0}` not conform to the standard plugin format, or has been disabled".format(package))
 
     @property
     def get_all_plugins(self):

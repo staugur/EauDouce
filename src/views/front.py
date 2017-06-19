@@ -112,3 +112,7 @@ def feed():
                  updated=datetime.datetime.strptime(updated, "%Y-%m-%d"),
                  published=datetime.datetime.strptime(article['create_time'][:10], "%Y-%m-%d"))
     return feed.get_response()
+
+@front_blueprint.route("/thirds/StaticUpload/")
+def thirdPluginStaticUpload():
+    return render_template("admin/thirdPluginStaticUpload.html")
