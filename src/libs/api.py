@@ -791,7 +791,7 @@ class SysApiManager(ServiceBase):
             api_logger.error(e)
             res.update(msg="query notice data error", code=400001)
         else:
-            res.update(data=[ _.get("msg") for _ in data if _.get("msg") ])
+            res.update(data=data)
 
         api_logger.info(res)
         return res

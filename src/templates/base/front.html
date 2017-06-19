@@ -152,8 +152,8 @@
     <!-- 公告 -->
     {% block notice %}
     <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
-        {% for msg in g.api.get_sys_notice().data %}
-        <i class="icon-bullhorn"></i>&nbsp;{{ msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {% for notice in g.api.get_sys_notice().data %}
+        <i class="icon-bullhorn"></i>&nbsp;{{ notice.msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         {% endfor %}
     </marquee>
     {% endblock %}
