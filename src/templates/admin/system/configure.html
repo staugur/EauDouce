@@ -2,11 +2,8 @@
 
 {% block title %}系统配置{% endblock %}
 
-{% block head %}
-    <!--<link href="/static/admin/css/plugins/iCheck/custom.css" rel="stylesheet">-->
-{% endblock %}
-
 {% block content %}
+        {% set config = g.api.get_sys_config().data %}
         <div class="row">
             <div class="col-sm-6">
                 <div class="ibox float-e-margins">
@@ -30,39 +27,41 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <form role="form">
+                                <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>about_awi</label><input type="text" placeholder="一句话介绍本站" class="form-control" value="{{ config.about_awi }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>about_ww</label><input type="text" placeholder="站长的话" class="form-control" value="{{ config.about_ww }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>about_address</label><input type="text" placeholder="地址" class="form-control" value="{{ config.about_address }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>about_phone</label><input type="text" placeholder="手机号" class="form-control" value="{{ config.about_phone }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>about_email</label><input type="email" placeholder="邮件" class="form-control" value="{{ config.about_email }}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>about_beian</label><input type="text" placeholder="备案号" class="form-control" value="{{ config.about_beian }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>seo_keywords</label><input type="text" placeholder="SEO关键字" class="form-control" value="{{ config.seo_keywords }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>seo_description</label><input type="email" placeholder="SEO描述" class="form-control" value="{{ config.seo_description }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>site_title</label><input type="text" placeholder="站点标题后缀" class="form-control" value="{{ config.site_title }}">
                                     </div>
                                     <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>用户名</label><input type="email" placeholder="请输入您注册的E-mail" class="form-control">
+                                        <label>site_feedname</label><input type="text" placeholder="站点订阅源名称" class="form-control" value="{{ config.site_feedname }}">
                                     </div>
                                     <div>
-                                        <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>登 录</strong></button>
-                                        <label><input type="checkbox" class="i-checks">自动登录</label>
+                                        <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>更 新</strong></button>
                                     </div>
                                 </form>
                             </div>
@@ -71,19 +70,4 @@
                 </div>
             </div>
         </div>
-{% endblock %}
-
-{% block script %}
-    <!-- iCheck -->
-    <!--
-    <script src="/static/admin/js/plugins/iCheck/icheck.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.i-checks').iCheck({
-                checkboxClass: 'icheckbox_square-green',
-                radioClass: 'iradio_square-green',
-            });
-        });
-    </script>
-    -->
 {% endblock %}
