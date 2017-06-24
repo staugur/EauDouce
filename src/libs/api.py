@@ -796,6 +796,38 @@ class SysApiManager(ServiceBase):
         api_logger.info(res)
         return res
 
+    def post_sys_notice(self, noticeMsg):
+        "添加系统公告"
+
+        res = {"code": 0, "msg": None, "success": False}
+        sql = "INSERT INTO sys_notice (msg) VALUES (%s)"
+        if not noticeMsg:
+            res.update(msg="msg is empty")
+        else:
+            try:
+                data = self.mysql_write.insert(sql, noticeMsg)
+            except Exception,e:
+                api_logger.error(e, exc_info=True)
+                res.update(msg="post a notice data error", code=400002)
+            else:
+                res.update(data=data, success=True)
+
+        api_logger.info(res)
+        return res
+
+    def delete_sys_notice(self, noticeId):
+        """删除系统公告"""
+        res = {"code": 0, "msg": None, "success": False}
+        sql = "DELETE FROM sys_notice WHERE id=%d" %int(noticeId)
+        try:
+            self.mysql_write.execute(sql)
+        except Exception,e:
+            api_logger.error(e, exc_info=True)
+        else:
+            res.update(success=True)
+        api_logger.info(res)
+        return res
+
     def get_sys_config(self):
         "查询系统配置"
 
@@ -829,22 +861,6 @@ class SysApiManager(ServiceBase):
 
         api_logger.info(res)
         return res
-
-    def ClickMysqlWrite(self, data):
-        if isinstance(data, dict):
-            if data.get("ip") and data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
-                try:
-                    Ipd = requests.get("http://ip.taobao.com/service/getIpInfo.php?ip={}".format(data.get("ip")), timeout=5, headers={"Use-Agent": data.get("agent")}).json().get("data", {})
-                except Exception,e:
-                    api_logger.debug(e)
-                    Ipd = {}
-                sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, isp=%s"
-                try:
-                    self.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), "{} {} {} {} {}".format(Ipd.get("country"), Ipd.get("area"), Ipd.get("region"), Ipd.get("city"), Ipd.get("isp")))
-                except Exception, e:
-                    api_logger.warn(e, exc_info=True)
-        else:
-            api_logger.debug("Do not record this log")
 
     def post_apply_author(self, username):
         """

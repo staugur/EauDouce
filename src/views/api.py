@@ -199,24 +199,19 @@ class User(Resource):
 
 class Sys(Resource):
 
-    def get(self):
-        "查询系统数据"
+    def post(self):
 
-        res   = {"code": 200, "msg": None, "data": None}
         query = request.args.get("q", request.args.get("query", None))
 
         if query == "notice":
-            sql = "SELECT msg FROM sys_notice"
-            try:
-                data = mysql.query(sql)
-                logger.info("query notice data with sql: " + sql)
-            except Exception,e:
-                logger.error(e)
-            else:
-                res.update(data=data)
+            return g.api.post_sys_notice(request.form.get("noticeMsg"))
 
-        logger.info(res)
-        return res
+    def delete(self):
+
+        query = request.args.get("q", request.args.get("query", None))
+
+        if query == "notice":
+            return g.api.delete_sys_notice(request.form.get("noticeId"))
 
 class Author(Resource):
 

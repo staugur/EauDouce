@@ -13,6 +13,42 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
+                        <h5>添加公告 <small></small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form role="form" id="PostNoticeForm">
+                                    <div class="form-group">
+                                        <label>公告内容</label>
+                                        <input type="text" class="form-control" name="noticeMsg">
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit" onclick="PostNotice()"><strong>提交</strong>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
                         <h5>公告管理</h5><small></small>
                     </div>
                     <div class="ibox-content">
@@ -30,7 +66,7 @@
                                     <td>{{ notice.id }}</td>
                                     <td>{{ notice.msg }}</td>
                                     <td class="center">
-                                        <button class="btn btn-sm btn-danger pull-right m-t-n-xs" type="submit"><strong>删除</strong></button>
+                                        <button class="btn btn-sm btn-danger pull-right m-t-n-xs" type="submit" onclick="DeleteNotice({{ notice.id }})"><strong>删除</strong></button>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -55,5 +91,48 @@
             /* Init DataTables */
             var oTable = $('#editable').dataTable();
         });
+
+// 添加公告
+function PostNotice() {
+    $.ajax({
+        url: "{{ url_for('api.sys', q='notice') }}",
+        method: 'POST',
+        datatype: 'json',
+        data: $('#PostNoticeForm').serialize(),
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                layer.msg("添加公告成功！");
+                document.location.reload()
+            } else {
+                layer.msg("添加公告失败！");
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+// 删除公告
+function DeleteNotice(noticeId) {
+    $.ajax({
+        url: "{{ url_for('api.sys', q='notice') }}",
+        method: 'DELETE',
+        datatype: 'json',
+        data: {"noticeId": noticeId},
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                layer.msg("删除公告成功！");
+                document.location.reload()
+            } else {
+                layer.msg("删除公告失败！");
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
     </script>
 {% endblock %}
