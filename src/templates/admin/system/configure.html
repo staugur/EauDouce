@@ -5,7 +5,7 @@
 {% block content %}
         {% set config = g.api.get_sys_config().data %}
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>系统配置 <small></small></h5>
@@ -24,10 +24,7 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-sm-12">
                                 <form role="form">
-                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>about_awi</label><input type="text" placeholder="一句话介绍本站" class="form-control" value="{{ config.about_awi }}">
                                     </div>
@@ -43,8 +40,6 @@
                                     <div class="form-group">
                                         <label>about_email</label><input type="email" placeholder="邮件" class="form-control" value="{{ config.about_email }}">
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>about_beian</label><input type="text" placeholder="备案号" class="form-control" value="{{ config.about_beian }}">
                                     </div>
@@ -64,8 +59,6 @@
                                         <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>更 新</strong></button>
                                     </div>
                                 </form>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
