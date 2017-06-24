@@ -13,6 +13,46 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
+                        <h5>添加友情链接 <small></small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form role="form" id="PostFriendlinkForm">
+                                    <div class="form-group">
+                                        <label>友链标题</label>
+                                        <input type="text" class="form-control" name="title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>友链地址</label>
+                                        <input type="url" class="form-control" name="link">
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit" onclick="PostFriendlink()"><strong>提交</strong>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
                         <h5>友情链接管理</h5><small></small>
                     </div>
                     <div class="ibox-content">
@@ -32,7 +72,7 @@
                                     <td>{{ link.title }}</td>
                                     <td>{{ link.link }}</td>
                                     <td class="center">
-                                        <button class="btn btn-sm btn-danger pull-right m-t-n-xs" type="submit"><strong>删除</strong></button>
+                                        <button class="btn btn-sm btn-danger pull-right m-t-n-xs" type="submit" onclick="DeleteFriendlink({{ link.id }})"><strong>删除</strong></button>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -57,5 +97,69 @@
             /* Init DataTables */
             var oTable = $('#editable').dataTable();
         });
+
+// 添加友链
+function PostFriendlink() {
+    $.ajax({
+        url: "{{ url_for('api.sys', q='friendlink') }}",
+        method: 'POST',
+        datatype: 'json',
+        data: $('#PostFriendlinkForm').serialize(),
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                layer.msg("添加友链成功！");
+                document.location.reload()
+            } else {
+                layer.msg("添加友链失败！");
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+// 删除友链
+function DeleteFriendlink(friendlinkId) {
+    $.ajax({
+        url: "{{ url_for('api.sys', q='friendlink') }}",
+        method: 'DELETE',
+        datatype: 'json',
+        data: {"friendlinkId": friendlinkId},
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                layer.msg("删除友链成功！");
+                document.location.reload()
+            } else {
+                layer.msg("删除友链失败！");
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+// 删除友链
+function PutFriendlink(friendlinkId) {
+    $.ajax({
+        url: "{{ url_for('api.sys', q='friendlink') }}",
+        method: 'PUT',
+        datatype: 'json',
+        data: {"friendlinkId": friendlinkId},
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                layer.msg("删除友链成功！");
+                document.location.reload()
+            } else {
+                layer.msg("删除友链失败！");
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
     </script>
 {% endblock %}

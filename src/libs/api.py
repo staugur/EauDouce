@@ -862,6 +862,54 @@ class SysApiManager(ServiceBase):
         api_logger.info(res)
         return res
 
+    def put_sys_friendlink(self, link, title, friendlinkId):
+        "更新系统中的友链"
+
+        res = {"code": 0, "msg": None, "success": False}
+        sql = "UPDATE sys_friendlink SET link=%s, title=%s WHERE id=%d"
+        try:
+            data = self.mysql_write.update(sql, link, title, int(friendlinkId))
+        except Exception,e:
+            api_logger.error(e)
+            res.update(msg="update friend link data error", code=400004)
+        else:
+            res.update(success=True)
+
+        api_logger.info(res)
+        return res
+
+    def post_sys_friendlink(self, link, title):
+        "添加友情链接"
+
+        res = {"code": 0, "msg": None, "success": False}
+        sql = "INSERT INTO sys_friendlink (link,title) VALUES (%s,%s)"
+        if not link or not title:
+            res.update(msg="param error")
+        else:
+            try:
+                data = self.mysql_write.insert(sql, link, title)
+            except Exception,e:
+                api_logger.error(e, exc_info=True)
+                res.update(msg="post a friendlink data error", code=400005)
+            else:
+                res.update(success=True)
+
+        api_logger.info(res)
+        return res
+
+    def delete_sys_friendlink(self, friendlinkId):
+        """删除友情链接"""
+        res = {"code": 0, "msg": None, "success": False}
+        sql = "DELETE FROM sys_friendlink WHERE id=%d" %int(friendlinkId)
+        try:
+            self.mysql_write.execute(sql)
+        except Exception,e:
+            api_logger.error(e, exc_info=True)
+        else:
+            res.update(success=True)
+        api_logger.info(res)
+        return res
+
     def post_apply_author(self, username):
         """
         申请成为作者

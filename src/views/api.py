@@ -205,6 +205,8 @@ class Sys(Resource):
 
         if query == "notice":
             return g.api.post_sys_notice(request.form.get("noticeMsg"))
+        if query == "friendlink":
+            return g.api.post_sys_friendlink(request.form.get("link"), request.form.get("title"))
 
     def delete(self):
 
@@ -212,6 +214,15 @@ class Sys(Resource):
 
         if query == "notice":
             return g.api.delete_sys_notice(request.form.get("noticeId"))
+        if query == "friendlink":
+            return g.api.delete_sys_friendlink(request.form.get("friendlinkId"))
+
+    def put(self):
+
+        query = request.args.get("q", request.args.get("query", None))
+
+        if query == "friendlink":
+            return g.api.put_sys_friendlink(request.form.get("link"), request.form.get("title"), request.form.get("friendlinkId"))
 
 class Author(Resource):
 
