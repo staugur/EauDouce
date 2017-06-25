@@ -24,7 +24,7 @@ __version__ = "0.0.1"
 __license__ = "MIT"
 
 import rq_dashboard
-import json, datetime, SpliceURL, time, os, jinja2
+import json, datetime, SpliceURL, time, os, jinja2, sys
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
 from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5, ChoiceColor
@@ -35,7 +35,8 @@ from views.api import api_blueprint
 from views.front import front_blueprint
 from views.admin import admin_blueprint
 from views.upload import upload_blueprint
-
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 #初始化定义application
 app = Flask(__name__)
