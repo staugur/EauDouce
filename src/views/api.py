@@ -221,9 +221,6 @@ class Sys(Resource):
 
         query = request.args.get("q", request.args.get("query", None))
 
-        if query == "friendlink":
-            return g.api.put_sys_friendlink(request.form.get("link"), request.form.get("title"), request.form.get("friendlinkId"))
-
 class Author(Resource):
 
     def get(self):

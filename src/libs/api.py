@@ -862,22 +862,6 @@ class SysApiManager(ServiceBase):
         api_logger.info(res)
         return res
 
-    def put_sys_friendlink(self, link, title, friendlinkId):
-        "更新系统中的友链"
-
-        res = {"code": 0, "msg": None, "success": False}
-        sql = "UPDATE sys_friendlink SET link=%s, title=%s WHERE id=%d"
-        try:
-            data = self.mysql_write.update(sql, link, title, int(friendlinkId))
-        except Exception,e:
-            api_logger.error(e)
-            res.update(msg="update friend link data error", code=400004)
-        else:
-            res.update(success=True)
-
-        api_logger.info(res)
-        return res
-
     def post_sys_friendlink(self, link, title):
         "添加友情链接"
 

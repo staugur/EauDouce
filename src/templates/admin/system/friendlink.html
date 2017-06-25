@@ -140,26 +140,5 @@ function DeleteFriendlink(friendlinkId) {
         }
     });
 }
-// 删除友链
-function PutFriendlink(friendlinkId) {
-    $.ajax({
-        url: "{{ url_for('api.sys', q='friendlink') }}",
-        method: 'PUT',
-        datatype: 'json',
-        data: {"friendlinkId": friendlinkId},
-        success: function(res) {
-            console.log(res);
-            if (res.success==true) {
-                layer.msg("删除友链成功！");
-                document.location.reload()
-            } else {
-                layer.msg("删除友链失败！");
-            }
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
-}
     </script>
 {% endblock %}
