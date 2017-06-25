@@ -109,10 +109,10 @@ class PluginManager(object):
                 i = p()
             except Exception,e:
                 plugin_logger.exception(e, exc_info=True)
-                break
+                return
             if plugin.__state__ != "enabled":
                 self.plugins.append(pluginInfo)
-                break
+                return
             plugin_logger.info("runPlugin: package is {0}.{1}, class instance is {2}".format("plugins", package, i))
             #: 更新插件信息
             pluginInfo.update(plugin_instance=i)
