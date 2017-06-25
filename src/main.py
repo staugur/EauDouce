@@ -76,7 +76,7 @@ for bep in plugin.get_all_bep:
 @app.context_processor  
 def GlobalTemplateVariables():  
     data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor}
-    data.update(Plugins=plugin.get_all_plugins())
+    data.update(Plugins=plugin.get_all_plugins)
     return data
 
 @app.before_request
