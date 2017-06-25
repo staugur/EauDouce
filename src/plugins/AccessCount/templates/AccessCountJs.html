@@ -2,7 +2,7 @@
 //$(document).ready(function () {
     var AccessCount = document.getElementById("AccessCount");
     $.ajax({
-        url: "{{ url_for('AccessCount.uv') }}",
+        url: "{{ url_for('AccessCount.uv', url=request.url) }}",
         method: 'GET',
         datatype: 'json',
         success: function(res) {

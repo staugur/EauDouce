@@ -33,7 +33,7 @@ pb    = PluginBase()
 uvKey = "EauDouce:AccessCount:uv"
 @AccessCountBlueprint.route("/uv/")
 def uv():
-    url = request.url
+    url = request.args.get("url")
     res = {"code": 0, "msg": None, "data": None, "url": url}
     res.update(data=pb.redis.hgetall(uvKey).get(url) or 1)
     pb.logger.info(res)
