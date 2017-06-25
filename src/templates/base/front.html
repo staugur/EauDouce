@@ -112,6 +112,7 @@
 
             <!--首页轮番图-->
             {% block AlternateDiagram %}
+            <!--
             <div class="carousel slide" id="carousel-394119">
                 <ol class="carousel-indicators">
                     <li data-slide-to="0" data-target="#carousel-394119">
@@ -145,18 +146,10 @@
                     </div>
                 </div> <a class="left carousel-control" href="#carousel-394119" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-394119" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
+            -->
             {% endblock %}
         </div>
     </div>
-
-    <!-- 公告 -->
-    {% block notice %}
-    <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
-        {% for notice in g.api.get_sys_notice().data %}
-        <i class="icon-bullhorn"></i>&nbsp;{{ notice.msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        {% endfor %}
-    </marquee>
-    {% endblock %}
 
     <div class="row clearfix">
         <div class="col-md-8 column">
@@ -164,6 +157,15 @@
             <p><!-- 路径导航 -->
             {% block PathNavigation %}{% endblock %}
             </p>
+
+            <!-- 公告 -->
+    {% block notice %}
+    <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
+        {% for notice in g.api.get_sys_notice().data %}
+        <i class="icon-bullhorn"></i>&nbsp;{{ notice.msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {% endfor %}
+    </marquee>
+    {% endblock %}
 
             <!-- 搜索 -->
             {% block search %}
