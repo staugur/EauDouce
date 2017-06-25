@@ -24,12 +24,6 @@
                                     <th>作者</th>
                                     <th>链接</th>
                                     <th>许可证</th>
-                                    <th>许可证文件</th>
-                                    <th>自述文件</th>
-                                    <th>模板路径</th>
-                                    <th>模板扩展点</th>
-                                    <th>上下文扩展点</th>
-                                    <th>蓝图扩展点</th>
                                     <th>状态</th>
                                     <th>动作</th>
                                 </tr>
@@ -43,17 +37,10 @@
                                     <td>{{ plugin.plugin_author }}</td>
                                     <td>{{ plugin.plugin_url }}</td>
                                     <td>{{ plugin.plugin_license }}</td>
-                                    <td>{{ plugin.plugin_license_file }}</td>
-                                    <td>{{ plugin.plugin_readme_file }}</td>
-                                    <td>{{ plugin.plugin_tpl_path }}</td>
-                                    <td>{{ plugin.plugin_tep }}</td>
-                                    <td>{{ plugin.plugin_cep }}</td>
-                                    <td>{{ plugin.plugin_bep }}</td>
                                     <td>{{ plugin.plugin_state }}</td>
                                     <td class="center">
                                         {% if plugin.plugin_state == "enabled" %}
                                         <button class="btn btn-sm btn-danger pull-right m-t-n-xs" type="submit"><strong>禁用</strong></button>
-                                        }
                                         {% else %}
                                         <button class="btn btn-sm btn-danger pull-right m-t-n-xs" type="submit"><strong>启用</strong></button>
                                         {% endif %}
