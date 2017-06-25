@@ -100,12 +100,19 @@ class PluginManager(object):
         #: 动态加载模块(plugins.package): 可以查询自定义的信息, 并通过getPluginClass获取插件的类定义
         plugin = __import__("{0}.{1}".format("plugins", package), fromlist=["plugins",])
         #: 检测插件信息
-        if plugin.__name__ and plugin.__version__ and plugin.__description__ and plugin.__author__ and plugin.__state__ == "enabled":
+        if plugin.__name__ and plugin.__version__ and plugin.__description__ and plugin.__author__:
             #: 获取插件信息
             pluginInfo = self.__getPluginInfo(package, plugin)
-            #: 获取插件主类并实例化
-            p = plugin.getPluginClass()
-            i = p()
+            try:
+                #: 获取插件主类并实例化
+                p = plugin.getPluginClass()
+                i = p()
+            except Exception,e:
+                plugin_logger.exception(e, exc_info=True)
+                break
+            if plugin.__state__ != "enabled":
+                self.plugins.append(pluginInfo)
+                break
             plugin_logger.info("runPlugin: package is {0}.{1}, class instance is {2}".format("plugins", package, i))
             #: 更新插件信息
             pluginInfo.update(plugin_instance=i)
@@ -129,7 +136,7 @@ class PluginManager(object):
                     pluginInfo.update(plugin_cep=cep)
                     plugin_logger.info("Register CEP Success")
                 else:
-                     plugin_logger.error("Register CEP Failed, not a dict")
+                    plugin_logger.error("Register CEP Failed, not a dict")
             #: 注册蓝图扩展点
             if hasattr(i, "register_bep"):
                 bep = i.register_bep()
@@ -146,7 +153,7 @@ class PluginManager(object):
                 plugin_logger.error("The current class {0} does not have the `run` or `register_tep` or `register_cep` or `register_bep` method".format(i))
         else:
             del plugin
-            plugin_logger.warning("This plugin `{0}` not conform to the standard plugin format, or has been disabled".format(package))
+            plugin_logger.warning("This plugin `{0}` not conform to the standard plugin format".format(package))
 
     @property
     def get_all_plugins(self):
