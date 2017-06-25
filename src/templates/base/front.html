@@ -262,8 +262,10 @@
             <h4><scan class="icon-cogs icon-1x"> 插件列表</scan></h4>
             <dl class="dl-horizontal">
             {% for plugin in Plugins %}
-                <dt><attr title="关于这个插件:&#10;作者: {{ plugin[1].decode('utf8') }}&#10;版本: {{ plugin[3] }}"><code>{{ plugin[0] }}</code></attr></dt>
-                <dd><var>{{ plugin[2].decode('utf8') }}</var></dd>
+                {% if plugin.plugin_state == "enabled" %}
+                <dt><attr title="关于这个插件:&#10;作者: {{ plugin.plugin_author.decode('utf8') }}&#10;版本: {{ plugin.plugin_version }}"><code>{{ plugin.plugin_name }}</code></attr></dt>
+                <dd><var>{{ plugin.plugin_description.decode('utf8') }}</var></dd>
+                {% endif %}
             {% endfor %}
             </dl>
 

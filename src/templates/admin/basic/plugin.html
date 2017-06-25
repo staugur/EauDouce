@@ -1,5 +1,128 @@
 {% extends "base/admin.html" %}
 
-{% block title %}插件配置管理{% endblock %}
+{% block title %}插件管理{% endblock %}
 
-{% block content %}插件配置管理{% endblock %}
+{% block head %}
+    <!-- Data Tables -->
+    <link href="/static/admin/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>插件管理</h5><small></small>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>描述</th>
+                                    <th>版本</th>
+                                    <th>作者</th>
+                                    <th>链接</th>
+                                    <th>许可证</th>
+                                    <th>许可证文件</th>
+                                    <th>自述文件</th>
+                                    <th>模板路径</th>
+                                    <th>模板扩展点</th>
+                                    <th>上下文扩展点</th>
+                                    <th>蓝图扩展点</th>
+                                    <th>状态</th>
+                                    <th>动作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plugin in Plugins %}
+                                <tr>
+                                    <td>{{ plugin.plugin_name }}</td>
+                                    <td>{{ plugin.plugin_description }}</td>
+                                    <td>{{ plugin.plugin_version }}</td>
+                                    <td>{{ plugin.plugin_author }}</td>
+                                    <td>{{ plugin.plugin_url }}</td>
+                                    <td>{{ plugin.plugin_license }}</td>
+                                    <td>{{ plugin.plugin_license_file }}</td>
+                                    <td>{{ plugin.plugin_readme_file }}</td>
+                                    <td>{{ plugin.plugin_tpl_path }}</td>
+                                    <td>{{ plugin.plugin_tep }}</td>
+                                    <td>{{ plugin.plugin_cep }}</td>
+                                    <td>{{ plugin.plugin_bep }}</td>
+                                    <td>{{ plugin.plugin_state }}</td>
+                                    <td class="center">
+                                        {% if plugin.plugin_state == "enabled" %}
+                                        <button class="btn btn-sm btn-danger pull-right m-t-n-xs" type="submit"><strong>禁用</strong></button>
+                                        }
+                                        {% else %}
+                                        <button class="btn btn-sm btn-danger pull-right m-t-n-xs" type="submit"><strong>启用</strong></button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+
+{% block script %}
+    <!-- Data Tables -->
+    <script src="/static/admin/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="/static/admin/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function () {
+            $('.dataTables-example').dataTable();
+
+            /* Init DataTables */
+            var oTable = $('#editable').dataTable();
+        });
+
+// 启用
+function PostNotice() {
+    $.ajax({
+        url: "{{ url_for('api.sys', q='notice') }}",
+        method: 'POST',
+        datatype: 'json',
+        data: $('#PostNoticeForm').serialize(),
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                layer.msg("添加公告成功！");
+                document.location.reload()
+            } else {
+                layer.msg("添加公告失败！");
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+// 删除公告
+function DeleteNotice(noticeId) {
+    $.ajax({
+        url: "{{ url_for('api.sys', q='notice') }}",
+        method: 'DELETE',
+        datatype: 'json',
+        data: {"noticeId": noticeId},
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                layer.msg("删除公告成功！");
+                document.location.reload()
+            } else {
+                layer.msg("删除公告失败！");
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+    </script>
+{% endblock %}
