@@ -151,14 +151,7 @@
         </div>
     </div>
 
-    <div class="row clearfix">
-        <div class="col-md-8 column">
-
-            <p><!-- 路径导航 -->
-            {% block PathNavigation %}{% endblock %}
-            </p>
-
-            <!-- 公告 -->
+    <!-- 公告 -->
     {% block notice %}
     <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
         {% for notice in g.api.get_sys_notice().data %}
@@ -166,6 +159,13 @@
         {% endfor %}
     </marquee>
     {% endblock %}
+
+    <div class="row clearfix">
+        <div class="col-md-8 column">
+
+            <p><!-- 路径导航 -->
+            {% block PathNavigation %}{% endblock %}
+            </p>
 
             <!-- 搜索 -->
             {% block search %}
