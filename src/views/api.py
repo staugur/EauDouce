@@ -247,6 +247,18 @@ class Cache(Resource):
     def post(self):
         return g.cache.post_cache_blog(request.args.get("blogId"))
 
+class PLUGIN(Resource):
+
+    def post(self):
+
+        plugin_name = request.form.get("plugin_name")
+        if request.args.get("action") == "enable_plugin":
+            return g.pluginApi.enable_plugin(plugin_name)
+        if request.args.get("action") == "disable_plugin":
+            return g.pluginApi.disable_plugin(plugin_name)
+        if request.args.get("action") == "reload_plugin":
+            return g.pluginApi.reload_plugins()
+
 api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)
 api.add_resource(Blog, '/blog', '/blog/', endpoint='blog')
@@ -256,3 +268,4 @@ api.add_resource(Sys, '/sys', '/sys/', endpoint='sys')
 api.add_resource(Comment, '/comment', '/comment/', endpoint='comment')
 api.add_resource(Cache, "/cache/", "/cache", endpoint="cache")
 api.add_resource(Author, "/author/", "/author", endpoint="author")
+api.add_resource(PLUGIN, '/plugin/', '/plugin', endpoint='plugin')

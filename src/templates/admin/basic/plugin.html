@@ -12,10 +12,10 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>插件管理</h5><small></small>
+                        <h5>插件管理</h5><small><a href="javascript:ReloadPlugins()">&nbsp;<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>重新扫描并加载插件</a></small>
                     </div>
                     <div class="ibox-content">
-                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                        <table class="table table-striped table-bordered table-hover dataTables-plugins">
                             <thead>
                                 <tr>
                                     <th>名称</th>
@@ -40,9 +40,9 @@
                                     <td>{{ plugin.plugin_state }}</td>
                                     <td class="center">
                                         {% if plugin.plugin_state == "enabled" %}
-                                        <button class="btn btn-sm btn-danger" type="submit"><strong>禁用</strong></button>
+                                            <a class="btn btn-sm btn-danger btn-rounded btn-outline" href="javascript:DisablePlugin('{{ plugin.plugin_name }}')"><strong>禁用</strong></a><br>
                                         {% else %}
-                                        <button class="btn btn-sm btn-success" type="submit"><strong>启用</strong></button>
+                                            <a class="btn btn-sm btn-success btn-rounded btn-outline" href="javascript:EnablePlugin('{{ plugin.plugin_name }}')"><strong>启用</strong></a><br>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -63,53 +63,72 @@
     <!-- Page-Level Scripts -->
     <script>
         $(document).ready(function () {
-            $('.dataTables-example').dataTable();
+            $('.dataTables-plugins').dataTable();
 
             /* Init DataTables */
             var oTable = $('#editable').dataTable();
         });
-
-// 启用
-function PostNotice() {
-    $.ajax({
-        url: "{{ url_for('api.sys', q='notice') }}",
-        method: 'POST',
-        datatype: 'json',
-        data: $('#PostNoticeForm').serialize(),
-        success: function(res) {
-            console.log(res);
-            if (res.success==true) {
-                layer.msg("添加公告成功！");
-                document.location.reload()
-            } else {
-                layer.msg("添加公告失败！");
-            }
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
-}
-// 删除公告
-function DeleteNotice(noticeId) {
-    $.ajax({
-        url: "{{ url_for('api.sys', q='notice') }}",
-        method: 'DELETE',
-        datatype: 'json',
-        data: {"noticeId": noticeId},
-        success: function(res) {
-            console.log(res);
-            if (res.success==true) {
-                layer.msg("删除公告成功！");
-                document.location.reload()
-            } else {
-                layer.msg("删除公告失败！");
-            }
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
-}
+        // 重载插件
+        function ReloadPlugins() {
+            $.ajax({
+                url: '{{ url_for("api.plugin", action="reload_plugin") }}',
+                method: 'POST',
+                datatype: 'json',
+                success: function(res) {
+                    console.log(res);
+                    if (res.success==true) {
+                        layer.msg("重载成功", {icon: 1, time: 3*1000});
+                        parent.location.reload();
+                    } else {
+                        layer.alert("重载失败", {icon: 2, time: 15*1000});
+                    }
+                },
+                error:function(e){
+                    layer.alert("服务器错误，请刷新重试或报告错误！", {icon: 2, time: 15*1000});
+                }
+            });
+        };
+        // 启用插件
+        function EnablePlugin(plugin_name) {
+            $.ajax({
+                url: '{{ url_for("api.plugin", action="enable_plugin") }}',
+                method: 'POST',
+                datatype: 'json',
+                data: {"plugin_name": plugin_name},
+                success: function(res) {
+                    console.log(res);
+                    if (res.success==true) {
+                        layer.msg("启用插件成功", {icon: 1, time: 3*1000});
+                        parent.location.reload();
+                    } else {
+                        layer.alert("启用插件失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
+                    }
+                },
+                error:function(e){
+                    layer.alert("服务器错误，请刷新重试或报告错误！", {icon: 2, time: 15*1000});
+                }
+            });
+        };
+        // 禁用插件
+        function DisablePlugin(plugin_name) {
+            $.ajax({
+                url: '{{ url_for("api.plugin", action="disable_plugin") }}',
+                method: 'POST',
+                datatype: 'json',
+                data: {"plugin_name": plugin_name},
+                success: function(res) {
+                    console.log(res);
+                    if (res.success==true) {
+                        layer.msg("禁用插件成功", {icon: 1, time: 3*1000});
+                        parent.location.reload();
+                    } else {
+                        layer.alert("禁用插件失败，请重试提交或报告错误！\n错误原因是：" + res.msg, {icon: 2, time: 15*1000});
+                    }
+                },
+                error:function(e){
+                    layer.alert("服务器错误，请刷新重试或报告错误！", {icon: 2, time: 15*1000});
+                }
+            });
+        };
     </script>
 {% endblock %}

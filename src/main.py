@@ -89,6 +89,7 @@ def before_request():
     g.signin    = isLogged_in('.'.join([ g.username, g.expires, g.sessionId ]))
     g.api       = api
     g.plugins   = PLUGINS
+    g.pluginApi = plugin
     g.hitCache  = False
     g.token     = {}
     #上下文扩展点之请求后(返回前)
