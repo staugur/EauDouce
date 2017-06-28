@@ -10,44 +10,69 @@
                     <div class="ibox-title">
                         <h5>系统配置<small></small></h5>
                         <div class="ibox-tools">
-                            <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>更新配置</strong></button>
+                            <button class="btn btn-sm btn-primary pull-right m-t-n-xs" onclick="UpdateConfigure()"><strong>更新配置</strong></button>
                         </div>
                     </div>
                     <div class="ibox-content">
-                                <form role="form">
+                                <form role="form" id="ConfigureForm">
                                     <div class="form-group">
-                                        <label>一句话介绍本站</label><input type="text" placeholder="一句话介绍本站" class="form-control" value="{{ config.about_awi }}">
+                                        <label>一句话介绍本站</label><input type="text" placeholder="一句话介绍本站" class="form-control" value="{{ config.about_awi }}" name="about_awi">
                                     </div>
                                     <div class="form-group">
-                                        <label>站长的话</label><input type="text" placeholder="站长的话" class="form-control" value="{{ config.about_ww }}">
+                                        <label>站长的话</label><input type="text" placeholder="站长的话" class="form-control" value="{{ config.about_ww }}" name="about_ww">
                                     </div>
                                     <div class="form-group">
-                                        <label>地址</label><input type="text" placeholder="地址" class="form-control" value="{{ config.about_address }}">
+                                        <label>地址</label><input type="text" placeholder="地址" class="form-control" value="{{ config.about_address }}" name="about_address">
                                     </div>
                                     <div class="form-group">
-                                        <label>手机号</label><input type="text" placeholder="手机号" class="form-control" value="{{ config.about_phone }}">
+                                        <label>手机号</label><input type="text" placeholder="手机号" class="form-control" value="{{ config.about_phone }}" name="about_phone">
                                     </div>
                                     <div class="form-group">
-                                        <label>邮件</label><input type="email" placeholder="邮件" class="form-control" value="{{ config.about_email }}">
+                                        <label>邮件</label><input type="email" placeholder="邮件" class="form-control" value="{{ config.about_email }}" name="about_email">
                                     </div>
                                     <div class="form-group">
-                                        <label>备案号</label><input type="text" placeholder="备案号" class="form-control" value="{{ config.about_beian }}">
+                                        <label>备案号</label><input type="text" placeholder="备案号" class="form-control" value="{{ config.about_beian }}" name="about_beian">
                                     </div>
                                     <div class="form-group">
-                                        <label>SEO关键字</label><input type="text" placeholder="SEO关键字" class="form-control" value="{{ config.seo_keywords }}">
+                                        <label>SEO关键字</label><input type="text" placeholder="SEO关键字" class="form-control" value="{{ config.seo_keywords }}" name="seo_keywords">
                                     </div>
                                     <div class="form-group">
-                                        <label>SEO描述</label><input type="email" placeholder="SEO描述" class="form-control" value="{{ config.seo_description }}">
+                                        <label>SEO描述</label><input type="text" placeholder="SEO描述" class="form-control" value="{{ config.seo_description }}" name="seo_description">
                                     </div>
                                     <div class="form-group">
-                                        <label>站点标题后缀</label><input type="text" placeholder="站点标题后缀" class="form-control" value="{{ config.site_title }}">
+                                        <label>站点标题后缀</label><input type="text" placeholder="站点标题后缀" class="form-control" value="{{ config.site_title }}" name="site_title">
                                     </div>
                                     <div class="form-group">
-                                        <label>站点订阅源名称</label><input type="text" placeholder="站点订阅源名称" class="form-control" value="{{ config.site_feedname }}">
+                                        <label>站点订阅源名称</label><input type="text" placeholder="站点订阅源名称" class="form-control" value="{{ config.site_feedname }}" name="site_feedname">
                                     </div>
                                 </form>
                     </div>
                 </div>
             </div>
         </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+// 更新配置
+function UpdateConfigure() {
+    $.ajax({
+        url: "{{ url_for('api.sys', q='configure') }}",
+        method: 'PUT',
+        datatype: 'json',
+        data: $('#ConfigureForm').serialize(),
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                layer.msg("更新配置成功！");
+                document.location.reload()
+            } else {
+                layer.msg("更新配置失败！");
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+</script>
 {% endblock %}

@@ -12,7 +12,7 @@
 import requests, sys
 from config import REDIS, MYSQL, PLUGINS
 from torndb import IntegrityError, Connection
-from utils.tool import api_logger, get_today, ListEqualSplit, md5
+from utils.tool import api_logger, get_today, ListEqualSplit, md5, DO
 from .base import ServiceBase
 
 
@@ -937,6 +937,23 @@ class SysApiManager(ServiceBase):
             res.update(msg="server error", code=400007)
         else:
             res.update(data=data)
+
+        api_logger.info(res)
+        return res
+
+    def update_sys_configure(self, **kwargs):
+        """更新配置"""
+
+        data= DO(kwargs)
+        res = {"code": 0, "msg": None, "success": False}
+        sql = "UPDATE sys_config SET about_awi=%s, about_ww=%s, about_address=%s, about_phone=%s, about_email=%s, about_beian=%s, seo_keywords=%s, seo_description=%s, site_title=%s, site_feedname=%s"
+        try:
+            data = self.mysql_write.update(sql, data.about_awi, data.about_ww, data.about_address, data.about_phone, data.about_email, data.about_beian, data.seo_keywords, data.seo_description, data.site_title, data.site_feedname)
+        except Exception,e:
+            api_logger.error(e, exc_info=True)
+             res.update(msg="update configure data error")
+        else:
+            res.update(success=True)
 
         api_logger.info(res)
         return res
