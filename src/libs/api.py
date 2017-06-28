@@ -951,7 +951,7 @@ class SysApiManager(ServiceBase):
             data = self.mysql_write.update(sql, data.about_awi, data.about_ww, data.about_address, data.about_phone, data.about_email, data.about_beian, data.seo_keywords, data.seo_description, data.site_title, data.site_feedname)
         except Exception,e:
             api_logger.error(e, exc_info=True)
-             res.update(msg="update configure data error")
+            res.update(msg="update configure data error")
         else:
             res.update(success=True)
 
