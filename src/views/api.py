@@ -33,6 +33,7 @@ class Blog(Resource):
         12.get_recommend_data(bool)，查询推荐文章
         13.get_tags_data(str)，查询某标签下的文章
         14.q(str), 查询标题
+        15.get_all_blog(bool), 查询所有文章
         """
         limit  = request.args.get('limit', None)
         sort   = request.args.get('sort', 'desc')
@@ -52,6 +53,7 @@ class Blog(Resource):
 
         get_user  = request.args.get("get_user")
         get_index = True if request.args.get("get_index") in ("true", "True", True) else False
+        get_all_blog = True if request.args.get("get_all_blog") in ("true", "True", True) else False
 
         if blogId:
            return g.api.blog_get_id(blogId)
@@ -81,6 +83,8 @@ class Blog(Resource):
             page   = int(request.args.get("page", 0))
             length = int(request.args.get("length", 5))
             return g.api.blog_get_single_index(sort, limit, page, length)
+        if get_all_blog:
+            return g.api.blog_get_all()
 
         if q:
             return g.api.blog_search(q)
