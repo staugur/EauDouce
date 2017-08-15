@@ -263,11 +263,11 @@ class BlogApiManager(ServiceBase):
         api_logger.info(res)
         return res
 
-    def blog_get_all(self, sort="desc"):
+    def blog_get_all(self, limit=None, sort="desc"):
         "查询所有文章"
 
         res = {"msg": None, "data": [], "code": 0}
-        sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article ORDER BY id %s" %(sort,)
+        sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article ORDER BY id %s %s" %(sort, "LIMIT %s" %limit if limit else "")
         api_logger.info("query all blog SQL: %s" %sql)
         try:
             data = self.mysql_read.query(sql)
