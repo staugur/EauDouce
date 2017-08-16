@@ -17,8 +17,6 @@
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-    <script src="/static/js/echarts.min.js"></script>
-    <script src="/static/js/echarts-wordcloud.min.js"></script>
     {% block head %}{% endblock %}
     <meta name="baidu-site-verification" content="mJRkKVNnPF" />
     <meta name="google-site-verification" content="h2Kbua4YStdYubtL4-tQRiX0-Mx1ANHbMt8HF8hRj4o" />
@@ -220,12 +218,9 @@
             <h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
-                    <div class="echarts" id="echarts_tag"></div>
-                    <!--
                     {% for tag in g.api.blog_get_tags_list().data %}
                     <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签下的文章"><span class="label label-{{ ChoiceColor() }}">{{ tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=tag).data|length }}</strong></span></a>
                     {% endfor %}
-                    -->
                 </div>
             </div>
 
@@ -439,43 +434,6 @@ function tick()
 //右侧动态时间
 tick();
 
-
-        // 基于准备好的dom，初始化echarts实例
-        var echarts_wiki_tag = echarts.init(document.getElementById('echarts_tag'));
-        // 指定图表的配置项和数据
-        var echarts_wiki_tag_option = {
-            tooltip: {},
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            series: [{
-                type: 'wordCloud',
-                gridSize: 20,
-                sizeRange: [12, 50],
-                rotationRange: [0, 0],
-                shape: 'circle',
-                textStyle: {
-                    normal: {
-                         color: function() {
-                            return 'rgb(' + [
-                                Math.round(Math.random() * 160),
-                                Math.round(Math.random() * 160),
-                                Math.round(Math.random() * 160)
-                            ].join(',') + ')';
-                        }
-                    },
-                    emphasis: {
-                        shadowBlur: 10,
-                        shadowColor: '#333'
-                    }
-                },
-                data: {{ g.api.blog_get_tags_list().data|tojson }}
-            }]
-        };
-        // 使用刚指定的配置项和数据显示图表。
-        echarts_wiki_tag.setOption(echarts_wiki_tag_option);
 </script>  
 
 </body>
