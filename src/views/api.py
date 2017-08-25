@@ -55,8 +55,11 @@ class Blog(Resource):
         get_index = True if request.args.get("get_index") in ("true", "True", True) else False
         get_all_blog = True if request.args.get("get_all_blog") in ("true", "True", True) else False
 
+        if request.args.get("get_source_html") in ("true", "True", True):
+            return g.api.get_source_html()
+
         if blogId:
-           return g.api.blog_get_id(blogId)
+            return g.api.blog_get_id(blogId)
 
         if get_catalog_data:
             return g.api.blog_get_catalog_data(get_catalog_data, sort, limit)

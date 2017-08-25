@@ -18,6 +18,10 @@ from .base import ServiceBase
 
 class BlogApiManager(ServiceBase):
 
+    
+    def get_source_html(self):
+        sql  = "SELECT id,title,content FROM blog_article"
+        return self.mysql_read.query(sql)
 
     def blog_search(self, q):
         "搜索文章标题"
