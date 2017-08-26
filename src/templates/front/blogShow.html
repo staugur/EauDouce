@@ -18,6 +18,8 @@
             {{ bs|safe }}
         {% endfor %}
     {% endif %}
+    <!--gitment评论系统-->
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
 {% endblock %}
 
 {% block PathNavigation %}
@@ -145,24 +147,22 @@
                 </div>
             {% endif -%}
 
-
-
-<div id="gitment_container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-var gitment = new Gitment({
-  id: '{{ blogId }}', // 可选。默认为 location.href
-  owner: 'staugur',
-  repo: 'EauDouce',
-  oauth: {
-    client_id: '6ac822f92007cc8e6b75',
-    client_secret: 'ce00900eeb493d677549e4c533f2fed17d0d0d46',
-  },
-})
-gitment.render('gitment_container')
-</script>
-
+            {%- if g.plugins.gitment.enable in ('true', 'True', True) %}
+            <!--gitment评论系统-->
+            <div id="gitment"></div>
+            <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+            <script>
+                var gitment = new Gitment({
+                    id: '{{ blogId }}', // 可选。默认为 location.href
+                    owner: '{{ g.plugins.gitment.user }}',
+                    repo: '{{ g.plugins.gitment.repo }}',
+                    oauth: {
+                        client_id: '{{ g.plugins.gitment.clientId }}',
+                        client_secret: '{{ g.plugins.gitment.clientSecret }}',
+                    },
+                })
+                gitment.render('gitment')
+            </script>
 
             {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
                 <!-- 畅言评论框插件,PC和WAP自适应版 -->

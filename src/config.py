@@ -54,7 +54,16 @@ PLUGINS={
         "appid": os.getenv("eaudouce_ChangyanComment_appid", "cysX1azO3"),
         "appkey": os.getenv("eaudouce_ChangyanComment_appkey", "23503a7fdbfe37d50048a5c91d93627d")
     },
-    #畅言评论插件
+    #畅言评论系统
+
+    "gitment": {
+        "enable": os.getenv("eaudouce_gitment_enable", True),
+        "user": os.getenv("eaudouce_gitment_user", "staugur"),
+        "repo": os.getenv("eaudouce_gitment_repo", "EauDouce"),
+        "clientId": os.getenv("eaudouce_gitment_clientId", ""),
+        "clientSecret": os.getenv("eaudouce_gitment_clientSecret", "")
+    },
+    #gitment评论系统
 
     "BaiduStatistics": os.getenv("eaudouce_BaiduStatistics", False),
     #百度统计插件
