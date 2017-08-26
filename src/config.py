@@ -56,9 +56,6 @@ PLUGINS={
     },
     #畅言评论插件
 
-    "BaiduShare": False,
-    #百度分享插件：已禁用，由share.js代替
-
     "BaiduStatistics": os.getenv("eaudouce_BaiduStatistics", False),
     #百度统计插件
 
