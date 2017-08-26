@@ -97,4 +97,7 @@ PLUGINS={
 
     "AccessCount": os.getenv("eaudouce_AccessCount", True),
     #访问统计插件
+
+    "shareJs": os.getenv("eaudouce_shareJs", True),
+    #社会化分享插件
 }
