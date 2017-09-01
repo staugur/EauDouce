@@ -35,7 +35,10 @@ uvKey = "EauDouce:AccessCount:uv"
 def uv():
     url = request.args.get("url")
     res = {"code": 0, "msg": None, "data": None, "url": url}
-    res.update(data=pb.redis.hgetall(uvKey).get(url) or 1)
+    sql = "select id,url,ip from blog_clicklog where url=%s"
+    num = len(pb.mysql_read.query(sql, url))
+    res.update(data=num)
+    #res.update(data=pb.redis.hgetall(uvKey).get(url) or 1)
     pb.logger.info(res)
     return jsonify(res)
 
