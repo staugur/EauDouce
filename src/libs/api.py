@@ -949,9 +949,9 @@ class SysApiManager(ServiceBase):
 
         data= DO(kwargs)
         res = {"code": 0, "msg": None, "success": False}
-        sql = "UPDATE sys_config SET about_awi=%s, about_ww=%s, about_address=%s, about_phone=%s, about_email=%s, about_beian=%s, seo_keywords=%s, seo_description=%s, site_title=%s, site_feedname=%s"
+        sql = "UPDATE sys_config SET about_awi=%s, about_ww=%s, about_address=%s, about_phone=%s, about_email=%s, about_beian=%s, seo_keywords=%s, seo_description=%s, site_title=%s, site_feedname=%s,applet=%s"
         try:
-            data = self.mysql_write.update(sql, data.about_awi, data.about_ww, data.about_address, data.about_phone, data.about_email, data.about_beian, data.seo_keywords, data.seo_description, data.site_title, data.site_feedname)
+            data = self.mysql_write.update(sql, data.about_awi, data.about_ww, data.about_address, data.about_phone, data.about_email, data.about_beian, data.seo_keywords, data.seo_description, data.site_title, data.site_feedname, data.applet)
         except Exception,e:
             api_logger.error(e, exc_info=True)
             res.update(msg="update configure data error")
