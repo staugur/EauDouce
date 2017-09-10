@@ -978,10 +978,8 @@ class SysApiManager(ServiceBase):
         api_logger.debug(res)
         return res
 
-    def get_applet_users(self, WxUser):
-        """记录微信小程序访问用户
-        WxUser str, 微信用户账号
-        """
+    def get_applet_users(self):
+        """查询微信小程序访问用户"""
         res = dict(data=[], msg=None)
         key = "EauDouce:AppletUsers"
         res.update(data=self.redis.smembers(key))
