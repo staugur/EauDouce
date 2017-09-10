@@ -991,7 +991,7 @@ class SysApiManager(ServiceBase):
         data = self.redis.smembers(key)
         if isinstance(data, set):
             data = list(data)
-        res.update(data=[json.loads(i) for i in data] if i)
+        res.update(data=[json.loads(i) for i in data if i])
         return res
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
