@@ -982,7 +982,10 @@ class SysApiManager(ServiceBase):
         """查询微信小程序访问用户"""
         res = dict(data=[], msg=None)
         key = "EauDouce:AppletUsers"
-        res.update(data=self.redis.smembers(key))
+        data = self.redis.smembers(key)
+        if isinstance(data, set):
+            data = list(data)
+        res.update(data=data)
         return res
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
