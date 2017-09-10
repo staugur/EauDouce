@@ -215,6 +215,7 @@ class Sys(Resource):
         if query == "friendlink":
             return g.api.post_sys_friendlink(request.form.get("link"), request.form.get("title"))
         if query == "WechatApplet":
+            logger.debug(request.form)
             return g.api.post_applet_users(
                 avatarUrl=request.form.get("avatarUrl"),
                 country=request.form.get("country"),
