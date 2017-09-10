@@ -54,6 +54,10 @@ class Blog(Resource):
         get_user  = request.args.get("get_user")
         get_index = True if request.args.get("get_index") in ("true", "True", True) else False
         get_all_blog = True if request.args.get("get_all_blog") in ("true", "True", True) else False
+        get_banner = True if request.args.get("get_banner") in ("true", "True", True) else False
+
+        if get_banner:
+            return g.api.get_banner()
 
         if request.args.get("get_source_html") in ("true", "True", True):
             return g.api.get_source_html()
