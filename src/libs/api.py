@@ -962,19 +962,19 @@ class SysApiManager(ServiceBase):
         return res
 
     def post_applet_users(self, **kwargs):
-        """记录微信小程序访问用户
-        avatarUrl=kwargs.get("avatarUrl")
-        country=kwargs.get("country")
-        province=kwargs.get("province")
-        city=kwargs.get("city")
-        gender=kwargs.get("gender")
-        nickName=kwargs.get("nickName")
-        """
-
+        """记录微信小程序访问用户"""
+        data = dict(
+            avatarUrl=kwargs.get("avatarUrl"),
+            country=kwargs.get("country"),
+            province=kwargs.get("province"),
+            city=kwargs.get("city"),
+            gender=kwargs.get("gender"),
+            nickName=kwargs.get("nickName")
+        )
         res = dict(success=False, msg=None)
         key = "EauDouce:AppletUsers"
-        if kwargs:
-            rid = self.redis.sadd(key, json.dumps(kwargs))
+        if data:
+            rid = self.redis.sadd(key, json.dumps(data))
             if rid == 1:
                 res.update(success=True)
             else:
