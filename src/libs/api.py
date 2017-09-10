@@ -961,5 +961,31 @@ class SysApiManager(ServiceBase):
         api_logger.info(res)
         return res
 
+    def post_applet_users(self, WxUser):
+        """记录微信小程序访问用户
+        WxUser str, 微信用户账号
+        """
+        res = dict(success=False, msg=None)
+        key = "EauDouce:AppletUsers"
+        if WxUser:
+            rid = self.redis.sadd(key, WxUser)
+            if rid == 1:
+                res.update(success=True)
+            else:
+                res.update(msg="Not added. May already exist.")
+        else:
+            res.update(msg="param error")
+        api_logger.debug(res)
+        return res
+
+    def get_applet_users(self, WxUser):
+        """记录微信小程序访问用户
+        WxUser str, 微信用户账号
+        """
+        res = dict(data=[], msg=None)
+        key = "EauDouce:AppletUsers"
+        res.update(data=self.redis.smembers(key))
+        return res
+
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
     pass
