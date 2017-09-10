@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <title>{% block title %}{% endblock %} | {{ g.api.get_sys_config().data.site_title }}</title>
+    {%- set config = g.api.get_sys_config().data %}
+    <title>{% block title %}{% endblock %} | {{ config.site_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="{{ g.api.get_sys_config().data.seo_keywords }}">
-    <meta name="description" content="{{ g.api.get_sys_config().data.seo_description }}">
+    <meta name="keywords" content="{{ config.seo_keywords }}">
+    <meta name="description" content="{{ config.seo_description }}">
     <!-- 引入 Bootstrap -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
-    <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
-    <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -30,9 +29,6 @@
             {{ hs|safe }}
         {% endfor %}
     {% endif %}
-    <style type="text/css">
-        body { padding-top: 60px; }
-    </style>
 </head>
 </head>
 <body>
@@ -41,16 +37,15 @@
 
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <!--顶部导航-->
+            <nav class="navbar navbar-default" role="navigation">
                 <div class="navbar-header">
                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}">EauDouce&nbsp;<i class="icon-home icon-1x"></i></a>
                 </div>
-                
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li><a href="{{ url_for('front.blogWrite') }}" title="Write">创作&nbsp;<i class="icon-pencil icon-1x"></i></a></li>
                         <li><a href="{{ url_for('front.feed') }}" target="_blank" title="Feed">订阅&nbsp;<i class="icon-rss icon-1x"></i></a></li>
-                        <li><a href="https://github.com/staugur/" title="OpenSource" target="_blank">开源项目&nbsp;<i class="icon-github icon-1x"></i></a></li>
                         <li class="dropdown">
                             <a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="icon-folder-open icon-1x"></i></a>
                             <ul class="dropdown-menu">
@@ -90,10 +85,6 @@
                                 <li class="divider"></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}">我的主页</a></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}#blog">我的文章</a></li>
-                                <!--
-                                <li><a href="javascript:ChangerAvater()">修改头像</a></li>
-                                <li><a href="javascript:ChangerPassword()">修改密码</a></li>
-                                -->
                                 {% if g.username in g.api.user_get_admins().data %}
                                 <li><a href="{{ url_for('admin.index') }}">后台管理</a></li>
                                 {% endif %}
@@ -109,127 +100,65 @@
                     </ul>
                 </div>
             </nav>
-
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
             <!--首页轮番图-->
-            {% block AlternateDiagram %}
-            <!--
-            <div class="carousel slide" id="carousel-394119">
-                <ol class="carousel-indicators">
-                    <li data-slide-to="0" data-target="#carousel-394119">
-                    </li>
-                    <li data-slide-to="1" data-target="#carousel-394119">
-                    </li>
-                    <li data-slide-to="2" data-target="#carousel-394119" class="active">
-                    </li>
-                </ol>
-                <div class="carousel-inner">
-                    <div class="item">
-                        <img alt="" src="https://img.saintic.com/EauDouce/slide/1.jpg" />
-                        <div class="carousel-caption">
-                            <p>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img alt="" src="https://img.saintic.com/EauDouce/slide/2.jpg" />
-                        <div class="carousel-caption">
-                            <p>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="item active">
-                        <img alt="" src="https://img.saintic.com/EauDouce/slide/3.jpg" />
-                        <div class="carousel-caption">
-                            <p>
-                            </p>
-                        </div>
-                    </div>
-                </div> <a class="left carousel-control" href="#carousel-394119" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-394119" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-            </div>
-            -->
+            {% block AlternateDiagram %}{% endblock %}
+            <!-- 公告 -->
+            {% block notice %}
+            <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
+                {% for notice in g.api.get_sys_notice().data %}
+                <i class="icon-bullhorn"></i>&nbsp;{{ notice.msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% endfor %}
+            </marquee>
             {% endblock %}
         </div>
     </div>
-
-    <!-- 公告 -->
-    {% block notice %}
-    <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
-        {% for notice in g.api.get_sys_notice().data %}
-        <i class="icon-bullhorn"></i>&nbsp;{{ notice.msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        {% endfor %}
-    </marquee>
-    {% endblock %}
-
     <div class="row clearfix">
         <div class="col-md-8 column">
-
-            <p><!-- 路径导航 -->
+            <!-- 路径导航 -->
             {% block PathNavigation %}{% endblock %}
-            </p>
-
             <!-- 搜索 -->
             {% block search %}
             <form class="form-search form-horizontal" id="SearchForm" method="GET" action="{{ url_for('front.blogSearch') }}">
-            <div class="input-group search-input-group">
-                <button type="button" style="height: 30px;" onClick="jump()" class="btn btn-success"><i class="icon-search"></i></button>
-                <input type="text" name="q" id="input" placeholder="站内搜索" value="{{ request.args.get('q','') }}">
-            </div>
-            <script type="text/javascript">
-                function jump(){
-                    var f = document.getElementById("SearchForm");
-                    f.action = f.action+"?q="+document.getElementById("input").value;
-                    window.location.href=f.action;
-                }
-            </script>
+                <div class="input-group search-input-group">
+                    <button type="button" style="height: 30px;" onClick="search()" class="btn btn-success"><i class="icon-search"></i></button>
+                    <input type="text" name="q" id="input" placeholder="站内搜索" value="{{ request.args.get('q','') }}">
+                </div>
             </form>
             {% endblock %}
-
             {% block container %}{% endblock %}
         </div>
-
         <!-- 右侧 -->
         {% block aside %}
         <div class="col-md-4 column">
-            <!-- 关于本站 -->
-            <h4><scan class="icon-flag icon-1x"> 关于本站</scan></h4>
-            {% set config = g.api.get_sys_config().data %}
-            <p class="text-success">
-                <strong>{{ config.about_awi }}</strong><br />
-            </p>
-            <address>
-            {% if config.about_address %}
-            <i class="icon-map-marker"></i>&nbsp;&nbsp;&nbsp;{{ config.about_address }}<br />
-            {% endif %}
-
-            {% if config.about_phone %}
-            <i class="icon-mobile-phone"></i>&nbsp;&nbsp;&nbsp;{{ config.about_phone }}<br />
-            {% endif %}
-
-            {% if config.about_email %}
-            <i class="icon-envelope"></i>&nbsp;&nbsp;{{ config.about_email }}<br />
-            {% endif %}
-
-            {% if config.about_ww %}
-            <i class="icon-comments-alt"></i>&nbsp;&nbsp;{{ config.about_ww }}<br />
-            {% endif %}
-
-            {% if config.applet %}
-            <img src="{{ config.applet }}" title="微信小程序码" />
-            {% endif %}
-            </address>
-
             <!-- 标签云 -->
             <h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
-                    {% for tag in g.api.blog_get_tags_list().data %}
-                    <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签下的文章"><span class="label label-{{ ChoiceColor() }}">{{ tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=tag).data|length }}</strong></span></a>
+                    {% set tags = g.api.blog_get_tags_list().data %}
+                    <div id="tagscloud">
+                    {% for tag in tags %}
+                        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签下的文章" class="{{TagRandomColor()}}">{{ tag }}</a>
                     {% endfor %}
+                    </div>
                 </div>
             </div>
-
+            <!-- 置顶文章列表 -->
+            <h4><scan class="icon-fire icon-large"> 置顶文章</scan></h4>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <ol>
+                    {% for blog in g.api.blog_get_top_data().data %}
+                        <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}">{{ blog.title }}</a></li>
+                    {% endfor %}
+                    </ol>
+                </div>
+            </div>
             <!-- 推荐文章列表 -->
-            <h4><scan class="icon-refresh icon-spin icon-large"></scan> 推荐文章</h4>
+            <h4><scan class="icon-book icon-large"></scan> 推荐文章</h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <ol>
@@ -239,74 +168,6 @@
                     </ol>
                 </div>
             </div>
-
-            <!-- 广告位 -->
-
-            {% if g.plugins.Weather in ("true", "True", True) %}
-            <!-- 实时天气查询插件 -->
-            <h4><scan class="icon-cloud icon-1x"> 天气播报</scan></h4>
-            <div id="tp-weather-widget"></div>
-            <script>(function(T,h,i,n,k,P,a,g,e){g=function(){P=h.createElement(i);a=h.getElementsByTagName(i)[0];P.src=k;P.charset="utf-8";P.async=1;a.parentNode.insertBefore(P,a)};T["ThinkPageWeatherWidgetObject"]=n;T[n]||(T[n]=function(){(T[n].q=T[n].q||[]).push(arguments)});T[n].l=+new Date();if(T.attachEvent){T.attachEvent("onload",g)}else{T.addEventListener("load",g,false)}}(window,document,"script","tpwidget","//widget.seniverse.com/widget/chameleon.js"))</script>
-            <script>tpwidget("init", {
-                "flavor": "slim",
-                "location": "WX4FBXXFKE4F",
-                "geolocation": "enabled",
-                "language": "zh-chs",
-                "unit": "c",
-                "theme": "chameleon",
-                "container": "tp-weather-widget",
-                "bubble": "enabled",
-                "alarmType": "badge",
-                "uid": "U617F38FE8",
-                "hash": "ec1620b5f1dacd856964835023ed7f25"
-            });
-            tpwidget("show");
-            </script>
-            {% endif %}
-
-            <!-- 插件列表 -->
-            <h4><scan class="icon-cogs icon-1x"> 插件列表</scan></h4>
-            <dl class="dl-horizontal">
-            {% for plugin in Plugins %}
-                {% if plugin.plugin_state == "enabled" %}
-                <dt><attr title="关于这个插件:&#10;作者: {{ plugin.plugin_author.decode('utf8') }}&#10;版本: {{ plugin.plugin_version }}"><code>{{ plugin.plugin_name }}</code></attr></dt>
-                <dd><var>{{ plugin.plugin_description.decode('utf8') }}</var></dd>
-                {% endif %}
-            {% endfor %}
-            </dl>
-
-            <!-- 博客信息 -->
-            {% set statistics = g.api.blog_get_statistics() %}
-            <h4><scan class="icon-info-sign icon-1x"> 博客统计</scan></h4>
-            <div class="panel-group" id="panel-579972">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                         <a class="panel-title" data-toggle="collapse" data-parent="#panel-579972" href="#panel-element-612038">文章数据</a>
-                    </div>
-                    <div id="panel-element-612038" class="panel-collapse in">
-                        <div class="panel-body">
-                            文章总数：{{ statistics.ArticleTotal }}篇<br/>
-                            分类总数：{{ statistics.CatalogTotal }}个<br/>
-                            标签总数：{{ statistics.TagTotal }}个<br/>
-                            <!--评论总数：{{ statistics.CommentTotal }}条<br/>-->
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                         <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-579972" href="#panel-element-266807">访问数据</a>
-                    </div>
-                    <div id="panel-element-266807" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <p class="bg-primary">{{ request.headers.get("User-Agent") }}</p>
-                            <p class="bg-info">来源地址: {{ request.headers.get('X-Real-Ip', request.remote_addr) }}</p>
-                            <p class="bg-danger">当前路径: {{ request.url }}</p>
-                            <p class="bg-success">当前时间: <span id="localtime"></span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- 友情链接 -->
             <h4><scan class="icon-link icon-1x"> 友情链接</scan></h4>
             <div class="row clearfix">
@@ -322,17 +183,14 @@
 
 </div>
 
-<p></p>
 <div id="footer" class="container">
 <nav class="navbar navbar-default text-center">
     <div class="navbar-inner navbar-content-center">
         <p class="text-muted credit" style="padding: 10px;">
-            Copyright &copy; 2017.&nbsp;&nbsp;
-            SaintIC, All rights reserved.&nbsp;&nbsp;
-            Originate by <a href="https://github.com/staugur/EauDouce/" target="_blank" title="{{ Doc }}">EauDouce</a>&nbsp;
-            <a href="https://github.com/staugur/passport/" target="_blank" title="Passport Auth System">Passport</a>.&nbsp;&nbsp;
-            <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ Email }}">{{ Author }}</a>.&nbsp;&nbsp;
-            <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.api.get_sys_config().data.about_beian }}</a>.&nbsp;&nbsp;
+            Copyright &copy; 2017.&nbsp;&nbsp;SaintIC, all rights reserved.&nbsp;&nbsp;
+            <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ Email }}">{{ Author }}</a>&nbsp;&nbsp;
+            <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.api.get_sys_config().data.about_beian }}</a>&nbsp;&nbsp;
+            <br/>
             {% if base_front_footer_include %}
                 {% for fi in base_front_footer_include() %}
                     {% include fi %}
@@ -349,6 +207,7 @@
 </div>
 
 <div id="goTopBtn"></div>
+<script src='/static/js/tagscloud.js' type="text/javascript"></script>
 <script src="{{ url_for('static', filename='js/jquery-3.1.0.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='layer/layer.js') }}"></script>
@@ -380,44 +239,11 @@ function dropdownOpen() {
     });
 }
 
-function showLocale(objD)  
-{  
-    var str,colorhead,colorfoot;  
-    var yy = objD.getYear();  
-    if(yy<1900) yy = yy+1900;  
-    var MM = objD.getMonth()+1;  
-    if(MM<10) MM = '0' + MM;  
-    var dd = objD.getDate();  
-    if(dd<10) dd = '0' + dd;  
-    var hh = objD.getHours();  
-    if(hh<10) hh = '0' + hh;  
-    var mm = objD.getMinutes();  
-    if(mm<10) mm = '0' + mm;  
-    var ss = objD.getSeconds();  
-    if(ss<10) ss = '0' + ss;  
-    var ww = objD.getDay();  
-    if  ( ww==0 )  colorhead="<font color=\"red\">";  
-    if  ( ww > 0 && ww < 6 )  colorhead="<font color=\"red\">";  
-    if  ( ww==6 )  colorhead="<font color=\"red\">";  
-    if  (ww==0)  ww="星期日";  
-    if  (ww==1)  ww="星期一";  
-    if  (ww==2)  ww="星期二";  
-    if  (ww==3)  ww="星期三";  
-    if  (ww==4)  ww="星期四";  
-    if  (ww==5)  ww="星期五";  
-    if  (ww==6)  ww="星期六";  
-    colorfoot="</font>"  
-    str = colorhead + yy + "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss + "  " + ww + colorfoot;  
-    return(str);  
-};  
-
-function tick()
-{  
-    var today;  
-    today = new Date();  
-    document.getElementById("localtime").innerHTML = showLocale(today);  
-    window.setTimeout("tick()", 1000);  
-};  
+function search(){
+    var f = document.getElementById("SearchForm");
+    f.action = f.action+"?q="+document.getElementById("input").value;
+    window.location.href=f.action;
+}
 
 //返回顶部
     $(window).scroll(function(){
@@ -435,10 +261,6 @@ function tick()
       $('body,html').animate({scrollTop:0},500);
     })
 
-//右侧动态时间
-tick();
-
 </script>  
-
 </body>
 </html>

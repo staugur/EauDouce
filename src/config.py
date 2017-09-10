@@ -16,6 +16,8 @@ GLOBAL={
     "ProcessName": "EauDouce",
     #自定义进程名.
 
+    "Host": os.getenv("eaudouce_host", "0.0.0.0"),
+
     "Port": os.getenv("eaudouce_port", 10140),
     #应用绑定的Port.
 

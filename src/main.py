@@ -23,11 +23,10 @@ __date__    = "2017-03-26"
 __version__ = "0.0.1"
 __license__ = "MIT"
 
-import rq_dashboard
 import json, datetime, SpliceURL, time, os, jinja2, sys
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
-from utils.tool import logger, sso_logger, access_logger, plugin_logger, isLogged_in, md5, ChoiceColor
+from utils.tool import logger, isLogged_in, md5, ChoiceColor, TagRandomColor
 from urllib import urlencode
 from libs.api import ApiManager
 from libs.plugins import PluginManager
@@ -40,8 +39,6 @@ sys.setdefaultencoding('utf-8')
 
 #初始化定义application
 app = Flask(__name__)
-app.config["REDIS_URL"] = REDIS
-app.config["RQ_POLL_INTERVAL"] = 2500
 
 #初始化插件管理器(自动扫描并加载运行)
 plugin = PluginManager()
@@ -56,7 +53,6 @@ app.jinja_loader = loader
 #注册全局模板扩展点
 for tep_name,tep_func in plugin.get_all_tep.iteritems():
     app.add_template_global(tep_func, tep_name)
-    logger.info("add a template global for {0}".format(tep_func))
 
 #初始化接口管理器
 api = ApiManager()
@@ -66,17 +62,15 @@ app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
-app.register_blueprint(rq_dashboard.blueprint, url_prefix="/rq")
 #注册蓝图扩展点
 for bep in plugin.get_all_bep:
     prefix = bep["prefix"]
     if prefix in ("/api", "/admin", "/upload"): continue
     app.register_blueprint(bep["blueprint"], url_prefix=prefix)
-    logger.info("add a blueprint for {0}".format(prefix))
 
 @app.context_processor  
 def GlobalTemplateVariables():  
-    data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor}
+    data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor, "TagRandomColor": TagRandomColor}
     data.update(Plugins=plugin.get_all_plugins)
     return data
 
@@ -96,10 +90,6 @@ def before_request():
     before_request_hook = plugin.get_all_cep.get("before_request_hook")
     for cep_func in before_request_hook():
         cep_func(request=request, g=g)
-        logger.info("exec a before cep function for {0}".format(cep_func))
-    app.logger.info(app.url_map)
-    if hasattr(g, "token"):
-        logger.info(g.token)
 
 @app.after_request
 def after_request(response):
@@ -112,12 +102,11 @@ def after_request(response):
         "agent": request.headers.get("User-Agent"),
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
     }
-    access_logger.info(json.dumps(data))
+    logger.access.info(json.dumps(data))
     #上下文扩展点之请求后(返回前)
     after_request_hook = plugin.get_all_cep.get("after_request_hook")
     for cep_func in after_request_hook():
         cep_func(request=request, response=response, access_data=data)
-        logger.info("exec an after cep function for {0}".format(cep_func))
     return response
 
 @app.errorhandler(404)
@@ -139,7 +128,7 @@ def login():
            "sso_t": md5("%s:%s" %(SSO["SSO.PROJECT"], SpliceURL.Modify(request.url_root, "/sso/").geturl))
         }
         SSOLoginURL = SpliceURL.Modify(url=SSO["SSO.URL"], path="/login/", query=query).geturl
-        sso_logger.info("User request login to SSO: %s" %SSOLoginURL)
+        logger.sso.info("User request login to SSO: %s" %SSOLoginURL)
         return redirect(SSOLoginURL)
 
 @app.route('/logout/')
@@ -156,7 +145,7 @@ def logout():
 @app.route('/sso/')
 def sso():
     ticket = request.args.get("ticket")
-    sso_logger.info("ticket: %s" %ticket)
+    logger.sso.info("ticket: %s" %ticket)
     username, expires, sessionId = ticket.split('.')
     if expires == 'None':
         UnixExpires = None

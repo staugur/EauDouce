@@ -6,7 +6,7 @@
 dir=$(cd $(dirname $0); pwd)
 cd $dir
 
-host="0.0.0.0"
+host=$(python -c "from config import GLOBAL;print GLOBAL['Host']")
 port=$(python -c "from config import GLOBAL;print GLOBAL['Port']")
 proc=$(python -c "from config import GLOBAL;print GLOBAL['ProcessName']")
 procname=$proc

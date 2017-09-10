@@ -18,15 +18,25 @@ from functools import wraps
 from threading import Thread
 from flask import g, request, redirect, url_for
 
+class DO(dict):
+    """A dict that allows for object-like property access syntax."""
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+
 ip_pat          = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
 mail_pat        = re.compile(r"([0-9a-zA-Z\_*\.*\-*]+)@([a-zA-Z0-9\-*\_*\.*]+)\.([a-zA-Z]+$)")
 user_pat        = re.compile(r'[a-zA-Z\_][0-9a-zA-Z\_]')
 comma_pat       = re.compile(r"\s*,\s*")
-logger          = Logger("sys").getLogger
-sso_logger      = Logger("sso").getLogger
-api_logger      = Logger("api").getLogger
-access_logger   = Logger("access").getLogger
-plugin_logger   = Logger("plugin").getLogger
+logger          = DO(
+                    sys = Logger("sys").getLogger,
+                    sso = Logger("sso").getLogger,
+                    api = Logger("api").getLogger,
+                    access = Logger("access").getLogger,
+                    plugin = Logger("plugin").getLogger
+                  )
 md5             = lambda pwd:hashlib.md5(pwd).hexdigest()
 gen_token       = lambda n=32:b32encode(uuid4().hex)[:n]
 gen_requestId   = lambda :str(uuid4())
@@ -48,12 +58,12 @@ def isLogged_in(cookie_str):
         try:
             success = requests.post(SSOURL+"/sso/", data={"username": username, "time": expires, "sessionId": sessionId}, timeout=3, verify=False, headers={"User-Agent": "SSO.Client"}).json().get("success", False)
         except Exception,e:
-            sso_logger.error(e, exc_info=True)
+            logger.sso.error(e, exc_info=True)
         else:
-            sso_logger.info("check login request, cookie_str: %s, success:%s" %(cookie_str, success))
+            logger.sso.info("check login request, cookie_str: %s, success:%s" %(cookie_str, success))
             return success
     else:
-        sso_logger.info("Not Logged in")
+        logger.sso.info("Not Logged in")
     return False
 
 def ParseMySQL(mysql, callback="dict"):
@@ -70,34 +80,6 @@ def ParseMySQL(mysql, callback="dict"):
         return protocol,host,port,user,password,database,charset, timezone
     else:
         return {"Protocol": protocol, "Host": host, "Port": port, "Database": database, "User": user, "Password": password, "Charset": charset, "Timezone": timezone}
-
-def ParseRedis(redis):
-    """解析REDIS配置段"""
-    if not redis:return None
-    protocol, dburl = redis.split("://")
-    #["redis", "host:port:password@db"], ["redis_cluster", "host:port,host:port"]
-    if protocol == "redis":
-        if "@" in dburl:
-            dbinfo, db = dburl.split("@")
-            #["host:port:password", "db"]
-        else:
-            db = 0
-            dbinfo = dburl.split("@")[0]
-            #["host:port:password", 0]
-        if len(dbinfo.split(":")) == 2:
-            password = None
-            host, port = dbinfo.split(":")
-        else:
-            host, port, password = dbinfo.split(":")
-        data = {"host": host, "port": port, "password": password, "db": db}
-
-    elif protocol == "redis_cluster":
-        dbinfo = re.split(comma_pat, dburl)
-        #['host:port', 'host:port']
-        data = [ {"host": i.split(":")[0], "port": i.split(":")[-1] } for i in dbinfo ]
-
-    logger.debug("REDIS INFO: {}".format(data))
-    return data
 
 def login_required(f):
     @wraps(f)
@@ -136,12 +118,17 @@ def BaiduActivePush(pushUrl, original=True, callUrl=PLUGINS['BaiduActivePush']['
     """百度主动推送(实时)接口提交链接"""
     callUrl = callUrl + "&type=original" if original else callUrl
     res = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
-    api_logger.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
+    logger.api.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
     return res
 
 def ChoiceColor():
     """ 模板中随机选择bootstrap内置颜色 """
     color = ["default", "primary", "success", "info", "warning", "danger"]
+    return random.choice(color)
+
+def TagRandomColor():
+    """ 模板中随机选择颜色 """
+    color = ["tagc1", "tagc2", "tagc3", "tagc4", "tagc5"]
     return random.choice(color)
 
 def async(f):
@@ -150,14 +137,4 @@ def async(f):
         thr = Thread(target=f, args=args, kwargs=kwargs)
         thr.start()
     return wrapper
-
-class DO(dict):
-    """A dict that allows for object-like property access syntax."""
-
-    def __getattr__(self, name):
-        try:
-            return self[name]
-        except KeyError:
-            raise AttributeError(name)
-
 

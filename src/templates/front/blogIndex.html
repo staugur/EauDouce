@@ -2,6 +2,25 @@
 
 {% block title %}首页{% endblock %}
 
+{% block head %}
+<style type="text/css">
+    .carousel{
+     height: 360px;
+     /*height: auto;*/
+     background-color: #000000;
+    }
+    .carousel .item{
+     /*height: auto;*/
+     height: 360px;
+     background-color: #000000;
+    }
+    .carousel img{
+     /*height: 360px;*/
+     width: 100%;
+    }
+</style>
+{% endblock %}
+
 {% block PathNavigation %}
 			<ul class="breadcrumb">
 				<li class="active">
@@ -10,22 +29,36 @@
 			</ul>
 {% endblock %}
 
-{% block container %}
-            <!-- 置顶文章列表 -->
-			<div class="row clearfix">
-				<div class="col-md-12 column">
-				    <h3><scan class="icon-fire icon-large"> 置顶文章</scan></h3>
-				    <ol>
-                    {% for blog in g.api.blog_get_top_data().data %}
-			            <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}">{{ blog.title }}</a></li>
-                    {% endfor %}
-                    </ol>
-				</div>
-			</div>
+{% block AlternateDiagram %}
+            {%- set banners = g.api.get_banner().data %}
+            <div class="carousel slide" id="carousel-394119">
+                <ol class="carousel-indicators">
+                    {%- for banner in banners %}
+                    <li data-slide-to="{{ loop.index0 }}" data-target="#carousel-394119"{% if banner.isActive %} class="active"{% endif %}></li>
+                    {%- endfor %}
+                </ol>
+                <div class="carousel-inner">
+                    {%- for banner in banners %}
+                    <div class="item{% if banner.isActive %} active{% endif %}">
+                        <a href="{{ url_for('front.blogShow', bid=banner.id) }}"><img src="{{ banner.imgUrl }}" max-width="1600px" height="500px" class="img-responsive" /></a>
+                        <div class="carousel-caption">
+                            <p>{{ banner.title }}</p>
+                        </div>
+                    </div>
+                    {%- endfor %}
+                </div>
+                <a class="left carousel-control" href="#carousel-394119" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-394119" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+{% endblock %}
 
+{% block container %}
             <!-- 文章列表缩略 -->
-            <h3><scan class="icon-book icon-large"> 最新文章</scan></h3>
-            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 8)) %}
+            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 6)) %}
             <blockquote>
             {% for blog in blogs.data %}
 			<div class="row clearfix">
@@ -61,14 +94,13 @@
 				</div>
 			</div>
 			{% endfor %}
-			</blockquote>
-
 			<!-- 分页 -->
-			{% set prev = blogs.page.page - 1 %}
-			{% set next = blogs.page.page + 1 %}
-			{% set last = blogs.page.PageCount - 1 %}
-			<center>
-			<ul class="pagination pagination-lg">
+			{%- set prev = blogs.page.page - 1 %}
+			{%- set next = blogs.page.page + 1 %}
+			{%- set last = blogs.page.PageCount - 1 %}
+			<nav aria-label="">
+            <center>
+			<ul class="pagination">
 			    {%- if blogs.page.page == 0 %}
 				<li class="disabled"><a>Prev</a></li>
 				{% else -%}
@@ -88,4 +120,6 @@
 				{%- endif %}
 			</ul>
 			</center>
+			</nav>
+			</blockquote>
 {% endblock %}

@@ -9,11 +9,10 @@
     :license: MIT, see LICENSE for more details.
 """
 
-from rq import Queue
 from redis import from_url
 from torndb import Connection
 from config import REDIS, MYSQL, PLUGINS
-from utils.tool import ParseRedis, ParseMySQL, plugin_logger
+from utils.tool import ParseMySQL, logger
 
 
 class ServiceBase(object):
@@ -37,7 +36,6 @@ class ServiceBase(object):
                     max_idle_time=self.timeout)
         self.mysql_read = self._mysql
         self.mysql_write= self._mysql
-        self.asyncQueue = Queue(connection=self.redis)
 
 
 class PluginBase(ServiceBase):
@@ -45,4 +43,4 @@ class PluginBase(ServiceBase):
     
     def __init__(self):
         super(PluginBase, self).__init__()
-        self.logger = plugin_logger
+        self.logger = logger.plugin

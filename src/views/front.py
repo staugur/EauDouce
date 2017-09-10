@@ -28,7 +28,7 @@ def blogShow(bid):
         BaiduActivePushResult = False
         if g.plugins['BaiduActivePush']['enable'] in ("true", "True", True):
             BaiduActivePushResult = True if BaiduActivePush(request.url, original=True if data.get("sources") == "原创" else False).get("success") == 1 else False
-        logger.info("BaiduActivePushResult for id: %s, %s" %(bid, BaiduActivePushResult))
+        logger.sys.info("BaiduActivePushResult for id: %s, %s" %(bid, BaiduActivePushResult))
         return render_template("front/blogShow.html", blogId=bid, data=data, BaiduActivePushResult=BaiduActivePushResult)
     else:
         return abort(404)

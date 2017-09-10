@@ -10,7 +10,7 @@
 """
 
 import os
-from utils.tool import plugin_logger
+from utils.tool import logger
 
 class PluginManager(object):
     """
@@ -36,7 +36,7 @@ class PluginManager(object):
         self.plugins     = []
         self.plugin_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "plugins")
         self.__scanPlugins()
-        plugin_logger.debug(self.plugins)
+        logger.plugin.debug(self.plugins)
 
     def __getPluginInfo(self, package, plugin):
         """ 组织插件信息 """
@@ -83,16 +83,16 @@ class PluginManager(object):
 
     def __scanPlugins(self):
         """ 扫描插件目录 """
-        plugin_logger.info("Initialization Plugins Start, loadPlugins path: {0}".format(self.plugin_path))
+        logger.plugin.info("Initialization Plugins Start, loadPlugins path: {0}".format(self.plugin_path))
         if os.path.exists(self.plugin_path):
             for package in os.listdir(self.plugin_path):
                 _plugin_path = os.path.join(self.plugin_path, package)
                 if os.path.isdir(_plugin_path):
                     if os.path.isfile(os.path.join(_plugin_path, "__init__.py")):
-                        plugin_logger.info("find plugin package: {0}".format(package))
+                        logger.plugin.info("find plugin package: {0}".format(package))
                         self.__runPlugins(package)
         else:
-            plugin_logger.warning("Plugins directory not in here!")
+            logger.plugin.warning("Plugins directory not in here!")
 
     def __runPlugins(self, package):
         """ 动态加载插件模块,遵循插件格式的才能被启用并运行,否则删除加载 """
@@ -108,12 +108,12 @@ class PluginManager(object):
                 p = plugin.getPluginClass()
                 i = p()
             except Exception,e:
-                plugin_logger.exception(e, exc_info=True)
+                logger.plugin.exception(e, exc_info=True)
                 return
             if plugin.__state__ != "enabled":
                 self.plugins.append(pluginInfo)
                 return
-            plugin_logger.info("runPlugin: package is {0}.{1}, class instance is {2}".format("plugins", package, i))
+            logger.plugin.info("runPlugin: package is {0}.{1}, class instance is {2}".format("plugins", package, i))
             #: 更新插件信息
             pluginInfo.update(plugin_instance=i)
             #: 运行插件主类的run方法
@@ -122,38 +122,38 @@ class PluginManager(object):
             #: 注册模板扩展点
             if hasattr(i, "register_tep"):
                 tep = i.register_tep()
-                plugin_logger.info("The plugin {0} wants to register the following template extension points: {1}".format(package, tep))
+                logger.plugin.info("The plugin {0} wants to register the following template extension points: {1}".format(package, tep))
                 if isinstance(tep, dict):
                     pluginInfo.update(plugin_tep=tep)
-                    plugin_logger.info("Register TEP Success")
+                    logger.plugin.info("Register TEP Success")
                 else:
-                    plugin_logger.error("Register TEP Failed, not a dict")
+                    logger.plugin.error("Register TEP Failed, not a dict")
             #: 注册上下文扩展点
             if hasattr(i, "register_cep"):
                 cep = i.register_cep()
-                plugin_logger.info("The plugin {0} wants to register the following context extension points: {1}".format(package, cep))
+                logger.plugin.info("The plugin {0} wants to register the following context extension points: {1}".format(package, cep))
                 if isinstance(cep, dict):
                     pluginInfo.update(plugin_cep=cep)
-                    plugin_logger.info("Register CEP Success")
+                    logger.plugin.info("Register CEP Success")
                 else:
-                    plugin_logger.error("Register CEP Failed, not a dict")
+                    logger.plugin.error("Register CEP Failed, not a dict")
             #: 注册蓝图扩展点
             if hasattr(i, "register_bep"):
                 bep = i.register_bep()
-                plugin_logger.info("The plugin {0} wants to register the following blueprint extension points: {1}".format(package, bep))
+                logger.plugin.info("The plugin {0} wants to register the following blueprint extension points: {1}".format(package, bep))
                 if isinstance(bep, dict):
                     pluginInfo.update(plugin_bep=bep)
-                    plugin_logger.info("Register BEP Success")
+                    logger.plugin.info("Register BEP Success")
                 else:
-                    plugin_logger.error("Register BEP Failed, not a dict")
+                    logger.plugin.error("Register BEP Failed, not a dict")
             #: 加入全局插件中
             if hasattr(i, "run") or hasattr(i, "register_tep") or hasattr(i, "register_cep") or hasattr(i, "register_bep"):
                 self.plugins.append(pluginInfo)
             else:
-                plugin_logger.error("The current class {0} does not have the `run` or `register_tep` or `register_cep` or `register_bep` method".format(i))
+                logger.plugin.error("The current class {0} does not have the `run` or `register_tep` or `register_cep` or `register_bep` method".format(i))
         else:
             del plugin
-            plugin_logger.warning("This plugin `{0}` not conform to the standard plugin format".format(package))
+            logger.plugin.warning("This plugin `{0}` not conform to the standard plugin format".format(package))
 
     @property
     def get_all_plugins(self):

@@ -14,7 +14,7 @@ from main import app
 from config import GLOBAL
 from utils.tool import logger
 
-Host = "0.0.0.0"
+Host = GLOBAL.get('Host')
 Port = GLOBAL.get('Port')
 Environment = GLOBAL.get('Environment')
 ProcessName = GLOBAL.get('ProcessName')
@@ -22,15 +22,15 @@ ProcessName = GLOBAL.get('ProcessName')
 try:
     import setproctitle
 except ImportError, e:
-    logger.warn("%s, try to pip install setproctitle, otherwise, you can't use the process to customize the function" %e)
+    logger.sys.warn("%s, try to pip install setproctitle, otherwise, you can't use the process to customize the function" %e)
 else:
     setproctitle.setproctitle(ProcessName)
-    logger.info("The process is %s" % ProcessName)
+    logger.sys.info("The process is %s" % ProcessName)
 
 try:
     msg = '%s has been launched, %s:%s' %(ProcessName, Host, Port)
     print(msg)
-    logger.info(msg)
+    logger.sys.info(msg)
     from tornado.wsgi import WSGIContainer
     from tornado.httpserver import HTTPServer
     from tornado.ioloop import IOLoop
@@ -40,4 +40,4 @@ try:
 
 except Exception,e:
     print(e)
-    logger.error(e, exc_info=True)
+    logger.sys.error(e, exc_info=True)

@@ -20,9 +20,9 @@
     /*　使用IE专属滤镜实现IE背景透明*/ }
 
 .TransparentBar p { position:relative; } /*实现IE文字不透明*/
-
+/*
 blockquote {
-    color:#888;
+  color:#888;
   background-color: #eae6f3;
   border-left: 1em solid #5236a0;
   padding: 1em 1.5em 1em 1.5em;
@@ -41,7 +41,7 @@ blockquote:before {
   line-height: 0.1em;
 }
 blockquote:after {
-   color: #392570;
+  color: #392570;
   content: "\201D";
   font-size: 5em;
   position:absolute;
@@ -49,8 +49,7 @@ blockquote:after {
   bottom: 0em;
   line-height: 0.1em;
 }
-
-
+*/
 /*like and reward css*/
 .thumbs_content{
     width: 291px;
@@ -138,3 +137,13 @@ blockquote:after {
 .btn-danger.btn-outline:hover {
     color: #fff;
 }
+
+/* tagscloud */
+#tagscloud{width:350px;height:260px;position:relative;font-size:12px;color:#333;margin:0px auto 0;text-align:left;}
+#tagscloud a{position:absolute;top:0px;left:0px;color:#333;font-family:Arial;text-decoration:none;margin:0 10px 15px 0;line-height:18px;text-align:center;font-size:12px;padding:1px 5px;display:inline-block;border-radius:3px;}
+#tagscloud a.tagc1{background:#666;color:#fff;}
+#tagscloud a.tagc2{background:#F16E50;color:#fff;}
+#tagscloud a.tagc3{background:#00BB00;color:#fff;}
+#tagscloud a.tagc4{background:#8600FF;color:#fff;}
+#tagscloud a.tagc5{background:#006633;color:#fff;}
+#tagscloud a:hover{color:#fff;background:#0099ff;}

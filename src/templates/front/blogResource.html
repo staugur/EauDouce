@@ -8,7 +8,13 @@
 					 <a href="{{ url_for('front.index') }}">首页</a>
 				</li>
 				<li>
-					{{ request.args.get("resource_type") }}
+					{% if request.args.get("resource_type") == "tag" %}
+					标签
+					{% elif request.args.get("resource_type") == "catalog" %}
+					分类
+					{% elif request.args.get("resource_type") == "sources" %}
+					来源
+					{% endif %}
 				</li>
 				<li class="active">
 					{% if request.args.get("resource_data") == "1" %}

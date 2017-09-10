@@ -56,8 +56,8 @@ class AccessCount(PluginBase):
         """ 记录ip、ip """
 
         data  = kwargs.get("access_data")
-        self.asyncQueue.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
-        self.asyncQueue.enqueue(Click2MySQL, data)
+        #self.asyncQueue.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
+        #self.asyncQueue.enqueue(Click2MySQL, data)
 
     def register_cep(self):
         return {"after_request_hook": self.Record_ip_pv}

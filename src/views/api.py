@@ -105,7 +105,7 @@ class Blog(Resource):
             sources = request.form.get("sources", "原创"),
             author  = request.form.get("author", "admin")
         )
-        logger.debug(data)
+        logger.sys.debug(data)
         return g.api.blog_create(**data)
 
     def put(self):
@@ -120,7 +120,7 @@ class Blog(Resource):
                 author  = request.form.get("author", "admin"),
                 blogId  = request.form.get("blogId")
             )
-            logger.debug(data)
+            logger.sys.debug(data)
             return g.api.blog_update(**data)
         else:
             return {"code": 403, "msg": "Permission denied"}, 403
@@ -171,7 +171,7 @@ class User(Resource):
         getalluser   = True if request.args.get("getalluser") in ("True", "true", True) else False
         getadminuser = True if request.args.get("getadminuser") in ("True", "true", True) else False
 
-        logger.info(res)
+        logger.sys.info(res)
         return res
 
     def post(self):
@@ -192,7 +192,6 @@ class User(Resource):
 
     def delete(self):
         #sql = "DELETE FROM user WHERE username=%s"
-        #logger.info({"User:delete:SQL": sql})
         return {}
 
     def put(self):
@@ -215,7 +214,7 @@ class Sys(Resource):
         if query == "friendlink":
             return g.api.post_sys_friendlink(request.form.get("link"), request.form.get("title"))
         if query == "WechatApplet":
-            logger.debug(request.form)
+            logger.sys.debug(request.form)
             return g.api.post_applet_users(
                 avatarUrl=request.form.get("avatarUrl"),
                 country=request.form.get("country"),

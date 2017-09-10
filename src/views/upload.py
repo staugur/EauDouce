@@ -28,7 +28,7 @@ allowed_file = lambda filename: '.' in filename and filename.rsplit('.', 1)[1] i
 @upload_blueprint.route("/BlogImage/", methods=["POST",])
 def UploadBlogImage():
     editorType = request.args.get("editorType", "wangEditor")
-    logger.debug(request.files)
+    logger.sys.debug(request.files)
     f = request.files.get("WriteBlogImage") or request.files.get("editormd-image-file")
     if f and allowed_file(f.filename):
         filename = secure_filename(gen_rnd_filename() + "." + f.filename.split('.')[-1]) #随机命名
@@ -36,12 +36,12 @@ def UploadBlogImage():
             imgUrl = "/EauDouce/blog/" + filename
             upres  = UploadImage2Upyun(imgUrl, f.stream.read())
             imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
-            logger.info("Blog to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
+            logger.sys.info("Blog to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
         else:
             if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
             f.save(os.path.join(UPLOAD_FOLDER, filename))
             imgUrl = request.url_root + IMAGE_FOLDER + filename
-            logger.info("Blog to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
+            logger.sys.info("Blog to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
         #返回数据加上自定义头
         if editorType == "wangEditor":
             res = Response(imgUrl)
@@ -63,7 +63,7 @@ def UploadBlogImage():
 #对头像图片上传进行响应
 @upload_blueprint.route('/avatar/', methods=['POST','OPTIONS'])
 def UploadAvatarImage():
-    logger.debug(request.files)
+    logger.sys.debug(request.files)
     f = request.files.get('file')
     # Check if the file is one of the allowed types/extensions
     if f and allowed_file(f.filename):
@@ -72,24 +72,24 @@ def UploadAvatarImage():
             imgUrl = "/EauDouce/avatar/" + filename
             upres  = UploadImage2Upyun(imgUrl, f.stream.read())
             imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
-            logger.info("Avatar to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
+            logger.sys.info("Avatar to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
         else:
             if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
             f.save(os.path.join(UPLOAD_FOLDER, filename))
             imgUrl = "/" + IMAGE_FOLDER + filename
-            logger.info("Avatar to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
+            logger.sys.info("Avatar to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
         # return user home and write avatar url into mysql db.
         res = g.api.user_update_avatar(g.username, imgUrl)
     else:
         res = {"success": False, "msg": u"上传失败: 未成功获取文件或格式不允许"}
 
-    logger.info(res)
+    logger.sys.info(res)
     return jsonify(res)
 
 #对封面图片上传进行响应
 @upload_blueprint.route('/cover/', methods=['POST','OPTIONS'])
 def UploadCoverImage():
-    logger.debug(request.files)
+    logger.sys.debug(request.files)
     f = request.files.get('file')
     # Check if the file is one of the allowed types/extensions
     if f and allowed_file(f.filename):
@@ -98,18 +98,18 @@ def UploadCoverImage():
             imgUrl = "/EauDouce/cover/" + filename
             upres  = UploadImage2Upyun(imgUrl, f.stream.read())
             imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
-            logger.info("Cover to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
+            logger.sys.info("Cover to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
         else:
             if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
             f.save(os.path.join(UPLOAD_FOLDER, filename))
             imgUrl = "/" + IMAGE_FOLDER + filename
-            logger.info("Cover to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
+            logger.sys.info("Cover to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
         # return user home and write avatar url into mysql db.
         res = g.api.user_update_cover(g.username, imgUrl)
     else:
         res = {"success": False, "msg": u"上传失败: 未成功获取文件或格式不允许"}
 
-    logger.info(res)
+    logger.sys.info(res)
     return jsonify(res)
 
 #对头像图片裁剪后上传进行响应
@@ -123,18 +123,18 @@ def UploadClipperAvatar():
             imgUrl = "/EauDouce/avatar/" + filename
             upres  = UploadImage2Upyun(imgUrl, base64str(data))
             imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
-            logger.info("Avatar to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
+            logger.sys.info("Avatar to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
         else:
             if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
             file=open(os.path.join(UPLOAD_FOLDER, filename), 'wb')
             file.write(imgdata)
             file.close()
             imgUrl = "/" + IMAGE_FOLDER + filename
-            logger.info("Avatar to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
+            logger.sys.info("Avatar to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
         # return user home and write avatar url into mysql db.
         res = g.api.user_update_avatar(g.username, imgUrl)
     else:
         res = {"success": False, "msg": u"不支持的action"}
 
-    logger.info(res)
+    logger.sys.info(res)
     return jsonify(res)
