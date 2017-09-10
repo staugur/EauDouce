@@ -9,7 +9,7 @@
     :license: MIT, see LICENSE for more details.
 """
 
-import requests, sys
+import requests, sys, json
 from config import REDIS, MYSQL, PLUGINS
 from torndb import IntegrityError, Connection
 from utils.tool import api_logger, get_today, ListEqualSplit, md5, DO
@@ -961,14 +961,20 @@ class SysApiManager(ServiceBase):
         api_logger.info(res)
         return res
 
-    def post_applet_users(self, WxUser):
+    def post_applet_users(self, **kwargs):
         """记录微信小程序访问用户
-        WxUser str, 微信用户账号
+        avatarUrl=kwargs.get("avatarUrl")
+        country=kwargs.get("country")
+        province=kwargs.get("province")
+        city=kwargs.get("city")
+        gender=kwargs.get("gender")
+        nickName=kwargs.get("nickName")
         """
+
         res = dict(success=False, msg=None)
         key = "EauDouce:AppletUsers"
-        if WxUser:
-            rid = self.redis.sadd(key, WxUser)
+        if kwargs:
+            rid = self.redis.sadd(key, json.dumps(kwargs))
             if rid == 1:
                 res.update(success=True)
             else:
@@ -985,7 +991,7 @@ class SysApiManager(ServiceBase):
         data = self.redis.smembers(key)
         if isinstance(data, set):
             data = list(data)
-        res.update(data=data)
+        res.update(data=[json.loads(i) for i in data] if i)
         return res
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):

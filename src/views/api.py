@@ -215,7 +215,14 @@ class Sys(Resource):
         if query == "friendlink":
             return g.api.post_sys_friendlink(request.form.get("link"), request.form.get("title"))
         if query == "WechatApplet":
-            return g.api.post_applet_users(request.form.get("WxUser"))
+            return g.api.post_applet_users(
+                avatarUrl=request.form.get("avatarUrl"),
+                country=request.form.get("country"),
+                province=request.form.get("province"),
+                city=request.form.get("city"),
+                gender=request.form.get("gender"),
+                nickName=request.form.get("nickName"),
+            )
 
     def delete(self):
 
