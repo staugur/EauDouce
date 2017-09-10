@@ -1,5 +1,4 @@
 <script type="text/javascript">
-//$(document).ready(function () {
     var AccessCount = document.getElementById("AccessCount");
     $.ajax({
         url: "{{ url_for('AccessCount.uv', url=request.url) }}",
@@ -14,5 +13,4 @@
             AccessCount.innerHTML = '<i class="icon-eye-open icon-1x"></i>&nbsp;访问统计插件发生未知错误';
         }
     });
-//});
 </script>

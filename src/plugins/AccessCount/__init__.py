@@ -28,9 +28,9 @@ else:
     __state__   = "disabled"
 
 
-AccessCountBlueprint = Blueprint("AccessCount", "AccessCount")
 pb    = PluginBase()
 uvKey = "EauDouce:AccessCount:uv"
+AccessCountBlueprint = Blueprint("AccessCount", "AccessCount")
 @AccessCountBlueprint.route("/uv/")
 def uv():
     url = request.args.get("url")
@@ -38,7 +38,6 @@ def uv():
     sql = "select id,url,ip from blog_clicklog where url=%s"
     num = len(pb.mysql_read.query(sql, url))
     res.update(data=num)
-    #res.update(data=pb.redis.hgetall(uvKey).get(url) or 1)
     pb.logger.info(res)
     return jsonify(res)
 
@@ -48,16 +47,19 @@ def getPluginClass():
 class AccessCount(PluginBase):
     """ 记录与统计每天访问数据 """
 
-    pvKey = "EauDouce:AccessCount:pv:" + get_today("%Y%m%d")
-    ipKey = "EauDouce:AccessCount:ip:" + get_today("%Y%m%d")
-    urlKey= uvKey
+    def Click2MySQL(self, data):
+        if isinstance(data, dict):
+            if data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
+                sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s"
+                try:
+                    pb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"))
+                except Exception, e:
+                    self.logger.warn(e, exc_info=True)
 
     def Record_ip_pv(self, **kwargs):
         """ 记录ip、ip """
-
         data  = kwargs.get("access_data")
-        #self.asyncQueue.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
-        #self.asyncQueue.enqueue(Click2MySQL, data)
+        self.Click2MySQL(data)
 
     def register_cep(self):
         return {"after_request_hook": self.Record_ip_pv}

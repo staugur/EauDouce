@@ -107,13 +107,7 @@
             <!--首页轮番图-->
             {% block AlternateDiagram %}{% endblock %}
             <!-- 公告 -->
-            {% block notice %}
-            <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
-                {% for notice in g.api.get_sys_notice().data %}
-                <i class="icon-bullhorn"></i>&nbsp;{{ notice.msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                {% endfor %}
-            </marquee>
-            {% endblock %}
+            {% block notice %}{% endblock %}
         </div>
     </div>
     <div class="row clearfix">
