@@ -4,19 +4,18 @@
 
 {% block head %}
 <style type="text/css">
+/*
     .carousel{
-     height: 360px;
-     /*height: auto;*/
      background-color: #000000;
     }
     .carousel .item{
-     /*height: auto;*/
-     height: 360px;
+     max-height: 360px;
      background-color: #000000;
     }
+*/
     .carousel img{
-     /*height: 360px;*/
-     width: 100%;
+     height: 320px;
+     //width: 100%;
     }
 </style>
 {% endblock %}
@@ -48,7 +47,7 @@
                 <div class="carousel-inner">
                     {%- for banner in banners %}
                     <div class="item{% if banner.isActive %} active{% endif %}">
-                        <a href="{{ url_for('front.blogShow', bid=banner.id) }}"><img src="{{ banner.imgUrl }}" max-width="1600px" height="500px" class="img-responsive" /></a>
+                        <a href="{{ url_for('front.blogShow', bid=banner.id) }}"><img src="{{ banner.imgUrl }}" width="1600px" height="320px"  /></a>
                         <div class="carousel-caption">
                             <p>{{ banner.title }}</p>
                         </div>
