@@ -154,6 +154,7 @@ def getIpArea(ip):
             data = DO(data.data)
     else:
         data = DO(data.data)
+    logger.access.debug(data)
     if u'内网IP' in data.city:
         city = data.city
     else:
