@@ -16,8 +16,6 @@ from user_agents import parse as user_agents_parse
 _sb = ServiceBase()
 
 def Click2MySQL(data):
-    url = data.get("url")
-    logger.access.info("url: {}, rq in: {}, static in: {}".format(url, not "/rqdashboard" in url, not "/static" in url))
     if isinstance(data, dict):
         if "/rqdashboard" in data.get("url") or "/static/" in data.get("url"):
             return
