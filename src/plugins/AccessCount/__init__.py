@@ -13,9 +13,8 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 from config import PLUGINS
 from utils.tool import get_today
-from utils.qf import Click2MySQL, Click2Redis
 from flask import Blueprint, jsonify, request
-
+from user_agents import parse as user_agents_parse
 
 __name__        = "AccessCount"
 __description__ = "IP、PV、UV统计插件"
@@ -50,9 +49,22 @@ class AccessCount(PluginBase):
     def Click2MySQL(self, data):
         if isinstance(data, dict):
             if data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
-                sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s"
+                # 解析User-Agent
+                uap = user_agents_parse(data.get("agent"))
+                browserDevice, browserOs, browserFamily = str(uap).split(' / ')
+                if uap.is_mobile:
+                    browserType = "mobile"
+                elif uap.is_pc:
+                    browserType = "pc"
+                elif uap.is_tablet:
+                    browserType = "tablet"
+                elif uap.is_bot:
+                    browserType = "bot"
+                else:
+                    browserType = "unknown"
+                sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, browserType=%s, browserDevice=%s, browserOs=%s, browserFamily=%s"
                 try:
-                    pb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"))
+                    pb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), browserType, browserDevice, browserOs, browserFamily)
                 except Exception, e:
                     self.logger.warn(e, exc_info=True)
 
