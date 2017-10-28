@@ -9,20 +9,33 @@
     :license: Apache2.0, see LICENSE for more details.
 """
 
-from .tool import logger
+from .tool import logger, getIpArea
 from libs.base import ServiceBase
+from user_agents import parse as user_agents_parse
 
 _sb = ServiceBase()
 
-
 def Click2MySQL(data):
-    if isinstance(data, dict):
+    if isinstance(data, dict) and "/rqdashboard/" not in data.get("url") and "/static/" not in data.get("url"):
         if data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
-            sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s"
+            # 解析User-Agent
+            uap = user_agents_parse(data.get("agent"))
+            browserDevice, browserOs, browserFamily = str(uap).split(' / ')
+            if uap.is_mobile:
+                browserType = "mobile"
+            elif uap.is_pc:
+                browserType = "pc"
+            elif uap.is_tablet:
+                browserType = "tablet"
+            elif uap.is_bot:
+                browserType = "bot"
+            else:
+                browserType = "unknown"
+            sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, isp=%s, browserType=%s, browserDevice=%s, browserOs=%s, browserFamily=%s"
             try:
-                _sb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"))
+                _sb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), getIpArea(data.get("ip")), browserType, browserDevice, browserOs, browserFamily)
             except Exception, e:
-                logger.sys.warn(e, exc_info=True)
+                logger.plugin.warn(e, exc_info=True)
 
 
 def Click2Redis(data, pvKey, ipKey, urlKey):

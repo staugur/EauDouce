@@ -9,6 +9,7 @@
     :license: MIT, see LICENSE for more details.
 """
 
+from rq import Queue
 from redis import from_url
 from torndb import Connection
 from config import REDIS, MYSQL, PLUGINS
@@ -36,6 +37,9 @@ class ServiceBase(object):
                     max_idle_time=self.timeout)
         self.mysql_read = self._mysql
         self.mysql_write= self._mysql
+        self.asyncQueue = Queue(connection=self.redis)
+        self.asyncQueueLow = Queue(name='low', connection=self.redis)
+        self.asyncQueueHigh = Queue(name='high', connection=self.redis)
 
 
 class PluginBase(ServiceBase):
