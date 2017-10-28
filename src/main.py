@@ -39,6 +39,8 @@ sys.setdefaultencoding('utf-8')
 
 #初始化定义application
 app = Flask(__name__)
+app.config["REDIS_URL"] = REDIS
+app.config["RQ_POLL_INTERVAL"] = 2500
 
 #初始化插件管理器(自动扫描并加载运行)
 plugin = PluginManager()
