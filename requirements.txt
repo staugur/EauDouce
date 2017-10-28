@@ -12,3 +12,4 @@ gunicorn
 gevent
 uwsgi
 user_agents
+rq
