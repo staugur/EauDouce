@@ -18,7 +18,9 @@ _sb = ServiceBase()
 def Click2MySQL(data):
     url = data.get("url")
     logger.access.info("url: {}, rq in: {}, static in: {}".format(url, not "/rqdashboard" in url, not "/static" in url))
-    if isinstance(data, dict) and not "/rqdashboard" in data.get("url") and not "/static/" in data.get("url"):
+    if isinstance(data, dict):
+        if "/rqdashboard" in data.get("url") or "/static/" in data.get("url"):
+            return
         if data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
             # 解析User-Agent
             uap = user_agents_parse(data.get("agent"))
