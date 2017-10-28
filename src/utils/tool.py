@@ -138,3 +138,27 @@ def async(f):
         thr.start()
     return wrapper
 
+
+def getIpArea(ip):
+    """查询IP地址信息，返回格式：国家 省级 市级 运营商"""
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36"}
+    url = "http://ip.taobao.com/service/getIpInfo.php?ip={0}".format(ip)
+    try:
+        data = DO(requests.get(url, timeout=10, headers=headers).json())
+    except requests.exceptions.Timeout:
+        try:
+            data = DO(requests.get(url, headers=headers).json())
+        except Exception:
+            return "Unknown"
+        else:
+            data = DO(data.data)
+    else:
+        data = DO(data.data)
+    if u'内网IP' in data.city:
+        city = data.city
+    else:
+        if data.city:
+            city = data.city if u"市" in data.city else data.city + u"市"
+        else:
+            city = data.city
+    return u"{0} {1} {2} {3}".format(data.country, data.region.replace(u'市',''), city, data.isp)

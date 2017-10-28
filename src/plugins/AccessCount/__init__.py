@@ -12,7 +12,7 @@
 from __future__ import absolute_import
 from libs.base import PluginBase
 from config import PLUGINS
-from utils.tool import get_today
+from utils.tool import get_today, getIpArea
 from flask import Blueprint, jsonify, request
 from user_agents import parse as user_agents_parse
 
@@ -62,9 +62,9 @@ class AccessCount(PluginBase):
                     browserType = "bot"
                 else:
                     browserType = "unknown"
-                sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, browserType=%s, browserDevice=%s, browserOs=%s, browserFamily=%s"
+                sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, browserType=%s, browserDevice=%s, browserOs=%s, browserFamily=%s, isp=%s"
                 try:
-                    pb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), browserType, browserDevice, browserOs, browserFamily)
+                    pb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), browserType, browserDevice, browserOs, browserFamily, getIpArea(data.get("ip")))
                 except Exception, e:
                     self.logger.warn(e, exc_info=True)
 
