@@ -23,7 +23,7 @@ __date__    = "2017-03-26"
 __version__ = "0.0.1"
 __license__ = "MIT"
 
-import json, datetime, SpliceURL, time, os, jinja2, sys
+import json, datetime, SpliceURL, time, os, jinja2, sys, rq_dashboard
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
 from utils.tool import logger, isLogged_in, md5, ChoiceColor, TagRandomColor
@@ -62,6 +62,7 @@ app.register_blueprint(front_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
+app.register_blueprint(rq_dashboard.blueprint, url_prefix="/rqdashboard")
 #注册蓝图扩展点
 for bep in plugin.get_all_bep:
     prefix = bep["prefix"]

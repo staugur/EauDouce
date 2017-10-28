@@ -13,3 +13,4 @@ gevent
 uwsgi
 user_agents
 rq
+rq-dashboard
