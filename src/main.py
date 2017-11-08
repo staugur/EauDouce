@@ -110,6 +110,7 @@ def after_request(response):
     after_request_hook = plugin.get_all_cep.get("after_request_hook")
     for cep_func in after_request_hook():
         cep_func(request=request, response=response, access_data=data)
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
     return response
 
 @app.errorhandler(404)
