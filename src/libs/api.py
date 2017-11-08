@@ -263,15 +263,22 @@ class BlogApiManager(ServiceBase):
         "查询某个id的博客数据"
 
         res = {"msg": None, "data": [], "code": 0}
-        sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article WHERE id=%s" %blogId
-        logger.api.info("get some id blog SQL: %s" %sql)
-        try:
-            data = self.mysql_read.get(sql)
-        except Exception,e:
-            logger.api.error(e, exc_info=True)
-            res.update(msg="get blog error", code=1000011)
-        else:
+        key = "EauDouce:blog:{}:cache".format(blogId)
+        if self.redis.exists(key):
+            data = json.loads(self.redis.get(key))
             res.update(data=data)
+            logger.api.info("hit blog cache")
+        else:
+            sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article WHERE id=%s" %blogId
+            try:
+                data = self.mysql_read.get(sql)
+            except Exception,e:
+                logger.api.error(e, exc_info=True)
+                res.update(msg="get blog error", code=1000011)
+            else:
+                res.update(data=data)
+                self.redis.set(key, json.dumps(data))
+                self.redis.expire(key, 600)
 
         logger.api.debug(res)
         return res
