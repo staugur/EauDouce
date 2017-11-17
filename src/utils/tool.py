@@ -9,7 +9,7 @@
     :license: MIT, see LICENSE for more details.
 """
 
-import re, requests, hashlib, datetime, random, upyun
+import re, requests, hashlib, datetime, random, upyun, time
 from uuid import uuid4
 from log import Logger
 from base64 import b32encode
@@ -26,6 +26,7 @@ class DO(dict):
         except KeyError:
             raise AttributeError(name)
 
+###===~~~
 ip_pat          = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
 mail_pat        = re.compile(r"([0-9a-zA-Z\_*\.*\-*]+)@([a-zA-Z0-9\-*\_*\.*]+)\.([a-zA-Z]+$)")
 user_pat        = re.compile(r'[a-zA-Z\_][0-9a-zA-Z\_]')
@@ -163,3 +164,8 @@ def getIpArea(ip):
         else:
             city = data.city
     return u"{0} {1} {2} {3}".format(data.country, data.region.replace(u'市',''), city, data.isp)
+
+
+def get_current_timestamp():
+    """ 获取本地当前时间戳(10位): Unix timestamp：是从1970年1月1日（UTC/GMT的午夜）开始所经过的秒数，不考虑闰秒 """
+    return int(time.mktime(datetime.datetime.now().timetuple()))

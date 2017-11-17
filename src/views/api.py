@@ -14,6 +14,9 @@ from torndb import IntegrityError
 from flask import request, g, Blueprint, abort
 from flask_restful import Api, Resource
 from utils.tool import logger
+from utils.Signature import Signature
+
+sign = Signature()
 
 class Blog(Resource):
 
@@ -163,41 +166,6 @@ class Misc(Resource):
 
 class User(Resource):
 
-    def get(self):
-        """Public func, no token, with url args:
-        1. num, 展现的数量,默认是10条,可为all
-        2. username|email, 用户名或邮箱，数据库主键，唯一。
-
-        返回数据样例，{'msg':'success or error(errmsg)', 'code':'result code', 'data':data, 'success': True or False}
-        """
-        res = {"code": 200, "msg": None, "data": None}
-        username     = request.args.get("username")
-        getalluser   = True if request.args.get("getalluser") in ("True", "true", True) else False
-        getadminuser = True if request.args.get("getadminuser") in ("True", "true", True) else False
-
-        logger.sys.info(res)
-        return res
-
-    def post(self):
-        """login and registry, with url args:
-        1. action=log/reg, default is log;
-
-        post data:
-        1. username,
-        2. password,
-        3. email
-        """
-        NULL     = None
-        res      = {"url": request.url, "msg": None, "success": False}
-        username = request.form.get("username")
-        password = request.form.get("password")
-        email    = request.form.get("email", NULL)
-        action   = request.args.get("action") #log or reg (登录or注册)
-
-    def delete(self):
-        #sql = "DELETE FROM user WHERE username=%s"
-        return {}
-
     def put(self):
         """Update user profile"""
         
@@ -217,16 +185,6 @@ class Sys(Resource):
             return g.api.post_sys_notice(request.form.get("noticeMsg"))
         if query == "friendlink":
             return g.api.post_sys_friendlink(request.form.get("link"), request.form.get("title"))
-        if query == "WechatApplet":
-            logger.sys.debug(request.form)
-            return g.api.post_applet_users(
-                avatarUrl=request.form.get("avatarUrl"),
-                country=request.form.get("country"),
-                province=request.form.get("province"),
-                city=request.form.get("city"),
-                gender=request.form.get("gender"),
-                nickName=request.form.get("nickName"),
-            )
 
     def delete(self):
 
@@ -244,14 +202,6 @@ class Sys(Resource):
             data = { k:v for k,v in request.form.iteritems() if k in ("about_awi", "about_ww", "about_address", "about_phone", "about_email", "about_beian", "seo_keywords", "seo_description", "site_title", "site_feedname", "applet") }
             return g.api.update_sys_configure(**data)
 
-class Author(Resource):
-
-    def get(self):
-        return g.api.get_apply_author()
-
-    def post(self):
-        return g.api.post_apply_author(request.args.get("username"))
-
 class Comment(Resource):
 
     def get(self):
@@ -260,27 +210,33 @@ class Comment(Resource):
         """
         return g.api.misc_get_commend(request.args.get("blogId"))
 
-class Cache(Resource):
+class WechatApplet(Resource):
+    """ 小程序专属接口 """
 
+    @sign.signature_required
     def get(self):
-        data = g.cache.get_cache_blog(request.args.get("blogId"))
-        g.hitCache = True if data else False
-        return data
-
-    def post(self):
-        return g.cache.post_cache_blog(request.args.get("blogId"))
-
-class PLUGIN(Resource):
-
-    def post(self):
-
-        plugin_name = request.form.get("plugin_name")
-        if request.args.get("action") == "enable_plugin":
-            return g.pluginApi.enable_plugin(plugin_name)
-        if request.args.get("action") == "disable_plugin":
-            return g.pluginApi.disable_plugin(plugin_name)
-        if request.args.get("action") == "reload_plugin":
-            return g.pluginApi.reload_plugins()
+        Action = request.args.get("Action")
+        if Action == "AccessUserLog":
+            logger.sys.debug(request.form)
+            return g.api.post_applet_users(
+                avatarUrl=request.form.get("avatarUrl"),
+                country=request.form.get("country"),
+                province=request.form.get("province"),
+                city=request.form.get("city"),
+                gender=request.form.get("gender"),
+                nickName=request.form.get("nickName"),
+            )
+        elif Action == "get_index":
+            sort   = request.args.get('sort', 'desc')
+            limit  = request.args.get('limit', None)
+            page   = int(request.args.get("page", 0))
+            length = int(request.args.get("length", 5))
+            return g.api.blog_get_single_index(sort, limit, page, length)
+        elif Action == "get_banner":
+            return g.api.get_banner()
+        elif Action == "get_blogId":
+            blogId = int(request.args.get('blogId'))
+            return g.api.blog_get_id(blogId)
 
 api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)
@@ -289,6 +245,4 @@ api.add_resource(Misc, '/misc', '/misc/', endpoint='misc')
 api.add_resource(User, '/user', '/user/', endpoint='user')
 api.add_resource(Sys, '/sys', '/sys/', endpoint='sys')
 api.add_resource(Comment, '/comment', '/comment/', endpoint='comment')
-api.add_resource(Cache, "/cache/", "/cache", endpoint="cache")
-api.add_resource(Author, "/author/", "/author", endpoint="author")
-api.add_resource(PLUGIN, '/plugin/', '/plugin', endpoint='plugin')
+api.add_resource(WechatApplet, '/wechatapplet', '/wechatapplet/', endpoint='wechatapplet')
