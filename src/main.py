@@ -111,6 +111,7 @@ def after_request(response):
     for cep_func in after_request_hook():
         cep_func(request=request, response=response, access_data=data)
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
 @app.errorhandler(404)
