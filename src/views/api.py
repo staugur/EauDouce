@@ -214,7 +214,7 @@ class WechatApplet(Resource):
     """ 小程序专属接口 """
 
     @sign.signature_required
-    def get(self):
+    def post(self):
         Action = request.args.get("Action")
         if Action == "AccessUserLog":
             logger.sys.debug(request.form)
@@ -226,7 +226,11 @@ class WechatApplet(Resource):
                 gender=request.form.get("gender"),
                 nickName=request.form.get("nickName"),
             )
-        elif Action == "get_index":
+
+    @sign.signature_required
+    def get(self):
+        Action = request.args.get("Action")
+        if Action == "get_index":
             sort   = request.args.get('sort', 'desc')
             limit  = request.args.get('limit', None)
             page   = int(request.args.get("page", 0))
