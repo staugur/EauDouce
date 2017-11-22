@@ -258,6 +258,11 @@ class BlogApiManager(ServiceBase):
         logger.api.debug(res)
         return res
 
+    def blog_refresh_id_cache(self, blogId):
+        """刷新某个id博客数据缓存"""
+        key = "EauDouce:blog:{}:cache".format(blogId)
+        kid = self.redis.delete(key)
+        return True if isinstance(kid, (int, long)) else False
 
     def blog_get_id(self, blogId):
         "查询某个id的博客数据"
@@ -356,7 +361,7 @@ class BlogApiManager(ServiceBase):
                     logger.api.error(e, exc_info=True)
                     res.update(msg="blog update error.", code=1000016)
                 else:
-                    res.update(success=True)
+                    res.update(success=True, msg=self.blog_refresh_id_cache(blog_blogId))
             else:
                 res.update(msg="blog form error.", code=1000017)
 
@@ -375,7 +380,7 @@ class BlogApiManager(ServiceBase):
             logger.api.error(e, exc_info=True)
             res.update(msg="delete blog error", code=1000018)
         else:
-            res.update(success=True)
+            res.update(success=True, msg=self.blog_refresh_id_cache(blogId))
 
         logger.api.debug(res)
         return res
