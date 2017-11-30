@@ -1,0 +1,38 @@
+<!--
+ * 基于https://github.com/GC0202/WordPress-connect-WeChat-applet开发
+ * The MIT License (MIT)
+-->
+ 
+<!--pages/user/user.wxml-->
+<view class="page me">
+    <view class="userinfo">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+     <view class="usermotto">
+        <text class="user-motto">{{motto}}</text>
+     </view> 
+    </view>
+
+    <view class="about">
+        <view class="about-item">
+          <text class="about-item-title">关于项目</text>
+          <text class="about-item-content">基于EauDouce的Api做微信小程序应用（实现了数据的读取、内容展示加载），目前尚有不足，望您见谅！</text>
+        </view>
+        <view class="about-item">
+          <text class="about-item-title">官网地址</text>
+          <text class="about-item-content link">https://www.saintic.com</text>
+        </view>
+        <view class="about-item">
+          <text class="about-item-title">公众号</text>
+          <text class="about-item-content ">暂无</text>
+        </view>
+        <view class="about-item">
+          <text class="about-item-title">联系方式</text>
+          <text class="about-item-content ">邮箱：staugur@saintic.com</text>
+        </view>
+        <view class="about-item">
+          <text class="about-item-title">当前版本</text>
+          <text class="about-item-content ">{{version}}</text>
+        </view>
+    </view>
+</view>

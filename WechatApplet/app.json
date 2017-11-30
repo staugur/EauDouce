@@ -1,0 +1,35 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/user/user"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#DE3639",
+    "navigationBarTitleText": "陶先森de博客",
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": "true"
+  },
+  "tabBar": {
+    "color": "#FFF",
+    "selectedColor": "#DE3639",
+    "borderStyle": "white",
+    "backgroundColor": "#333",
+    "list": [{
+      "pagePath": "pages/index/index",
+      "iconPath": "images/night_a4e.png",
+      "selectedIconPath": "images/night_a4q.png",
+      "text": "首页"
+    }, {
+      "pagePath": "pages/user/user",
+      "iconPath": "images/night_a4r.png",
+      "selectedIconPath": "images/night_a4s.png",
+      "text": "关于我"
+    }
+    ]
+  },
+  "networkTimeout": {
+    "request": 120000
+  }
+}
