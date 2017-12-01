@@ -1015,5 +1015,9 @@ class SysApiManager(ServiceBase):
         res.update(data=[json.loads(i) for i in data if i])
         return res
 
+    def sys_get_clicklog(self):
+        sql = "SELECT id,url,agent,method,ip,status_code,referer,isp,browserType,browserDevice,browserOs,browserFamily FROM blog_clicklog ORDER BY id DESC LIMIT 500"
+        return self.mysql.query(sql)
+
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
     pass

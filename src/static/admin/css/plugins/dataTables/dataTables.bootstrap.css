@@ -229,3 +229,13 @@ div.DTFC_RightFootWrapper table,
 div.DTFC_LeftFootWrapper table {
     border-top: none;
 }
+
+/*自定义css：设置表头居中*/
+        .table>tbody>tr>td{
+            text-align:center;
+        }
+        /* dataTables表头居中 */
+        .table>thead:first-child>tr:first-child>th{
+            text-align:center;
+        }
+

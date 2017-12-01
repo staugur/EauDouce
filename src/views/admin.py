@@ -82,3 +82,8 @@ def system_notice():
 @admin_login_required
 def system_friendlink():
     return render_template("admin/system/friendlink.html")
+
+@admin_blueprint.route("/system/clicklog/")
+@admin_login_required
+def system_clicklog():
+    return render_template("admin/system/clicklog.html")
