@@ -1016,7 +1016,7 @@ class SysApiManager(ServiceBase):
         return res
 
     def sys_get_clicklog(self):
-        sql = "SELECT id,url,agent,method,ip,status_code,referer,isp,browserType,browserDevice,browserOs,browserFamily FROM blog_clicklog ORDER BY id DESC LIMIT 500"
+        sql = "SELECT id,url,agent,method,ip,status_code,referer,isp,browserType,browserDevice,browserOs,browserFamily FROM blog_clicklog ORDER BY id DESC LIMIT 100"
         return self.mysql_read.query(sql)
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
