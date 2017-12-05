@@ -117,9 +117,14 @@ def UploadRealFile2Upyun(file, imgurl, kwargs=PLUGINS['UpYunStorage']):
 
 def BaiduActivePush(pushUrl, original=True, callUrl=PLUGINS['BaiduActivePush']['callUrl']):
     """百度主动推送(实时)接口提交链接"""
+    res = dict(success=0)
     callUrl = callUrl + "&type=original" if original else callUrl
-    res = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
-    logger.api.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
+    try:
+        res = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
+    except Exception,e:
+        logger.api.warning(e, exc_info=True)
+    else:
+        logger.api.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, res))
     return res
 
 def ChoiceColor():

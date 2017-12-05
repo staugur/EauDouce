@@ -140,7 +140,7 @@ def UploadClipperAvatar():
     return jsonify(res)
 
 @upload_blueprint.route('/test/', methods=['POST','OPTIONS'])
-def UploadCoverImage():
+def test():
     logger.sys.debug(request.files)
     f = request.files.get('file')
     # Check if the file is one of the allowed types/extensions
