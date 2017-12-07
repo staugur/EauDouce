@@ -427,7 +427,7 @@ class MiscApiManager(ServiceBase):
             logger.api.error(e, exc_info=True)
             res.update(msg="set or unset recommend error", success=False, code=200003)
         else:
-            res.update(success=True)
+            res.update(success=True, msg=self.blog_refresh_id_cache(blog_blogId))
 
         logger.api.debug(res)
         return res
@@ -460,7 +460,7 @@ class MiscApiManager(ServiceBase):
             logger.api.error(e, exc_info=True)
             res.update(success=False, msg="set or unset top error", code=200006)
         else:
-            res.update(success=True)
+            res.update(success=True, msg=self.blog_refresh_id_cache(blog_blogId))
 
         logger.api.debug(res)
         return res
