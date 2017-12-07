@@ -9,7 +9,7 @@
     :license: Apache2.0, see LICENSE for more details.
 """
 
-from .tool import logger, getIpArea
+from .tool import logger, getIpArea, get_current_timestamp
 from libs.base import ServiceBase
 from user_agents import parse as user_agents_parse
 
@@ -19,7 +19,7 @@ def Click2MySQL(data):
     if isinstance(data, dict):
         if "/rqdashboard" in data.get("url") or "/static/" in data.get("url"):
             return
-        if data.get("agent") and data.get("method") in ("GET", "POST", "PUT", "DELETE", "OPTIONS"):
+        if data.get("agent"):
             # 解析User-Agent
             uap = user_agents_parse(data.get("agent"))
             browserDevice, browserOs, browserFamily = str(uap).split(' / ')
@@ -33,9 +33,9 @@ def Click2MySQL(data):
                 browserType = "bot"
             else:
                 browserType = "unknown"
-            sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, isp=%s, browserType=%s, browserDevice=%s, browserOs=%s, browserFamily=%s"
+            sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, isp=%s, browserType=%s, browserDevice=%s, browserOs=%s, browserFamily=%s, clickTime=%s"
             try:
-                _sb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), getIpArea(data.get("ip")), browserType, browserDevice, browserOs, browserFamily)
+                _sb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), getIpArea(data.get("ip")), browserType, browserDevice, browserOs, browserFamily, get_current_timestamp())
             except Exception, e:
                 logger.plugin.warn(e, exc_info=True)
 
