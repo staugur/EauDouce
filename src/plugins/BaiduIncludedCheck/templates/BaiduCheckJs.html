@@ -14,6 +14,10 @@ $(document).ready(function () {
             } else {
                 BaiduIncludedCheck.setAttribute("class", "text-danger");
                 BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录失败';
+                var bp = document.createElement('script');
+                bp.src = '//push.zhanzhang.baidu.com/push.js';
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(bp, s);
             }
         },
         error: function(error){
