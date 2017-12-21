@@ -192,7 +192,10 @@
             <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ Email }}">{{ Author }}</a>&nbsp;&nbsp;
             <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.api.get_sys_config().data.about_beian }}</a>&nbsp;&nbsp;
             <br/>
-            <a href="https://www.upyun.com/?from=saintic" target="_blank" rel="nofollow" upyun=""><img src="https://img.saintic.com/misc/public/upyunlogo.png" height="49px"></a>
+            <div id="cc-myssl-id">
+                <a href="https://www.upyun.com/?from=saintic" target="_blank" rel="nofollow" upyun=""><img src="https://img.saintic.com/misc/public/upyunlogo.png" height="49px"></a>
+                <a href="https://myssl.com/www.saintic.com?from=mysslid" target="_blank"><img src="https://static.myssl.com/res/images/myssl-id3.png" alt="" style="max-height:49px;margin:0 auto;"></a>
+            </div>
             {% if base_front_footer_include %}
                 {% for fi in base_front_footer_include() %}
                     {% include fi %}
