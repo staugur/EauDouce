@@ -50,10 +50,6 @@ christmas_blueprint = Blueprint("christmas", "christmas")
 def index():
     return render_template("Christmas/christmas.html")
 
-@christmas_blueprint.route("/open/")
-def open():
-    return render_template("ChristmasOpen/christmas.html")
-
 #: 返回插件主类
 def getPluginClass():
     return ChristmasSnowmanMain
