@@ -45,12 +45,14 @@ if PLUGINS["Christmas"] in ("true", "True", True):
 else:
     __state__   = "disabled"
 
-
 christmas_blueprint = Blueprint("christmas", "christmas")
 @christmas_blueprint.route("/")
 def index():
     return render_template("Christmas/christmas.html")
 
+@christmas_blueprint.route("/open/")
+def open():
+    return render_template("ChristmasOpen/christmas.html")
 
 #: 返回插件主类
 def getPluginClass():

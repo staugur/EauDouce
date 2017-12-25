@@ -58,7 +58,7 @@ function fadeOut(elem, speed, opacity){
 }
 function DispMagicEmot(MagicID,H,W){
 	fadeIn(document.getElementById('MagicFace'), 20, 100);
-	MagicFaceUrl = "https://www.saintic.com/christmas/open/";
+	MagicFaceUrl = "/christmas/";
 	document.getElementById("MagicFace").innerHTML = '<iframe width="'+W+'" height="'+H+'" allowtransparency="true" seamless="seamless" frameborder="0" src="'+MagicFaceUrl+'" style="position: fixed;"></iframe>';
 	//document.getElementById("MagicFace").style.top = (document.body.scrollTop+((document.body.clientHeight-300)/2))+"px";
 	//document.getElementById("MagicFace").style.left = (document.body.scrollLeft+((document.body.clientWidth-480)/2))+"px";
