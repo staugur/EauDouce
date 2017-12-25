@@ -108,4 +108,7 @@ PLUGINS={
 
     "shareJs": os.getenv("eaudouce_shareJs", True),
     #社会化分享插件
+
+    "Christmas": os.getenv("eaudouce_Christmas", True)
+    #圣诞雪人效果
 }
