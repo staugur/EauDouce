@@ -67,16 +67,17 @@
             <!-- 置顶文章列表 -->
             <div class="row clearfix">
                 <div class="col-md-12 column">
-                    <h3><scan class="icon-fire icon-large"> 置顶文章</scan></h3>
-                    <ol>
+                    <h3>置顶文章</h3>
+                    <ul class="list-unstyled">
                     {% for blog in g.api.blog_get_top_data().data %}
                         <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}">{{ blog.title }}</a></li>
                     {% endfor %}
-                    </ol>
+                    </ul>
                 </div>
             </div>
             <!-- 文章列表缩略 -->
             {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 8)) %}
+            <h3>最新文章</h3>
             <blockquote>
             {% for blog in blogs.data %}
 			<div class="row clearfix">
