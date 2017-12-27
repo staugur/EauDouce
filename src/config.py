@@ -17,9 +17,10 @@ GLOBAL={
     #自定义进程名.
 
     "Host": os.getenv("eaudouce_host", "0.0.0.0"),
+    #监听地址
 
     "Port": os.getenv("eaudouce_port", 10140),
-    #应用绑定的Port.
+    #监听端口.
 
     "LogLevel": os.getenv("eaudouce_loglevel", "DEBUG"),
     #应用日志记录级别, 依次为 DEBUG, INFO, WARNING, ERROR, CRITICAL.
@@ -109,6 +110,6 @@ PLUGINS={
     "shareJs": os.getenv("eaudouce_shareJs", True),
     #社会化分享插件
 
-    "Christmas": os.getenv("eaudouce_Christmas", True)
+    "Christmas": os.getenv("eaudouce_Christmas", False)
     #圣诞雪人效果
 }

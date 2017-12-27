@@ -170,5 +170,4 @@ def signup():
     return redirect(regUrl)
 
 if __name__ == '__main__':
-    Port  = GLOBAL.get('Port')
-    app.run(host="0.0.0.0", port=int(Port), debug=True)
+    app.run(host=GLOBAL.get('Host'), port=int(GLOBAL.get('Port')), debug=True)

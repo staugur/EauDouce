@@ -13,7 +13,7 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 from config import PLUGINS
 from utils.tool import get_today, getIpArea
-from utils.qf import Click2MySQL
+from utils.qf import Click2MySQL, Click2Redis
 from flask import Blueprint, jsonify, request
 
 __name__        = "AccessCount"
@@ -28,15 +28,14 @@ else:
 
 
 pb    = PluginBase()
-uvKey = "EauDouce:AccessCount:uv"
+uvKey = "EauDouce:AccessCount:uv:hash"
 AccessCountBlueprint = Blueprint("AccessCount", "AccessCount")
 @AccessCountBlueprint.route("/uv/")
 def uv():
     url = request.args.get("url")
     res = {"code": 0, "msg": None, "data": None, "url": url}
-    sql = "select id,url,ip from blog_clicklog where url=%s"
-    num = len(pb.mysql_read.query(sql, url))
-    res.update(data=num)
+    sql = "SELECT count(id) FROM blog_clicklog WHERE url LIKE '%%{}%%'".format(url)
+    res.update(data=pb.mysql_read.get(sql).get('count(id)'))
     pb.logger.info(res)
     return jsonify(res)
 
@@ -46,9 +45,14 @@ def getPluginClass():
 class AccessCount(PluginBase):
     """ 记录与统计每天访问数据 """
 
+    pvKey = "EauDouce:AccessCount:pv:hash"
+    ipKey = "EauDouce:AccessCount:ip:" + get_today("%Y%m%d")
+    urlKey= uvKey
+
     def Record_ip_pv(self, **kwargs):
         """ 记录ip、ip """
         data  = kwargs.get("access_data")
+        self.asyncQueue.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
         self.asyncQueueLow.enqueue(Click2MySQL, data)
 
     def register_cep(self):

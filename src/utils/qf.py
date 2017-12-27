@@ -9,7 +9,7 @@
     :license: Apache2.0, see LICENSE for more details.
 """
 
-from .tool import logger, getIpArea, get_current_timestamp
+from .tool import logger, getIpArea, get_current_timestamp, get_today
 from libs.base import ServiceBase
 from user_agents import parse as user_agents_parse
 
@@ -35,32 +35,32 @@ def Click2MySQL(data):
                 browserType = "unknown"
             sql = "insert into blog_clicklog set url=%s, ip=%s, agent=%s, method=%s, status_code=%s, referer=%s, isp=%s, browserType=%s, browserDevice=%s, browserOs=%s, browserFamily=%s, clickTime=%s"
             try:
-                _sb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), getIpArea(data.get("ip")), browserType, browserDevice, browserOs, browserFamily, get_current_timestamp())
+                mid = _sb.mysql_write.insert(sql, data.get("url"), data.get("ip"), data.get("agent"), data.get("method"), data.get("status_code"), data.get("referer"), getIpArea(data.get("ip")), browserType, browserDevice, browserOs, browserFamily, get_current_timestamp())
             except Exception, e:
                 logger.plugin.warn(e, exc_info=True)
+            else:
+                logger.plugin.debug("Click2MySQL for {}".format(mid))
 
 
 def Click2Redis(data, pvKey, ipKey, urlKey):
     """ 记录ip、ip """
 
-    logger.sys.debug('start click2redis')
     if isinstance(data, dict):
         try:
-            pipe = _sb.redis.pipeline()
-            #_sb.redis.incr(pvKey)
-            #_sb.redis.sadd(ipKey, data.get("ip"))
-            pipe.incr(pvKey)
-            pipe.sadd(ipKey, data.get("ip"))
-            key   = data.get("url")
-            value = _sb.redis.hgetall(urlKey).get(key)
+            key  = data.get("url")
+            value= _sb.redis.hget(urlKey, key)
             try:
                 value = int(value)
             except Exception:
                 value = 1
-            value += 1
+            else:
+                value += 1
+            pipe = _sb.redis.pipeline()
+            pipe.hincrby(pvKey, get_today("%Y%m%d"), 1)
+            pipe.sadd(ipKey, data.get("ip"))
             pipe.hset(urlKey, key, value)
             pipe.execute()
         except Exception,e:
-            logger.sys.error(e, exc_info=True)
+            logger.plugin.error(e, exc_info=True)
         else:
-            logger.sys.info("Click2Redis uv result {0}:{1}".format(key, value))
+            logger.plugin.info("Click2Redis uv result {0}:{1}".format(key, value))

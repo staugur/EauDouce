@@ -64,8 +64,19 @@
 {% endblock %}
 
 {% block container %}
+            <!-- 置顶文章列表 -->
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <h3><scan class="icon-fire icon-large"> 置顶文章</scan></h3>
+                    <ol>
+                    {% for blog in g.api.blog_get_top_data().data %}
+                        <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}">{{ blog.title }}</a></li>
+                    {% endfor %}
+                    </ol>
+                </div>
+            </div>
             <!-- 文章列表缩略 -->
-            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 6)) %}
+            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 8)) %}
             <blockquote>
             {% for blog in blogs.data %}
 			<div class="row clearfix">
@@ -130,3 +141,4 @@
 			</nav>
 			</blockquote>
 {% endblock %}
+

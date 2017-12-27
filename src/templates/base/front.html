@@ -135,29 +135,6 @@
                     <img src="/static/img/applet.jpg" class="img-rounded">
                 </div>
             </div>
-            <!-- 标签云 -->
-            <h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
-            <div class="row clearfix">
-                <div class="col-md-12 column">
-                    {% set tags = g.api.blog_get_tags_list().data %}
-                    <div id="tagscloud">
-                    {% for tag in tags %}
-                        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签下的文章" class="{{TagRandomColor()}}">{{ tag }}</a>
-                    {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <!-- 置顶文章列表 -->
-            <h4><scan class="icon-fire icon-large"> 置顶文章</scan></h4>
-            <div class="row clearfix">
-                <div class="col-md-12 column">
-                    <ol>
-                    {% for blog in g.api.blog_get_top_data().data %}
-                        <li><a href="{{ url_for('front.blogShow', bid=blog.id) }}">{{ blog.title }}</a></li>
-                    {% endfor %}
-                    </ol>
-                </div>
-            </div>
             <!-- 推荐文章列表 -->
             <h4><scan class="icon-book icon-large"></scan> 推荐文章</h4>
             <div class="row clearfix">
@@ -169,6 +146,18 @@
                     </ol>
                 </div>
             </div>
+            <!-- 标签云 -->
+            <h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    {%- set tags = g.api.blog_get_tags_list().data %}
+                    <div id="tagscloud">
+                    {%- for tag in tags %}
+                        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签下的文章" class="{{TagRandomColor()}}">{{ tag }}</a>
+                    {%- endfor -%}
+                    </div>
+                </div>
+            </div>
             <!-- 友情链接 -->
             <h4><scan class="icon-link icon-1x"> 友情链接</scan></h4>
             <div class="row clearfix">
@@ -176,6 +165,14 @@
                     {% for fl in g.api.get_sys_friendlink().data %}
                         <p class="text-success"><scan class="icon-external-link"></scan>&nbsp;<a href="{{ fl.link }}" title="{{ fl.title }}" target="_blank">{{ fl.title }}</a></p>
                     {% endfor %}
+                </div>
+            </div>
+            <!-- 推广 -->
+            <h4><scan class="icon-tags icon-1x"> 推广位</scan></h4>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <p><a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=rxnbx8o5&utm_source=rxnbx8o5" target="_blank">免费领取阿里云优惠券！</a></p>
+                    <p><a href="https://s.click.taobao.com/t?e=m%3D2%26s%3D4Pj66Lq%2F4KccQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAlSerte6%2Bgf5ktDeF8xE37FSwej7Ti1zHZZRgErIHXXYboC%2FVQ9%2FFUyM%2BN%2B8%2B2GrWhVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7P37PZ5d3EfkhhwnYyXLnHpDoUWJTlJsdRZujRnIpwuLGJe8N%2FwNpGw%3D%3D" target="_blank"><img src="{{ url_for('static',filename='img/ad/ecs.jpg') }}" alt="阿里云高性能服务器" title="阿里云高性能服务器" class="img-rounded"></a></p>
                 </div>
             </div>
         </div>
