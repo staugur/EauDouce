@@ -24,11 +24,11 @@ def index():
 def blogShow(bid):
     data = g.api.blog_get_id(bid).get("data")
     if data:
-        BaiduActivePushResult = False
-        if g.plugins['BaiduActivePush']['enable'] in ("true", "True", True):
-            BaiduActivePushResult = True if BaiduActivePush(request.url, original=True if data.get("sources") == "原创" else False).get("success_realtime") == 1 else False
-        logger.sys.info("BaiduActivePushResult for id: %s, %s" %(bid, BaiduActivePushResult))
-        return render_template("front/blogShow.html", blogId=bid, data=data, BaiduActivePushResult=BaiduActivePushResult)
+        #BaiduActivePushResult = False
+        #if g.plugins['BaiduActivePush']['enable'] in ("true", "True", True):
+        #    BaiduActivePushResult = True if BaiduActivePush(request.url, original=True if data.get("sources") == "原创" else False).get("success_realtime") == 1 else False
+        #logger.sys.info("BaiduActivePushResult for id: %s, %s" %(bid, BaiduActivePushResult))
+        return render_template("front/blogShow.html", blogId=bid, data=data, original=True if data.get("sources") == "原创" else False)
     else:
         return abort(404)
 

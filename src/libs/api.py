@@ -497,6 +497,32 @@ class MiscApiManager(ServiceBase):
         logger.api.debug(res)
         return res
 
+    def misc_BaiduActivePush(self, pushUrl, original=True):
+        """百度主动推送(实时)接口提交链接，每个链接3次提交机会，超过后不允许提交
+        @param pushUrl str: 提交的链接
+        @param original bool: 是否原创
+        """
+        res = dict(msg=None, success=False)
+        key = "EauDouce:BaiduActivePushUrls:hash"
+        callUrl = PLUGINS['BaiduActivePush']['callUrl']
+        callUrl = callUrl + "&type=original" if original else callUrl
+        pushTimes = int(self.redis.hget(key, pushUrl) or 0)
+        if 0 <= pushTimes <= 3:
+            try:
+                data = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
+            except Exception,e:
+                logger.api.warning(e, exc_info=True)
+                res.update(msg="push failed")
+            else:
+                # data like {u'success_realtime': 0, u'remain_realtime': 0}
+                logger.api.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, data))
+                if int(data["success_realtime"]) == 1:
+                    res.update(success=True)
+                    self.redis.hincrby(key, pushUrl, 1)
+        else:
+            res.update(msg="No submission authority")
+        return res
+
 class UserApiManager(ServiceBase):
 
     @property

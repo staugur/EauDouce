@@ -1,0 +1,29 @@
+<script type="text/javascript">
+$(document).ready(function () {
+    var BaiduActivePush = document.getElementById("BaiduActivePush");
+    $.ajax({
+        url: "{{ url_for('api.misc', action='BaiduActivePush') }}",
+        method: 'POST',
+        datatype: 'json',
+        data: {"pushUrl": "{{ request.base_url }}", "original": "{{ original }}"},
+        success: function(res) {
+            console.log(res);
+            if (res.success==true) {
+                BaiduIncludedCheck.setAttribute("class", "text-success");
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录成功';
+            } else {
+                BaiduIncludedCheck.setAttribute("class", "text-danger");
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录失败';
+                var bp = document.createElement('script');
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(bp, s);
+            }
+        },
+        error: function(error){
+                BaiduIncludedCheck.setAttribute("class", "text-danger");
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件发生未知错误';
+        }
+    });
+});
+</script>

@@ -153,14 +153,21 @@ class Misc(Resource):
         推荐文章: Recommended articles 
         置顶文章: Sticky articles 
         """
-        blogId = request.args.get("blogId")
         action = request.args.get("action")
+        blogId = request.args.get("blogId")
         value  = request.args.get("value", "true")
 
         if action == "recommend":
             return g.api.misc_set_recommend(blogId, value)
         elif action == "top":
             return g.api.misc_set_top(blogId, value)
+        elif action == "BaiduActivePush":
+            """ 百度主动推送(实时)插件 """
+            # 要推送的URL地址，大部分情况下应该是request.base_url
+            pushUrl = request.form.get("pushUrl")
+            # 是否原创文章
+            original = True if request.form.get("original") in ("1", "true", "True", True) else False
+            return g.api.misc_BaiduActivePush(pushUrl, original)
         else:
             return {"msg": "illegal parameter action", "code": -1}
 
