@@ -10,7 +10,6 @@
 """
 
 import datetime
-from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
 from utils.tool import login_required, logger, BaiduActivePush
@@ -109,7 +108,7 @@ def feed():
                  content_type='html',
                  author=article['author'],
                  id=article['id'],
-                 url=urljoin(request.url_root, url_for(".blogShow", bid=article['id'])),
+                 url=url_for(".blogShow", bid=article['id'], utm_source='feed', _external=True),
                  updated=datetime.datetime.strptime(updated, "%Y-%m-%d"),
                  published=datetime.datetime.strptime(article['create_time'][:10], "%Y-%m-%d"))
     return feed.get_response()
