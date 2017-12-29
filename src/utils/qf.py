@@ -8,10 +8,12 @@
     :copyright: (c) 2017 by Mr.tao.
     :license: Apache2.0, see LICENSE for more details.
 """
-
+import sys
 from .tool import logger, getIpArea, get_current_timestamp, get_today
 from libs.base import ServiceBase
 from user_agents import parse as user_agents_parse
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 _sb = ServiceBase()
 
