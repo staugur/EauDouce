@@ -521,7 +521,7 @@ class MiscApiManager(ServiceBase):
                     res.update(success=True)
                     self.redis.hincrby(key, pushUrl, 1)
         else:
-            res.update(msg="No submission authority")
+            res.update(msg="No submission authority", success=True)
         return res
 
 class UserApiManager(ServiceBase):
