@@ -19,8 +19,10 @@
             {{ bs|safe }}
         {% endfor %}
     {% endif %}
+    {%- if g.plugins.gitment.enable in ('true', 'True', True) %}
     <!--gitment评论系统-->
     <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    {% endif %}
 {% endblock %}
 
 {% block PathNavigation %}
