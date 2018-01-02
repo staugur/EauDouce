@@ -1,3 +1,4 @@
+<!--百度主动(实时)推送-->
 <script type="text/javascript">
 $(document).ready(function () {
     var BaiduActivePush = document.getElementById("BaiduActivePush");
@@ -9,20 +10,16 @@ $(document).ready(function () {
         success: function(res) {
             console.log(res);
             if (res.success==true) {
-                BaiduIncludedCheck.setAttribute("class", "text-success");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录成功';
+                BaiduActivePush.setAttribute("class", "text-success");
+                BaiduActivePush.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度主动推送成功';
             } else {
-                BaiduIncludedCheck.setAttribute("class", "text-danger");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录失败';
-                var bp = document.createElement('script');
-                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(bp, s);
+                BaiduActivePush.setAttribute("class", "text-danger");
+                BaiduActivePush.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度主动推送失败';
             }
         },
         error: function(error){
-                BaiduIncludedCheck.setAttribute("class", "text-danger");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件发生未知错误';
+                BaiduActivePush.setAttribute("class", "text-danger");
+                BaiduActivePush.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度主动推送插件发生未知错误';
         }
     });
 });

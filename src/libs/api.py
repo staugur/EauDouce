@@ -507,6 +507,7 @@ class MiscApiManager(ServiceBase):
         callUrl = PLUGINS['BaiduActivePush']['callUrl']
         callUrl = callUrl + "&type=original" if original else callUrl
         pushTimes = int(self.redis.hget(key, pushUrl) or 0)
+        logger.api.debug("pushUrl: {}, original: {}, pushTimes: {}, check: {}".format(pushUrl, original, pushTimes, 0 <= pushTimes <= 3))
         if 0 <= pushTimes <= 3:
             try:
                 data = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()

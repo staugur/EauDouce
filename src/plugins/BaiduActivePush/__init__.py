@@ -3,7 +3,7 @@
     EauDouce.plugins.BaiduActivePush
     ~~~~~~~~~~~~~~
 
-    百度自动(实时)推送
+    百度主动推送(实时)插件
 
     :copyright: (c) 2017 by Mr.tao.
     :license: MIT, see LICENSE for more details.

@@ -7,6 +7,7 @@
         fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid #009;border-radius:5px;}
         legend{padding:.5em;border:0;width:auto}
         img{max-width: 100%}
+        .funcarea{ padding:.35em .625em .75em;margin:0 2px;border:1px solid #009;border-radius:5px; height: auto; } 
     </style>
     {% if blog_show_header_include %}
         {% for bi in blog_show_header_include() %}
@@ -50,8 +51,7 @@
                     {% endif %}
                     </h3>
 			    </header>
-                <fieldset>
-                    <legend><small class="text-info text-lowercase">功能区</small></legend>
+                <div class="funcarea">
                     {% set admins = g.api.user_get_admins().data %}
                     <div class="btn-group" role="group" aria-label="...">
                         {% if g.signin and g.username == data.author or g.username in admins %}
@@ -110,7 +110,7 @@
                             {% endfor %}
                         {% endif %}
                     </h6>
-                </fieldset>
+                </div>
                 <fieldset>
                     <legend><small class="text-success text-lowercase">正文区</small></legend>
 				    {{ data['content'] | safe }}
