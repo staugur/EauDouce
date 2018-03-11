@@ -243,8 +243,12 @@ function dropdownOpen() {
 }
 
 function search(){
+    var v = document.getElementById("input").value;
+    if (!v) {
+        return false;
+    }
     var f = document.getElementById("SearchForm");
-    f.action = f.action+"?q="+document.getElementById("input").value;
+    f.action = f.action+"?q=" + v;
     window.location.href=f.action;
 }
 

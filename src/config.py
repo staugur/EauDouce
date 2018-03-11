@@ -60,7 +60,7 @@ PLUGINS={
     #畅言评论系统
 
     "gitment": {
-        "enable": os.getenv("eaudouce_gitment_enable", True),
+        "enable": os.getenv("eaudouce_gitment_enable", False),
         "user": os.getenv("eaudouce_gitment_user", "staugur"),
         "repo": os.getenv("eaudouce_gitment_repo", "EauDouce"),
         "clientId": os.getenv("eaudouce_gitment_clientId", ""),
