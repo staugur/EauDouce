@@ -244,12 +244,14 @@ function dropdownOpen() {
 
 function search(){
     var v = document.getElementById("input").value;
+    console.log(v,!v)
     if (!v) {
         return false;
+    } else {
+        var f = document.getElementById("SearchForm");
+        f.action = f.action+"?q=" + v;
+        window.location.href=f.action;
     }
-    var f = document.getElementById("SearchForm");
-    f.action = f.action+"?q=" + v;
-    window.location.href=f.action;
 }
 
 //返回顶部
