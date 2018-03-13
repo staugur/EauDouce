@@ -59,7 +59,10 @@ def blogSearch():
 
 @front_blueprint.route("/user/<user>/")
 def userHome(user=None):
-    return render_template("front/userHome.html", user=user)
+    dev = request.args.get("dev")
+    if dev == "yes":
+        return render_template("front/userHome.html", user=user)
+    return u"暂不开放"
 
 @front_blueprint.route("/user/ChangeAvater/")
 @login_required
