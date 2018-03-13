@@ -517,7 +517,7 @@ class MiscApiManager(ServiceBase):
             else:
                 # data like {u'success_realtime': 0, u'remain_realtime': 0}
                 logger.api.info("BaiduActivePush PushUrl is %s, Result is %s" % (pushUrl, data))
-                if int(data.get("success_realtime") or 0) == 1:
+                if int(data.get("success_realtime") or data.get("success") or 0) == 1:
                     res.update(success=True)
                     self.redis.hincrby(key, pushUrl, 1)
         else:
