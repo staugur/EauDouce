@@ -23,10 +23,11 @@ __date__    = "2017-03-26"
 __version__ = "0.0.1"
 __license__ = "MIT"
 
-import json, datetime, SpliceURL, time, os, jinja2, sys, rq_dashboard
+import time, os.path, jinja2, sys, rq_dashboard
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
 from utils.tool import logger, isLogged_in, md5, ChoiceColor, TagRandomColor
+from utils.web import verify_sessionId, analysis_sessionId, get_redirect_url
 from urllib import urlencode
 from libs.api import ApiManager
 from libs.plugins import PluginManager
@@ -65,6 +66,7 @@ app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
 app.register_blueprint(rq_dashboard.blueprint, url_prefix="/rqdashboard")
+
 #注册蓝图扩展点
 for bep in plugin.get_all_bep:
     prefix = bep["prefix"]
@@ -74,21 +76,19 @@ for bep in plugin.get_all_bep:
 @app.context_processor  
 def GlobalTemplateVariables():  
     data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor, "TagRandomColor": TagRandomColor}
-    data.update(Plugins=plugin.get_all_plugins)
     return data
 
 @app.before_request
 def before_request():
     g.startTime = time.time()
-    g.sessionId = request.cookies.get("sessionId", "")
-    g.username  = request.cookies.get("username", "")
-    g.expires   = request.cookies.get("time", "")
-    g.signin    = isLogged_in('.'.join([ g.username, g.expires, g.sessionId ]))
+    g.signin    = verify_sessionId(request.cookies.get("sessionId"))
+    g.uid       = analysis_sessionId(request.cookies.get("sessionId")).get("uid") if g.signin else None
+    g.username  = g.uid
     g.api       = api
     g.plugins   = PLUGINS
-    g.pluginApi = plugin
-    g.hitCache  = False
     g.token     = {}
+    # 仅是重定向页面快捷定义
+    g.redirect_uri = get_redirect_url()
     #上下文扩展点之请求后(返回前)
     before_request_hook = plugin.get_all_cep.get("before_request_hook")
     for cep_func in before_request_hook():
@@ -105,7 +105,7 @@ def after_request(response):
         "agent": request.headers.get("User-Agent"),
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
     }
-    logger.access.info(json.dumps(data))
+    logger.access.info(data)
     #上下文扩展点之请求后(返回前)
     after_request_hook = plugin.get_all_cep.get("after_request_hook")
     for cep_func in after_request_hook():
@@ -120,6 +120,8 @@ def not_found(error=None):
 
 @app.errorhandler(500)
 def server_error(error=None):
+    if error:
+        logger.err.error(error, exc_info=True)
     return render_template('public/500.html'),500
 
 @app.route('/login/')
@@ -127,46 +129,21 @@ def login():
     if g.signin:
         return redirect(url_for("front.index"))
     else:
-        query = {"sso": True,
-           "sso_r": SpliceURL.Modify(request.url_root, "/sso/").geturl,
-           "sso_p": SSO["SSO.PROJECT"],
-           "sso_t": md5("%s:%s" %(SSO["SSO.PROJECT"], SpliceURL.Modify(request.url_root, "/sso/").geturl))
-        }
-        SSOLoginURL = SpliceURL.Modify(url=SSO["SSO.URL"], path="/login/", query=query).geturl
-        logger.sso.info("User request login to SSO: %s" %SSOLoginURL)
-        return redirect(SSOLoginURL)
+        ReturnUrl = request.args.get("NextUrl") or request.args.get("ReturnUrl")
+        SSOLoginURL = url_for("sso.Login", ReturnUrl=ReturnUrl) if ReturnUrl else url_for("sso.Login")
+        return redirect(SSOLoginURL) 
 
 @app.route('/logout/')
 def logout():
-    SSOLogoutURL = SSO.get("SSO.URL") + "/sso/?nextUrl=" + request.url_root.strip("/")
-    resp = make_response(redirect(SSOLogoutURL))
-    resp.set_cookie(key='logged_in', value='', expires=0)
-    resp.set_cookie(key='username',  value='', expires=0)
-    resp.set_cookie(key='sessionId',  value='', expires=0)
-    resp.set_cookie(key='time',  value='', expires=0)
-    resp.set_cookie(key='Azone',  value='', expires=0)
-    return resp
-
-@app.route('/sso/')
-def sso():
-    ticket = request.args.get("ticket")
-    logger.sso.info("ticket: %s" %ticket)
-    username, expires, sessionId = ticket.split('.')
-    if expires == 'None':
-        UnixExpires = None
+    # 注销
+    if g.signin:
+        return redirect(url_for("sso.Logout"))
     else:
-        UnixExpires = datetime.datetime.strptime(expires,"%Y-%m-%d")
-    resp = make_response(redirect(url_for("front.index")))
-    resp.set_cookie(key='logged_in', value="yes", expires=UnixExpires)
-    resp.set_cookie(key='username',  value=username, expires=UnixExpires)
-    resp.set_cookie(key='sessionId', value=sessionId, expires=UnixExpires)
-    resp.set_cookie(key='time', value=expires, expires=UnixExpires)
-    resp.set_cookie(key='Azone', value="sso", expires=UnixExpires)
-    return resp
+        return redirect(url_for("sso.Login"))
 
 @app.route('/SignUp')
 def signup():
-    regUrl = SSO.get("SSO.URL").strip("/") + "/SignUp"
+    regUrl = SSO.get("sso_server").strip("/") + "/signUp"
     return redirect(regUrl)
 
 if __name__ == '__main__':

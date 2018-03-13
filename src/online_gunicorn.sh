@@ -10,25 +10,25 @@ host=$(python -c "from config import GLOBAL;print GLOBAL['Host']")
 port=$(python -c "from config import GLOBAL;print GLOBAL['Port']")
 procname=$(python -c "from config import GLOBAL;print GLOBAL['ProcessName']")
 cpu_count=$[$(cat /proc/cpuinfo | grep "processor" | wc -l)*2]
+[ -d ${dir}/logs ] || mkdir -p ${dir}/logs
 logfile=${dir}/logs/gunicorn.log
 pidfile=${dir}/logs/${procname}.pid
-[ -d ${dir}/logs ] || mkdir -p ${dir}/logs
 
 function Monthly2Number() {
-  case "$1" in
-    Jan) echo 1;;
-    Feb) echo 2;;
-    Mar) echo 3;;
-    Apr) echo 4;;
-    May) echo 5;;
-    Jun) echo 6;;
-    Jul) echo 7;;
-    Aug) echo 8;;
-    Sep) echo 9;;
-    Oct) echo 10;;
-    Nov) echo 11;;
-    Dec) echo 12;;
-    *)   exit;;
+    case "$1" in
+        Jan) echo 1;;
+        Feb) echo 2;;
+        Mar) echo 3;;
+        Apr) echo 4;;
+        May) echo 5;;
+        Jun) echo 6;;
+        Jul) echo 7;;
+        Aug) echo 8;;
+        Sep) echo 9;;
+        Oct) echo 10;;
+        Nov) echo 11;;
+        Dec) echo 12;;
+        *)   exit;;
   esac
 }
 
@@ -69,7 +69,7 @@ status)
     fi
     pid=$(cat $pidfile)
     procnum=$(ps aux | grep -v grep | grep $pid | grep $procname | wc -l)
-    m=$(date +%b)
+    m=$(ps -eO lstart | grep $pid | grep $procname | grep -vE "worker|grep|Team.Api\." | awk '{print $3}')
     t=$(Monthly2Number $m)
     if [[ "$procnum" != "1" ]]; then
         echo -e "\033[39;31m异常，pid文件与系统pid数量不相等。\033[0m"
@@ -85,8 +85,8 @@ status)
     ;;
 
 restart)
-    bash $0 stop
-    bash $0 start
+    bash $(basename $0) stop
+    bash $(basename $0) start
     ;;
 
 *)

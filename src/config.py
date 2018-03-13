@@ -27,12 +27,19 @@ GLOBAL={
 }
 
 
-SSO={
+SSO = {
 
-    "SSO.URL": os.getenv("eaudouce_ssourl", "https://passport.saintic.com"),
-    #认证中心地址
+    "app_name": getenv("eaudouce_sso_app_name", GLOBAL["ProcessName"]),
+    # SSO中注册的应用名
 
-    "SSO.PROJECT": GLOBAL["ProcessName"],
+    "app_id": getenv("eaudouce_sso_app_id", "app_id"),
+    # SSO中注册返回的`app_id`
+
+    "app_secret": getenv("eaudouce_sso_app_secret", "app_secret"),
+    # SSO中注册返回的`app_secret`
+
+    "sso_server": getenv("eaudouce_sso_server", "https://passport.saintic.com"),
+    # SSO完全合格域名根地址
 }
 
 
@@ -46,6 +53,28 @@ REDIS=os.getenv("eaudouce_redis_url")
 #redis://[:password]@host:port/db
 #host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
 
+
+# 系统配置
+SYSTEM = {
+
+    "HMAC_SHA256_KEY": getenv("eaudouce_hmac_sha256_key", "273d32c8d797fa715190c7408ad73811"),
+    # hmac sha256 key
+
+    "AES_CBC_KEY": getenv("eaudouce_aes_cbc_key", "YRRGBRYQqrV1gv5A"),
+    # utils.aes_cbc.CBC类中所用加密key
+
+    "JWT_SECRET_KEY": getenv("eaudouce_jwt_secret_key", "WBlE7_#qDf2vRb@vM!Zw#lqrg@rdd3A6"),
+    # utils.jwt.JWTUtil类中所用加密key
+
+    "Sign": {
+        "version": getenv("eaudouce_sign_version", "v1"),
+        "accesskey_id": getenv("eaudouce_sign_accesskeyid", "accesskey_id"),
+        "accesskey_secret": getenv("eaudouce_sign_accesskeysecret", "accesskey_secret"),
+    }
+    # utils.Signature.Signature类中所有签名配置
+}
+
+
 #内置插件
 PLUGINS={
 
@@ -53,9 +82,9 @@ PLUGINS={
     #代码高亮插件
 
     "ChangyanComment": {
-        "enable": os.getenv("eaudouce_ChangyanComment_enable", False),
-        "appid": os.getenv("eaudouce_ChangyanComment_appid", "cysX1azO3"),
-        "appkey": os.getenv("eaudouce_ChangyanComment_appkey", "23503a7fdbfe37d50048a5c91d93627d")
+        "enable": os.getenv("eaudouce_ChangyanComment_enable", True),
+        "appid": os.getenv("eaudouce_ChangyanComment_appid", "app_id"),
+        "appkey": os.getenv("eaudouce_ChangyanComment_appkey", "app_key")
     },
     #畅言评论系统
 
@@ -63,8 +92,8 @@ PLUGINS={
         "enable": os.getenv("eaudouce_gitment_enable", False),
         "user": os.getenv("eaudouce_gitment_user", "staugur"),
         "repo": os.getenv("eaudouce_gitment_repo", "EauDouce"),
-        "clientId": os.getenv("eaudouce_gitment_clientId", ""),
-        "clientSecret": os.getenv("eaudouce_gitment_clientSecret", "")
+        "clientId": os.getenv("eaudouce_gitment_clientId", "clientId"),
+        "clientSecret": os.getenv("eaudouce_gitment_clientSecret", "clientSecret")
     },
     #gitment评论系统
 
@@ -76,15 +105,12 @@ PLUGINS={
     
     "BaiduActivePush": {
         "enable":  os.getenv("eaudouce_BaiduActivePush_enable", False),
-        "callUrl": os.getenv("eaudouce_BaiduActivePush_callUrl", "http://data.zz.baidu.com/urls?site=www.saintic.com&token=QbriJ4Iv7TGi8yOF")
+        "callUrl": os.getenv("eaudouce_BaiduActivePush_callUrl", "YourCallUrl")
     },
     #百度主动推送(实时)插件
 
     "BaiduIncludedCheck": os.getenv("eaudouce_BaiduIncludedCheck", False),
     #百度收录检测插件
-
-    "Weather": os.getenv("eaudouce_Weather", True),
-    #天气显示插件
 
     "BackupBlog": os.getenv("eaudouce_BackupBlog", False),
     #备份文章插件,如果开启了又拍云存储插件,将会存储到又拍云上,否则存到本地

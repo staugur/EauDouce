@@ -10,7 +10,7 @@
 """
 
 from flask import Blueprint, g, render_template, request
-from utils.tool import admin_login_required
+from utils.web import admin_login_required
 
 admin_blueprint = Blueprint("admin", __name__)
 

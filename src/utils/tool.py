@@ -13,10 +13,7 @@ import re, requests, hashlib, datetime, random, upyun, time
 from uuid import uuid4
 from log import Logger
 from base64 import b32encode
-from config import SSO, PLUGINS
-from functools import wraps
-from threading import Thread
-from flask import g, request, redirect, url_for
+from config import PLUGINS
 
 class DO(dict):
     """A dict that allows for object-like property access syntax."""
@@ -35,6 +32,7 @@ logger          = DO(
                     sys = Logger("sys").getLogger,
                     sso = Logger("sso").getLogger,
                     api = Logger("api").getLogger,
+                    err = Logger("error").getLogger,
                     access = Logger("access").getLogger,
                     plugin = Logger("plugin").getLogger
                   )
@@ -50,23 +48,6 @@ def ip_check(ip):
     if isinstance(ip, (str, unicode)):
         return ip_pat.match(ip)
 
-def isLogged_in(cookie_str):
-    ''' check username is logged in '''
-
-    SSOURL = SSO.get("SSO.URL")
-    if cookie_str and not cookie_str == '..':
-        username, expires, sessionId = cookie_str.split('.')
-        try:
-            success = requests.post(SSOURL+"/sso/", data={"username": username, "time": expires, "sessionId": sessionId}, timeout=3, verify=False, headers={"User-Agent": "SSO.Client"}).json().get("success", False)
-        except Exception,e:
-            logger.sso.error(e, exc_info=True)
-        else:
-            logger.sso.info("check login request, cookie_str: %s, success:%s" %(cookie_str, success))
-            return success
-    else:
-        logger.sso.info("Not Logged in")
-    return False
-
 def ParseMySQL(mysql, callback="dict"):
     """解析MYSQL配置段"""
     if not mysql:return None
@@ -81,23 +62,6 @@ def ParseMySQL(mysql, callback="dict"):
         return protocol,host,port,user,password,database,charset, timezone
     else:
         return {"Protocol": protocol, "Host": host, "Port": port, "Database": database, "User": user, "Password": password, "Charset": charset, "Timezone": timezone}
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not g.signin:
-            return redirect(url_for('login', next=request.url))
-        return f(*args, **kwargs)
-    return decorated_function
-
-def admin_login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if g.signin and g.username in g.api.user_get_admins().get("data", []):
-            return f(*args, **kwargs)
-        else:
-            return redirect(url_for('login', next=request.url))
-    return decorated_function
 
 def UploadImage2Upyun(FilePath, FileData, kwargs=PLUGINS['UpYunStorage']):
     """ Upload image to Upyun Cloud with Api """
@@ -137,14 +101,6 @@ def TagRandomColor():
     color = ["tagc1", "tagc2", "tagc3", "tagc4", "tagc5"]
     return random.choice(color)
 
-def async(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        thr = Thread(target=f, args=args, kwargs=kwargs)
-        thr.start()
-    return wrapper
-
-
 def getIpArea(ip):
     """查询IP地址信息，返回格式：国家 省级 市级 运营商"""
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36"}
@@ -169,7 +125,23 @@ def getIpArea(ip):
             city = data.city
     return u"{0} {1} {2} {3}".format(data.country, data.region.replace(u'市',''), city, data.isp)
 
-
 def get_current_timestamp():
     """ 获取本地当前时间戳(10位): Unix timestamp：是从1970年1月1日（UTC/GMT的午夜）开始所经过的秒数，不考虑闰秒 """
     return int(time.mktime(datetime.datetime.now().timetuple()))
+
+def url_check(addr):
+    """检测UrlAddr是否为有效格式，例如
+    http://ip:port
+    https://abc.com
+    """
+    regex = re.compile(
+        r'^(?:http)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+    if addr and isinstance(addr, (str, unicode)):
+        if regex.match(addr):
+            return True
+    return False

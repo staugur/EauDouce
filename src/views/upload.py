@@ -15,6 +15,7 @@ from flask import Blueprint, request, Response, url_for, redirect, g, jsonify
 from werkzeug import secure_filename
 from config import PLUGINS
 from thirds.binbase64 import base64str
+from utils.web import login_required
 
 upload_blueprint = Blueprint("upload", __name__)
 #文件上传文件夹, 相对于项目根目录, 请勿改动static/部分
@@ -26,6 +27,7 @@ allowed_file = lambda filename: '.' in filename and filename.rsplit('.', 1)[1] i
 
 #对博客图片上传进行响应
 @upload_blueprint.route("/BlogImage/", methods=["POST",])
+@login_required
 def UploadBlogImage():
     editorType = request.args.get("editorType", "wangEditor")
     logger.sys.debug(request.files)
@@ -62,6 +64,7 @@ def UploadBlogImage():
 
 #对头像图片上传进行响应
 @upload_blueprint.route('/avatar/', methods=['POST','OPTIONS'])
+@login_required
 def UploadAvatarImage():
     logger.sys.debug(request.files)
     f = request.files.get('file')
@@ -88,6 +91,7 @@ def UploadAvatarImage():
 
 #对封面图片上传进行响应
 @upload_blueprint.route('/cover/', methods=['POST','OPTIONS'])
+@login_required
 def UploadCoverImage():
     logger.sys.debug(request.files)
     f = request.files.get('file')
@@ -114,6 +118,7 @@ def UploadCoverImage():
 
 #对头像图片裁剪后上传进行响应
 @upload_blueprint.route('/clipper/', methods=['POST','OPTIONS'])
+@login_required
 def UploadClipperAvatar():
     if request.form.get("action") == "add":
         data     = request.form.get("picStr")
@@ -135,30 +140,6 @@ def UploadClipperAvatar():
         res = g.api.user_update_avatar(g.username, imgUrl)
     else:
         res = {"success": False, "msg": u"不支持的action"}
-
-    logger.sys.info(res)
-    return jsonify(res)
-
-@upload_blueprint.route('/test/', methods=['POST','OPTIONS'])
-def test():
-    logger.sys.debug(request.files)
-    f = request.files.get('file')
-    # Check if the file is one of the allowed types/extensions
-    if f and allowed_file(f.filename):
-        filename = secure_filename(gen_rnd_filename() + "." + f.filename.split('.')[-1]) #随机命名
-        if PLUGINS['UpYunStorage']['enable'] in ('true', 'True', True):
-            imgUrl = "/EauDouce/test/" + filename
-            upres  = UploadImage2Upyun(imgUrl, f.stream.read())
-            imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
-            logger.sys.info("TEST to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
-        else:
-            if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
-            f.save(os.path.join(UPLOAD_FOLDER, filename))
-            imgUrl = "/" + IMAGE_FOLDER + filename
-            logger.sys.info("TEST to local file saved in %s, its url is %s" %(UPLOAD_FOLDER, imgUrl))
-        res = dict(code=0, imgUrl=imgUrl)
-    else:
-        res = {"code": -1, "msg": u"上传失败: 未成功获取文件或格式不允许"}
 
     logger.sys.info(res)
     return jsonify(res)

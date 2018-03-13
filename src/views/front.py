@@ -12,7 +12,8 @@
 import datetime
 from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
-from utils.tool import login_required, logger, BaiduActivePush
+from utils.tool import logger, BaiduActivePush
+from utils.web import login_required
 
 front_blueprint = Blueprint("front", __name__)
 
