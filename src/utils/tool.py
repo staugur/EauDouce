@@ -30,7 +30,6 @@ user_pat        = re.compile(r'[a-zA-Z\_][0-9a-zA-Z\_]')
 comma_pat       = re.compile(r"\s*,\s*")
 logger          = DO(
                     sys = Logger("sys").getLogger,
-                    sso = Logger("sso").getLogger,
                     api = Logger("api").getLogger,
                     err = Logger("error").getLogger,
                     access = Logger("access").getLogger,
