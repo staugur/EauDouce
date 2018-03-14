@@ -12,8 +12,9 @@
 import datetime
 from werkzeug.contrib.atom import AtomFeed
 from flask import Blueprint, g, render_template, request, redirect, url_for, make_response, abort
-from utils.tool import logger, BaiduActivePush
+from utils.tool import logger
 from utils.web import login_required
+from config import SSO
 
 front_blueprint = Blueprint("front", __name__)
 
@@ -25,10 +26,6 @@ def index():
 def blogShow(bid):
     data = g.api.blog_get_id(bid).get("data")
     if data:
-        #BaiduActivePushResult = False
-        #if g.plugins['BaiduActivePush']['enable'] in ("true", "True", True):
-        #    BaiduActivePushResult = True if BaiduActivePush(request.url, original=True if data.get("sources") == "原创" else False).get("success_realtime") == 1 else False
-        #logger.sys.info("BaiduActivePushResult for id: %s, %s" %(bid, BaiduActivePushResult))
         return render_template("front/blogShow.html", blogId=bid, data=data, original=True if data.get("sources") == "原创" else False)
     else:
         return abort(404)
@@ -57,32 +54,39 @@ def blogResource():
 def blogSearch():
     return render_template("front/blogSearch.html")
 
-@front_blueprint.route("/user/<user>/")
-def userHome(user=None):
-    dev = request.args.get("dev")
-    if dev == "yes":
-        return render_template("front/userHome.html", user=user)
-    return u"暂不开放"
+@front_blueprint.route("/user/")
+def userHome():
+    user = request.args.get("user")
+    return render_template("front/userHome.html", user=user)
+
+@front_blueprint.route("/user/setting/")
+@login_required
+def userSet():
+    return redirect("{}/user/setting/".format(SSO["sso_server"].strip("/")))
 
 @front_blueprint.route("/user/ChangeAvater/")
 @login_required
 def userChangeAvater():
+    return redirect("{}/user/setting/#avatar".format(SSO["sso_server"].strip("/")))
     return render_template("front/userChangeAvater2.html")
     return render_template("front/userChangeAvater.html")
 
 @front_blueprint.route("/user/ChangePassword/")
 @login_required
 def userChangePassword():
+    return redirect("{}/user/setting/#pass".format(SSO["sso_server"].strip("/")))
     return render_template("front/userChangePassword.html")
 
 @front_blueprint.route("/user/ChangeCover/")
 @login_required
 def userChangeCover():
+    return u"暂不开放"
     return render_template("front/userChangeCover.html")
 
 @front_blueprint.route("/user/ChangeProfile/")
 @login_required
 def userChangeProfile():
+    return redirect("{}/user/setting/".format(SSO["sso_server"].strip("/")))
     return render_template("front/userChangeProfile.html")
 
 @front_blueprint.route("/robots.txt")
@@ -100,10 +104,12 @@ def sitemapxml():
 
 @front_blueprint.route("/sitemap.html")
 def sitemaphtml():
+    # 站点地图
     return render_template("public/sitemap.html")
 
 @front_blueprint.route("/feed/")
 def feed():
+    # 订阅
     data = g.api.blog_get_all(limit=10).get("data")
     feed = AtomFeed(g.api.get_sys_config().get("data").get("site_feedname"), feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))
     for article in data:

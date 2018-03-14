@@ -16,7 +16,7 @@
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-    <link rel="alternate" type="application/atom+xml" title="{{ g.api.get_sys_config().data.site_feedname }}" href="{{ url_for('front.feed') }}">
+    <link rel="alternate" type="application/atom+xml" title="{{ config.site_feedname }}" href="{{ url_for('front.feed') }}">
     {% block head %}{% endblock %}
     <meta name="baidu-site-verification" content="xUt9qNVlom" />
     <meta name="google-site-verification" content="h2Kbua4YStdYubtL4-tQRiX0-Mx1ANHbMt8HF8hRj4o" />
@@ -62,7 +62,7 @@
                         <li class="dropdown">
                             <a href="#" title="Sitemap" class="dropdown-toggle" data-toggle="dropdown">站点地图&nbsp;<i class="icon-sitemap icon-1x"></i></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('front.sitemapxml') }}">站点地图XML版</a></li>
+                                <li><a href="{{ url_for('front.sitemapxml') }}" target="_blank">站点地图XML版</a></li>
                                 <li><a href="{{ url_for('front.sitemaphtml') }}">站点地图HTML版</a></li>
                             </ul>
                         </li>
@@ -82,15 +82,13 @@
                         <li class="dropdown">
                             <a href="{{ url_for('front.userHome', user=g.username) }}" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
                             <ul class="dropdown-menu">
-                                <li><center><small>Welcome <strong>{{ g.username }}</strong></small></center></li>
-                                <li class="divider"></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}">我的主页</a></li>
                                 <li><a href="{{ url_for('front.userHome', user=g.username) }}#blog">我的文章</a></li>
                                 {% if g.username in g.api.user_get_admins().data %}
                                 <li><a href="{{ url_for('admin.index') }}">后台管理</a></li>
                                 {% endif %}
                                 <li class="divider"></li>
-                                <li><a href="{{ url_for('front.userHome', user=g.username) }}#Setting" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
+                                <li><a href="{{ url_for('front.userSet') }}" title="Setting" target="_blank">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
                                 <li><a href="{{ url_for('logout') }}" title="Sign Out">注销&nbsp;<i class="icon-signout icon-1x"></i></a></li>
                             </ul>
                         </li>
@@ -188,7 +186,7 @@
         <p class="text-muted credit" style="padding: 10px;">
             Copyright &copy; 2018.&nbsp;&nbsp;SaintIC, all rights reserved.&nbsp;&nbsp;
             <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ Email }}">{{ Author }}</a>&nbsp;&nbsp;
-            <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.api.get_sys_config().data.about_beian }}</a>&nbsp;&nbsp;
+            <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ config.about_beian }}</a>&nbsp;&nbsp;
             <br/>
             <div id="cc-myssl-id">
                 <a href="https://www.upyun.com/?from=saintic" target="_blank" rel="nofollow" upyun=""><img src="https://img.saintic.com/misc/public/upyunlogo.png" height="49px"></a>

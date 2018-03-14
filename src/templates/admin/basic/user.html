@@ -20,12 +20,12 @@
                             <thead>
                                 <tr>
                                     <th>UID</th>
-                                    <th>用户名</th>
+                                    <th>域名</th>
                                     <th>头像</th>
                                     <th>别名</th>
                                     <th>性别</th>
-                                    <th>邮箱</th>
                                     <th>加入时间</th>
+                                    <th>地区</th>
                                     <th>是否作者</th>
                                     <th>是否管理员</th>
                                     <th>动作</th>
@@ -34,19 +34,20 @@
                             <tbody>
                                 {% for user in data %}
                                 <tr valign="middle" align="center">
-                                    <td>{{ user.id }}</td>
-                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.uid }}</td>
+                                    <td>{{ user.domain_name }}</td>
                                     <td>{% if user.avatar %}<img src="{{ user.avatar }}" width="60px">{% endif %}</td>
-                                    <td>{{ user.cname }}</td>
+                                    <td>{{ user.nick_name }}</td>
                                     <td>{{ user.gender }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.time }}</td>
-                                    <td>{% if user.isAuthor in ('true', 'True', True) %}是{% else %}否{% endif %}</td>
-                                    <td>{% if user.isAdmin in ('true', 'True', True) %}是{% else %}否{% endif %}</td>
+                                    <td>{{ timestamp_to_timestring(user.ctime) }}</td>
+                                    <td>{{ user.location }}</td>
+                                    <td>{% if user.is_admin in ('true', 'True', True, 1) %}是{% else %}否{% endif %}</td>
+                                    <td>{% if user.is_admin in ('true', 'True', True, 1) %}是{% else %}否{% endif %}</td>
                                     <td>
+                                        <!--
                                         {% if user.isAuthor in ('true', 'True', True) %}<a class="btn btn-info btn-rounded" href="buttons.html#">取消作者</a>{% else %}<a class="btn btn-info btn-rounded" href="buttons.html#">设置作者</a>{% endif %}<br>
+                                        -->
                                         {% if user.isAdmin in ('true', 'True', True) %}<a class="btn btn-danger btn-rounded" href="buttons.html#">取消管理</a>{% else %}<a class="btn btn-danger btn-rounded" href="buttons.html#">设置管理</a>{% endif %}<br>
-                                        <a class="btn btn-danger btn-rounded" href="buttons.html#">删除用户</a><br>
                                     </td>
                                 </tr>
                                 {% endfor %}

@@ -74,9 +74,9 @@
                         {% endif %}
                     </div>
                     <h6>
-                        {% if data.author %}
+                        {#
                         <i class="icon-user icon-1x"></i><a href="{{ url_for('front.userHome', user=data.author) }}" title="由 {{ data.author }} 发布" style="color: #999">&nbsp;{{ data.author }}</a>&nbsp;
-                        {% endif %}
+                        #}
 
                         {% if data.catalog %}
                         <i class="icon-folder-open icon-1x"></i><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=data.catalog) }}" title="查看 {{ data.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ data.catalog }}</a>&nbsp;

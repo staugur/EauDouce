@@ -1,6 +1,6 @@
 {% extends "base/front.html" %}
 
-{% block title %}用户{% endblock %}
+{% block title %}我的主页{% endblock %}
 
 {% block head %}
 <style type="text/css">
@@ -11,7 +11,6 @@
 	padding: 50px 0;
 	text-align: center;
 	color: #fff !important;
-	
 	background-color: #000;
 	background-size: cover;
 }
@@ -23,21 +22,20 @@ legend{padding:.5em;border:0;width:auto}
 
 {% block AlternateDiagram %}
     {% set data = g.api.user_get_one_profile(user).data %}
-    <div class="bg" style="background: url({{ data.cover }}) no-repeat top center;">
+    <div class="bg" style="background: url({{ data.cover or 'https://img.saintic.com/EauDouce/cover/defaultCover.jpg' }}) no-repeat top center;">
 		<div class="col-md-4 column">
 		  	<a href="javascript:ShowAvatar('{{ data.avatar }}')"><img id="avatar" src="{{ data.avatar or 'https://img.saintic.com/EauDouce/avatar/default.jpg' }}" class="img-thumbnail" style="display: block; max-height: 200px" /></a>
 		  	<p class="text-left text-default">
-                <i class="icon-user icon-1x">&nbsp;</i><attr title="{{ data.motto or '' }}">{{ data.cname or data.username }}</attr><br/>
-
+                <i class="icon-user icon-1x">&nbsp;</i><attr title="{{ data.signature or '' }}">{{ data.nick_name or data.domain_name or data.uid }}</attr><br/>
                 {% if data.get('gender') == '男' %}
-                    <i class="icon-time icon-1x">&nbsp;</i>A handsome boy Joined on {{ data.get('time') }}
+                    <i class="icon-time icon-1x">&nbsp;</i>A handsome boy Joined on {{ timestamp_to_timestring(data.get('ctime')) }}
                 {% elif data.get('gender') == '女' %}
-                    <i class="icon-time icon-1x">&nbsp;</i>A pretty girl Joined on {{ data.get('time') }}
+                    <i class="icon-time icon-1x">&nbsp;</i>A pretty girl Joined on {{ timestamp_to_timestring(data.get('ctime')) }}
                 {% else %}
-                    <i class="icon-time icon-1x">&nbsp;</i>Joined on {{ data.get('time') }}
+                    <i class="icon-time icon-1x">&nbsp;</i>Joined on {{ timestamp_to_timestring(data.get('ctime')) }}
                 {% endif %}
                 <br/>
-
+                <!--
                 {% if data.get('url') %}
                     <i class="icon-link icon-1x">&nbsp;</i>我的网址: <a href="{% if 'http' in data.get('url') %}{{ data.get('url') }}{% else %}{{ 'http://' + data.get('url') }}{% endif %}" target="_blank">{{ data.get('url') }}</a><br/>
                 {% endif %}
@@ -55,25 +53,9 @@ legend{padding:.5em;border:0;width:auto}
                 {% endif %}
 
                 <i class="icon-link icon-1x">&nbsp;</i>个性地址: {{ request.url_root.strip('/') + url_for('front.userHome', user=user)  }}<br/>
+                -->
             </p>
 		</div>
-		<div class="col-md-4 column">
-		</div>
-        <div class="col-md-4 column">
-            {% if g.signin and g.username == data.username %}
-            <br><br><br><br>
-            <fieldset>
-                <a name="Setting"></a>
-                <legend><small class="text-default text-lowercase">个人设置</small></legend>
-                <div>
-                    <a href="javascript:ChangerAvater()" class="btn btn-warning btn-lg btn-block active" role="button">修改头像</a>
-                    <a href="javascript:ChangerPassword()" class="btn btn-danger btn-lg btn-block active" role="button">修改密码</a>
-                    <a href="javascript:ChangerCover()" class="btn btn-success btn-lg btn-block active" role="button">修改封面</a>
-                    <a href="javascript:ChangerProfile()" class="btn btn-info btn-lg btn-block active" role="button">修改个人资料</a>
-                </div>
-            </fieldset>
-            {% endif %}
-        </div>
     </div>
     <br/>
     <div>
@@ -84,7 +66,9 @@ legend{padding:.5em;border:0;width:auto}
 				<div class="col-md-12 column">
 					<p class="text-left">
 						<a href="{{ url_for('front.blogShow', bid=blog.id) }}" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
-					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.userHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
+                        {% if data.nick_name %}
+					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.userHome', user=blog.author) }}" title="由 {{ data.nick_name }} 发布" style="color: #999">&nbsp;{{ data.nick_name }}</a>&nbsp;</small>
+                        {% endif %}
 					    <small><i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;</small>
 					    {% if blog.tag %}
 					    <small><i class="icon-tag icon-1x"></i>
@@ -113,57 +97,6 @@ legend{padding:.5em;border:0;width:auto}
 
 {% block script %}
 <script type="text/javascript">
-{% if g.username == user %}
-// iframe层显示更改头像弹窗
-function ChangerAvater() {
-    layer.open({
-        type: 2,
-        title: '更换头像',
-        shadeClose: true,
-        shade: 0.8,
-        area: ['900px', '660px'],
-        content: '{{ url_for("front.userChangeAvater") }}'
-    });
-}
-
-// iframe层显示更改密码弹窗
-function ChangerPassword() {
-    layer.open({
-        type: 2,
-        title: '修改密码',
-        shadeClose: true,
-        shade: 0.8,
-        area: ['300px', '360px'],
-        content: '{{ url_for("front.userChangePassword") }}'
-    });
-}
-
-// iframe层显示更改封面弹窗
-function ChangerCover() {
-    layer.open({
-        type: 2,
-        title: '更换封面',
-        shadeClose: true,
-        shade: 0.8,
-        area: ['300px', '260px'],
-        content: '{{ url_for("front.userChangeCover") }}'
-    });
-}
-
-// iframe层显示更改个人资料
-function ChangerProfile() {
-    layer.open({
-        type: 2,
-        title: '修改个人资料',
-        shadeClose: true,
-        shade: 0.8,
-        area: ['70%', '90%'],
-        content: '{{ url_for("front.userChangeProfile") }}'
-    });
-}
-{% endif %}
-
-//页面层-显示头像
 function ShowAvatar(imgUrl) {
     var img = new Image();
     img.src=$("#avatar")[0].src;
@@ -174,6 +107,7 @@ function ShowAvatar(imgUrl) {
             title: false,
             closeBtn: 0,
             skin: 'layui-layer-nobg', //没有背景色
+            shade: 0,
             shadeClose: true,
             area: [img.width, img.height],
             content: '<img src="' + imgUrl +'" />'

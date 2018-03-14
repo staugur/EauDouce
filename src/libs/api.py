@@ -241,7 +241,7 @@ class BlogApiManager(ServiceBase):
         return res
 
     def blog_get_user_blog(self, user, sort="desc", limit=None):
-        "查询某用户的博客"
+        "查询某用户的博客 user=uid"
 
         res   = {"msg": None, "data": [], "code": 0}
         LIMIT = "LIMIT " + str(limit) if limit else ""
@@ -526,306 +526,66 @@ class MiscApiManager(ServiceBase):
 
 class UserApiManager(ServiceBase):
 
-    @property
-    def RegisteredUser(self):
-        "返回本地已注册的用户名列表"
-
-        sql = "SELECT lauth_username FROM user_lauth"
-        logger.api.info("query registered user list SQL: {}".format(sql))
-        try:
-            data = self.mysql_read.query(sql)
-        except Exception,e:
-            logger.api.error(e, exc_info=True)
-            logger.api.warn("get user list error, return false")
-            return False
-        else:
-            return [ _.get("lauth_username") for _ in data if _.get("lauth_username") ]
-
-    def RegisteredUserInfo(self, username):
-        "返回用户信息"
-
-        sql = "SELECT lauth_username, lauth_password FROM user_lauth WHERE lauth_username=%s"
-        logger.api.info("query user information SQL: {}".format(sql))
-
-        try:
-            data = self.mysql_read.get(sql, username)
-        except Exception,e:
-            logger.api.error(e, exc_info=True)
-            logger.api.warn("get user info error, return an empty dict")
-            return {}
-        else:
-            return data
-
-    @property
-    def AlreadyLogged(self):
-        ticket = request.form.get("ticket", request.args.get("ticket"))
-        if isLogged_in(ticket) in ("True", True):
-            return True
-        return False
 
     def user_get_list(self, OAuth=False):
-        "获取用户列表"
-
-        res = {"code": 0, "msg": None, "data": []}
-        sql = "SELECT lauth_username FROM user_lauth UNION SELECT oauth_username FROM user_oauth" if OAuth else "SELECT lauth_username FROM user_lauth"
-        logger.api.info("get user list sql: "+ sql)
+        "获取用户列表, OAuth: 没用"
+        sql = "SELECT uid FROM user_profile"
         try:
             data = self.mysql_read.query(sql)
         except Exception,e:
-            logger.api.info(e, exc_info=True)
-            res.update(msg="get user list error", code=300001)
+            logger.api.error(e, exc_info=True)
+            return []
         else:
-            res.update(data=[ _["lauth_username"] for _ in data if _.get("lauth_username") ])
+            return [ _.get("uid") for _ in data if _.get("uid") ]
 
-        logger.api.debug(res)
-        return res
-
-    def user_get_lauth_passwd(self, username):
-        "获取本地用户密码"
-
-        res = {"code": 0, "msg": None, "data": None}
-        sql = "SELECT lauth_password FROM user_lauth WHERE lauth_username=%s"
-        logger.api.info("get user password sql: "+ sql)
-        try:
-            data = self.mysql_read.get(sql, username)
-        except Exception,e:
-            logger.api.info(e, exc_info=True)
-            res.update(msg="get user password error", code=300001)
-        else:
-            res.update(data=data.get("lauth_password"))
-
-        logger.api.debug(res)
-        return res
 
     def user_get_all(self):
         "获取所有用户资料"
-
         res = {"code": 0, "msg": None, "data": []}
-        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin, a.isAuthor FROM user_profile a"
-        logger.api.info("get all user and profile sql: "+ sql)
+        sql = "SELECT * FROM user_profile"
         try:
             data = self.mysql_read.query(sql)
         except Exception,e:
-            logger.api.info(e, exc_info=True)
+            logger.api.error(e, exc_info=True)
             res.update(msg="get all user error", code=300001)
         else:
             res.update(data=data)
-
-        logger.api.debug(res)
         return res
 
     def user_get_one_profile(self, username):
-        "查询用户资料"
-
-        res = {"code": 0, "msg": None, "data": {}}        
-        sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin, a.isAuthor FROM user_profile a INNER JOIN user_oauth b ON a.username = b.oauth_username WHERE a.username=%s"
-        data = self.mysql_read.get(sql, username)
-        if not data:
-            sql = "SELECT a.id, a.username, a.email, a.cname, a.avatar, a.cover, a.motto, a.url, a.time, a.weibo, a.github, a.gender, a.extra, a.isAdmin, a.isAuthor FROM user_profile a INNER JOIN user_lauth b ON a.username = b.lauth_username WHERE a.username=%s"
+        "返回用户信息, username = uid"
+        sql = "SELECT * FROM user_profile WHERE uid=%s"
+        res = dict(data=dict(), msg=None)
+        try:
             data = self.mysql_read.get(sql, username)
-        logger.api.info("get username profile sql: " + sql)
-        res.update(data=data)
-        logger.api.debug(res)
+        except Exception,e:
+            logger.api.error(e, exc_info=True)
+        else:
+            res.update(data=data)
         return res
 
     def user_get_admins(self):
         "获取管理员列表"
         res = {"code": 0, "msg": None, "data": []}
-        sql = "SELECT username FROM user_profile WHERE isAdmin='true'"
-        logger.api.info("query admin sql: " + sql)
+        sql = "SELECT uid FROM user_profile WHERE is_admin=1"
         try:
             data = self.mysql_read.query(sql)
         except Exception,e:
             logger.api.error(e, exc_info=True)
             res.update(msg="query admin account error", code=300001)
         else:
-            res.update(data=[ _["username"] for _ in data if _.get("username") ])
-
-        logger.api.debug(res)
+            res.update(data=[ _["uid"] for _ in data if _.get("uid") ])
         return res
 
     def user_get_authors(self):
         "获取作者列表"
-        res = {"code": 0, "msg": None, "data": []}
-        sql = "SELECT username FROM user_profile WHERE isAuthor='true'"
-        logger.api.info("query author sql: " + sql)
-        try:
-            data = self.mysql_read.query(sql)
-        except Exception,e:
-            logger.api.error(e, exc_info=True)
-            res.update(msg="query author account error", code=300002)
-        else:
-            res.update(data=[ _["username"] for _ in data if _.get("username") ])
-
-        logger.api.debug(res)
-        return res
-
-    def post(self):
-        """login and registry, with url args:
-        1. action=log/reg, default is log;
-
-        post data:
-        1. username,
-        2. password,
-        3. email
-        """
-        NULL     = None
-        res      = {"url": request.url, "msg": None, "success": False}
-        username = request.form.get("username")
-        password = request.form.get("password")
-        email    = request.form.get("email", NULL)
-        action   = request.args.get("action") #log or reg (登录or注册)
-
-        #chck username and password value
-        if not username or not password:
-            res.update(msg="Invaild username or password", code=10001)
-            logger.api.debug(res)
-            return res
-
-        #check username and password length
-        if 5 <= len(username) < 30 and 5 <= len(password) < 30:
-            MD5password = md5(password)
-        else:
-            res.update({'msg': 'username or password length requirement is greater than or equal to 5 less than 30', 'code': 10002})
-            logger.api.warn(res)
-            return res
-
-        #check username pattern
-        if not user_pat.match(username):
-            res.update({'msg': 'username is not valid', 'code': 10003})
-            logger.api.warn(res)
-            return res
-
-        if email and mail_pat.match(email) == None:
-            res.update({'msg': "email format error", 'code': 10004})
-            logger.api.warn(res)
-            return res
-
-        #Start Action with (log, reg)
-        if action == 'SignIn':
-            logger.api.debug(RegisteredUser())
-            logger.api.debug("MD5password: %s, DBpassword: %s, username: %s" %(MD5password, RegisteredUserInfo(username).get("lauth_password"),username))
-            if username in RegisteredUser():
-                if MD5password == RegisteredUserInfo(username).get("lauth_password"):
-                    res.update({'msg': 'Password authentication success at sign in', 'code': 0, "success": True})
-                else:
-                    res.update({'msg': 'Password authentication failed at sign in', 'code': 10005, "success": False})
-            else:
-                res.update({'msg':'username not exists', 'code': 10006})
-            logger.api.debug(res)
-            return res
-
-        elif action == 'SignUp':
-            try:
-                AuthSQL = "INSERT INTO LAuth (lauth_username, lauth_password) VALUES(%s, %s)"
-                logger.api.info(AuthSQL)
-                mysql.insert(AuthSQL, username, MD5password)
-                UserSQL = "INSERT INTO User (username, email, time, avatar) VALUES(%s, %s, %s, %s)"
-                mysql.insert(UserSQL, username, email, get_today(), "/static/img/avatar/default.jpg")
-            except IntegrityError, e:
-                logger.api.error(e, exc_info=True)
-                res.update({'msg': 'username already exists, cannot be registered!', 'code': 10007})
-                logger.api.warn(res)
-                return res
-            except Exception,e:
-                logger.api.error(e, exc_info=True)
-                res.update(msg="server error", code=-1)
-                logger.api.error(res)
-                return res
-            else:
-                res.update({'code': 0, 'msg': 'Sign up success', "success": True})
-                logger.api.debug(res)
-                return res
-
-        else:
-            res.update({'msg': 'Request action error', 'code': 10008})
-            logger.api.debug(res)
-            return res
-
-    def delete(self):
-        #sql = "DELETE FROM user WHERE username=%s"
-        #logger.api.info({"User:delete:SQL": sql})
-        return {}
-
-    def user_update_profile(self, username, **data):
-        """Update user profile"""
-
-        res  = {"code": 0, "success": False, "msg": None}
-        #data = { k:v for k,v in kwargs.iteritems() if k in ("email", "cname", "avatar", "motto", "url", "weibo", "github", "gender") }
-        sql  = "UPDATE user_profile SET "
-        for k,v in data.iteritems():
-            sql += "%s='%s'," %(k, v)
-        sql = sql.strip(",") + " WHERE username=%s"
-        logger.api.info("username: %s, sql: %s" %(username, sql))
-        if username:
-            try:
-                self.mysql_write.update(sql, username)
-            except Exception,e:
-                logger.api.error(e, exc_info=True)
-                success = False
-            else:
-                success = True
-            res.update(success=success)
-        logger.api.debug(res)
-        return res
-
-    def user_update_avatar(self, username, avatarUrl):
-        """Update user avatar"""
-        
-        res = {"code": 0, "success": False, "msg": None}
-        sql = "UPDATE user_profile SET avatar=%s WHERE username=%s"
-        if username:
-            try:
-                self.mysql_write.update(sql, avatarUrl, username)
-            except Exception,e:
-                logger.api.error(e, exc_info=True)
-            else:
-                res.update(success=True)
-
-        logger.api.debug(res)
-        return res
+        return self.user_get_admins()
 
     def user_update_cover(self, username, coverUrl):
         """Update user cover"""
-        
         res = {"code": 0, "success": False, "msg": None}
-        sql = "UPDATE user_profile SET cover=%s WHERE username=%s"
-        if username:
-            try:
-                self.mysql_write.update(sql, coverUrl, username)
-            except Exception,e:
-                logger.api.error(e, exc_info=True)
-            else:
-                res.update(success=True)
-
-        logger.api.debug(res)
         return res
 
-    def user_update_password(self, username, OldPassword, NewPassword):
-        """Update user password"""
-        
-        res = {"code": 0, "success": False, "msg": None}
-
-        if username in self.user_get_list().get("data", []) and md5(OldPassword) == self.user_get_lauth_passwd(username).get("data"):
-            sql = "UPDATE user_lauth SET lauth_password=%s WHERE lauth_username=%s"
-            if 5 <= len(NewPassword) < 30:
-                try:
-                    self.mysql_write.update(sql, md5(NewPassword), username)
-                except Exception,e:
-                    logger.api.error(e, exc_info=True)
-                else:
-                    res.update(success=True)
-            else:
-                res.update(msg='password length requirement is greater than or equal to 5 less than 30', code= 300002)
-        else:
-            res.update(msg="username does not exist or old passwords do not match", code=300002)
-
-        logger.api.debug(res)
-        return res
-
-    def user_get_statistics(self):
-        "统计数据查询"
-        pass
 
 class SysApiManager(ServiceBase):
 

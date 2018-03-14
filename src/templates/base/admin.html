@@ -59,56 +59,26 @@
                     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                         <span class="ng-scope">基础</span>
                     </li>
-
                     <li>
-                        <a href="#"><i class="fa fa-linux"></i> <span class="nav-label">博客管理</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="J_menuItem" href="{{ url_for('admin.basic_blog') }}">
+                                <a href="{{ url_for('admin.basic_blog') }}">
                                     <i class="fa fa-book"></i> <span class="nav-label">文章管理</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a class="J_menuItem" href="{{ url_for('admin.basic_user') }}">
+                    </li>
+                    <li>
+                                <a href="{{ url_for('admin.basic_user') }}">
                                     <i class="fa fa-user"></i> <span class="nav-label">用户管理</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a class="J_menuItem" href="{{ url_for('admin.basic_catalog') }}">
+                    </li>
+                    <li>
+                                <a href="{{ url_for('admin.basic_catalog') }}">
                                     <i class="fa fa-folder-open"></i> <span class="nav-label">分类管理</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a class="J_menuItem" href="http://changyan.kuaizhan.com/overview" target="_blank">
+                    </li>
+                    <li>
+                                <a href="http://changyan.kuaizhan.com/overview" target="_blank">
                                     <i class="fa fa-commenting"></i> <span class="nav-label">评论管理</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a class="J_menuItem" href="{{ url_for('admin.basic_project') }}">
-                                    <i class="fa fa-github"></i> <span class="nav-label">开源项目管理</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-
-                    <li>
-                        <a href="{{ url_for('admin.basic_team') }}">
-                            <i class="fa fa-group"></i> <span class="nav-label">团队管理</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ url_for('admin.basic_filemanager') }}">
-                            <i class="fa fa-file-image-o"></i> <span class="nav-label">上传图片管理</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ url_for('admin.basic_plugin') }}">
-                            <i class="fa fa-puzzle-piece"></i> <span class="nav-label">插件配置管理</span>
-                        </a>
-                    </li>
-
                     <li>
                         <a href="{{ url_for('admin.system_clicklog') }}">
                             <i class="fa fa-database"></i> <span class="nav-label">点击记录</span>
@@ -144,9 +114,7 @@
                     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs"></li>
                     <li>
                         <center>
-                            <i class="fa fa-child" style="font-size:20px;color:white"></i>&nbsp;<scan style="font-size:10px;color:green;">欢迎: <font size="2px">{{ g.username }}</font></scan>
                             <p class="text-muted credit" style="padding: 10px;">
-                                &copy; 2017<br />
                                 SaintIC, All rights reserved.
                             </p>
                         </center>
@@ -160,64 +128,14 @@
             <div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-info " href="#"><i class="fa fa-bars"></i> </a>
-                        <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
-                            <div class="form-group">
-                                <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
-                            </div>
-                        </form>
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
-                        <li><a href="{{ url_for('front.index') }}" target="_blank"><i class="fa fa-home"></i>前台</a></li>
-                        <!--消息导航-->
-                        <li class="dropdown">
-                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                                <i class="fa fa-bell"></i>消息&nbsp;&nbsp;<span class="label label-primary">8</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-alerts">
-                                <li>
-                                    <a href="mailbox.html">
-                                        <div>
-                                            <i class="fa fa-envelope fa-fw"></i> 您有16条未读消息
-                                            <span class="pull-right text-muted small">4分钟前</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="profile.html">
-                                        <div>
-                                            <i class="fa fa-qq fa-fw"></i> 3条新回复
-                                            <span class="pull-right text-muted small">12分钟钱</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <div class="text-center link-block">
-                                        <a class="J_menuItem" href="notifications.html">
-                                            <strong>查看所有 </strong>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-
+                        <li><a href="{{ url_for('front.index') }}"><i class="fa fa-home"></i>前台</a></li>
                         <!--用户导航-->
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <i class="fa fa-user"></i><span>管理员</span>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li><center><small>Signed in as <strong>{{ g.username }}</strong></small></center></li>
-                                <li class="divider"></li>
-                                <li><a href="#">我的资料</a></li>
-                                <li><a href="{{ url_for('front.userHome', user=g.username) }}">我的主页</a></li>
-                                <li><a href="{{ url_for('front.userHome', user=g.username) }}#blog">我的文章</a></li>
-                                <li class="divider"></li>
-                                <li><a href="{{ url_for('front.userHome', user=g.username) }}#Setting" title="Setting">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
-                                <li><a href="{{ url_for('logout') }}" title="Sign Out">注销&nbsp;<i class="icon-signout icon-1x"></i></a></li>
-                            </ul>
                         </li>
                     </ul>
                 </nav>

@@ -26,7 +26,7 @@ __license__ = "MIT"
 import time, os.path, jinja2, sys, rq_dashboard
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
-from utils.tool import logger, ChoiceColor, TagRandomColor
+from utils.tool import logger, ChoiceColor, TagRandomColor, timestamp_to_timestring
 from utils.web import verify_sessionId, analysis_sessionId, get_redirect_url
 from urllib import urlencode
 from libs.api import ApiManager
@@ -75,7 +75,7 @@ for bep in plugin.get_all_bep:
 
 @app.context_processor  
 def GlobalTemplateVariables():  
-    data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor, "TagRandomColor": TagRandomColor}
+    data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor, "TagRandomColor": TagRandomColor, "timestamp_to_timestring": timestamp_to_timestring}
     return data
 
 @app.before_request
@@ -86,7 +86,7 @@ def before_request():
     g.username  = g.uid
     g.api       = api
     g.plugins   = PLUGINS
-    g.token     = {}
+    g.userinfo  = {}
     # 仅是重定向页面快捷定义
     g.redirect_uri = get_redirect_url()
     #上下文扩展点之请求后(返回前)

@@ -99,15 +99,16 @@ def authorized():
     if Action == "ssoLogin":
         ticket = request.args.get("ticket")
         if ticket and g.signin == False:
-            resp = sso_request("{}/sso/validate".format(sso_server), dict(Action="validate_ticket"), dict(ticket=ticket, app_name=SSO["app_name"], get_userinfo=False, get_userbind=False))
+            resp = sso_request("{}/sso/validate".format(sso_server), dict(Action="validate_ticket"), dict(ticket=ticket, app_name=SSO["app_name"], get_userinfo=True, get_userbind=False))
             logger.sys.debug("SSO check ticket resp: {}".format(resp))
             if resp and isinstance(resp, dict) and "success" in resp and "uid" in resp:
                 if resp["success"] is True:
                     uid = resp["uid"]
                     sid = resp["sid"]
                     expire = int(resp["expire"])
-                    #userinfo = resp["userinfo"]
-                    #logger.sys.debug(userinfo)
+                    userinfo = resp["userinfo"]
+                    g.userinfo = userinfo
+                    logger.sys.debug(g.userinfo)
                     # 授权令牌验证通过，设置局部会话，允许登录
                     sessionId = set_sessionId(uid=uid, seconds=expire)
                     response = make_response(redirect(get_redirect_url("front.index")))
