@@ -26,7 +26,7 @@ __license__ = "MIT"
 import time, os.path, jinja2, sys, rq_dashboard
 from flask import Flask, request, g, render_template, redirect, make_response, url_for
 from config import GLOBAL, SSO, PLUGINS, REDIS
-from utils.tool import logger, isLogged_in, md5, ChoiceColor, TagRandomColor
+from utils.tool import logger, ChoiceColor, TagRandomColor
 from utils.web import verify_sessionId, analysis_sessionId, get_redirect_url
 from urllib import urlencode
 from libs.api import ApiManager
