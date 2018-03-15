@@ -93,6 +93,7 @@ def before_request():
     before_request_hook = plugin.get_all_cep.get("before_request_hook")
     for cep_func in before_request_hook():
         cep_func(request=request, g=g)
+    logger.access.debug(g.userinfo)
 
 @app.after_request
 def after_request(response):

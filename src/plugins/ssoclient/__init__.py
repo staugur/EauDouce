@@ -107,11 +107,10 @@ def authorized():
                     uid = resp["uid"]
                     sid = resp["sid"]
                     expire = int(resp["expire"])
-                    userinfo = resp["userinfo"]
-                    g.userinfo = userinfo
+                    g.userinfo = resp["userinfo"].get("data") or dict()
                     logger.sys.debug(g.userinfo)
                     # 授权令牌验证通过，设置局部会话，允许登录
-                    sessionId = set_sessionId(uid=uid, seconds=expire)
+                    sessionId = set_sessionId(uid=uid, seconds=expire, sid=sid)
                     response = make_response(redirect(get_redirect_url("front.index")))
                     response.set_cookie(key="sessionId", value=sessionId, max_age=expire, httponly=True, secure=False if request.url_root.split("://")[0] == "http" else True)
                     return response
@@ -142,6 +141,15 @@ def authorized():
                 if resp and isinstance(resp, dict) and resp.get("success") is True:
                     # 之后根据不同类型的ct处理cd
                     logger.plugin.debug("ssoConSync is ok")
+                    if ct == "user_profile":
+                        # like {u'nick_name': u'.\u5f18\u5f08', u'gender': u'1', u'domain_name': u'taochengwei', u'birthday': u'1995-04-22', u'location': u'\u5317\u4eac \u671d\u9633', u'signature': u'\u5c81\u6708\u5982\u5200\u65a9\u5929\u9a84'}
+                        logger.plugin.debug("sync user_profile before: {}".format(g.userinfo))
+                        g.userinfo.update(cd)
+                        logger.plugin.debug("sync user_profile after: {}".format(g.userinfo))
+                    elif ct == "user_avatar":
+                        logger.plugin.debug("sync user_avatar before: {}".format(g.userinfo["avatar"]))
+                        g.userinfo["avatar"] = cd
+                        logger.plugin.debug("sync user_avatar after: {}".format(g.userinfo["avatar"]))
                     return jsonify(msg="Synchronization completed", success=True)
     return "Invalid Authorized"
 
