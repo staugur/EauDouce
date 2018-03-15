@@ -152,7 +152,7 @@ def authorized():
                         logger.plugin.debug("sync user_avatar before: {}".format(g.userinfo["avatar"]))
                         g.userinfo["avatar"] = cd
                         logger.plugin.debug("sync user_avatar after: {}".format(g.userinfo["avatar"]))
-                    return jsonify(msg="Synchronization completed", success=g.api.sso_set_userinfo(uid, g.userinfo))
+                    return jsonify(msg="Synchronization completed", success=g.api.sso_set_userinfo(uid, g.userinfo), app_name=SSO["app_name"])
     return "Invalid Authorized"
 
 #: 返回插件主类
