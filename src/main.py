@@ -86,14 +86,14 @@ def before_request():
     g.username  = g.uid
     g.api       = api
     g.plugins   = PLUGINS
-    g.userinfo  = {}
+    g.userinfo  = api.sso_get_userinfo(g.uid)
     # 仅是重定向页面快捷定义
     g.redirect_uri = get_redirect_url()
     #上下文扩展点之请求后(返回前)
     before_request_hook = plugin.get_all_cep.get("before_request_hook")
     for cep_func in before_request_hook():
         cep_func(request=request, g=g)
-    logger.access.debug(g.userinfo)
+    logger.access.debug("sid: {}, uid: {}, userinfo: {}".format(g.sid, g.uid, g.userinfo))
 
 @app.after_request
 def after_request(response):

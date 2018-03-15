@@ -10,8 +10,8 @@
 """
 
 import requests, sys, json
-from config import REDIS, MYSQL, PLUGINS
-from torndb import IntegrityError, Connection
+from config import PLUGINS
+from torndb import IntegrityError
 from utils.tool import logger, get_today, ListEqualSplit, md5, DO
 from .base import ServiceBase
 
@@ -526,6 +526,28 @@ class MiscApiManager(ServiceBase):
 
 class UserApiManager(ServiceBase):
 
+
+    def sso_get_userinfo(self, uid):
+        key = "EauDouce:userinfo:{}".format(uid)
+        if uid:
+            try:
+                data = json.loads(self.redis.get(key))
+            except Exception,e:
+                logger.sys.debug(e)
+            else:
+                return data
+        return dict()
+
+    def sso_set_userinfo(self, uid, userinfo):
+        key = "EauDouce:userinfo:{}".format(uid)
+        if uid and userinfo and isinstance(userinfo, dict):
+            try:
+                self.redis.set(key, json.dumps(userinfo))
+            except Exception,e:
+                logger.sys.debug(e)
+            else:
+                return True
+        return False
 
     def user_get_list(self, OAuth=False):
         "获取用户列表, OAuth: 没用"
