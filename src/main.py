@@ -82,7 +82,7 @@ def GlobalTemplateVariables():
 def before_request():
     g.startTime = time.time()
     g.signin    = verify_sessionId(request.cookies.get("sessionId"))
-    g.uid       = analysis_sessionId(request.cookies.get("sessionId")).get("uid") if g.signin else None
+    g.sid,g.uid = analysis_sessionId(request.cookies.get("sessionId"), "tuple") if g.signin else (None, None)
     g.username  = g.uid
     g.api       = api
     g.plugins   = PLUGINS

@@ -13,7 +13,7 @@ import re, requests, hashlib, datetime, random, upyun, time
 from uuid import uuid4
 from log import Logger
 from base64 import b32encode
-from config import PLUGINS
+from config import PLUGINS, SYSTEM
 
 class DO(dict):
     """A dict that allows for object-like property access syntax."""
@@ -36,6 +36,7 @@ logger          = DO(
                     plugin = Logger("plugin").getLogger
                   )
 md5             = lambda pwd:hashlib.md5(pwd).hexdigest()
+hmac_sha256     = lambda message: hmac.new(key=SYSTEM["HMAC_SHA256_KEY"], msg=message, digestmod=hashlib.sha256).hexdigest()
 gen_token       = lambda n=32:b32encode(uuid4().hex)[:n]
 gen_requestId   = lambda :str(uuid4())
 get_today       = lambda format="%Y-%m-%d %H:%M":datetime.datetime.now().strftime(format)
