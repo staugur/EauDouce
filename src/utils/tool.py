@@ -9,7 +9,7 @@
     :license: MIT, see LICENSE for more details.
 """
 
-import re, requests, hashlib, datetime, random, upyun, time
+import re, requests, hashlib, datetime, random, upyun, time, hmac
 from uuid import uuid4
 from log import Logger
 from base64 import b32encode
