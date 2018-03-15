@@ -36,7 +36,6 @@ class PluginManager(object):
         self.plugins     = []
         self.plugin_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "plugins")
         self.__scanPlugins()
-        logger.plugin.debug(self.plugins)
 
     def __getPluginInfo(self, package, plugin):
         """ 组织插件信息 """
