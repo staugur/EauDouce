@@ -47,9 +47,9 @@
 						<a href="{{ url_for('front.blogShow', bid=blog.id) }}" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
 					</h4>
 					<h6>
-					    {% if blog.author %}
+					    {#
 					    <i class="icon-user icon-1x"></i><a href="{{ url_for('front.userHome', user=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;
-					    {% endif %}
+					    #}
 
                         {% if blog.create_time %}
 					    <i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;
