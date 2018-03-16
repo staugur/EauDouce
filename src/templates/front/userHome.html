@@ -28,11 +28,11 @@ legend{padding:.5em;border:0;width:auto}
 		  	<p class="text-left text-default">
                 <i class="icon-user icon-1x">&nbsp;</i><attr title="{{ data.signature or '' }}">{{ data.nick_name or data.domain_name or data.uid }}</attr><br/>
                 {% if data.get('gender') == '男' %}
-                    <i class="icon-time icon-1x">&nbsp;</i>A handsome boy Joined on {{ timestamp_to_timestring(data.get('ctime')) }}
+                    <i class="icon-time icon-1x">&nbsp;</i>A handsome boy Joined on {{ timestamp_to_timestring(data.get('ctime'), format='%Y-%m-%d') }}
                 {% elif data.get('gender') == '女' %}
-                    <i class="icon-time icon-1x">&nbsp;</i>A pretty girl Joined on {{ timestamp_to_timestring(data.get('ctime')) }}
+                    <i class="icon-time icon-1x">&nbsp;</i>A pretty girl Joined on {{ timestamp_to_timestring(data.get('ctime'), format='%Y-%m-%d') }}
                 {% else %}
-                    <i class="icon-time icon-1x">&nbsp;</i>Joined on {{ timestamp_to_timestring(data.get('ctime')) }}
+                    <i class="icon-time icon-1x">&nbsp;</i>Joined on {{ timestamp_to_timestring(data.get('ctime'), format='%Y-%m-%d') }}
                 {% endif %}
                 <br/>
                 <!--
