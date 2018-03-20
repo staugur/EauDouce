@@ -127,6 +127,8 @@ def UploadClipperAvatar():
         if PLUGINS['UpYunStorage']['enable'] in ('true', 'True', True):
             imgUrl = "/EauDouce/avatar/" + filename
             upres  = UploadImage2Upyun(imgUrl, base64str(data))
+            #直接上传imgdata，即解码的base64，不能携带头信息`data:image/png;base64,`
+            #upres  = UploadImage2Upyun(imgUrl, base64str(data))
             imgUrl = PLUGINS['UpYunStorage']['dn'].strip("/") + imgUrl
             logger.sys.info("Avatar to Upyun file saved, its url is %s, result is %s" %(imgUrl, upres))
         else:
