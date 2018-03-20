@@ -107,6 +107,11 @@ def sitemaphtml():
     # 站点地图
     return render_template("public/sitemap.html")
 
+@front_blueprint.route("/BingSiteAuth.xml")
+def BingSiteAuth():
+    # Bing验证
+    return render_template("public/BingSiteAuth.xml")
+
 @front_blueprint.route("/feed/")
 def feed():
     # 订阅
