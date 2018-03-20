@@ -235,7 +235,7 @@ class BlogApiManager(ServiceBase):
             if page < len(data):
                 res.update(data=data[page], page={"page": page, "limit": limit, "length": length, "PageCount": len(data)})
             else:
-                logger.api.info("get single index, but IndexOut with page "+page)
+                logger.api.info("get single index, but IndexOut with page {}".format(page))
 
         logger.api.debug(res)
         return res
