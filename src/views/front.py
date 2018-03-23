@@ -54,9 +54,9 @@ def blogResource():
 def blogSearch():
     return render_template("front/blogSearch.html")
 
-@front_blueprint.route("/user/")
-def userHome():
-    user = request.args.get("user")
+@front_blueprint.route("/user/<user>")
+def userHome(user):
+    userdata = g.api.user_getprofile_with_domainName()
     return render_template("front/userHome.html", user=user)
 
 @front_blueprint.route("/user/setting/")

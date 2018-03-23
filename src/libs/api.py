@@ -608,6 +608,18 @@ class UserApiManager(ServiceBase):
         res = {"code": 0, "success": False, "msg": None}
         return res
 
+    def user_getprofile_with_domainName(self, domainName):
+        """根据个性域名地址获取个人资料"""
+        res = {"code": 0, "msg": None, "data": dict()}
+        sql = "SELECT * FROM user_profile WHERE domain_name=%s"
+        try:
+            data = self.mysql_read.get(sql, domainName)
+        except Exception,e:
+            logger.api.error(e, exc_info=True)
+            res.update(msg="get user error", code=300009)
+        else:
+            res.update(data=data)
+        return res
 
 class SysApiManager(ServiceBase):
 
