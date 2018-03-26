@@ -12,7 +12,7 @@
 import requests, sys, json
 from config import PLUGINS
 from torndb import IntegrityError
-from utils.tool import logger, get_today, ListEqualSplit, md5, DO
+from utils.tool import logger, get_today, ListEqualSplit, md5, DO, user_pat, sql_safestring_check
 from .base import ServiceBase
 
 
@@ -608,17 +608,44 @@ class UserApiManager(ServiceBase):
         res = {"code": 0, "success": False, "msg": None}
         return res
 
+    def user_get_domainName(self, uid):
+        """根据uid获取域名"""
+        res = dict(code=1, msg=None)
+        if uid:
+            sql = "SELECT domain_name FROM user_profile WHERE uid=%s"
+            try:
+                data = self.mysql_read.get(sql, uid)
+            except Exception,e:
+                logger.api.error(e, exc_info=True)
+                res.update(msg="get domain_name error", code=2)
+            else:
+                if data and isinstance(data, dict) and data["domain_name"]:
+                    res.update(domain_name=data["domain_name"], code=0)
+                else:
+                    res.update(code=404)
+        else:
+            res.update(msg="Invaild uid", code=3)
+        logger.api.debug(res)
+        return res
+
     def user_getprofile_with_domainName(self, domainName):
         """根据个性域名地址获取个人资料"""
-        res = {"code": 0, "msg": None, "data": dict()}
+        res = {"code": 1, "msg": None}
         sql = "SELECT * FROM user_profile WHERE domain_name=%s"
-        try:
-            data = self.mysql_read.get(sql, domainName)
-        except Exception,e:
-            logger.api.error(e, exc_info=True)
-            res.update(msg="get user error", code=300009)
+        if domainName and user_pat.match(domainName) and sql_safestring_check(domainName):
+            try:
+                data = self.mysql_read.get(sql, domainName)
+            except Exception,e:
+                logger.api.error(e, exc_info=True)
+                res.update(msg="get user error", code=300009)
+            else:
+                if data and isinstance(data, dict):
+                    res.update(data=data, code=0)
+                else:
+                    res.update(code=404)
         else:
-            res.update(data=data)
+            res.update(msg="Invaild domain_name", code=1)
+        logger.api.debug(res)
         return res
 
 class SysApiManager(ServiceBase):

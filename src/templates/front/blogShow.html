@@ -75,7 +75,7 @@
                     </div>
                     <h6>
                         {#
-                        <i class="icon-user icon-1x"></i><a href="{{ url_for('front.userHome', user=data.author) }}" title="由 {{ data.author }} 发布" style="color: #999">&nbsp;{{ data.author }}</a>&nbsp;
+                        <i class="icon-user icon-1x"></i><a href="{{ url_for('front.userGo', uid=data.author) }}" title="由 {{ data.author }} 发布" style="color: #999">&nbsp;{{ data.author }}</a>&nbsp;
                         #}
 
                         {% if data.catalog %}

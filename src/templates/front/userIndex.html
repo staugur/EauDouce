@@ -1,0 +1,94 @@
+{% extends "base/front.html" %}
+
+{% block title %}我的主页{% endblock %}
+
+{% block head %}
+    <style type="text/css">
+    .bg {
+	    display: table;
+	    width: 100%;
+	    height: 100%;
+	    padding: 50px 0;
+	    text-align: center;
+	    color: #fff !important;
+	    background-color: #000;
+	    background-size: cover;
+    }
+    fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid #009;border-radius:5px;}
+    legend{padding:.5em;border:0;width:auto}
+</style> 
+{% endblock %}
+
+{% block AlternateDiagram %}
+    <div class="bg" style="background: url({{ userdata.cover or 'https://img.saintic.com/EauDouce/cover/defaultCover.jpg' }}) no-repeat top center;">
+		<div class="col-md-4 column">
+		  	<img id="avatar" src="{{ userdata.avatar or 'https://img.saintic.com/EauDouce/avatar/default.jpg' }}" class="img-thumbnail" style="display: block; max-height: 200px" />
+		  	<p class="text-left text-default">
+                <i class="icon-user icon-1x">&nbsp;</i><attr title="{{ userdata.signature or '' }}">{{ userdata.nick_name or userdata.domain_name or userdata.uid }}</attr><br/>
+                {% if userdata.get('gender') == '男' %}
+                    <i class="icon-time icon-1x">&nbsp;</i>A handsome boy Joined on {{ timestamp_to_timestring(userdata.get('ctime'), format='%Y-%m-%d') }}
+                {% elif userdata.get('gender') == '女' %}
+                    <i class="icon-time icon-1x">&nbsp;</i>A pretty girl Joined on {{ timestamp_to_timestring(userdata.get('ctime'), format='%Y-%m-%d') }}
+                {% else %}
+                    <i class="icon-time icon-1x">&nbsp;</i>Joined on {{ timestamp_to_timestring(userdata.get('ctime'), format='%Y-%m-%d') }}
+                {% endif %}
+                <br/>
+                <!--
+                {% if userdata.get('url') %}
+                    <i class="icon-link icon-1x">&nbsp;</i>我的网址: <a href="{% if 'http' in userdata.get('url') %}{{ userdata.get('url') }}{% else %}{{ 'http://' + userdata.get('url') }}{% endif %}" target="_blank">{{ userdata.get('url') }}</a><br/>
+                {% endif %}
+
+                {% if userdata.get('email') %}
+                    <i class="icon-envelope icon-1x">&nbsp;</i>我的邮箱: <a href="mailto:{{ userdata.get('email') }}">{{ userdata.get('email') }}</a><br/>
+                {% endif %}
+
+                {% if userdata.get('weibo') %}
+                    <i class="icon-twitter-sign icon-1x">&nbsp;</i>我的微博: <a href="{% if 'http' in userdata.get('weibo') %}{{ userdata.get('weibo') }}{% else %}{{ 'http://' + userdata.get('weibo') }}{% endif %}" target="_blank">{{ userdata.get('weibo') }}</a><br/>
+                {% endif %}
+
+                {% if userdata.get('github') %}
+                    <i class="icon-github icon-1x">&nbsp;</i>我的代码: <a href="{% if 'http' in userdata.get('github') %}{{ userdata.get('github') }}{% else %}{{ 'http://' + userdata.get('github') }}{% endif %}" target="_blank">{{ userdata.get('github') }}</a><br/>
+                {% endif %}
+
+                <i class="icon-link icon-1x">&nbsp;</i>个性地址: {{ request.url_root.strip('/') + url_for('front.userGo', uid=g.uid)  }}<br/>
+                -->
+            </p>
+		</div>
+    </div>
+    <br/>
+    <div>
+        <a name="blog"></a>
+		{% for blog in blogdata %}
+        <blockquote>
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<p class="text-left">
+						<a href="{{ url_for('front.blogShow', bid=blog.id) }}" style="color: blue; font-weight: bold;">{{ blog.title }}</a>
+                        {% if userdata.nick_name %}
+					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.userGo', uid=blog.author) }}" title="由 {{ userdata.nick_name }} 发布" style="color: #999">&nbsp;{{ userdata.nick_name }}</a>&nbsp;</small>
+                        {% endif %}
+					    <small><i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;</small>
+					    {% if blog.tag %}
+					    <small><i class="icon-tag icon-1x"></i>
+					    {% for tag in blog.tag.split() %}
+					        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
+					    {% endfor %}
+					    </small>
+					    {% endif %}
+					</p>
+				</div>
+			</div>
+	    </blockquote>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block PathNavigation %}{% endblock %}
+
+{% block notice %}{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block aside %}{% endblock %}
+
+{% block container %}{% endblock %}

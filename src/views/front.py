@@ -54,10 +54,24 @@ def blogResource():
 def blogSearch():
     return render_template("front/blogSearch.html")
 
-@front_blueprint.route("/user/<user>")
-def userHome(user):
-    userdata = g.api.user_getprofile_with_domainName()
-    return render_template("front/userHome.html", user=user)
+@front_blueprint.route("/user/go/")
+def userGo():
+    # 过渡性的路由，用于使用uid跳转到userIndex的情况
+    uid = request.args.get("uid") or g.uid
+    res = g.api.user_get_domainName(uid)
+    if res["code"] == 0:
+        return redirect(url_for("front.userIndex", domain_name=res["domain_name"]))
+    else:
+        return abort(404)
+
+@front_blueprint.route("/user/<domain_name>")
+def userIndex(domain_name):
+    # 用户主页
+    res = g.api.user_getprofile_with_domainName(domain_name)
+    if res["code"] == 0:
+        return render_template("front/userIndex.html", userdata=res["data"], blogdata=g.api.blog_get_user_blog(res["data"]["uid"])["data"])
+    else:
+        return abort(404)
 
 @front_blueprint.route("/user/setting/")
 @login_required
