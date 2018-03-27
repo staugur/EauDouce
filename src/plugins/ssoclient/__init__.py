@@ -139,6 +139,7 @@ def authorized():
             else:
                 logger.plugin.info("ssoConSync with uid: {} -> {}: {}".format(uid, ct, cd))
                 resp = sso_request("{}/sso/validate".format(sso_server), dict(Action="validate_sync"), dict(token=token, uid=uid))
+                logger.plugin.debug("ssoCronSync resp: {}".format(resp))
                 if resp and isinstance(resp, dict) and resp.get("success") is True:
                     # 之后根据不同类型的ct处理cd
                     logger.plugin.debug("ssoConSync is ok")
