@@ -6,7 +6,7 @@
         datatype: 'json',
         success: function(res) {
             console.log(res);
-            if (res.Included==true) {
+            if (res.success==true) {
                 BingIncludedCheck.setAttribute("class", "text-success");
                 BingIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;必应收录成功';
             } else {
