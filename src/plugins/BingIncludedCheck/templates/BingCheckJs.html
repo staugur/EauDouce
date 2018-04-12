@@ -1,0 +1,22 @@
+<script type="text/javascript">
+    var BingIncludedCheck = document.getElementById("BingIncludedCheck");
+    $.ajax({
+        url: "https://open.saintic.com/api/BingIncludedQuery/?url={{ request.url }}",
+        method: 'GET',
+        datatype: 'json',
+        success: function(res) {
+            console.log(res);
+            if (res.Included==true) {
+                BingIncludedCheck.setAttribute("class", "text-success");
+                BingIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;必应收录成功';
+            } else {
+                BingIncludedCheck.setAttribute("class", "text-danger");
+                BingIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;必应收录失败';
+            }
+        },
+        error: function(error){
+            BingIncludedCheck.setAttribute("class", "text-danger");
+            BingIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;必应收录插件发生未知错误';
+        }
+    });
+</script>

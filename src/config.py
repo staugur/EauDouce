@@ -112,6 +112,9 @@ PLUGINS={
     "BaiduIncludedCheck": getenv("eaudouce_BaiduIncludedCheck", False),
     #百度收录检测插件
 
+    "BingIncludedCheck": getenv("eaudouce_BingIncludedCheck", False),
+    #必应收录检测插件
+
     "BackupBlog": getenv("eaudouce_BackupBlog", False),
     #备份文章插件,如果开启了又拍云存储插件,将会存储到又拍云上,否则存到本地
 
