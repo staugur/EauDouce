@@ -541,8 +541,10 @@ class UserApiManager(ServiceBase):
     def sso_set_userinfo(self, uid, userinfo):
         key = "EauDouce:userinfo:{}".format(uid)
         if uid and userinfo and isinstance(userinfo, dict):
+            source = self.sso_get_userinfo(uid)
+            source.update(userinfo)
             try:
-                self.redis.set(key, json.dumps(userinfo))
+                self.redis.set(key, json.dumps(source))
             except Exception,e:
                 logger.sys.debug(e)
             else:
