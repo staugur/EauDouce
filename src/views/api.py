@@ -248,6 +248,10 @@ class WechatApplet(Resource):
         elif Action == "get_blogId":
             blogId = int(request.args.get('blogId'))
             return g.api.blog_get_id(blogId)
+        elif Action == "get_top":
+            sort   = request.args.get('sort', 'desc')
+            limit  = request.args.get('limit', None)
+            return g.api.blog_get_top_data(sort, limit)
 
 api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)
