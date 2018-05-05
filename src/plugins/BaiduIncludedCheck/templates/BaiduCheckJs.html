@@ -10,10 +10,10 @@ $(document).ready(function () {
             console.log(res);
             if (res.Included==true) {
                 BaiduIncludedCheck.setAttribute("class", "text-success");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录成功';
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度已收录';
             } else {
                 BaiduIncludedCheck.setAttribute("class", "text-danger");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录失败';
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度未收录';
                 var bp = document.createElement('script');
                 bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
                 var s = document.getElementsByTagName("script")[0];
@@ -22,7 +22,7 @@ $(document).ready(function () {
         },
         error: function(error){
                 BaiduIncludedCheck.setAttribute("class", "text-danger");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件发生未知错误';
+                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件异常';
         }
     });
 });
