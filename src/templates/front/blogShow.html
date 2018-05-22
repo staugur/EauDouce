@@ -183,6 +183,12 @@
 {% endif %}
 
 <script type="text/javascript">
+$(document).ready(function() {
+    setTimeout(function(){
+        document.getElementById("feedAv").style.display="none";
+        document.getElementById('feedAv').id="feedAvBak";
+    },2000);
+});
 {% if g.username in g.api.user_get_admins().data %}
 // 设置或取消置顶文章
 function setTop(value) {
