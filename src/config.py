@@ -139,6 +139,9 @@ PLUGINS={
     "shareJs": getenv("eaudouce_shareJs", True),
     #社会化分享插件
 
-    "Christmas": getenv("eaudouce_Christmas", False)
+    "Christmas": getenv("eaudouce_Christmas", False),
     #圣诞雪人效果
+
+    "CrawlHuaban": getenv("eaudouce_CrawlHuaban", True),
+    #抓取花瓣网图片
 }
