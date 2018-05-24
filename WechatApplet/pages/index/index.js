@@ -8,6 +8,7 @@ var app = getApp()
 var utils = require('../../utils/util.js')
 Page({
   data: {
+    top: [],
     list: [],
     banner: [],
     duration: 2000,
@@ -26,12 +27,21 @@ Page({
     })
   },
   onPullDownRefresh: function () {
-    wx.stopPullDownRefresh()
+    wx.stopPullDownRefresh();
   },
   onLoad: function () {
     this.index = 0;
     var that = this;
-    //首页文章数据
+    //首页置顶文章数据
+    wx.request({
+      url: app.serverUrl + '/api/wechatapplet/?' + utils.make_url({Action: 'get_top'}),
+      success: function (res) {
+         that.setData({
+           top: res.data.data
+         })
+      }
+    });
+    //首页最新文章数据
     wx.request({
       url: app.serverUrl + '/api/wechatapplet/?' + utils.make_url({Action: 'get_index', length: that.data.length, page: that.index}),
       success: function (res) {
@@ -61,7 +71,7 @@ Page({
           "Content-Type": "application/x-www-form-urlencoded"
         },
         success: function (res) {
-          console.log(res.data)
+          console.log(res.data);
         }
       });
     })
@@ -87,7 +97,7 @@ Page({
           wx.request({
             url: app.serverUrl + '/api/wechatapplet/?' + utils.make_url({Action: 'get_index', length: that.data.length, page: that.nextPage}),
             success: function (res) {
-               var last = res.data.page.PageCount - 1
+               var last = res.data.page.PageCount - 1;
                if(res.data.page.page != last){
                    that.setData({
                      loading: false,

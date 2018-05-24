@@ -42,3 +42,7 @@
 .wxParse-div{
   width: 100% !important;
 }
+
+.tip{
+    padding-bottom: 1px;
+}

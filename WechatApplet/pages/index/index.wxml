@@ -15,6 +15,23 @@
     </block>
   </swiper>
   <view class="news-item-container">
+    <!--top-->
+    <text class="news-item-catalog">置顶文章</text>
+    <block wx:for="{{top}}" wx:for-index="id" wx:key="unique">
+      <navigator url="../detail/detail?id={{item.id}}">
+        <view class="news-item" >
+          <view class="news-item-left">
+            <text class="news-item-title">{{item.title}}</text>
+            <!--<image src="{{item.attachments[0].url}}" class="news-image"/>-->
+          </view>
+          <view class="news-item-right">
+            <text class="news-item-misc">{{item.create_time}}</text>
+          </view>
+        </view>
+      </navigator>
+    </block>
+    <!--blogs-->
+    <text class="news-item-catalog">最新文章</text>
     <block wx:for="{{list}}" wx:for-index="id" wx:key="unique">
       <navigator url="../detail/detail?id={{item.id}}">
         <view class="news-item" >

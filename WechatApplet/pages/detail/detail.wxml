@@ -14,7 +14,9 @@
                     <view class="weui-article__p">
                         <template is="wxParse" data="{{wxParseData:content.nodes}}"/>
                     </view>
-                    <text>温馨提示：小程序尚无法解析文章代码高亮，请用浏览器打开！</text>
+                    <view class="tip">
+                        温馨提示：小程序尚无法解析文章代码高亮，<text style="font-weight: font;color: blue" bindtap="copyTBL">点击此处一键复制</text>，使用浏览器打开！
+                    </view>
                 </view>
             </view>
         </view>

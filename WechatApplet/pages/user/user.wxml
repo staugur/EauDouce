@@ -20,7 +20,7 @@
         </view>
         <view class="about-item">
           <text class="about-item-title">官网地址</text>
-          <text class="about-item-content link">https://www.saintic.com</text>
+          <text class="about-item-content link" selectable="true">https://www.saintic.com</text>
         </view>
         <view class="about-item">
           <text class="about-item-title">公众号</text>

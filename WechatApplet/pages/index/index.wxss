@@ -93,3 +93,8 @@
   margin-top: 16px;
   margin-bottom: 16px;
 }
+.news-item-catalog {
+  font-size: 14px;
+  color: #009900;
+  padding-left: 10px;
+}

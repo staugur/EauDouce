@@ -9,7 +9,7 @@
     "navigationBarBackgroundColor": "#DE3639",
     "navigationBarTitleText": "陶先森de博客",
     "navigationBarTextStyle": "white",
-    "enablePullDownRefresh": "true"
+    "enablePullDownRefresh": true
   },
   "tabBar": {
     "color": "#FFF",

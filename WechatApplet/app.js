@@ -4,7 +4,7 @@
 */
 
 //配置
-var version = 'v0.0.3'
+var version = 'v0.0.4'
 var serverUrl = 'https://www.saintic.com'
 
 //app.js

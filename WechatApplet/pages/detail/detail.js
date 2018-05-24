@@ -4,36 +4,49 @@
 */
 
 //pages/detail/detail.js
-var app = getApp()
+var app = getApp();
 var WxParse = require('../../vender/wxParse/wxParse.js');
-var utils = require('../../utils/util.js')
+var utils = require('../../utils/util.js');
 Page({
   data: {
     art: {},
     userInfo: {}
   },
+  copyTBL: function(e) {
+    wx.setClipboardData({
+      data: "https://www.saintic.com/blog/"+this.data.blogId+".html",
+      success: function(res) {
+        wx.showToast({
+          title: '复制成功',
+          icon: 'success',
+          duration: 2000
+        });
+      }
+    });
+  },
   onPullDownRefresh: function () {
     wx.stopPullDownRefresh()
   },
   onLoad: function (options) {
-  console.log('onLoad')
-  var that = this
-  //调用应用实例的方法获取全局数据
-  app.getUserInfo(function (userInfo) {
-    //更新数据
-    that.setData({
-      userInfo: userInfo
+    console.log('onLoad detail');
+    var that = this;
+    //调用应用实例的方法获取全局数据
+    app.getUserInfo(function (userInfo) {
+      //更新数据
+      that.setData({
+        userInfo: userInfo
+      })
     })
-  })
-	//文章内容
-    var that = this
+	  //文章内容
+    var that = this;
     wx.request({
       url: app.serverUrl + '/api/wechatapplet/?' + utils.make_url({Action: 'get_blogId', blogId: options.id}),
       success: function (res) {
          var content = res.data.data.content;
          WxParse.wxParse('content', 'html', content, that,5);
          that.setData({
-           info: res.data.data
+           info: res.data.data,
+           blogId: options.id
          })
          wx.setNavigationBarTitle({
            title: res.data.data.title //文章页面的标题
