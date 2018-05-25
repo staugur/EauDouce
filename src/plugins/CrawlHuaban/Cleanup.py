@@ -39,6 +39,17 @@ def timestamp_after_timestamp(timestamp=None, seconds=0, minutes=0, hours=0, day
     return int(time.mktime(d2.timetuple()))
 
 
+def timestamp_to_timestring(timestamp, format='%Y-%m-%d %H:%M:%S'):
+    """ 将时间戳(10位)转换为可读性的时间 """
+    # timestamp为传入的值为时间戳(10位整数)，如：1332888820
+    timestamp = time.localtime(timestamp)
+    # 经过localtime转换后变成
+    ## time.struct_time(tm_year=2012, tm_mon=3, tm_mday=28, tm_hour=6, tm_min=53, tm_sec=40, tm_wday=2, tm_yday=88, tm_isdst=0)
+    # 最后再经过strftime函数转换为正常日期格式。
+    return time.strftime(format, timestamp)
+
+
+logging.info("Run at {}".format(timestamp_to_timestring(get_current_timestamp())))
 for root in os.listdir(basedir):
     if os.path.isdir(root):
         for f in os.listdir(root):
