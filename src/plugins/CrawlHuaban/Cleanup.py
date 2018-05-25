@@ -39,7 +39,7 @@ for root, dirs, files in os.walk(basedir):
             path = os.path.join(basedir, root, f)
             if ".zip" == os.path.splitext(f)[-1]:
                 timestamp = os.path.splitext(f)[0].split("_")[-1]
-                if timestamp_after_timestamp(int(timestamp), hours=24) > get_current_timestamp():
+                if timestamp_after_timestamp(int(timestamp), hours=24) <= get_current_timestamp():
                     print "remove {}".format(path)
                     os.remove(path)
             else:
