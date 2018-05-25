@@ -11,25 +11,28 @@
 
 from __future__ import absolute_import
 from libs.base import PluginBase
-import os, json
+import os
+import json
 from config import PLUGINS
 from utils.tool import logger, get_current_timestamp, timestamp_after_timestamp, timestamp_to_timestring
 from utils.qf import DownloadBoard, DownloadBoardDelete
 from flask import Blueprint, jsonify, request, make_response, url_for, send_from_directory
 
-__name__        = "CrawlHuaban"
+__name__ = "CrawlHuaban"
 __description__ = "抓取花瓣网图片并压缩提供下载"
-__author__      = "Mr.tao"
-__version__     = "0.1" 
-__license__     = "MIT"
+__author__ = "Mr.tao"
+__version__ = "0.1"
+__license__ = "MIT"
 if PLUGINS["CrawlHuaban"] in ("true", "True", True):
-    __state__   = "enabled"
+    __state__ = "enabled"
 else:
-    __state__   = "disabled"
+    __state__ = "disabled"
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 logger.sys.debug("CrawlHuaban basedir: {}".format(basedir))
 CrawlHuabanBlueprint = Blueprint("CrawlHuaban", "CrawlHuaban")
+
+
 @CrawlHuabanBlueprint.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
@@ -69,7 +72,7 @@ def index():
                 raise ValueError
         except ValueError:
             res.update(msg="Invalid data")
-        except Exception,e:
+        except Exception, e:
             logger.sys.error(e, exc_info=True)
             res.update(msg="Unknown error, please contact staugur@saintic.com, thanks!")
         else:
@@ -82,8 +85,10 @@ def index():
         logger.sys.info(res)
         return jsonify(res)
 
+
 def getPluginClass():
     return CrawlHuabanMain
+
 
 class CrawlHuabanMain(PluginBase):
     """ 记录与统计每天访问数据 """

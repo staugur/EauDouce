@@ -33,13 +33,14 @@ def timestamp_after_timestamp(timestamp=None, seconds=0, minutes=0, hours=0, day
     return int(time.mktime(d2.timetuple()))
 
 
-for root, dirs, files in os.walk(d):
-    for f in files:
-        path = os.path.join(basedir, root, f)
-        print "for: {}".format(path)
-        if ".zip" == os.path.splitext(f)[-1]:
-            timestamp = os.path.splitext(f)[0].split("_")[-1]
-            if timestamp_after_timestamp(int(timestamp), hours=24) > get_current_timestamp():
+for root, dirs, files in os.walk(basedir):
+    if os.path.isdir(root):
+        for f in files:
+            path = os.path.join(basedir, root, f)
+            if ".zip" == os.path.splitext(f)[-1]:
+                timestamp = os.path.splitext(f)[0].split("_")[-1]
+                if timestamp_after_timestamp(int(timestamp), hours=24) > get_current_timestamp():
+                    print "remove {}".format(path)
+                    os.remove(path)
+            else:
                 os.remove(path)
-        else:
-            os.remove(path)
