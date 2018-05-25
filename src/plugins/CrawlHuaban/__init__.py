@@ -80,7 +80,6 @@ def index():
             filename = "{}_{}".format(board_id, get_current_timestamp())
             pb = PluginBase()
             pb.asyncQueueHigh.enqueue(DownloadBoard, basedir, board_id, filename, board_pins)
-            #pb.asyncQueue.enqueue(DownloadBoardDelete, os.path.join(basedir, board_id, "{}.zip".format(filename)))
             res.update(success=True, downloadUrl=url_for("CrawlHuaban.index", board_id=board_id, filename="{}.zip".format(filename), _external=True), expireTime=timestamp_to_timestring(timestamp_after_timestamp(hours=24)))
         logger.sys.info(res)
         return jsonify(res)
@@ -91,7 +90,7 @@ def getPluginClass():
 
 
 class CrawlHuabanMain(PluginBase):
-    """ 记录与统计每天访问数据 """
+    """ 抓取花瓣网画板图片 """
 
     def register_bep(self):
         """ 注册一个查询uv接口 """
