@@ -12,8 +12,14 @@
 import os
 import time
 import datetime
+import logging
 
 basedir = os.path.dirname(os.path.abspath(__file__))
+logging.basicConfig(level=logging.INFO,
+                    format='[ %(levelname)s ] %(asctime)s %(filename)s:%(threadName)s:%(process)d:%(lineno)d %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    filename=os.path.join(basedir, 'Cleanup.log'),
+                    filemode='a')
 
 
 def get_current_timestamp():
@@ -40,7 +46,11 @@ for root in os.listdir(basedir):
             if ".zip" == os.path.splitext(f)[-1]:
                 timestamp = int(os.path.splitext(f)[0].split("_")[-1])
                 if timestamp_after_timestamp(timestamp, hours=24) <= get_current_timestamp():
-                    print "remove {}".format(path)
+                    logging.info("Remove zip file: {}".format(path))
                     os.remove(path)
             else:
                 os.remove(path)
+        try:
+            os.rmdir(root)
+        except OSError:
+            pass
