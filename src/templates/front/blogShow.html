@@ -134,15 +134,6 @@
                 {% endfor %}
             {% endif %}
 
-            {%- if g.plugins.Reward in ('true', 'True', True) or g.plugins.Like in ('true', 'True', True) %}
-                <!--点赞、打赏-->
-                <div class="thumbs_content">
-                    {% if g.plugins.Like in ('true', 'True', True) %}
-                    <a href="javascript:void(0)" class="thumbs_button fa fa-thumbs-up" title="点赞, 支持一下"> 点赞</a>
-                    {% endif %}
-                </div>
-            {% endif -%}
-
             {%- if g.plugins.gitment.enable in ('true', 'True', True) %}
             <!--gitment评论系统-->
             <div id="gitment"></div>

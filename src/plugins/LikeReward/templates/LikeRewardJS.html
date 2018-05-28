@@ -1,0 +1,114 @@
+<script src="/static/js/fingerprint.min.js"></script>
+<script type="text/javascript">
+    //点赞功能模块
+    (function($) {
+        $.extend({
+            tipsBox: function(options) {
+                options = $.extend({
+                    obj: null, //jq对象，要在那个html标签上显示
+                    str: "+1", //字符串，要显示的内容;也可以传一段html，如: "<b style='font-family:Microsoft YaHei;'>+1</b>"
+                    startSize: "12px", //动画开始的文字大小
+                    endSize: "30px", //动画结束的文字大小
+                    interval: 600, //动画时间间隔
+                    color: "#cd4450", //文字颜色
+                    weight: "bold", //文字
+                    callback: function() {} //回调函数
+                }, options);
+                $("body").append("<span class='num'>" + options.str + "</span>");
+                var box = $(".num");
+                var left = options.obj.offset().left + options.obj.width() / 2;
+                var top = options.obj.offset().top - options.obj.height();
+                box.css({
+                    "position": "absolute",
+                    "left": left + "px",
+                    "top": top + "px",
+                    "z-index": 9999,
+                    "font-size": options.startSize,
+                    "line-height": options.endSize,
+                    "color": options.color,
+                    "font-weight": options.weight
+                });
+                box.animate({
+                    "font-size": options.endSize,
+                    "opacity": "0",
+                    "top": top - parseInt(options.endSize) + "px"
+                }, options.interval, function() {
+                    box.remove();
+                    options.callback();
+                });
+            }
+        });
+    })(jQuery);
+    $(function() {
+        $(".pay_item").click(function() {
+            $(this).addClass('checked').siblings('.pay_item').removeClass('checked');
+            var dataid = $(this).attr('data-id');
+            $(".shang_payimg img").attr("src", "/static/img/" + dataid + "img.jpg");
+            $("#shang_pay_txt").text(dataid == "alipay" ? "支付宝" : "微信");
+        });
+        {%- if g.signin %}
+        var userId = "{{ g.uid }}";
+        {%- else %}
+        var userId = new Fingerprint().get();
+        {%- endif %}
+        $.ajax({
+            url: "/LikeReward/?Action=has&blogId={{ blogId }}&userId="+userId,
+            success: function(res) {
+                if (res.has===true) {
+                    //data-status=1, 已经点赞，文字为取消赞
+                    $('#Favor').attr("data-status",1);
+                    $('#Favor').text("取消赞");
+                } else {
+                    //data-status=0, 未点赞，文字为点赞
+                    $('#Favor').attr("data-status",0);
+                    $('#Favor').text("点赞");
+                }
+            }
+        });
+        $("#Favor").click(function() {
+            var status = parseInt($(this).attr('data-status')), url = "/LikeReward/?Action=", failText, statusText, statusCode, statusText, tipStr;
+            if (status===1) {
+                //说明已点赞，需要取消点赞
+                url += "cancel";
+                failText = "取消赞";
+                statusText = "点赞"
+                statusCode = 0;
+                tipStr = "-1";
+            } else {
+                //说明未点赞，需要点赞
+                url += "like";
+                failText = "点赞";
+                statusText = "取消赞";
+                statusCode = 1;
+                tipStr = "+1";
+            }
+            $.tipsBox({
+                obj: $(this),
+                str: "<b style='font-family:Microsoft YaHei;'>"+tipStr+"</b>",
+                callback: function() {
+                    $.ajax({
+                        url: url,
+                        type: "post",
+                        data: {blogId: "{{ blogId }}", userId: userId},
+                        success: function(res) {
+                            if (res.code===0) {
+                                $('#Favor').text(statusText);
+                                $('#Favor').attr("data-status",statusCode);
+                            } else {
+                                layer.msg(failText+"失败", {icon: 7});
+                            }
+                        },
+                        error: function() {
+                            layer.msg(failText+"功能异常", {icon: 2});
+                        }
+                    });
+                }
+            });
+        });
+    });
+    //显示隐藏打赏弹窗
+    function dashangToggle() {
+        $(".hide_box").fadeToggle();
+        $(".shang_box").fadeToggle();
+    }
+</script>

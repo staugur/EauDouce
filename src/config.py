@@ -127,11 +127,8 @@ PLUGINS={
     },
     #又拍云存储插件
 
-    "Like": getenv("eaudouce_Like", False),
-    #点赞插件
-
-    "Reward": getenv("eaudouce_Reward", True),
-    #打赏插件
+    "LikeReward": getenv("eaudouce_LikeReward", True),
+    #点赞打赏插件
 
     "AccessCount": getenv("eaudouce_AccessCount", True),
     #访问统计插件
