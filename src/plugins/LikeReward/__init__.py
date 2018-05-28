@@ -52,7 +52,7 @@ class LikeApi(PluginBase):
     def __init__(self):
         super(LikeApi, self).__init__()
         self.genIndexKey = lambda blogId: "EauDouce:LikeCount:Sum:{}".format(blogId)
-        self.genSecondKey = lambda userId: "EauDouce:LikeCount:Entry:{}".format(userId)
+        self.genSecondKey = lambda blogId, userId: "EauDouce:LikeCount:Entry:{}:{}".format(blogId, userId)
 
     def check(self, blogId):
         """检测blogId参数"""
@@ -81,7 +81,7 @@ class LikeApi(PluginBase):
                 key = self.genIndexKey(blogId)
                 pipe = self.redis.pipeline()
                 pipe.sadd(key, userId)
-                pipe.hmset(self.genSecondKey(userId), dict(userId=userId, blogId=blogId, loginStatus=loginStatus, likeTime=get_current_timestamp()))
+                pipe.hmset(self.genSecondKey(blogId, userId), dict(userId=userId, blogId=blogId, loginStatus=loginStatus, likeTime=get_current_timestamp()))
                 try:
                     pipe.execute()
                 except Exception,e:
@@ -101,7 +101,7 @@ class LikeApi(PluginBase):
         res = dict(code=1, msg=None)
         if self.has(blogId, userId):
             pipe = self.redis.pipeline()
-            pipe.delete(self.genSecondKey(userId))
+            pipe.delete(self.genSecondKey(blogId, userId))
             pipe.srem(self.genIndexKey(blogId), userId)
             try:
                 pipe.execute()
@@ -132,7 +132,7 @@ class LikeApi(PluginBase):
         if self.check(blogId):
             key = self.genIndexKey(blogId)
             try:
-                data = [ self.redis.hgetall(self.genSecondKey(userId)) for userId in list(self.redis.smembers(key)) if userId ]
+                data = [ self.redis.hgetall(self.genSecondKey(blogId, userId)) for userId in list(self.redis.smembers(key)) if userId ]
             except Exception,e:
                 self.logger.error(e, exc_info=True)
                 res.update(msg="Like failed", code=2)
@@ -149,7 +149,7 @@ class LikeApi(PluginBase):
             data = {}
             for key in self.redis.keys("EauDouce:LikeCount:Sum:*"):
                 blogId = key.split(":")[-1]
-                data.update({blogId: [ self.redis.hgetall(self.genSecondKey(userId)) for userId in list(self.redis.smembers(key)) if userId ]})
+                data.update({blogId: [ self.redis.hgetall(self.genSecondKey(blogId, userId)) for userId in list(self.redis.smembers(key)) if userId ]})
             res.update(data=data, code=0)
         else:
             res.update(code=2, msg="Service Unreachable")
