@@ -60,6 +60,7 @@ for root in os.listdir(basedir):
                     logging.info("Remove zip file: {}".format(path))
                     os.remove(path)
             else:
+                logging.info("Remove picture file: {}".format(path))
                 os.remove(path)
         try:
             os.rmdir(root)
