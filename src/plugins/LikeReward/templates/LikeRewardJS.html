@@ -1,4 +1,4 @@
-<script src="/static/js/fingerprint.min.js"></script>
+<script src="/static/js/fingerprint2.min.js"></script>
 <script type="text/javascript">
     //点赞功能模块
     (function($) {
@@ -46,24 +46,27 @@
             $(".shang_payimg img").attr("src", "/static/img/" + dataid + "img.jpg");
             $("#shang_pay_txt").text(dataid == "alipay" ? "支付宝" : "微信");
         });
-        {%- if g.signin %}
-        var userId = "{{ g.uid }}";
-        {%- else %}
-        var userId = new Fingerprint().get();
-        {%- endif %}
-        $.ajax({
-            url: "/LikeReward/?Action=has&blogId={{ blogId }}&userId="+userId,
-            success: function(res) {
-                if (res.has===true) {
-                    //data-status=1, 已经点赞，文字为取消赞
-                    $('#Favor').attr("data-status",1);
-                    $('#Favor').text("取消赞");
-                } else {
-                    //data-status=0, 未点赞，文字为点赞
-                    $('#Favor').attr("data-status",0);
-                    $('#Favor').text("点赞");
+        new Fingerprint2().get(function(result, components) {
+            {%- if g.signin %}
+                var userId = "{{ g.uid }}";
+            {%- else %}
+                var userId = result;
+            });
+            {%- endif %}
+            $.ajax({
+                url: "/LikeReward/?Action=has&blogId={{ blogId }}&userId=" + userId,
+                success: function(res) {
+                    if (res.has===true) {
+                        //data-status=1, 已经点赞，文字为取消赞
+                        $('#Favor').attr("data-status",1);
+                        $('#Favor').text("取消赞");
+                    } else {
+                        //data-status=0, 未点赞，文字为点赞
+                        $('#Favor').attr("data-status",0);
+                        $('#Favor').text("点赞");
+                    }
                 }
-            }
+            });
         });
         $("#Favor").click(function() {
             var status = parseInt($(this).attr('data-status')), url = "/LikeReward/?Action=", failText, statusText, statusCode, statusText, tipStr;
