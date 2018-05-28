@@ -51,8 +51,8 @@ class LikeApi(PluginBase):
 
     def __init__(self):
         super(LikeApi, self).__init__()
-        self.genIndexKey = lambda blogId: "EauDouce:LikeCount:{}".format(blogId)
-        self.genSecondKey = lambda blogId,userId: "{}:{}".format(self.genIndexKey(blogId), userId)
+        self.genIndexKey = lambda blogId: "EauDouce:LikeCount:Sum:{}".format(blogId)
+        self.genSecondKey = lambda userId: "EauDouce:LikeCount:Entry:{}".format(userId)
 
     def check(self, blogId):
         """检测blogId参数"""
@@ -70,7 +70,7 @@ class LikeApi(PluginBase):
         @param loginStatus int: 登录状态，0未登录 1已登录
         数据规则:
         1. 每个blogId是一个set，set中存userId。
-        2. 每个userId是一个hash，格式是：{userId: xx, loginStatus: 0未登录、1已登录, likeTime: 时间戳}
+        2. 每个userId是一个hash，格式是：{userId: xx, blogId: xx, loginStatus: 0未登录、1已登录, likeTime: 时间戳}
         3. 取消赞即删除userId及hash数据
         """
         res = dict(code=1, msg=None)
@@ -81,7 +81,7 @@ class LikeApi(PluginBase):
                 key = self.genIndexKey(blogId)
                 pipe = self.redis.pipeline()
                 pipe.sadd(key, userId)
-                pipe.hmset(self.genSecondKey(blogId, userId), dict(userId=userId, loginStatus=loginStatus, likeTime=get_current_timestamp()))
+                pipe.hmset(self.genSecondKey(userId), dict(userId=userId, blogId=blogId, loginStatus=loginStatus, likeTime=get_current_timestamp()))
                 try:
                     pipe.execute()
                 except Exception,e:
@@ -101,7 +101,7 @@ class LikeApi(PluginBase):
         res = dict(code=1, msg=None)
         if self.has(blogId, userId):
             pipe = self.redis.pipeline()
-            pipe.delete(self.genSecondKey(blogId, userId))
+            pipe.delete(self.genSecondKey(userId))
             pipe.srem(self.genIndexKey(blogId), userId)
             try:
                 pipe.execute()
@@ -132,7 +132,7 @@ class LikeApi(PluginBase):
         if self.check(blogId):
             key = self.genIndexKey(blogId)
             try:
-                data = [ self.redis.hgetall(self.genSecondKey(blogId, userId)) for userId in list(self.redis.smembers(key)) if userId ]
+                data = [ self.redis.hgetall(self.genSecondKey(userId)) for userId in list(self.redis.smembers(key)) if userId ]
             except Exception,e:
                 self.logger.error(e, exc_info=True)
                 res.update(msg="Like failed", code=2)
@@ -140,6 +140,19 @@ class LikeApi(PluginBase):
                 res.update(code=0, data=data)
         else:
             res.update(msg="Invalid parameters", code=3)
+        return res
+
+    def queryAll(self):
+        """查询所有blogId数据"""
+        res = dict(code=1, msg=None)
+        if self.redis.ping():
+            data = {}
+            for key in self.redis.keys("EauDouce:LikeCount:Sum:*"):
+                blogId = key.split(":")[-1]
+                data.update({blogId: [ self.redis.hgetall(self.genSecondKey(userId)) for userId in list(self.redis.smembers(key)) if userId ]})
+            res.update(data=data, code=0)
+        else:
+            res.update(code=2, msg="Service Unreachable")
         return res
 
 plugin_blueprint = Blueprint("LikeReward", "LikeReward")
@@ -160,6 +173,8 @@ def index():
             res = Likeapi.query(blogId, userId)
         elif Action == "has":
             res = dict(has=Likeapi.has(blogId, userId))
+        elif Action == "queryAll":
+            res = Likeapi.queryAll()
     else:
         blogId = request.form.get("blogId")
         userId = request.form.get("userId")
