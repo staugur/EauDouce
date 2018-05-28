@@ -51,8 +51,8 @@ def timestamp_to_timestring(timestamp, format='%Y-%m-%d %H:%M:%S'):
 
 logging.info("Run at {}".format(timestamp_to_timestring(get_current_timestamp())))
 for root in os.listdir(basedir):
-    if os.path.isdir(root):
-        for f in os.listdir(root):
+    if os.path.isdir(os.path.join(basedir, root)):
+        for f in os.listdir(os.path.join(basedir, root)):
             path = os.path.join(basedir, root, f)
             if ".zip" == os.path.splitext(f)[-1]:
                 timestamp = int(os.path.splitext(f)[0].split("_")[-1])
