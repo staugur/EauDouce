@@ -46,11 +46,12 @@
             $(".shang_payimg img").attr("src", "/static/img/" + dataid + "img.jpg");
             $("#shang_pay_txt").text(dataid == "alipay" ? "支付宝" : "微信");
         });
+        var userId;
         new Fingerprint2().get(function(result, components) {
             {%- if g.signin %}
-                var userId = "{{ g.uid }}";
+                userId = "{{ g.uid }}";
             {%- else %}
-                var userId = result;
+                userId = result;
             {%- endif %}
             $.ajax({
                 url: "/LikeReward/?Action=has&blogId={{ blogId }}&userId=" + userId,
