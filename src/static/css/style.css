@@ -174,3 +174,6 @@ blockquote:after {
 #tagscloud a.tagc4{background:#8600FF;color:#fff;}
 #tagscloud a.tagc5{background:#006633;color:#fff;}
 #tagscloud a:hover{color:#fff;background:#0099ff;}
+
+/*屏蔽畅言广告*/
+#feedAv{ margin-top: -250px!important;transform: scale(0);}
