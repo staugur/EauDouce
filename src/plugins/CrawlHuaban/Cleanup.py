@@ -16,7 +16,7 @@ import logging
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 logging.basicConfig(level=logging.INFO,
-                    format='[ %(levelname)s ] %(asctime)s %(filename)s:%(threadName)s:%(process)d:%(lineno)d %(message)s',
+                    format='[ %(levelname)s ] %(asctime)s %(filename)s:%(lineno)d %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
                     filename=os.path.join(basedir, 'Cleanup.log'),
                     filemode='a')
