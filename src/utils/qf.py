@@ -110,15 +110,8 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins):
     data = pool.map(_download_img, board_pins)
     pool.close()
     pool.join()
-    logger.sys.debug("DownloadBoard over, data len: {}, start make_archive, data is {}".format(len(data), data))
+    logger.sys.debug("DownloadBoard over, data len: {}, start make_archive".format(len(data)))
     zipfilepath = shutil.make_archive(zipfilename, 'zip', board_id)
     logger.sys.debug("DownloadBoard make_archive over, path is {}".format(zipfilepath))
     zipfilename = "{}.zip".format(zipfilename)
     shutil.move(zipfilename, os.path.join(board_id, zipfilename))
-
-def DownloadBoardDelete(zipfilepath):
-    """24h后删除压缩文件"""
-    time.sleep(86400)
-    if os.path.isfile(zipfilepath):
-        os.remove(zipfilepath)
-        logger.sys.debug("DownloadBoardDelete over for deleted: {}".format(zipfilepath))

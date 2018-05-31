@@ -14,9 +14,10 @@ from libs.base import PluginBase
 import os
 import json
 from config import PLUGINS
+from utils.qf import DownloadBoard
 from utils.tool import logger, get_current_timestamp, timestamp_after_timestamp, timestamp_to_timestring
-from utils.qf import DownloadBoard, DownloadBoardDelete
 from flask import Blueprint, jsonify, request, make_response, url_for, send_from_directory
+from werkzeug import secure_filename
 
 __name__ = "CrawlHuaban"
 __description__ = "抓取花瓣网图片并压缩提供下载"
@@ -44,9 +45,9 @@ def index():
         2. 返回根目录，压缩board_id目录成文件，再移动到board_id下。
         """
         # 下载画板
-        board_id = str(request.args.get("board_id", ""))
+        board_id = secure_filename(str(request.args.get("board_id", "")))
         # 下载文件名
-        filename = request.args.get("filename")
+        filename = secure_filename(request.args.get("filename", ""))
         if board_id and filename:
             # 下载文件存放目录
             directory = os.path.join(basedir, board_id)
