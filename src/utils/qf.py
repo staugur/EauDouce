@@ -118,3 +118,4 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins):
     logger.sys.debug("DownloadBoard make_archive over, path is {}".format(zipfilepath))
     shutil.move(zipfilename, os.path.join(board_id, zipfilename))
     os.remove(lock_file)
+    logger.sys.debug("DownloadBoard move over, delete lock")
