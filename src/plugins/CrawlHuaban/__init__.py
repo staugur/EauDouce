@@ -78,10 +78,10 @@ def index():
             res.update(msg="Unknown error, please contact staugur@saintic.com, thanks!")
         else:
             logger.sys.debug("dir: {}, board_id: {}, board_pins number: {}, type: {}, result: {}".format(basedir, board_id, len(board_pins), type(board_pins), board_pins))
-            filename = "{}_{}".format(board_id, get_current_timestamp())
+            filename = "{}_{}.zip".format(board_id, get_current_timestamp())
             pb = PluginBase()
             pb.asyncQueueHigh.enqueue(DownloadBoard, basedir, board_id, filename, board_pins)
-            res.update(success=True, downloadUrl=url_for("CrawlHuaban.index", board_id=board_id, filename="{}.zip".format(filename), _external=True), expireTime=timestamp_to_timestring(timestamp_after_timestamp(hours=24)))
+            res.update(success=True, downloadUrl=url_for("CrawlHuaban.index", board_id=board_id, filename=filename, _external=True), expireTime=timestamp_to_timestring(timestamp_after_timestamp(hours=24)))
         logger.sys.info(res)
         return jsonify(res)
 

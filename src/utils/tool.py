@@ -9,7 +9,7 @@
     :license: MIT, see LICENSE for more details.
 """
 
-import re, requests, hashlib, datetime, random, upyun, time, hmac
+import os, re, requests, hashlib, datetime, random, upyun, time, hmac
 from uuid import uuid4
 from log import Logger
 from base64 import b32encode
@@ -175,3 +175,24 @@ def sql_safestring_check(string):
         if "'" in string or '"' in string or '?' in string or '%' in string or ';' in string or '*' in string or '=' in string or "\\" in string:
             return False
     return True
+
+def make_zipfile(zip_filename, zip_path, exclude=[]):
+    """Create a zipped file with the name zip_filename. Compress the files in the zip_path directory. Do not include subdirectories. Exclude files in the exclude file.
+    @param zip_filename str: Compressed file name
+    @param zip_path str: The compressed directory (the files in this directory will be compressed)
+    @param exclude list,tuple: File suffixes will not be compressed in this list when compressed
+    """
+    if zip_filename and os.path.splitext(zip_filename)[-1] == ".zip" and zip_path and os.path.isdir(zip_path) and isinstance(exclude, (list, tuple)):
+        try:
+            import zipfile
+        except ImportError:
+            raise
+        with zipfile.ZipFile(zip_filename, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+            for filename in os.listdir(zip_path):
+                if os.path.isdir(filename):
+                    continue
+                if not os.path.splitext(filename)[-1] in exclude:
+                    zf.write(os.path.join(zip_path, filename), filename)
+        return zip_filename if os.path.isabs(zip_filename) else os.path.join(os.getcwd(), zip_filename)
+    else:
+        raise TypeError

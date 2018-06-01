@@ -9,7 +9,7 @@
     :license: Apache2.0, see LICENSE for more details.
 """
 import os, sys, time, shutil, requests
-from .tool import logger, getIpArea, get_current_timestamp, get_today
+from .tool import logger, getIpArea, get_current_timestamp, get_today, make_zipfile
 from libs.base import ServiceBase
 from user_agents import parse as user_agents_parse
 from multiprocessing.dummy import Pool as ThreadPool
@@ -111,7 +111,6 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins):
     pool.close()
     pool.join()
     logger.sys.debug("DownloadBoard over, data len: {}, start make_archive".format(len(data)))
-    zipfilepath = shutil.make_archive(zipfilename, 'zip', board_id)
+    zipfilepath = make_zipfile(zipfilename, board_id, [".zip"])
     logger.sys.debug("DownloadBoard make_archive over, path is {}".format(zipfilepath))
-    zipfilename = "{}.zip".format(zipfilename)
     shutil.move(zipfilename, os.path.join(board_id, zipfilename))
