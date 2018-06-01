@@ -54,15 +54,18 @@ for root in os.listdir(basedir):
     root = os.path.join(basedir, root)
     if os.path.isdir(root):
         for f in os.listdir(root):
-            path = os.path.join(root, f)
+            filepath = os.path.join(root, f)
             if ".zip" == os.path.splitext(f)[-1]:
                 timestamp = int(os.path.splitext(f)[0].split("_")[-1])
                 if timestamp_after_timestamp(timestamp, hours=24) <= get_current_timestamp():
-                    logging.info("Remove zip file: {}".format(path))
-                    os.remove(path)
+                    logging.info("Remove zip file: {}".format(filepath))
+                    os.remove(filepath)
             else:
-                logging.info("Remove picture file: {}".format(path))
-                os.remove(path)
+                if os.path.exists(os.path.join(root, "board.lock")):
+                    logging.info("Locking for {}".format(root))
+                else:
+                    logging.info("Remove picture file: {}".format(filepath))
+                    os.remove(filepath)
         try:
             os.rmdir(root)
         except OSError:
