@@ -53,6 +53,11 @@ logging.info("Run at {}".format(timestamp_to_timestring(get_current_timestamp())
 for root in os.listdir(basedir):
     root = os.path.join(basedir, root)
     if os.path.isdir(root):
+        #判断是否锁目录中
+        lock = False
+        if os.path.exists(os.path.join(root, "board.lock")):
+            lock = True
+            logging.info("Locking for {}".format(root))
         for f in os.listdir(root):
             filepath = os.path.join(root, f)
             if ".zip" == os.path.splitext(f)[-1]:
@@ -61,9 +66,7 @@ for root in os.listdir(basedir):
                     logging.info("Remove zip file: {}".format(filepath))
                     os.remove(filepath)
             else:
-                if os.path.exists(os.path.join(root, "board.lock")):
-                    logging.info("Locking for {}".format(root))
-                else:
+                if lock is False:
                     logging.info("Remove picture file: {}".format(filepath))
                     os.remove(filepath)
         try:
