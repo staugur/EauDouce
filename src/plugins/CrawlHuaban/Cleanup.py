@@ -49,7 +49,6 @@ def timestamp_to_timestring(timestamp, format='%Y-%m-%d %H:%M:%S'):
     return time.strftime(format, timestamp)
 
 
-logging.info("Run at {}".format(timestamp_to_timestring(get_current_timestamp())))
 for root in os.listdir(basedir):
     root = os.path.join(basedir, root)
     if os.path.isdir(root):
@@ -58,6 +57,8 @@ for root in os.listdir(basedir):
         if os.path.exists(os.path.join(root, "board.lock")):
             lock = True
             logging.info("Locking for {}".format(root))
+        else:
+            logging.info("Checking for {}".format(root))
         for f in os.listdir(root):
             filepath = os.path.join(root, f)
             if ".zip" == os.path.splitext(f)[-1]:
@@ -67,7 +68,6 @@ for root in os.listdir(basedir):
                     os.remove(filepath)
             else:
                 if lock is False:
-                    logging.info("Remove picture file: {}".format(filepath))
                     os.remove(filepath)
         try:
             os.rmdir(root)
