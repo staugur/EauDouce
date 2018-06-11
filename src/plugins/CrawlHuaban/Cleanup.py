@@ -58,7 +58,7 @@ for root in os.listdir(basedir):
             lock = True
             logging.info("Locking for {}".format(root))
         else:
-            logging.info("Checking for {}".format(root))
+            logging.debug("Checking for {}".format(root))
         for f in os.listdir(root):
             filepath = os.path.join(root, f)
             if ".zip" == os.path.splitext(f)[-1]:
