@@ -3,7 +3,7 @@ $(document).ready(function () {
     var BaiduIncludedCheck = document.getElementById("BaiduIncludedCheck");
     $.ajax({
         //url: "{{ url_for('BaiduIncludedCheck.index', url=request.url) }}",
-        url: "https://open.saintic.com/api/BaiduIncludedQuery/?url={{ request.url }}",
+        url: "https://open.saintic.com/api/BaiduIncludedQuery/?url={{ request.base_url }}",
         method: 'GET',
         datatype: 'json',
         success: function(res) {

@@ -1,7 +1,7 @@
 <script type="text/javascript">
     var BingIncludedCheck = document.getElementById("BingIncludedCheck");
     $.ajax({
-        url: "https://open.saintic.com/api/BingIncludedQuery/?url={{ request.url }}",
+        url: "https://open.saintic.com/api/BingIncludedQuery/?url={{ request.base_url }}",
         method: 'GET',
         datatype: 'json',
         success: function(res) {
