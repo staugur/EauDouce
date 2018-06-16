@@ -97,10 +97,6 @@
                         <i class="icon-comment-alt icon-1x"></i>&nbsp;评论<a href="#SOHUCS">{{ g.api.misc_get_commend(blogId).data.comments }}</a>次&nbsp;
                         {% endif %}
 
-                        {% if g.plugins.BaiduIncludedCheck in ("true", "True", True) %}
-                            <scan id="BaiduIncludedCheck"></scan>
-                        {% endif %}
-
                         {% if blog_show_funcarea_include %}
                             {% for sfi in blog_show_funcarea_include() %}
                                 {% include sfi %}

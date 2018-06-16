@@ -82,7 +82,7 @@ PLUGINS={
     #代码高亮插件
 
     "ChangyanComment": {
-        "enable": getenv("eaudouce_ChangyanComment_enable", True),
+        "enable": getenv("eaudouce_ChangyanComment_enable", False),
         "appid": getenv("eaudouce_ChangyanComment_appid", "app_id"),
         "appkey": getenv("eaudouce_ChangyanComment_appkey", "app_key")
     },
@@ -109,10 +109,10 @@ PLUGINS={
     },
     #百度主动推送(实时)插件
 
-    "BaiduIncludedCheck": getenv("eaudouce_BaiduIncludedCheck", False),
+    "BaiduIncludedCheck": getenv("eaudouce_BaiduIncludedCheck", True),
     #百度收录检测插件
 
-    "BingIncludedCheck": getenv("eaudouce_BingIncludedCheck", False),
+    "BingIncludedCheck": getenv("eaudouce_BingIncludedCheck", True),
     #必应收录检测插件
 
     "BackupBlog": getenv("eaudouce_BackupBlog", False),

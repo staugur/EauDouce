@@ -11,8 +11,6 @@
 
 from __future__ import absolute_import
 from libs.base import PluginBase
-from flask import Blueprint, jsonify, request
-from .util import BaiduIncludedCheckUtil
 from config import PLUGINS
 
 __name__        = "BaiduIncludedCheck"
@@ -24,26 +22,10 @@ if PLUGINS["BaiduIncludedCheck"] in ("true", "True", True):
 else:
     __state__   = "disabled"
 
-tool = BaiduIncludedCheckUtil()
-BaiduIncludedCheckBlueprint = Blueprint("BaiduIncludedCheck", "BaiduIncludedCheck")
-@BaiduIncludedCheckBlueprint.route("/")
-def index():
-    url = request.args.get("url")
-    res = {"code": 0, "msg": None, "Included": False, "url": url}
-    if url:
-        Included = True if tool.check(url) else False
-        res.update(Included=Included)
-    else:
-        res.update(msg="Request parameter error: no url")
-    return jsonify(res)
-
 def getPluginClass():
     return BaiduIncludedCheck
 
 class BaiduIncludedCheck(PluginBase):
 
-    def register_bep(self):
-        return {"prefix": "/BaiduIncludedCheck", "blueprint": BaiduIncludedCheckBlueprint}
-
     def register_tep(self):
-        return {"blog_show_script_include": "BaiduCheckJs.html"}
+        return {"blog_show_funcarea_string": "<scan id='BaiduIncludedCheck'></scan>", "blog_show_script_include": "BaiduCheckJs.html"}

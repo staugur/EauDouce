@@ -1,8 +1,6 @@
 <script type="text/javascript">
-$(document).ready(function () {
     var BaiduIncludedCheck = document.getElementById("BaiduIncludedCheck");
     $.ajax({
-        //url: "{{ url_for('BaiduIncludedCheck.index', url=request.url) }}",
         url: "https://open.saintic.com/api/BaiduIncludedQuery/?url={{ request.base_url }}",
         method: 'GET',
         datatype: 'json',
@@ -25,5 +23,4 @@ $(document).ready(function () {
                 BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件异常';
         }
     });
-});
 </script>
