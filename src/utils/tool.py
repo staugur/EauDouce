@@ -31,6 +31,7 @@ comma_pat       = re.compile(r"\s*,\s*")
 logger          = DO(
                     sys = Logger("sys").getLogger,
                     api = Logger("api").getLogger,
+                    cli = Logger("cli").getLogger,
                     err = Logger("error").getLogger,
                     access = Logger("access").getLogger,
                     plugin = Logger("plugin").getLogger

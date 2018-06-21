@@ -11,10 +11,9 @@
 
 from __future__ import absolute_import
 from libs.base import PluginBase
-import os
-import json
+import os, json
 from config import PLUGINS
-from utils.qf import DownloadBoard
+from utils.qf import DownloadBoard, DownloadBoardAddTimes
 from utils.tool import logger, get_current_timestamp, timestamp_after_timestamp, timestamp_to_timestring
 from flask import Blueprint, jsonify, request, make_response, url_for, send_from_directory
 from werkzeug import secure_filename
@@ -22,18 +21,16 @@ from werkzeug import secure_filename
 __name__ = "CrawlHuaban"
 __description__ = "抓取花瓣网图片并压缩提供下载"
 __author__ = "Mr.tao"
-__version__ = "0.1"
+__version__ = "0.2"
 __license__ = "MIT"
 if PLUGINS["CrawlHuaban"] in ("true", "True", True):
     __state__ = "enabled"
 else:
     __state__ = "disabled"
 
+pb = PluginBase()
 basedir = os.path.dirname(os.path.abspath(__file__))
-logger.sys.debug("CrawlHuaban basedir: {}".format(basedir))
 CrawlHuabanBlueprint = Blueprint("CrawlHuaban", "CrawlHuaban")
-
-
 @CrawlHuabanBlueprint.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
@@ -54,6 +51,7 @@ def index():
             logger.sys.debug("Want to download a file with directory: {0}, filename: {1}".format(directory, filename))
             headers = ("Content-Disposition", "attachment;filename={}".format(filename))
             if os.path.isfile(os.path.join(directory, filename)):
+                pb.asyncQueue.enqueue_call(func=DownloadBoardAddTimes, args=(board_id, filename, get_current_timestamp()))
                 response = make_response(send_from_directory(directory=directory, filename=filename, as_attachment=True))
                 response.headers[headers[0]] = headers[1]
             else:
@@ -78,11 +76,11 @@ def index():
             res.update(msg="Unknown error, please contact staugur@saintic.com, thanks!")
         else:
             logger.sys.debug("dir: {}, board_id: {}, board_pins number: {}".format(basedir, board_id, len(board_pins)))
-            filename = "{}_{}.zip".format(board_id, get_current_timestamp())
-            pb = PluginBase()
-            #pb.asyncQueueHigh.enqueue(DownloadBoard, basedir, board_id, filename, board_pins)
-            pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins), timeout=3600)
-            res.update(success=True, downloadUrl=url_for("CrawlHuaban.index", board_id=board_id, filename=filename, _external=True), expireTime=timestamp_to_timestring(timestamp_after_timestamp(hours=24)))
+            ctime = get_current_timestamp()
+            etime = timestamp_after_timestamp(hours=24)
+            filename = "{}_{}.zip".format(board_id, ctime)
+            pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, ctime, etime), timeout=3600)
+            res.update(success=True, downloadUrl=url_for("CrawlHuaban.index", board_id=board_id, filename=filename, _external=True), expireTime=timestamp_to_timestring(etime))
         logger.sys.info(res)
         return jsonify(res)
 
