@@ -187,7 +187,7 @@ def make_zipfile(zip_filename, zip_path, exclude=[]):
             import zipfile
         except ImportError:
             raise
-        with zipfile.ZipFile(zip_filename, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        with zipfile.ZipFile(zip_filename, "w", compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zf:
             for filename in os.listdir(zip_path):
                 if os.path.isdir(filename):
                     continue

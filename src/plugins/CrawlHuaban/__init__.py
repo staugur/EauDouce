@@ -77,7 +77,7 @@ def index():
             logger.sys.error(e, exc_info=True)
             res.update(msg="Unknown error, please contact staugur@saintic.com, thanks!")
         else:
-            logger.sys.debug("dir: {}, board_id: {}, board_pins number: {}, type: {}, result: {}".format(basedir, board_id, len(board_pins), type(board_pins), board_pins))
+            logger.sys.debug("dir: {}, board_id: {}, board_pins number: {}".format(basedir, board_id, len(board_pins)))
             filename = "{}_{}.zip".format(board_id, get_current_timestamp())
             pb = PluginBase()
             #pb.asyncQueueHigh.enqueue(DownloadBoard, basedir, board_id, filename, board_pins)
