@@ -177,6 +177,23 @@ def sql_safestring_check(string):
             return False
     return True
 
+def formatSize(bytes):
+    # 字节bytes转化kb\m\g
+    try:
+        bytes = float(bytes)
+        kb = bytes / 1024
+    except:
+        return "Error"
+    if kb >= 1024:
+        M = kb / 1024
+        if M >= 1024:
+            G = M / 1024
+            return "%.2fG" % (G)
+        else:
+            return "%.2fM" % (M)
+    else:
+        return "%.2fkb" % (kb)
+
 def make_zipfile(zip_filename, zip_path, exclude=[]):
     """Create a zipped file with the name zip_filename. Compress the files in the zip_path directory. Do not include subdirectories. Exclude files in the exclude file.
     @param zip_filename str: Compressed file name

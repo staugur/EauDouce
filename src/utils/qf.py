@@ -9,7 +9,7 @@
     :license: Apache2.0, see LICENSE for more details.
 """
 import os, sys, time, shutil, requests
-from .tool import logger, getIpArea, get_current_timestamp, get_today, make_zipfile
+from .tool import logger, getIpArea, get_current_timestamp, get_today, make_zipfile, formatSize
 from libs.base import ServiceBase
 from user_agents import parse as user_agents_parse
 from multiprocessing.dummy import Pool as ThreadPool
@@ -122,11 +122,12 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, ctime, etime):
     logger.sys.debug("DownloadBoard over, data len: {}, start make_archive".format(len(data)))
     zipfilepath = make_zipfile(zipfilename, board_id, [".zip", ".lock"])
     logger.sys.debug("DownloadBoard make_archive over, path is {}".format(zipfilepath))
+    size = formatSize(os.path.getsize(zipfilename))
     shutil.move(zipfilename, os.path.join(board_id, zipfilename))
     os.remove(lock_file)
     logger.sys.debug("DownloadBoard move over, delete lock")
     try:
-        _sb.mysql_write.update("update plugin_crawlhuaban set status=1 where board_id=%s and filename=%s", board_id, zipfilename)
+        _sb.mysql_write.update("update plugin_crawlhuaban set status=1,size=%s where board_id=%s and filename=%s", size, board_id, zipfilename)
     except Exception,e:
         logger.sys.error(e, exc_info=True)
 
