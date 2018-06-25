@@ -116,6 +116,7 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctim
     lock_file = os.path.join(board_id, "board.lock")
     with open(lock_file, 'w') as f:
         f.write("")
+    stime = time.time()
     pool = ThreadPool()
     data = pool.map(_download_img, board_pins)
     pool.close()
@@ -127,8 +128,9 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctim
     shutil.move(zipfilename, os.path.join(board_id, zipfilename))
     os.remove(lock_file)
     logger.sys.debug("DownloadBoard move over, delete lock")
+    dtime = "%.2f" %(time.time() - stime)
     try:
-        _sb.mysql_write.update("update plugin_crawlhuaban set status=1,size=%s where board_id=%s and filename=%s", size, board_id, zipfilename)
+        _sb.mysql_write.update("update plugin_crawlhuaban set status=1,size=%s,dtime=%s where board_id=%s and filename=%s", size, dtime, board_id, zipfilename)
     except Exception,e:
         logger.sys.error(e, exc_info=True)
 
