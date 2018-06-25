@@ -69,18 +69,19 @@ def Click2Redis(data, pvKey, ipKey, urlKey):
             logger.plugin.info("Click2Redis uv result {0}:{1}".format(key, value))
 
 
-def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctime, etime):
+def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctime, etime, version):
     """
     @param basedir str: 画板上层目录，CrawlHuaban插件所在目录，图片直接保存到此目录的`board_id`下
     @param board_id str int: 画板id
     @param zipfilename str: 压缩文件名称
     @param board_pins list: pin图片列表
     @param total_number, ctime, etime int: 分别是画板图片总数、创建时间和过期时间，仅用于写入mysql
+    @param version str: 用户脚本版本，仅用于写入mysql
     """
     logger.sys.debug("DownloadBoard dir: {}, board_pins number: {}".format(basedir, len(board_pins)))
     #初始写入数据库
     try:
-        _sb.mysql_write.insert("insert into plugin_crawlhuaban (board_id,filename,pin_number,total_number,ctime,etime) values(%s,%s,%s,%s,%s,%s)", board_id, zipfilename, len(board_pins), total_number, ctime, etime)
+        _sb.mysql_write.insert("insert into plugin_crawlhuaban (board_id,filename,pin_number,total_number,ctime,etime,version) values(%s,%s,%s,%s,%s,%s,%s)", board_id, zipfilename, len(board_pins), total_number, ctime, etime, version)
     except Exception,e:
         logger.sys.error(e, exc_info=True)
     req = requests.Session()
