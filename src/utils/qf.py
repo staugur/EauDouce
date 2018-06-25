@@ -80,7 +80,7 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctim
     logger.sys.debug("DownloadBoard dir: {}, board_pins number: {}".format(basedir, len(board_pins)))
     #初始写入数据库
     try:
-        _sb.mysql_write.insert("insert into plugin_crawlhuaban (board_id,filename,pin_number,total_number,ctime,etime) values(%s,%s,%s,%s,%s)", board_id, zipfilename, len(board_pins), total_number, ctime, etime)
+        _sb.mysql_write.insert("insert into plugin_crawlhuaban (board_id,filename,pin_number,total_number,ctime,etime) values(%s,%s,%s,%s,%s,%s)", board_id, zipfilename, len(board_pins), total_number, ctime, etime)
     except Exception,e:
         logger.sys.error(e, exc_info=True)
     req = requests.Session()
