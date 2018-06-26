@@ -3,7 +3,7 @@
     EauDouce.plugins.CrawlHuaban
     ~~~~~~~~~~~~~~
 
-    抓取花瓣网图片
+    抓取花瓣、堆糖图片
 
     :copyright: (c) 2018 by taochengwei.
     :license: MIT, see LICENSE for more details.
@@ -19,7 +19,7 @@ from flask import Blueprint, jsonify, request, make_response, url_for, send_from
 from werkzeug import secure_filename
 
 __name__ = "CrawlHuaban"
-__description__ = "抓取花瓣网图片并压缩提供下载"
+__description__ = "抓取花瓣、堆糖图片并压缩提供下载"
 __author__ = "Mr.tao"
 __version__ = "0.2"
 __license__ = "MIT"
@@ -62,11 +62,14 @@ def index():
     else:
         res = dict(success=False, msg=None)
         try:
+            #site站点，花瓣网1、堆糖网2
+            site = int(request.form.get("site", 1))
+            #version脚本版本
             version = request.form.get("version", "")
+            #以下board同album，不区分
             board_id = str(request.form.get("board_id", ""))
             board_pins = json.loads(request.form.get("pins"))
             board_total = int(request.form.get("board_total", 0))
-            site = int(request.form.get("site", 1))
             if board_id and board_pins:
                 if not isinstance(board_pins, (list, tuple)):
                     raise ValueError
@@ -78,12 +81,33 @@ def index():
             logger.sys.error(e, exc_info=True)
             res.update(msg="Unknown error, please contact staugur@saintic.com, thanks!")
         else:
-            logger.sys.debug("dir: {}, board_id: {}, board_pins number: {}".format(basedir, board_id, len(board_pins)))
-            ctime = get_current_timestamp()
-            etime = timestamp_after_timestamp(hours=24)
-            filename = "{}_{}.zip".format(board_id, ctime)
-            pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site), timeout=3600)
-            res.update(success=True, downloadUrl=url_for("CrawlHuaban.index", board_id=board_id, filename=filename, _external=True), expireTime=timestamp_to_timestring(etime))
+            logger.sys.debug("dir: {}, site: {}, version: {}, board_id: {}, board_pins number: {}".format(basedir, site, version, board_id, len(board_pins)))
+            #将site+board_id存入redis，限定时间内不允许重复下载
+            key = "EauDouce:CrawlHuaban:{site}:{board_id}".format(site=site, board_id=board_id)
+            hasKey = False
+            try:
+                hasKey = pb.redis.exists(key)
+            except Exception,e:
+                logger.sys.error(e, exc_info=True)
+            if hasKey:
+                data = pb.redis.hgetall(key)
+                res.update(success=True, downloadUrl=data["downloadUrl"], expireTime=data["expireTime"], msg="Qualified Repetition")
+            else:
+                ctime = get_current_timestamp()
+                etime = timestamp_after_timestamp(hours=24)
+                filename = "{}_{}.zip".format(board_id, ctime)
+                expireTime = timestamp_to_timestring(etime)
+                downloadUrl = url_for("CrawlHuaban.index", board_id=board_id, filename=filename, _external=True)
+                pipe = pb.redis.pipeline()
+                pipe.hmset(key, dict(downloadUrl=downloadUrl, expireTime=expireTime))
+                pipe.expire(key, 60)
+                try:
+                    pipe.execute()
+                except Exception,e:
+                    logger.sys.error(e, exc_info=True)
+                finally:
+                    pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site), timeout=3600)
+                    res.update(success=True, downloadUrl=downloadUrl, expireTime=expireTime)
         logger.sys.info(res)
         return jsonify(res)
 

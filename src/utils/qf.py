@@ -85,7 +85,7 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctim
     except Exception,e:
         logger.sys.error(e, exc_info=True)
     req = requests.Session()
-    req.headers.update({'Referer': 'http://huaban.com/boards/{}'.format(board_id), 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'})
+    req.headers.update({'Referer': 'https://huaban.com/boards/{}'.format(board_id) if site == 1 else 'https://www.duitang.com/album/?id={}'.format(board_id), 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'})
     def makedir(d):
         d = str(d)
         if not os.path.exists(d):
