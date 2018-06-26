@@ -66,6 +66,7 @@ def index():
             board_id = str(request.form.get("board_id", ""))
             board_pins = json.loads(request.form.get("pins"))
             board_total = int(request.form.get("board_total", 0))
+            site = int(request.form.get("site", 1))
             if board_id and board_pins:
                 if not isinstance(board_pins, (list, tuple)):
                     raise ValueError
@@ -81,7 +82,7 @@ def index():
             ctime = get_current_timestamp()
             etime = timestamp_after_timestamp(hours=24)
             filename = "{}_{}.zip".format(board_id, ctime)
-            pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version), timeout=3600)
+            pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site), timeout=3600)
             res.update(success=True, downloadUrl=url_for("CrawlHuaban.index", board_id=board_id, filename=filename, _external=True), expireTime=timestamp_to_timestring(etime))
         logger.sys.info(res)
         return jsonify(res)
