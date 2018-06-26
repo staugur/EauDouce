@@ -95,7 +95,7 @@ def index():
             else:
                 ctime = get_current_timestamp()
                 etime = timestamp_after_timestamp(hours=24)
-                filename = "{}_{}.zip".format(board_id, ctime)
+                filename = "{}_{}.zip".format(site, ctime)
                 expireTime = timestamp_to_timestring(etime)
                 downloadUrl = url_for("CrawlHuaban.index", board_id=board_id, filename=filename, _external=True)
                 pipe = pb.redis.pipeline()
