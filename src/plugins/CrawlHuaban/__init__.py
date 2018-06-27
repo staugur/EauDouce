@@ -91,7 +91,7 @@ def index():
                 logger.sys.error(e, exc_info=True)
             if hasKey:
                 data = pb.redis.hgetall(key)
-                res.update(msg="当前画板下载中，链接是{}。温馨提示，5分钟内请勿重复对同一个画板使用远程下载服务！".format(data["downloadUrl"]))
+                res.update(msg='当前画板下载中，链接是<a href="{}" target="_blank" title="请点击打开新页面或手动复制链接">{}</a>。温馨提示，5分钟内请勿重复对同一个画板使用远程下载服务！'.format(data["downloadUrl"], data["downloadUrl"]))
             else:
                 ctime = get_current_timestamp()
                 etime = timestamp_after_timestamp(hours=24)
