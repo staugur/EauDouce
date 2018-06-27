@@ -76,10 +76,10 @@ def index():
             else:
                 raise ValueError
         except ValueError:
-            res.update(msg="Invalid data")
+            res.update(msg=u"无效数据格式")
         except Exception, e:
             logger.sys.error(e, exc_info=True)
-            res.update(msg="Unknown error, please contact staugur@saintic.com, thanks!")
+            res.update(msg=u"未知错误, 请联系作者staugur@saintic.com反馈，谢谢!")
         else:
             logger.sys.debug("dir: {}, site: {}, version: {}, board_id: {}, board_pins number: {}".format(basedir, site, version, board_id, len(board_pins)))
             #将site+board_id存入redis，限定时间内不允许重复下载
@@ -91,7 +91,7 @@ def index():
                 logger.sys.error(e, exc_info=True)
             if hasKey:
                 data = pb.redis.hgetall(key)
-                res.update(success=True, downloadUrl=data["downloadUrl"], expireTime=data["expireTime"], msg="Qualified Repetition")
+                res.update(msg="当前画板下载中，链接是{}。温馨提示，5分钟内请勿重复对同一个画板使用远程下载服务！".format(data["downloadUrl"]))
             else:
                 ctime = get_current_timestamp()
                 etime = timestamp_after_timestamp(hours=24)
@@ -100,7 +100,7 @@ def index():
                 downloadUrl = url_for("CrawlHuaban.index", board_id=board_id, filename=filename, _external=True)
                 pipe = pb.redis.pipeline()
                 pipe.hmset(key, dict(downloadUrl=downloadUrl, expireTime=expireTime))
-                pipe.expire(key, 60)
+                pipe.expire(key, 300)
                 try:
                     pipe.execute()
                 except Exception,e:
