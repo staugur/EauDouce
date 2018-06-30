@@ -83,7 +83,7 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctim
     try:
         if user_agent:
             # 解析User-Agent
-            uap = user_agents_parse(data.get("agent"))
+            uap = user_agents_parse(user_agent)
             browserDevice, browserOs, browserFamily = str(uap).split(' / ')
             if uap.is_mobile:
                 browserType = "mobile"
