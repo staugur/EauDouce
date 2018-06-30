@@ -64,7 +64,7 @@ blockquote {
 			    </header>
                 <div class="funcarea">
                     {% set admins = g.api.user_get_admins().data %}
-                    <div class="btn-group" role="group" aria-label="...">
+                    <div>
                         {% if g.signin and g.username == data.author or g.username in admins %}
                             <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
                             <a href="javascript:delBlog()" style='color:blue'><button type="button" class="btn btn-danger">删除文章</button></a>
@@ -99,7 +99,7 @@ blockquote {
                         {% endif %}
 
                         {% if data.create_time %}
-                        <i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ data.create_time }}</scan>&nbsp;
+                        <i class="icon-calendar icon-1x"></i><scan style="color: #999" title="创建时间">&nbsp;{{ data.create_time }}</scan>&nbsp;
                         {% endif %}
 
                         {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
@@ -117,11 +117,9 @@ blockquote {
                             {% endfor %}
                         {% endif %}
                     </h6>
+                    <hr>
+		    {{ data['content'] | safe }}
                 </div>
-                <fieldset>
-                    <legend><small class="text-success text-lowercase">正文区</small></legend>
-				    {{ data['content'] | safe }}
-                </fieldset>
                 {%- if data.get("sources") == "原创" %}
                 <p></p>
                 <div class="alert alert-success alert-dismissible" role="alert">
