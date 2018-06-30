@@ -106,7 +106,7 @@ def index():
                 except Exception,e:
                     logger.sys.error(e, exc_info=True)
                 finally:
-                    pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site), timeout=3600)
+                    pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site, request.headers.get('X-Real-Ip', request.remote_addr), request.headers.get("User-Agent")), timeout=3600)
                     res.update(success=True, downloadUrl=downloadUrl, expireTime=expireTime)
         logger.sys.info(res)
         return jsonify(res)
