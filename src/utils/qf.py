@@ -159,3 +159,26 @@ def DownloadBoardAddTimes(board_id, zipfilename, mtime):
     sql = "update plugin_crawlhuaban set downloadTimes=downloadTimes + 1,mtime=%s where board_id=%s and filename=%s"
     if board_id and zipfilename and mtime:
         _sb.mysql_write.update(sql, mtime, board_id, zipfilename)
+
+def CountDownloadBoard(site, version, total_number, pin_number, board_id, user_id, downloadMethod, atime, user_ip, user_agent):
+    try:
+        if user_agent:
+            # 解析User-Agent
+            uap = user_agents_parse(user_agent)
+            browserDevice, browserOs, browserFamily = str(uap).split(' / ')
+            if uap.is_mobile:
+                browserType = "mobile"
+            elif uap.is_pc:
+                browserType = "pc"
+            elif uap.is_tablet:
+                browserType = "tablet"
+            elif uap.is_bot:
+                browserType = "bot"
+            else:
+                browserType = "unknown"
+        else:
+            browserType, browserDevice, browserOs, browserFamily = "", "", "", "", ""
+        _sb.mysql_write.insert("insert into plugin_crawlhuaban_clicklog (site,user_id,board_id,pin_number,total_number,atime,version,download_method,user_ip,user_area,user_agent,browser_type,browser_device,browser_os,browser_family) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", site, user_id, board_id, pin_number, total_number, atime, version, downloadMethod, user_ip, getIpArea(user_ip), user_agent, browserType, browserDevice, browserOs, browserFamily)
+    except Exception,e:
+        logger.sys.error(e, exc_info=True)
+

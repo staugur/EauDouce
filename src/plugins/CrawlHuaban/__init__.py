@@ -13,7 +13,7 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 import os, json
 from config import PLUGINS
-from utils.qf import DownloadBoard, DownloadBoardAddTimes
+from utils.qf import DownloadBoard, DownloadBoardAddTimes, CountDownloadBoard
 from utils.tool import logger, get_current_timestamp, timestamp_after_timestamp, timestamp_to_timestring
 from flask import Blueprint, jsonify, request, make_response, url_for, send_from_directory
 from werkzeug import secure_filename
@@ -21,7 +21,7 @@ from werkzeug import secure_filename
 __name__ = "CrawlHuaban"
 __description__ = "抓取花瓣、堆糖图片并压缩提供下载"
 __author__ = "Mr.tao"
-__version__ = "0.2"
+__version__ = "0.3"
 __license__ = "MIT"
 if PLUGINS["CrawlHuaban"] in ("true", "True", True):
     __state__ = "enabled"
@@ -108,6 +108,34 @@ def index():
                 finally:
                     pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site, request.headers.get('X-Real-Ip', request.remote_addr), request.headers.get("User-Agent")), timeout=3600)
                     res.update(success=True, downloadUrl=downloadUrl, expireTime=expireTime)
+        logger.sys.info(res)
+        return jsonify(res)
+
+
+@CrawlHuabanBlueprint.route("/putClick", methods=["POST"])
+def putClick():
+    if request.method == "POST":
+        res = dict(success=False, msg=None)
+        try:
+            #site站点，花瓣网1、堆糖网2
+            site = int(request.form.get("site", 0))
+            #version脚本版本
+            version = request.form.get("version", "")
+            #以下board同album，不区分
+            total_number = int(request.form.get("total_number", 0))
+            pin_number = int(request.form.get("pin_number", 0))
+            board_id = str(request.form.get("board_id", ""))
+            user_id = str(request.form.get("user_id", ""))
+            downloadMethod = int(request.form.get("downloadMethod", "0"))
+            if not board_id:
+                raise ValueError
+        except ValueError:
+            res.update(msg="Invalid format")
+        except Exception:
+            res.update(msg="Unknown error")
+        else:
+            pb.asyncQueue.enqueue_call(func=CountDownloadBoard, args=(site, version, total_number, pin_number, board_id, user_id, downloadMethod, get_current_timestamp(), request.headers.get('X-Real-Ip', request.remote_addr), request.headers.get("User-Agent")))
+            res.update(success=True)
         logger.sys.info(res)
         return jsonify(res)
 
