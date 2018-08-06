@@ -172,7 +172,7 @@
                 </div>
             </div>
             <!-- 友情链接 -->
-            <h4><scan class="icon-link icon-1x"> 友情链接</scan>&nbsp;&nbsp;<small><a href="mailto:{{ Email }}" title="请先添加本站为友情链接，在邮件中写明您的站点。">交换友链</a></small></h4>
+            <h4><scan class="icon-link icon-1x"> 友情链接</scan>&nbsp;&nbsp;<small><a href="mailto:{{ Email }}?subject=%e7%94%b3%e8%af%b7%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%e4%ba%a4%e6%8d%a2&body=%e8%af%b7%e5%85%88%e6%b7%bb%e5%8a%a0%e6%9c%ac%e7%ab%99%e4%b8%ba%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%ef%bc%8c%e5%9c%a8%e9%82%ae%e4%bb%b6%e4%b8%ad%e5%86%99%e6%98%8e%e6%82%a8%e7%9a%84%e7%ab%99%e7%82%b9%e3%80%82">交换友链</a></small></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     {% for fl in g.api.get_sys_friendlink().data %}
