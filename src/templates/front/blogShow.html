@@ -99,8 +99,9 @@
                         {% endfor %}
                         {% endif %}
 
-                        {% if data.create_time %}
-                        <i class="icon-calendar icon-1x"></i><scan style="color: #999" title="创建时间">&nbsp;{{ data.create_time }}</scan>&nbsp;
+                        {% if data.update_time or data.create_time %}
+                        {% set timetext = '修改时间' if data.update_time else '创建时间' %}
+                        <i class="icon-calendar icon-1x"></i><scan style="color: #999" title="{{ timetext }}">&nbsp;{{ data.update_time or data.create_time }}</scan>&nbsp;
                         {% endif %}
 
                         {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
