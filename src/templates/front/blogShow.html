@@ -8,15 +8,15 @@
         legend{padding:.5em;border:0;width:auto}
         img{max-width: 100%}
         .funcarea{ padding:.35em .625em .75em;margin:0 2px;border:1px solid #009;border-radius:5px; height: auto; }
-blockquote {
-    display: block;
-    border-left: 8px solid #d0e5f2;
-    padding: 5px 10px;
-    margin: 10px 0;
-    line-height: 1.4;
-    font-size: 100%;
-    background-color: #f1f1f1;
-}
+        blockquote {
+            display: block;
+            border-left: 8px solid #d0e5f2;
+            padding: 5px 10px;
+            margin: 10px 0;
+            line-height: 1.4;
+            font-size: 100%;
+            background-color: #f1f1f1;
+        }
     </style>
     {% if blog_show_header_include %}
         {% for bi in blog_show_header_include() %}
@@ -65,6 +65,7 @@ blockquote {
                 <div class="funcarea">
                     {% set admins = g.api.user_get_admins().data %}
                     <div>
+                        <a href="{{ url_for('front.blogEnjoy', bid=blogId) }}" style='color:blue' target="_blank"><button type="button" class="btn btn-success">纯享阅读</button></a>
                         {% if g.signin and g.username == data.author or g.username in admins %}
                             <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
                             <a href="javascript:delBlog()" style='color:blue'><button type="button" class="btn btn-danger">删除文章</button></a>

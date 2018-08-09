@@ -30,6 +30,15 @@ def blogShow(bid):
     else:
         return abort(404)
 
+@front_blueprint.route('/blogEnjoy/<int:bid>.html')
+def blogEnjoy(bid):
+    # 文章纯享版，全屏展示文章内容，无其他不相关
+    data = g.api.blog_get_id(bid).get("data")
+    if data:
+        return render_template("front/blogEnjoy.html", blogId=bid, data=data, original=True if data.get("sources") == "原创" else False)
+    else:
+        return abort(404)
+
 @front_blueprint.route("/blog/write/")
 @login_required
 def blogWrite():

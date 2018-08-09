@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <title>{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="博客,blog,Interest,IT">
     <meta name="description" content="Linux,NoSQL,DevOps,python,Docker,redis,memcache,MongoDB,LVS,HA,LB,puppet,ansible,func,Cloud,BigData">
@@ -20,13 +21,8 @@
 </head>
 <body>
 
-<div class="container">
-
-    <div class="header">
-    <br />
+<div class="container-fluid">
     {% block container %}{% endblock %}
-    </br>
-    </br>
 </div>
 
 {% block Jquery %}<script src="{{ url_for('static', filename='js/jquery-3.1.0.min.js') }}"></script>{% endblock %}
