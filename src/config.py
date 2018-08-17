@@ -54,6 +54,26 @@ REDIS=getenv("eaudouce_redis_url")
 #host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
 
 
+# 邮箱配置段
+EMAIL = {
+
+    "useraddr": getenv("eaudouce_email_useraddr"),
+    # 邮箱用户：发件人
+
+    "userpass": getenv("eaudouce_email_userpass"),
+    # 用户邮箱密码
+
+    "smtpServer": getenv("eaudouce_email_smtpserver"),
+    # 邮箱服务器地址
+
+    "smtpPort": getenv("eaudouce_email_smtpport", 25),
+    # 邮箱服务器端口
+
+    "smtpSSL": getenv("eaudouce_email_smtpssl", False)
+    # 是否使用SSL加密
+}
+
+
 # 系统配置
 SYSTEM = {
 

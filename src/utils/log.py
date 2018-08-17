@@ -34,7 +34,7 @@ class Logger:
                               backupCount=backupCount,
                               when="midnight")
         handler.suffix = "%Y%m%d"
-        formatter = logging.Formatter('[ %(levelname)s ] %(asctime)s %(filename)s:%(threadName)s:%(lineno)d %(message)s', datefmt=self._logfmt)
+        formatter = logging.Formatter('[ %(levelname)s ] %(asctime)s %(filename)s:%(lineno)d %(message)s', datefmt=self._logfmt)
         handler.setFormatter(formatter)
         self._logger.addHandler(handler)
         self._logger.setLevel(self._levels.get(GLOBAL.get('LogLevel', "INFO")))

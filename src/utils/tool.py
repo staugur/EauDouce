@@ -49,6 +49,10 @@ def ip_check(ip):
     if isinstance(ip, (str, unicode)):
         return ip_pat.match(ip)
 
+def email_check(email):
+    if email and isinstance(email, (str, unicode)):
+        return mail_pat.match(email)
+
 def ParseMySQL(mysql, callback="dict"):
     """解析MYSQL配置段"""
     if not mysql:return None
@@ -110,11 +114,11 @@ def getIpArea(ip):
     url = "http://ip.taobao.com/service/getIpInfo.php?ip={0}".format(ip)
     try:
         data = DO(requests.get(url, timeout=10, headers=headers).json())
-    except requests.exceptions.Timeout:
+    except Exception:
         try:
             data = DO(requests.get(url, headers=headers).json())
         except Exception:
-            return "Unknown"
+            return getIpArea2(ip)
         else:
             data = DO(data.data)
     else:
@@ -127,6 +131,24 @@ def getIpArea(ip):
         else:
             city = data.city
     return u"{0} {1} {2} {3}".format(data.country, data.region.replace(u'市',''), city, data.isp)
+
+def getIpArea2(ip):
+    """ ip-api.com提供接口
+        request:  http://ip-api.com/json/0.0.0.0?lang=zh-CN&fields=country,regionName,city,isp,status,message
+        response: {"city":"城市","country":"国家","isp":"运营商","regionName":"行省","status":"success|fail"}
+    """
+    if ip_check(ip):
+        url = "http://ip-api.com/json/{}?lang=zh-CN&fields=country,regionName,city,isp,status,message".format(ip)
+        data = DO(requests.get(url, timeout=10).json())
+        if data["status"] == "success":
+            if data.city:
+                city = data.city if u"市" in data.city else data.city + u"市"
+            else:
+                city = data.city
+            return u"{0} {1} {2} {3}".format(data.country, data.regionName.replace(u'市',''), city, data.isp)
+        else:
+            return data["message"]
+    return "Invaild Ip"
 
 def get_current_timestamp():
     """ 获取本地当前时间戳(10位): Unix timestamp：是从1970年1月1日（UTC/GMT的午夜）开始所经过的秒数，不考虑闰秒 """

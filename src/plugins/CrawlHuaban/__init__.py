@@ -14,7 +14,7 @@ from libs.base import PluginBase
 import os, json
 from config import PLUGINS
 from utils.qf import DownloadBoard, DownloadBoardAddTimes, CountDownloadBoard
-from utils.tool import logger, get_current_timestamp, timestamp_after_timestamp, timestamp_to_timestring
+from utils.tool import logger, get_current_timestamp, timestamp_after_timestamp, timestamp_to_timestring, email_check
 from flask import Blueprint, jsonify, request, make_response, url_for, send_from_directory
 from werkzeug import secure_filename
 
@@ -60,7 +60,8 @@ def index():
             response = make_response("Invalid Download Request")
         return response
     else:
-        res = dict(success=False, msg=None)
+        # 关于tip，可以是text或html格式，前端页面直接显示这个值内容，用于额外提示信息，若无提示，保持为空字符
+        res = dict(success=False, msg=None, tip='')
         try:
             #site站点，花瓣网1、堆糖网2
             site = int(request.form.get("site", 1))
@@ -70,6 +71,7 @@ def index():
             board_id = str(request.form.get("board_id", ""))
             board_pins = json.loads(request.form.get("pins"))
             board_total = int(request.form.get("board_total", 0))
+            email = request.form.get("email")
             if board_id and board_pins:
                 if not isinstance(board_pins, (list, tuple)):
                     raise ValueError
@@ -106,8 +108,14 @@ def index():
                 except Exception,e:
                     logger.sys.error(e, exc_info=True)
                 finally:
-                    pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site, request.headers.get('X-Real-Ip', request.remote_addr), request.headers.get("User-Agent")), timeout=3600)
+                    pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site, request.headers.get('X-Real-Ip', request.remote_addr), request.headers.get("User-Agent"), email, downloadUrl), timeout=3600)
                     res.update(success=True, downloadUrl=downloadUrl, expireTime=expireTime)
+                    # 更新邮件发送的提示
+                    if email:
+                        if email_check(email):
+                            res.update(tip="<br>您已设置邮箱，当前画板后端下载完成后将发送邮件提醒，请注意查收！")
+                        else:
+                            res.update(tip="<br>您已设置邮箱，但邮箱格式错误，将不会发送邮件提醒。")
         logger.sys.info(res)
         return jsonify(res)
 
