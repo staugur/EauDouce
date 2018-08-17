@@ -150,7 +150,7 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctim
     if email_check(email):
         message = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><style>a{text-decoration: none}</style></head><body><table style="width:550px;"><tr><td style="padding-top:10px; padding-left:5px; padding-bottom:5px; border-bottom:1px solid #D9D9D9; font-size:16px; color:#999;">SaintIC EauDouce</td></tr><tr><td style="padding:20px 0px 20px 5px; font-size:14px; line-height:23px;">你好！<br>图片下载完成，地址是<a href="%s" target="_blank">%s</a><br></td></tr><tr><td style="padding-top:5px; padding-left:5px; padding-bottom:10px; border-top:1px solid #D9D9D9; font-size:12px; color:#999;">此为系统邮件，请勿回复<br/>请保管好您的邮箱，避免账户被他人盗用<br/><br/>如有任何疑问，可查看网站帮助 <a target="_blank" href="https://www.saintic.com">https://www.saintic.com</a></td></tr></table></body></html>' %(downloadUrl, downloadUrl)
         sendmail = SendMail()
-        sendmail.SendMessage(to_addr=email, subject=u"花瓣、堆糖远程下载完成提醒", formatType="html", message=message)
+        sendmail.SendMessage(to_addr=email, subject=u"%s下载完成提醒" %(u"花瓣网画板" if site == 1 else u"堆糖网专辑"), formatType="html", message=message)
     try:
         _sb.mysql_write.update("update plugin_crawlhuaban set status=1,size=%s,dtime=%s where board_id=%s and filename=%s", size, dtime, board_id, zipfilename)
     except Exception,e:
