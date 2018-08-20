@@ -126,10 +126,11 @@
             {% block PathNavigation %}{% endblock %}
             <!-- 搜索 -->
             {% block search %}
-            <form class="form-search form-horizontal" id="SearchForm" method="GET" action="{{ url_for('front.blogSearch') }}">
+            <form class="form-search form-horizontal" id="SearchForm" method="GET" action="http://zhannei.baidu.com/cse/site" target="_blank">
                 <div class="input-group search-input-group">
-                    <button type="button" style="height: 30px;" onClick="search()" class="btn btn-success"><i class="icon-search"></i></button>
+                    <button type="submit" style="height: 30px;" class="btn btn-success"><i class="icon-search"></i></button>
                     <input type="text" name="q" id="input" placeholder="站内搜索" value="{{ request.args.get('q','') }}">
+                    <input type="hidden" name="cc" value="saintic.com">
                 </div>
             </form>
             {% endblock %}
