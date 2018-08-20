@@ -55,9 +55,9 @@ class AccessCount(PluginBase):
         if "/rqdashboard" in data.get("url") or "/static/" in data.get("url"):
             pass
         else:
-            self.asyncQueue.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
+            self.asyncQueueLow.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
             if request.endpoint == "front.blogShow":
-                self.asyncQueueLow.enqueue(Click2MySQL, data)
+                self.asyncQueue.enqueue(Click2MySQL, data)
 
     def register_cep(self):
         return {"after_request_hook": self.Record_ip_pv}
