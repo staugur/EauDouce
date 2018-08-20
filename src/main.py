@@ -147,5 +147,9 @@ def signup():
     regUrl = SSO.get("sso_server").strip("/") + "/signUp"
     return redirect(regUrl)
 
+@app.route('/baidu_verify_DWiXsqKLuK.html')
+def baidu_verify_DWiXsqKLuK():
+    return render_template("public/baidu_verify_DWiXsqKLuK.html")
+
 if __name__ == '__main__':
     app.run(host=GLOBAL.get('Host'), port=int(GLOBAL.get('Port')), debug=True)
