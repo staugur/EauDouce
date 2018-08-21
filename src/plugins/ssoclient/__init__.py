@@ -109,6 +109,8 @@ def authorized():
                     expire = int(resp["expire"])
                     g.userinfo = resp["userinfo"].get("data") or dict()
                     logger.sys.debug(g.userinfo)
+                    # 缓存用户信息
+                    g.api.sso_set_userinfo(uid, g.userinfo, expire)
                     # 授权令牌验证通过，设置局部会话，允许登录
                     sessionId = set_sessionId(uid=uid, seconds=expire, sid=sid)
                     response = make_response(redirect(get_redirect_url("front.index")))
