@@ -140,13 +140,28 @@
         {% block aside %}
         <div class="col-md-4 column">
             <!-- 小程序 -->
-            <h4><scan class="icon-qrcode icon-1x"> 微信小程序与公众号</scan></h4>
+            <h4><scan class="icon-qrcode icon-1x"> 交流分享</scan></h4>
             <div class="row clearfix">
-                <div class="col-md-6 column">
-                    <img src="/static/img/applet.jpg" class="img-rounded" title="微信小程序" width='180px'>
-                </div>
-                <div class="col-md-6 column">
-                    <img src="/static/img/gongzhonghao.jpg" class="img-rounded" title="微信公众号" width='180px'>
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" id="overviewTab">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">QQ交流群</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false"> 微信公众号</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false"> 微信小程序</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane fade in active">
+                            <scan>QQ扫一扫或点击二维码加入，群号577543189</scan>
+                            <a href="https://jq.qq.com/?_wv=1027&k=5aZyCMV" target="_blank" title="点击加入群聊"><img src="/static/img/qqgroup.jpg" class="img-rounded img-responsive" title="QQ交流群" width="160px" height='160px'></a>
+                        </div>
+                        <div id="tab-2" class="tab-pane fade">
+                            <scan>微信扫一扫，手滑关注它</scan>
+                            <img src="/static/img/gongzhonghao.jpg" class="img-rounded img-responsive" title="微信公众号" width="160px" height='160px'>
+                        </div>
+                        <div id="tab-3" class="tab-pane fade">
+                            <scan>微信扫一扫，进入小程序</scan>
+                            <img src="/static/img/applet.jpg" class="img-rounded img-responsive" title="微信小程序" width="160px" height='160px'>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- 推荐文章列表 -->
