@@ -31,5 +31,12 @@
 {% endblock %}
 
 {% block container %}
+    <p>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <b>温馨提示</b>：您正在访问纯享版文章，<a href="{{ url_for('front.blogShow', bid=blogId) }}">点击此处</a>返回文章详情页！</a><br>
+            <b>文章标题</b>：{{ data.title }}<br>
+            <b>更新时间</b>：{{ data.update_time or data.create_time }}
+        </div>
+    </p>
     {{ data['content'] | safe }}
 {% endblock %}
