@@ -84,12 +84,18 @@ status)
     fi
     ;;
 
+reload)
+    if [ -f $pidfile ]; then
+        kill -HUP $(cat $pidfile)
+    fi
+    ;;
+
 restart)
     bash $(basename $0) stop
     bash $(basename $0) start
     ;;
 
 *)
-    echo "Usage: $0 start|stop|restart|status"
+    echo "Usage: $0 start|stop|reload|restart|status"
     ;;
 esac

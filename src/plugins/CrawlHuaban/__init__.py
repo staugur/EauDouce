@@ -93,7 +93,7 @@ def index():
                 logger.sys.error(e, exc_info=True)
             if hasKey:
                 data = pb.redis.hgetall(key)
-                res.update(msg='当前画板下载中，链接是<a href="{}" target="_blank" title="请点击打开新页面或手动复制链接">{}</a>。温馨提示，5分钟内请勿重复对同一个画板使用远程下载服务！'.format(data["downloadUrl"], data["downloadUrl"]))
+                res.update(msg=u'当前画板下载中，链接是<a href="{}" target="_blank" title="请点击打开新页面或手动复制链接">{}</a>。温馨提示，5分钟内请勿重复对同一个画板使用远程下载服务！'.format(data["downloadUrl"], data["downloadUrl"]))
             else:
                 ctime = get_current_timestamp()
                 etime = timestamp_after_timestamp(hours=24)
@@ -117,9 +117,9 @@ def index():
                     # 更新邮件发送的提示
                     if email:
                         if email_check(email):
-                            res.update(tip="<br>您已设置邮箱，当前画板后端下载完成后将发送邮件提醒，请注意查收！")
+                            res.update(tip=u"<br>您已设置邮箱，当前画板后端下载完成后将发送邮件提醒，请注意查收！")
                         else:
-                            res.update(tip="<br>您已设置邮箱，但邮箱格式错误，将不会发送邮件提醒。")
+                            res.update(tip=u"<br>您已设置邮箱，但邮箱格式错误，将不会发送邮件提醒。")
         logger.sys.info(res)
         return jsonify(res)
 
@@ -146,9 +146,9 @@ def putEgg():
                 if email:
                     if email_check(email):
                         pipe.hset(eggKey, "remind", email)
-                        res.update(tip="您已设置邮箱，当前画板后端下载完成后将发送邮件提醒，请注意查收！")
+                        res.update(tip=u"您已设置邮箱，当前画板后端下载完成后将发送邮件提醒，请注意查收！")
                     else:
-                        res.update(tip="您已设置邮箱，但邮箱格式错误，将不会发送邮件提醒。")
+                        res.update(tip=u"您已设置邮箱，但邮箱格式错误，将不会发送邮件提醒。")
                 try:
                     pipe.execute()
                 except Exception,e:
@@ -157,7 +157,7 @@ def putEgg():
                 else:
                     res.update(success=True)
             else:
-                res.update(tip="下载已完成，" + downloadUrl, success=True)
+                res.update(tip=u'下载已完成，<a href="%s">%s</a>' %(downloadUrl, downloadUrl), success=True)
         logger.sys.info(res)
         return jsonify(res)
 
