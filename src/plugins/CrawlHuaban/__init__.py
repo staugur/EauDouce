@@ -140,20 +140,24 @@ def putEgg():
             res.update(msg="Unknown error")
         else:
             eggKey = "EauDouce:CrawlHuaban:HF:{}".format(downloadUrl)
-            pipe = pb.redis.pipeline()
-            if email:
-                if email_check(email):
-                    pipe.hset(eggKey, "remind", email)
-                    res.update(tip="您已设置邮箱，当前画板后端下载完成后将发送邮件提醒，请注意查收！")
+            eggData = pb.redis.hgetall(eggKey)
+            if not int(eggData.get("status", 0)) in (1, 2):
+                pipe = pb.redis.pipeline()
+                if email:
+                    if email_check(email):
+                        pipe.hset(eggKey, "remind", email)
+                        res.update(tip="您已设置邮箱，当前画板后端下载完成后将发送邮件提醒，请注意查收！")
+                    else:
+                        res.update(tip="您已设置邮箱，但邮箱格式错误，将不会发送邮件提醒。")
+                try:
+                    pipe.execute()
+                except Exception,e:
+                    logger.sys.error(e, exc_info=True)
+                    res.update(msg="System is abnormal")
                 else:
-                    res.update(tip="您已设置邮箱，但邮箱格式错误，将不会发送邮件提醒。")
-            try:
-                pipe.execute()
-            except Exception,e:
-                logger.sys.error(e, exc_info=True)
-                res.update(msg="System is abnormal")
+                    res.update(success=True)
             else:
-                res.update(success=True)
+                res.update(tip="下载已完成", success=True)
         logger.sys.info(res)
         return jsonify(res)
 

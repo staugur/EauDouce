@@ -146,9 +146,12 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctim
     os.remove(lock_file)
     logger.sys.debug("DownloadBoard move over, delete lock")
     dtime = "%.2f" %(time.time() - stime)
-    #彩蛋执行-发送邮件提醒
+    #彩蛋执行
     if downloadUrl:
         eggKey = "EauDouce:CrawlHuaban:HF:{}".format(downloadUrl)
+        #更新redis中状态
+        _sb.redis.hset(eggKey, "status", 1)
+        #发送邮件提醒
         email = _sb.redis.hget(eggKey, "remind")
         if email_check(email):
             remind = "mailto:{}".format(email)
