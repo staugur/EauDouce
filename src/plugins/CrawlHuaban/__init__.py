@@ -103,12 +103,16 @@ def index():
                 pipe = pb.redis.pipeline()
                 pipe.hmset(key, dict(downloadUrl=downloadUrl, expireTime=expireTime))
                 pipe.expire(key, 300)
+                # 设置彩蛋功能区
+                eggKey = "EauDouce:CrawlHuaban:HF:{}".format(downloadUrl)
+                pipe.hset(eggKey, "remind", email)
+                pipe.expire(eggKey, 24 * 3600)
                 try:
                     pipe.execute()
                 except Exception,e:
                     logger.sys.error(e, exc_info=True)
                 finally:
-                    pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site, request.headers.get('X-Real-Ip', request.remote_addr), request.headers.get("User-Agent"), email, downloadUrl), timeout=3600)
+                    pb.asyncQueueHigh.enqueue_call(func=DownloadBoard, args=(basedir, board_id, filename, board_pins, board_total, ctime, etime, version, site, request.headers.get('X-Real-Ip', request.remote_addr), request.headers.get("User-Agent"), downloadUrl), timeout=3600)
                     res.update(success=True, downloadUrl=downloadUrl, expireTime=expireTime)
                     # 更新邮件发送的提示
                     if email:
@@ -119,6 +123,39 @@ def index():
         logger.sys.info(res)
         return jsonify(res)
 
+@CrawlHuabanBlueprint.route("/putEgg", methods=["POST"])
+def putEgg():
+    if request.method == "POST":
+        res = dict(success=False, msg=None, tip='')
+        try:
+            # 必选参数-下载链接
+            downloadUrl = request.form.get("downloadUrl")
+            # 可选参数
+            email = request.form.get("email")
+            if not downloadUrl:
+                raise ValueError
+        except ValueError:
+            res.update(msg="Invalid downloadUrl")
+        except Exception:
+            res.update(msg="Unknown error")
+        else:
+            eggKey = "EauDouce:CrawlHuaban:HF:{}".format(downloadUrl)
+            pipe = pb.redis.pipeline()
+            if email:
+                if email_check(email):
+                    pipe.hset(eggKey, "remind", email)
+                    res.update(tip="您已设置邮箱，当前画板后端下载完成后将发送邮件提醒，请注意查收！")
+                else:
+                    res.update(tip="您已设置邮箱，但邮箱格式错误，将不会发送邮件提醒。")
+            try:
+                pipe.execute()
+            except Exception,e:
+                logger.sys.error(e, exc_info=True)
+                res.update(msg="System is abnormal")
+            else:
+                res.update(success=True)
+        logger.sys.info(res)
+        return jsonify(res)
 
 @CrawlHuabanBlueprint.route("/putClick", methods=["POST"])
 def putClick():
