@@ -157,7 +157,7 @@ def putEgg():
                 else:
                     res.update(success=True)
             else:
-                res.update(tip=u'下载已完成，<a href="%s">%s</a>' %(downloadUrl, downloadUrl), success=True)
+                res.update(tip=u'下载已完成，<a href="%s">点击下载</a>' %downloadUrl, success=True)
         logger.sys.info(res)
         return jsonify(res)
 
