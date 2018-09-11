@@ -80,6 +80,8 @@ def DownloadBoard(basedir, board_id, zipfilename, board_pins, total_number, ctim
     @param version, site, user_ip, user_agent str: 分别是用户脚本版本、站点id、用户ip、用户代理，仅用于写入mysql
     """
     logger.sys.debug("DownloadBoard dir: {}, board_pins number: {}".format(basedir, len(board_pins)))
+    if len(board_pins) > 15000:
+        board_pins = board_pins[:15000]
     #初始写入数据库
     try:
         if user_agent:
