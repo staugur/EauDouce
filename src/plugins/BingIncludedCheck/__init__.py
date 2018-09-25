@@ -28,4 +28,4 @@ def getPluginClass():
 class BingIncludedCheckMain(PluginBase):
 
     def register_tep(self):
-        return {"blog_show_funcarea_string": "<scan id='BingIncludedCheck'></scan>", "blog_show_script_include": "BingCheckJs.html"}
+        return {"blog_show_funcarea": "<scan id='BingIncludedCheck'></scan>", "blog_show_script": "BingCheckJs.html"}

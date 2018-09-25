@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>3306影视厅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="3306blog,3306,java社区,blog">
+  <meta name="description" content="3306Blog社区前端layui开发，后端java开发，致力于分享知识与生活">
+
+  <link rel="stylesheet" href="../../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../../res/css/global.css">
+  <link href="../../res/css/animate.min.css" rel="stylesheet">
+  <script src="../../res//mods/love.js"></script>
+  <!-- 相册css -->
+  <link rel="stylesheet" type="text/css" href="../../res/others/style_common.css" />
+  <link rel="stylesheet" type="text/css" href="../../res/others/style10.css" />
+
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+      <img src="../../res/images/logo.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+        <li class="layui-nav-item ">
+            <a href="../index.html"><i class="layui-icon" style="font-size: 22px;">&#xe68e;</i>博客主页</a>
+          </li>
+          <li class="layui-nav-item ">
+            <a href="../note/note.html"><i class="layui-icon" style="font-size: 22px;">&#xe705;</i>漫笔随谈</a>
+          </li>
+          <li class="layui-nav-item layui-this">
+            <a href="../life/life.html"><i class="layui-icon" style="font-size: 22px;">&#xe6ed;</i>青春岁月</a>
+          </li>
+          <li class="layui-nav-item">
+            <a href="../about/about.html"><i class="layui-icon" style="font-size: 22px;">&#xe60b;</i>关于</a>
+          </li>
+          <li class="layui-nav-item">
+            <a href="../search/search.html" target="_blank"><i class="layui-icon" style="font-size: 22px;">&#xe615;</i>搜索</a>
+          </li>
+    </ul> 
+    
+     <ul class="layui-nav fly-nav-user">
+      
+      <!-- 未登入的状态 -->
+      <li class="layui-nav-item">
+        <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+      </li>
+      <li class="layui-nav-item layui-show-xs layui-hide-md ">
+          <a class="leftmenusswitch"><i class="layui-icon " style="font-size: 18px;color:#838383;">&#xe66b;</i></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../user/login.html">登入</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../user/regist.html">注册</a>
+      </li>
+      
+      <!-- 登入后的状态 -->
+      <!--
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">于庆辉</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：3306Blog博主"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>-->
+      
+    </ul> 
+  </div>
+</div>
+
+<!-- 隐藏菜单start -->
+<ul class="layui-nav layui-nav-tree dynamic-navigation" lay-filter="test">
+    <li class="layui-nav-item">
+      <a href="../index.html"><i class="layui-icon" style="font-size: 16px;">&#xe68e;</i>&nbsp;&nbsp;博客主页</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../note/note.html"><i class="layui-icon" style="font-size: 16px;">&#xe705;</i>&nbsp;&nbsp;漫笔随谈</a>
+    </li>
+    <li class="layui-nav-item layui-nav-itemed">
+      <a href="../life/life.html"><i class="layui-icon" style="font-size: 16px;">&#xe6ed;</i>&nbsp;&nbsp;青春岁月</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../about/about.html"><i class="layui-icon" style="font-size: 16px;">&#xe60b;</i>&nbsp;&nbsp;关于</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../search/search.html" target="_blank"><i class="layui-icon" style="font-size: 16px;">&#xe615;</i>&nbsp;&nbsp;搜索</a>
+    </li>
+</ul>
+<!-- 隐藏菜单end -->
+<div class="fly-panel fly-column">
+  <div class="layui-container">
+    <ul class="layui-clear">
+    <!-- 面包屑 -->
+    <span class="layui-breadcrumb">
+        <a href="../index.html">主页</a>
+        <a href="../life/life.html#video">影视大厅</a>
+        <a><cite>视频集名称</cite></a>
+    </span> 
+      <li class="layui-hide-xs">&nbsp;</li> 
+      <li class="layui-hide-xs">&nbsp;&nbsp;<span class="motto animated fadeIn" style="color:red"></span></li> 
+    </ul> 
+    
+    <div class="fly-column-right layui-hide-xs animated fadeIn"> 
+      <span><i class="layui-icon" style="font-size: 16px;">&#xe60e;</i>当前时间：<span id="blog-date"></span></span> 
+    </div> 
+    <p style="text-align: center;"><span class="layui-show-xs layui-hide-md motto animated fadeIn" style="color:red;"></span></p>
+  </div>
+</div>
+
+<div class="layui-container">
+  <div class="layui-row">
+    <div class="layui-col-md12">
+      <div class="top3-box fly-panel layui-row animated fadeInUp" style="margin-bottom: 0">
+        <!-- 视频搜索 start -->
+        <div class="inp">
+          <form action="">
+            <table class="tab">
+              <tr>
+                <td class="cons1">
+                <input type="text" name="search" class="inpu" flag="0">
+                    <p class="p1"><a href="">人在囧途</a></p>
+                </td>
+                <td class="cons2">
+                <span class="sss" style="color: #616161; font-size: 20px;"><i class="layui-icon" style="font-size: 22px;">&#xe615;</i></span>
+                </td>
+              </tr>
+            </table>
+          </form>
+        </div>
+        <!-- 视频搜索 end -->
+        <div class="mylifetab layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this" style="font-size:18px;">视频集名称</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="photoitem">
+                        <div class="view view-tenth" movieid="001">
+                            <img src="../../res/vedio/01.png" index = "0"/>
+                            <div class="mask">
+                                <h2>蓝精灵</h2>
+                                <p>
+                                    导演：瑞恩库格勒<br>
+                                    主演：查德威克<br>
+                                    语言：英语
+                                </p>
+                                <a href="javascript:;" link="http://vfx.mtime.cn/Video/2017/03/28/mp4/170328102043699672.mp4" class="info" onclick="javascript:seemovie(this)">观看</a>
+                            </div>
+                        </div>
+                        <div class="view view-tenth" movieid="001">
+                            <img src="../../res/vedio/02.png" index = "0"/>
+                            <div class="mask">
+                                <h2>视频2</h2>
+                                <p>
+                                    导演：瑞恩库格勒<br>
+                                    主演：查德威克<br>
+                                    语言：英语
+                                </p>
+                                <a href="javascript:;" link="http://vfx.mtime.cn/Video/2018/04/25/mp4/180425102236611389.mp4" class="info" onclick="javascript:seemovie(this)">观看</a>
+                            </div>
+                        </div>
+                        <div class="view view-tenth" movieid="001">
+                            <img src="../../res/vedio/03.png" index = "0"/>
+                            <div class="mask">
+                                <h2>视频3</h2>
+                                <p>
+                                    导演：瑞恩库格勒<br>
+                                    主演：查德威克<br>
+                                    语言：英语
+                                </p>
+                                <a href="javascript:;" link="http://vfx.mtime.cn/Video/2018/04/27/mp4/180427102248084890.mp4" class="info" onclick="javascript:seemovie(this)">观看</a>
+                            </div>
+                        </div>
+                        <div class="view view-tenth" movieid="001">
+                            <img src="../../res/vedio/04.png" index = "0"/>
+                            <div class="mask">
+                                <h2>视频4</h2>
+                                <p>
+                                    导演：瑞恩库格勒<br>
+                                    主演：查德威克<br>
+                                    语言：英语
+                                </p>
+                                <a href="javascript:;" link="http://vfx.mtime.cn/Video/2018/04/04/mp4/180404165743420449.mp4" class="info" onclick="javascript:seemovie(this)">观看</a>
+                            </div>
+                        </div>
+                        <div class="view view-tenth" movieid="001">
+                            <img src="../../res/vedio/04.png" index = "0"/>
+                            <div class="mask">
+                                <h2>视频5</h2>
+                                <p>
+                                    导演：瑞恩库格勒<br>
+                                    主演：查德威克<br>
+                                    语言：英语
+                                </p>
+                                <a href="javascript:;" link="http://vfx.mtime.cn/Video/2018/03/09/mp4/180309080833156502.mp4" class="info" onclick="javascript:seemovie(this)">观看</a>
+                            </div>
+                        </div>
+                        <div class="view view-tenth" movieid="001">
+                            <img src="../../res/vedio/06.jpg" index = "0"/>
+                            <div class="mask">
+                                <h2>视频6</h2>
+                                <p>
+                                    导演：瑞恩库格勒<br>
+                                    主演：查德威克<br>
+                                    语言：英语
+                                </p>
+                                <a href="javascript:;" link="../../res/vedio/06.mp4" class="info" onclick="javascript:seemovie(this)">观看</a>
+                            </div>
+                        </div>
+                        <div class="view view-tenth" movieid="001">
+                            <img src="../../res/vedio/07.jpg" index = "0"/>
+                            <div class="mask">
+                                <h2>视频6</h2>
+                                <p>
+                                    导演：瑞恩库格勒<br>
+                                    主演：查德威克<br>
+                                    语言：英语
+                                </p>
+                                <a href="javascript:;" link="http://vfx.mtime.cn/Video/2018/04/28/mp4/180428160646482462.mp4" class="info" onclick="javascript:seemovie(this)">观看</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  
+  <div class="fly-footer">
+    <p><a href="/" target="_blank">3306Blog 所有</a> 2018 &copy;  Design By Happyyu</p>
+    <p class="ft-copyright">鲁ICP备11002373号-1</p>
+    <p>
+      <a href="javascript:donate();">捐赠赞赏</a>
+    </p>
+  </div>
+ 
+<script src="../../res/layui/layui.js"></script>
+<script>
+
+layui.config({
+  version: "3.0.0"
+  ,base: '../../res/mods/' 
+}).extend({
+  fly: 'index',
+ 
+}).use('fly');
+
+//观看视频
+function seemovie(obj){
+   layui.use('layer',function(){
+      var $ = layui.$
+      ,layer = layui.layer;
+      var currentmovie = $(obj);
+      var link = currentmovie.attr('link');
+      var title = currentmovie.parent(".mask").find('h2').html();
+      console.log(title);
+      var width = (window.screen.width)/2;
+      var height = (window.screen.height)/2;
+      var temph = 0;
+      if(height>width){
+        temph = width;
+        width = height;
+        height = temph;
+      }
+      layer.open({
+        title:title,
+        type: 2, 
+        area: [width+'px', height+'px'],
+        anim: 2,
+        shade:0.3,
+        skin:'layui-layer-lan',
+        resize:false,
+        content:['../life/play.html', 'no'],
+        success: function(layero, index){
+        var body = layer.getChildFrame('body', index);
+        var iframeWin = window[layero.find('iframe')[0]['name']]; 
+        iframeWin.setSrc(link);
+       }
+      });
+   })
+}
+
+//捐赠赞赏
+function donate(){
+  var height = (window.screen.height)/2-250;
+		layui.use('layer',function(){
+			var layer = layui.layer;
+			layer.open({
+		        title: '',
+		        offset: height,
+		        shadeClose:true,
+		        type: 1,
+		        area: ['350px', '350px'], //宽高
+		        content: '<img src="../../res/images/donate.jpg">'
+		    });
+		})
+    }
+    
+   
+</script>
+
+</body>
+</html>

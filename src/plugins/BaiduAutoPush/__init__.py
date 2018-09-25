@@ -50,4 +50,4 @@ class BaiduAutoPush(PluginBase):
     __doc__ = __description__
 
     def register_tep(self):
-        return {"blog_show_script_include": "BaiduAutoPush/BaiduAutoPush.html"}
+        return {"blog_show_script": "BaiduAutoPush/BaiduAutoPush.html"}

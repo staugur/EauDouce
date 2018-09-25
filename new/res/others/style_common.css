@@ -1,0 +1,66 @@
+.view {
+   width: 265px;
+   height: 180px;
+   margin: 10px;
+   display:inline;
+   float: left;
+   
+   overflow: hidden;
+   position: relative;
+   text-align: center;
+   -webkit-box-shadow: 1px 1px 2px #e6e6e6;
+   -moz-box-shadow: 1px 1px 2px #e6e6e6;
+   box-shadow: 1px 1px 2px #e6e6e6;
+   cursor: default;
+   background: #fff url(../../res/images/photo/bgimg.jpg) no-repeat center center;
+}
+.view .mask,.view .content {
+   width: 265px;
+   height: 180px;
+   position: absolute;
+   overflow: hidden;
+   top: 0px;
+   left: 0px;
+}
+.view img {
+   display: block;
+   position: relative;
+}
+.view h2 {
+   text-transform: uppercase;
+   color: #fff;
+   position: relative;
+   font-size: 17px;
+   padding: 10px;
+   background: rgba(0, 0, 0, 0.8);
+   margin: 10px 0 0 0;
+   text-align: center;
+}
+.view p {
+   /* font-family: Georgia, serif;
+   font-style: italic; */
+   font-size: 12px;
+   position: relative;
+   color: #fff;
+   padding: 10px 10px 10px;
+   text-align: center;
+}
+.view a.info {
+   display: inline-block;
+   text-decoration: none;
+   padding: 7px 14px;
+   background: #000;
+   color: #fff;
+   position: absolute;
+   bottom:10px;
+   left:105px;
+   text-transform: uppercase;
+   -webkit-box-shadow: 0 0 1px #000;
+   -moz-box-shadow: 0 0 1px #000;
+   box-shadow: 0 0 1px #000;
+}
+.view a.info :hover {
+   -webkit-box-shadow: 0 0 5px #000;
+   -moz-box-shadow: 0 0 5px #000;
+   box-shadow: 0 0 5px #000;
+}

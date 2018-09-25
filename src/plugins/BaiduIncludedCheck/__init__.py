@@ -28,4 +28,4 @@ def getPluginClass():
 class BaiduIncludedCheck(PluginBase):
 
     def register_tep(self):
-        return {"blog_show_funcarea_string": "<scan id='BaiduIncludedCheck'></scan>", "blog_show_script_include": "BaiduCheckJs.html"}
+        return {"blog_show_funcarea": "<scan id='BaiduIncludedCheck'></scan>", "blog_show_script": "BaiduCheckJs.html"}

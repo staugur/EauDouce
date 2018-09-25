@@ -11,10 +11,11 @@
 
 from __future__ import absolute_import
 from libs.base import PluginBase
+import time
 from config import PLUGINS
 from utils.tool import get_today, getIpArea
 from utils.qf import Click2MySQL, Click2Redis
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 
 __name__        = "AccessCount"
 __description__ = "IP、PV、UV统计插件"
@@ -51,7 +52,15 @@ class AccessCount(PluginBase):
 
     def Record_ip_pv(self, **kwargs):
         """ 记录ip、ip """
-        data = kwargs.get("access_data")
+        data = {
+            "status_code": kwargs['response'].status_code,
+            "method": request.method,
+            "ip": request.headers.get('X-Real-Ip', request.remote_addr),
+            "url": request.url,
+            "referer": request.headers.get('Referer'),
+            "agent": request.headers.get("User-Agent"),
+            "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
+        }
         if "/rqdashboard" in data.get("url") or "/static/" in data.get("url"):
             pass
         else:
@@ -64,7 +73,7 @@ class AccessCount(PluginBase):
 
     def register_tep(self):
         """注册博客详情页功能区代码"""
-        tep = {"blog_show_funcarea_string": "<scan id='AccessCount'></scan>", "blog_show_script_include": "AccessCountJs.html"}
+        tep = {"blog_show_funcarea": "<scan id='AccessCount'></scan>", "blog_show_script": "AccessCountJs.html"}
         return tep
 
     def register_bep(self):

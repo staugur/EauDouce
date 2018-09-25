@@ -24,38 +24,28 @@ __version__ = "0.0.1"
 __license__ = "MIT"
 
 import time, os.path, jinja2, sys, rq_dashboard
-from flask import Flask, request, g, render_template, redirect, make_response, url_for
+from flask import request, g, render_template, redirect, make_response, url_for
+from flask_pluginkit import PluginManager, blueprint
+from flask_multistatic import MultiStaticFlask as Flask
 from config import GLOBAL, SSO, PLUGINS, REDIS
 from utils.tool import logger, ChoiceColor, TagRandomColor, timestamp_to_timestring
 from utils.web import verify_sessionId, analysis_sessionId, get_redirect_url
 from urllib import urlencode
 from libs.api import ApiManager
-from libs.plugins import PluginManager
-from views.api import api_blueprint
-from views.front import front_blueprint
-from views.admin import admin_blueprint
-from views.upload import upload_blueprint
+from views import api_blueprint, front_blueprint, admin_blueprint, upload_blueprint
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 #初始化定义application
 app = Flask(__name__)
-app.config["REDIS_URL"] = REDIS
-app.config["RQ_POLL_INTERVAL"] = 2500
+app.config.update(
+    REDIS_URL = REDIS,
+    RQ_POLL_INTERVAL = 2500,
+    PLUGINKIT_AUTHMETHOD = "BOOL"
+)
 
 #初始化插件管理器(自动扫描并加载运行)
-plugin = PluginManager()
-
-#自定义添加多模板文件夹
-loader = jinja2.ChoiceLoader([
-    app.jinja_loader,
-    jinja2.FileSystemLoader([ p.get("plugin_tpl_path") for p in plugin.get_enabled_plugins if os.path.isdir(os.path.join(app.root_path, p["plugin_tpl_path"])) ]),
-])
-app.jinja_loader = loader
-
-#注册全局模板扩展点
-for tep_name,tep_func in plugin.get_all_tep.iteritems():
-    app.add_template_global(tep_func, tep_name)
+plugin = PluginManager(app, logger=logger.plugin)
 
 #初始化接口管理器
 api = ApiManager()
@@ -66,12 +56,7 @@ app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
 app.register_blueprint(rq_dashboard.blueprint, url_prefix="/rqdashboard")
-
-#注册蓝图扩展点
-for bep in plugin.get_all_bep:
-    prefix = bep["prefix"]
-    if prefix in ("/api", "/admin", "/upload"): continue
-    app.register_blueprint(bep["blueprint"], url_prefix=prefix)
+app.register_blueprint(blueprint, url_prefix="/PluginManager")
 
 @app.context_processor  
 def GlobalTemplateVariables():  
@@ -89,11 +74,8 @@ def before_request():
     g.userinfo  = api.sso_get_userinfo(g.uid)
     # 仅是重定向页面快捷定义
     g.redirect_uri = get_redirect_url()
-    #上下文扩展点之请求后(返回前)
-    before_request_hook = plugin.get_all_cep.get("before_request_hook")
-    for cep_func in before_request_hook():
-        cep_func(request=request, g=g)
     logger.access.debug("sid: {}, uid: {}, userinfo: {}".format(g.sid, g.uid, g.userinfo))
+    print app.url_map
 
 @app.after_request
 def after_request(response):
@@ -107,10 +89,6 @@ def after_request(response):
         "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
     }
     logger.access.info(data)
-    #上下文扩展点之请求后(返回前)
-    after_request_hook = plugin.get_all_cep.get("after_request_hook")
-    for cep_func in after_request_hook():
-        cep_func(request=request, response=response, access_data=data)
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response

@@ -18,16 +18,7 @@
             background-color: #f1f1f1;
         }
     </style>
-    {% if blog_show_header_include %}
-        {% for bi in blog_show_header_include() %}
-            {% include bi %}
-        {% endfor %}
-    {% endif %}
-    {% if blog_show_header_string %}
-        {% for bs in blog_show_header_string() %}
-            {{ bs|safe }}
-        {% endfor %}
-    {% endif %}
+    {{ emit_tep('blog_show_header') }}
 {% endblock %}
 
 {% block container %}

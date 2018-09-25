@@ -22,16 +22,7 @@
     <meta name="baidu-site-verification" content="IDRvu88Ko0" />
     <meta name="google-site-verification" content="h2Kbua4YStdYubtL4-tQRiX0-Mx1ANHbMt8HF8hRj4o" />
     <meta name="msvalidate.01" content="AE0CD03B6A341E25274B1AA53CBAEE98" />
-    {% if base_front_header_include %}
-        {% for hi in base_front_header_include() %}
-            {% include hi %}
-        {% endfor %}
-    {% endif %}
-    {% if base_front_header_string %}
-        {% for hs in base_front_header_string() %}
-            {{ hs|safe }}
-        {% endfor %}
-    {% endif %}
+    {{ emit_tep("base_front_header") }}
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69959525-2"></script>
 <script>
@@ -72,22 +63,13 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#" title="Sitemap" class="dropdown-toggle" data-toggle="dropdown">站点地图&nbsp;<i class="icon-sitemap icon-1x"></i></a>
+                            <a href="#" title="Resource" class="dropdown-toggle" data-toggle="dropdown">资源&nbsp;<i class="icon-heart icon-1x"></i></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('front.sitemapxml') }}" target="_blank">站点地图XML版</a></li>
-                                <li><a href="{{ url_for('front.sitemaphtml') }}">站点地图HTML版</a></li>
+                                <li><a href="https://open.saintic.com" target="_blank">诏预开放平台</a></li>
+                                <li><a href="http://docs.saintic.com" target="_blank">文档与帮助</a></li>
                             </ul>
                         </li>
-                        {% if base_front_navigation_include %}
-                            {% for ni in base_front_navigation_include() %}
-                                {% include ni %}
-                            {% endfor %}
-                        {% endif %}
-                        {% if base_front_navigation_string %}
-                            {% for ns in base_front_navigation_string() %}
-                                {{ ns|safe }}
-                            {% endfor %}
-                        {% endif %}
+                        {{ emit_tep('base_front_navigation') }}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if g.signin %}
@@ -202,8 +184,6 @@
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <p><a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=rxnbx8o5&utm_source=rxnbx8o5" target="_blank">免费领取阿里云优惠券！</a></p>
-                    <!--<p><a href="https://s.click.taobao.com/t?e=m%3D2%26s%3D4Pj66Lq%2F4KccQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAlSerte6%2Bgf5ktDeF8xE37FSwej7Ti1zHZZRgErIHXXYboC%2FVQ9%2FFUyM%2BN%2B8%2B2GrWhVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7P37PZ5d3EfkhhwnYyXLnHpDoUWJTlJsdRZujRnIpwuLGJe8N%2FwNpGw%3D%3D" target="_blank"><img src="{{ url_for('static',filename='img/ad/ecs.jpg') }}" alt="阿里云高性能服务器" title="阿里云高性能服务器" class="img-rounded"></a></p>-->
-                    <p><a href="https://promotion.aliyun.com/ntms/act/vm/aliyun-group/buy.html?group=eQ0Wwr2x4H" target="_blank">阿里云2核4G云服务器1.4折啦！！！</a></p>
                 </div>
             </div>
         </div>
@@ -217,23 +197,14 @@
     <div class="navbar-inner navbar-content-center">
         <p class="text-muted credit" style="padding: 10px;">
             Copyright &copy; 2018.&nbsp;&nbsp;SaintIC, all rights reserved.&nbsp;&nbsp;
-            <scan class="icon-envelope-alt"></scan></scan>&nbsp;<a href="mailto:{{ Email }}">{{ Author }}</a>&nbsp;&nbsp;
+            <scan class="icon-sitemap"></scan></scan>&nbsp;<a href="{{ url_for('front.sitemaphtml') }}">站点地图</a>&nbsp;&nbsp;
             <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ config.about_beian }}</a>&nbsp;&nbsp;
             <br/>
             <div id="cc-myssl-id">
                 <a href="https://www.upyun.com/?from=saintic" target="_blank" rel="nofollow" upyun=""><img src="https://img.saintic.com/misc/public/upyunlogo.png" height="49px"></a>
                 <a href="https://myssl.com/www.saintic.com?from=mysslid" target="_blank"><img src="https://static.myssl.com/res/images/myssl-id3.png" alt="" style="max-height:49px;margin:0 auto;"></a>
             </div>
-            {% if base_front_footer_include %}
-                {% for fi in base_front_footer_include() %}
-                    {% include fi %}
-                {% endfor %}
-            {% endif %}
-            {% if base_front_footer_string %}
-                {% for fs in base_front_footer_string() %}
-                    {{ fs|safe }}
-                {% endfor %}
-            {% endif %}
+            {{ emit_tep('base_front_footer') }}
         </p>
     </div>
 </nav>
@@ -245,16 +216,7 @@
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='layer/layer.js') }}"></script>
 {% block script %}{% endblock %}
-{% if base_front_script_include %}
-    {% for si in base_front_script_include() %}
-        {% include si %}
-    {% endfor %}
-{% endif %}
-{% if base_front_script_string %}
-    {% for ss in base_front_script_string() %}
-        {{ ss|safe }}
-    {% endfor %}
-{% endif %}
+{{ emit_tep('base_front_script') }}
 <script type="text/javascript">
 $(document).ready(function(){
     dropdownOpen();//调用

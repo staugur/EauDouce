@@ -77,8 +77,7 @@ class PluginDemoMain(PluginBase):
 
     def register_tep(self):
         """注册模板入口, 返回扩展点名称及扩展的代码, 其中include点必须是实际的HTML文件, string点必须是HTML代码."""
-        tep = {"base_front_navigation_include": "PluginDemo/PluginDemo.html", "base_front_footer_string": "<!--<br/><a href='', title=''>PluginDemo generate</a>-->"}
-        return tep
+        return {}
 
     def _hook(self, **kwargs):
         self.logger.debug("I am a demo for after cep, get redis all key: {}".format(self.redis.keys()))

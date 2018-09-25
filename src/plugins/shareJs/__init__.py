@@ -50,4 +50,4 @@ class shareJs(PluginBase):
     __doc__ = __description__
 
     def register_tep(self):
-        return {"blog_show_header_string": '<link rel="stylesheet" href="/static/share.js/css/share.min.css">', "blog_show_content_include": "shareJs.html"}
+        return {"blog_show_header": '<link rel="stylesheet" href="/static/share.js/css/share.min.css">', "blog_show_content": "shareJs.html"}

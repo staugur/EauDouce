@@ -57,4 +57,4 @@ class BaiduStatisticsPlugin(PluginBase):
     __doc__ = __description__
 
     def register_tep(self):
-        return {"base_front_script_include": "BaiduStatistics/BaiduStatistics.html"}
+        return {"base_front_script": "BaiduStatistics/BaiduStatistics.html"}

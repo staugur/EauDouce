@@ -16,12 +16,11 @@ from config import PLUGINS
 __name__        = "BaiduActivePush"
 __description__ = "百度主动推送(实时)插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
-__version__     = "0.1" 
+__version__     = "0.1"
 if PLUGINS["BaiduActivePush"]["enable"] in ("true", "True", True):
     __state__   = "enabled"
 else:
     __state__   = "disabled"
-
 
 def getPluginClass():
     return BaiduActivePushMain
@@ -29,4 +28,4 @@ def getPluginClass():
 class BaiduActivePushMain(PluginBase):
 
     def register_tep(self):
-        return {"blog_show_funcarea_string": "<scan id='BaiduActivePush'></scan>", "blog_show_script_include": "BaiduActivePush.html"}
+        return {"blog_show_funcarea": "<scan id='BaiduActivePush'></scan>", "blog_show_script": "BaiduActivePush.html"}

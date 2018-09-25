@@ -135,9 +135,6 @@ PLUGINS={
     "BingIncludedCheck": getenv("eaudouce_BingIncludedCheck", True),
     #必应收录检测插件
 
-    "BackupBlog": getenv("eaudouce_BackupBlog", False),
-    #备份文章插件,如果开启了又拍云存储插件,将会存储到又拍云上,否则存到本地
-
     "UpYunStorage": {
         "enable": getenv("eaudouce_UpYunStorage_enable", False),
         "bucket": getenv("eaudouce_UpYunStorage_bucket", ""),
@@ -150,14 +147,11 @@ PLUGINS={
     "LikeReward": getenv("eaudouce_LikeReward", True),
     #点赞打赏插件
 
-    "AccessCount": getenv("eaudouce_AccessCount", True),
+    "AccessCount": getenv("eaudouce_AccessCount", False),
     #访问统计插件
 
     "shareJs": getenv("eaudouce_shareJs", True),
     #社会化分享插件
-
-    "Christmas": getenv("eaudouce_Christmas", False),
-    #圣诞雪人效果
 
     "CrawlHuaban": getenv("eaudouce_CrawlHuaban", True),
     #抓取花瓣网图片

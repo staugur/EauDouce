@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>视频</title>
+  <style>
+    *{
+        padding:0px;
+        margin:0px;
+    }
+    video{
+        position: fixed;
+        right: 0px;
+        bottom: 0px;
+        min-width: 100%;
+        min-height: 100%;
+        height: auto;
+        width: auto;
+    }
+    source{
+        min-width: 100%;
+        min-height: 100%;
+        height: auto;
+        width: auto;
+    }
+  </style>
+</head>
+<body>
+    <video id="video" style="height:100%;width:100%" class="video-js vjs-big-play-centered"  controls poster="" data-setup="{}" >
+        <source id="movidesource" src="" type="video/mp4">
+    </video>
+</body>
+<script>
+    function setSrc(src){
+        document.getElementById("movidesource").src=src;
+        document.getElementById("video").load();
+        document.getElementById("video").play();
+    }
+</script>
+</html>

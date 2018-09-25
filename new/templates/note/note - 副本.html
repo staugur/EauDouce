@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>3306Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="3306blog,3306,java社区,blog">
+  <meta name="description" content="3306Blog社区前端layui开发，后端java开发，致力于分享知识与生活">
+
+  <link rel="stylesheet" href="../../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../../res/css/global.css">
+  <link href="../../res/css/animate.min.css" rel="stylesheet">
+  <script src="../../res//mods/love.js"></script>
+  
+   
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+      <img src="../../res/images/logo.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+        <li class="layui-nav-item ">
+          <a href="../index.html"><i class="layui-icon" style="font-size: 22px;">&#xe68e;</i>博客主页</a>
+        </li>
+        <li class="layui-nav-item layui-this">
+          <a href="../note/note.html"><i class="layui-icon" style="font-size: 22px;">&#xe705;</i>漫笔随谈</a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="../life/life.html"><i class="layui-icon" style="font-size: 22px;">&#xe6ed;</i>青春岁月</a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="../about/about.html"><i class="layui-icon" style="font-size: 22px;">&#xe60b;</i>关于</a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="../search/search.html" target="_blank"><i class="layui-icon" style="font-size: 22px;">&#xe615;</i>搜索</a>
+        </li>
+    </ul> 
+    
+     <ul class="layui-nav fly-nav-user">
+      
+      <!-- 未登入的状态 -->
+      <li class="layui-nav-item">
+        <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+      </li>
+      <li class="layui-nav-item layui-show-xs layui-hide-md ">
+          <a class="leftmenusswitch"><i class="layui-icon " style="font-size: 18px;color:#838383;">&#xe66b;</i></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../user/login.html">登入</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../user/regist.html">注册</a>
+      </li>
+      
+      <!-- 登入后的状态 -->
+      <!--
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">于庆辉</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：3306Blog博主"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>-->
+      
+    </ul> 
+  </div>
+</div>
+
+<!-- 隐藏菜单start -->
+<ul class="layui-nav layui-nav-tree dynamic-navigation" lay-filter="test">
+    <li class="layui-nav-item">
+      <a href="../index.html"><i class="layui-icon" style="font-size: 16px;">&#xe68e;</i>&nbsp;&nbsp;博客主页</a>
+    </li>
+    <li class="layui-nav-item layui-nav-itemed">
+      <a href="../note/note.html"><i class="layui-icon" style="font-size: 16px;">&#xe705;</i>&nbsp;&nbsp;漫笔随谈</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../life/life.html"><i class="layui-icon" style="font-size: 16px;">&#xe6ed;</i>&nbsp;&nbsp;青春岁月</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../about/about.html"><i class="layui-icon" style="font-size: 16px;">&#xe60b;</i>&nbsp;&nbsp;关于</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../search/search.html" target="_blank"><i class="layui-icon" style="font-size: 16px;">&#xe615;</i>&nbsp;&nbsp;搜索</a>
+    </li>
+</ul>
+<!-- 隐藏菜单end -->
+<div class="fly-panel fly-column">
+  <div class="layui-container">
+    <ul class="layui-clear">
+      <li class="layui-hide-xs">笔记统计：共计【<span style="color:red">20</span>】篇</li> 
+      <li class="layui-hide-xs">&nbsp;</li> 
+      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+      <li class="layui-hide-xs">&nbsp;</li> 
+      <li class="layui-hide-xs">&nbsp;&nbsp;<span class="motto animated fadeIn" style="color:red"></span></li> 
+    </ul> 
+    
+    <div class="fly-column-right layui-hide-xs animated fadeIn"> 
+      <span><i class="layui-icon" style="font-size: 16px;">&#xe60e;</i>当前时间：<span id="blog-date"></span></span> 
+    </div> 
+    <p style="text-align: center;"><span class="layui-show-xs layui-hide-md motto animated fadeIn" style="color:red;"></span></p>
+  </div>
+</div>
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md8">
+      <!-- note start -->
+      <div class="fly-panel layui-row animated fadeInUp" style="margin-bottom: 0">
+        <div class="mynote">
+          <div class="fly-panel-title fly-filter">
+            <h2 class="hometitle"><i class="layui-icon" style="font-size: 21px;">&#xe642;</i>&nbsp;个人笔记</h2>
+          </div>
+          <ul class="layui-timeline noteline">
+            <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                  <h3 onclick="javascript:shownote(this);" class="layui-timeline-title"><a><span class="layui-badge layui-bg-green">9月18日</span> js小知识积累</a></h3>
+                  <p showflag = "hide">
+                          
+                    回车键提交表单<br>
+                    $('#myform').find('input').on('keyup',function(event){<br>
+                      if(event.keyCode ==13){<br>
+                      $('myform').submit();<br>
+                      }<br>
+                      });<br>
+                      js序列化提交表单<br>
+                      function serializeForm(form){<br>
+                        var obj = {};<br>
+                        $.each(form.serializeArray(),function(index){<br>
+                          if(obj[this['name']]){<br>
+                            obj[this['name']] = obj[this['name']] + ','+this['value'];<br>
+                          } else {<br>
+                            obj[this['name']] =this['value'];<br>
+                          }<br>
+                        });<br>
+                        return obj;<br>
+                      }<br>
+                  </p>
+                </div>
+            </li>
+            <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                  <h3 onclick="javascript:shownote(this);" class="layui-timeline-title"><a ><a><span class="layui-badge layui-bg-green">9月17日</span> 冒泡排序原理及实现</a></h3>
+                  <p showflag = "hide">
+                      /*
+
+                      冒泡排序基本概念是：<br>
+                      
+                      依次比较相邻的两个数，将小数放在前面，大数放在后面。<br>
+                      
+                      即在第一趟：首先比较第1个和第2个数，将小数放前，大数放后。<br>
+                      
+                      然后比较第2个数和第3个数，将小数放前，大数放后，如此继续，<br>
+                      
+                      直至比较最后两个数，将小数放前，大数放后。至此第一趟结束，<br>
+                      
+                      将最大的数放到了最后。在第二趟：仍从第一对数开始比较<br>
+                      
+                      （因为可能由于第2个数和第3个数的交换，使得第1个数不再小于第2个数），<br>
+                      
+                      将小数放前，大数放后，一直比较到倒数第二个数（倒数第一的位置上已经是最大的），<br>
+                      
+                      第二趟结束，在倒数第二的位置上得到一个新的最大数<br>
+                      
+                      （其实在整个数列中是第二大的数）。如此下去，重复以上过程，直至最终完成排序。 */<br>
+                      public class bubbleSort {<br>
+                        public bubbleSort(){<br>
+                        int a[]={49,38,65,97,76,13,27,49,78,34,12,64,5,4,62,99,98,54,56,17,18,23};<br>
+                        
+                        int temp=0;  <br>
+                        for(int i=0;i&lta.length-1;i++){ <br>
+                          for(int j=0;j&lta.length-1-i;j++){ <br> 
+                            if(a[j]&gt;a[j+1]){  <br>
+                                temp=a[j];  <br>
+                                a[j]=a[j+1]; <br> 
+                                a[j+1]=temp; <br> 
+                            }  <br>
+                         }<br>
+                        }<br>
+                        for(int i=0;i&lta.length;i++){<br>
+                        System.out.println(a[i]);<br>
+                        } }<br>
+                        } <br>
+                  </p>
+                </div>
+            </li>
+            <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                    <div class="layui-timeline-title">过去</div>
+                </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- note end -->
+    
+    </div>
+      <div class="layui-col-md4">
+        <div class="fly-panel  animated fadeInUp">
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                  <li class="layui-this">用户中心</li>
+                  <li>网站信息</li>
+                  <li>后台管理</li>
+                </ul>
+                <div class="layui-tab-content">
+                  <div class="layui-tab-item layui-show" style="height: 280px;">
+                    <!-- 用户未登录显示 -->
+                    <div class="defaultpersion">
+                        <img class="layui-circle touxiangimg" src = "../../res/images/avatar/3.jpg">
+                        <h2 class="defaultname">于庆辉</h2>
+                        <p class="defaultinfo">Java开发工程师一枚</p>
+                        <p class="persionsite"><span><i class="iconfont icon-chengshi"></i>山东●济南</span></p>
+                        <hr>
+                        <ul class="persionresume">
+                          <li ><a onclick="skills()" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal">Skills</a></li>
+                          <li ><a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=395078618" tabindex="_blank" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm">QQ</a></li>
+                          <li ><a href="https://github.com/s2011203868" target="_blank" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger">Git</a></li>
+                          <li ><a onclick="wechat()" class="layui-btn layui-btn-sm layui-btn-radius">WX</a></li>
+                        </ul>
+                    </div>
+                    <!-- 用户登录显示 -->
+                    <!-- <div class="fly-home">
+                        <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="happyyu">
+                        <i class="iconfont icon-renzheng" title="3306Blog社区认证"></i>
+                        <h1>
+                          于庆辉
+                          <i class="iconfont icon-nan"></i>
+                          <i class="iconfont icon-nv"></i>
+                          <i class="layui-badge fly-badge-vip">VIP3</i>
+                          <span style="color:#5FB878;">（社区之光）</span>
+                          
+                        </h1>
+                      
+                        <p style="padding: 10px 0; color: #5FB878;">认证信息：博客用户</p>
+                      
+                        <p class="fly-home-info">
+                          <i class="iconfont icon-shijian"></i><span>2018-5-13 加入</span>
+                          <i class="iconfont icon-chengshi"></i><span>来自济南</span>
+                        </p>
+                      
+                        <p class="fly-home-sign">（人生仿若一场修行）</p>
+                    </div> -->
+                  </div>
+                  <div class="layui-tab-item">
+                    <ul class="fly-panel-main fly-list-static webinfo">
+                      <li>
+                        <span>网站名称：</span>3306 Blog
+                      </li>
+                      <li>
+                        <span>建站日期：</span>2018-5-14
+                      </li>
+                      <li>
+                        <span>前端支持：</span>layui-2.3
+                      </li>
+                      <li>
+                        <span>后端支持：</span>Java
+                      </li>
+                      <li>
+                        <span>运行环境：</span>腾讯云服务器 Linux CentOS6.8
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="layui-tab-item">
+                      <p><a href="../../html/admin/login.html" class="layui-btn">后台登录</a></p>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <dl class="badge-list fly-panel fly-list-one animated fadeInUp">
+            <dt class="fly-panel-title"><i class="layui-icon" style="font-size: 16px;">&#xe756;</i>&nbsp;热议排行</dt>
+              <dd >
+                <span class="layui-badge">1</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd>
+                <span class="layui-badge layui-bg-gray">2</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd >
+                <span class="layui-badge layui-bg-gray">3</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd>
+                <span class="layui-badge layui-bg-gray">4</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd >
+                <span class="layui-badge layui-bg-gray">5</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd>
+                <span class="layui-badge layui-bg-gray">6</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd >
+                <span class="layui-badge layui-bg-gray">7</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd>
+                <span class="layui-badge layui-bg-gray">8</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd >
+                <span class="layui-badge layui-bg-gray">9</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+              <dd>
+                <span class="layui-badge layui-bg-gray">10</span>&nbsp;<a href="jie/detail.html">热议文章</a>
+                <span><i class="iconfont icon-pinglun1"></i> 16</span>
+              </dd>
+            <!-- 无数据时 -->
+            <!--
+            <div class="fly-none">没有相关数据</div>
+            -->
+        </dl>
+        <dl class="badge-list fly-panel fly-list-one animated fadeInUp">
+            <dt class="fly-panel-title"><i class="layui-icon" style="font-size: 16px;">&#xe663;</i>&nbsp;推荐文章</dt>
+            <dd >
+              <span class="layui-badge">1</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd>
+              <span class="layui-badge layui-bg-gray">2</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd >
+              <span class="layui-badge layui-bg-gray">3</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd>
+              <span class="layui-badge layui-bg-gray">4</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd >
+              <span class="layui-badge layui-bg-gray">5</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd>
+              <span class="layui-badge layui-bg-gray">6</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd >
+              <span class="layui-badge layui-bg-gray">7</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd>
+              <span class="layui-badge layui-bg-gray">8</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd >
+              <span class="layui-badge layui-bg-gray">9</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <dd>
+              <span class="layui-badge layui-bg-gray">10</span>&nbsp;<a href="jie/detail.html">推荐文章</a>
+              <span><i class="iconfont icon-pinglun1"></i> 16</span>
+            </dd>
+            <!-- 无数据时 -->
+            <!--
+            <div class="fly-none">没有相关数据</div>
+            -->
+        </dl>
+        <div class="fly-panel animated fadeInUp">
+          <h3 class="fly-panel-title"><i class="layui-icon" style="font-size: 16px;">&#xe628;</i>&nbsp;发现文章</h3>
+          <ul class="fly-panel-main fly-list-static">
+            <li>
+              <a href="javascript:;" target="_blank">外部通道</a>
+            </li>
+          </ul>
+        </div>
+      <div class="fly-panel fly-rank fly-rank-reply animated fadeInUp" id="LAY_replyRank">
+        <h3 class="fly-panel-title"><i class="layui-icon" style="font-size: 16px;">&#xe63a;</i>&nbsp;回复榜</h3>
+        <dl>
+          <i class="layui-icon fly-loading">&#xe63d;</i>
+          <dd>
+            <a href="user/home.html">
+              <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>happyyu</cite><i>106次回答</i>
+            </a>
+          </dd>
+        </dl>
+      </div>
+      <div class="fly-panel fly-rank fly-rank-reply animated fadeInUp">
+        <h3 class="fly-panel-title"><i class="layui-icon" style="font-size: 16px;">&#xe66e;</i>&nbsp;标签云</h3>
+        <div class="cloud">
+          <ul>
+            <li><a href="/">个人博客</a></li>
+            <li><a href="/">web开发</a></li>
+            <li><a href="/">前端设计</a></li>
+            <li><a href="/">Html</a></li>
+            <li><a href="/">CSS3</a></li>
+            <li><a href="/">Html5+css3</a></li>
+            <li><a href="/">百度</a></li>
+            <li><a href="/">Javasript</a></li>
+            <li><a href="/">web开发</a></li>
+            <li><a href="/">前端设计</a></li>
+            <li><a href="/">Html</a></li>
+            <li><a href="/">CSS3</a></li>
+            <li><a href="/">Html5+css3</a></li>
+            <li><a href="/">百度</a></li>
+          </ul>
+        </div>
+      </div>
+    
+      <div class="fly-panel animated fadeInUp">
+        <div class="fly-panel-title">
+          <i class="layui-icon" style="font-size: 16px;">&#xe65b;</i>&nbsp;广告区域
+        </div>
+        <div class="fly-panel-main">
+          <a href="javascript:;" target="_blank" class="fly-zanzhu" time-limit="2017.09.25-2099.01.01" style="background-color: #5FB878;">虚伪以待</a>
+        </div>
+      </div>
+      
+      <div class="fly-panel fly-link">
+          <h3 class="fly-panel-title">友情链接</h3>
+          <dl class="fly-panel-main">
+            <dd><a href="https://www.oschina.net/" target="_blank">开源中国</a><dd>
+            <dd><a href="https://www.beejson.com/" target="_blank">beejson</a><dd>
+            <dd><a href="https://gitee.com/explore" target="_blank">码云</a><dd>
+            <dd><a href="https://www.csdn.net/" target="_blank">CSDN</a><dd>
+            <dd><a href="javascript:friendship()" class="fly-link">申请友链</a><dd>
+          </dl>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  <div class="fly-footer">
+    <p><a href="/" target="_blank">3306Blog 所有</a> 2018 &copy;  Design By Happyyu</p>
+    <p class="ft-copyright">鲁ICP备11002373号-1</p>
+    <p>
+      <a href="javascript:donate();">捐赠赞赏</a>
+    </p>
+  </div>
+ 
+<script src="../../res/layui/layui.js"></script>
+<script src="http://www.jq22.com/jquery/jquery-2.1.1.js"></script>
+
+<script>
+
+layui.config({
+  version: "3.0.0"
+  ,base: '../../res/mods/' 
+}).extend({
+  fly: 'index',
+ 
+}).use('fly');
+
+ //友链
+ function friendship(){
+    layer.open({
+      type: 1
+      ,title: false //不显示标题栏
+      ,closeBtn: false
+      ,area: '300px;'
+      ,shade: 0.8
+      ,id: 'firendship' //设定一个id，防止重复弹出
+      ,btn: '知道了'
+      ,btnAlign: 'c'
+      ,moveType: 1 //拖拽模式，0或者1
+      ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;"><span style="color:#3299BB;font-size:16px;">申请友链请注意以下内容</span><br><br>1、必须是长期稳定可访问的博客网站<br>2、应先将本博客友链添加至您的网站（如需提供素材可邮箱说明）<br>3、发送您的博客地址到本邮箱会第一时间添加</div>'
+      ,success: function(layero){
+        var btn = layero.find('.layui-layer-btn');
+        btn.find('.layui-layer-btn0').attr({
+          href: 'mailto:395078618@qq.com?subject=%E7%94%B3%E8%AF%B73306Blog%E5%8F%8B%E9%93%BE'
+         
+        });
+      }
+    });
+  }
+
+//显示笔记详情
+function shownote(obj){
+    layui.use('jquery',function(){
+        var $ = layui.$;
+        var currentnote = $(obj);
+        var currentp = currentnote.next();
+        currentp.toggle();
+        if(currentp.attr('showflag') ==='hide'){
+          currentp.toggle().slideDown();
+          currentp.attr('showflag','show');
+          
+        }else{
+          currentp.toggle().slideUp();
+          currentp.attr('showflag','hide');
+          
+        }
+        
+    });
+}
+
+//wechat
+function wechat(){
+    
+    var height = (window.screen.height)/2-250;
+		layui.use('layer',function(){
+			var layer = layui.layer;
+			layer.open({
+		        title: '',
+		        offset: height,
+		        shadeClose:true,
+		        type: 1,
+		        area: ['350px', '350px'], //宽高
+		        content: '<img src="../res/images/wexin.jpg">'
+		    });
+		})
+}
+//捐赠赞赏
+function donate(){
+  var height = (window.screen.height)/2-250;
+		layui.use('layer',function(){
+			var layer = layui.layer;
+			layer.open({
+		        title: '',
+		        offset: height,
+		        shadeClose:true,
+		        type: 1,
+		        area: ['350px', '350px'], //宽高
+		        content: '<img src="../res/images/donate.jpg">'
+		    });
+		})
+	}
+</script>
+</body>
+</html>

@@ -56,4 +56,4 @@ class CodeHighlighting_Highlight(PluginBase):
     __doc__ = __description__
 
     def register_tep(self):
-        return {"blog_show_header_include": "CodeHighlighting/CodeHighlighting.html"}
+        return {"blog_show_header": "CodeHighlighting/CodeHighlighting.html"}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>我的主页</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="3306blog,3306,java社区,blog">
+  <meta name="description" content="3306Blog社区前端layui开发，后端java开发，致力于分享知识与生活">
+
+  <link rel="stylesheet" href="../../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../../res/css/global.css">
+  <link href="../../res/css/animate.min.css" rel="stylesheet">
+  <script src="../../res//mods/love.js"></script>
+
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+      <img src="../../res/images/logo.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+        <li class="layui-nav-item ">
+            <a href="../index.html"><i class="layui-icon" style="font-size: 22px;">&#xe68e;</i>博客主页</a>
+          </li>
+          <li class="layui-nav-item ">
+            <a href="../note/note.html"><i class="layui-icon" style="font-size: 22px;">&#xe705;</i>漫笔随谈</a>
+          </li>
+          <li class="layui-nav-item">
+            <a href="../life/life.html"><i class="layui-icon" style="font-size: 22px;">&#xe6ed;</i>青春岁月</a>
+          </li>
+          <li class="layui-nav-item">
+            <a href="../about/about.html"><i class="layui-icon" style="font-size: 22px;">&#xe60b;</i>关于</a>
+          </li>
+          <li class="layui-nav-item">
+            <a href="../../html/search/search.html" target="_blank"><i class="layui-icon" style="font-size: 22px;">&#xe615;</i>搜索</a>
+          </li>
+    </ul> 
+    
+     <ul class="layui-nav fly-nav-user">
+      
+      <!-- 未登入的状态 -->
+      <!-- <li class="layui-nav-item">
+        <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+      </li>
+      <li class="layui-nav-item layui-show-xs layui-hide-md ">
+          <a class="leftmenusswitch"><i class="layui-icon " style="font-size: 18px;color:#838383;">&#xe66b;</i></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../user/login.html">登入</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../user/reg.html">注册</a>
+      </li> -->
+      
+      <!-- 登入后的状态 -->
+      <li class="layui-nav-item layui-show-xs layui-hide-md ">
+        <a class="leftmenusswitch"><i class="layui-icon " style="font-size: 18px;color:#838383;">&#xe66b;</i></a>
+      </li>
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">于庆辉</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：3306Blog博主"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="../user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="../user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="../user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="/logout" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+      
+    </ul> 
+  </div>
+</div>
+
+<!-- 隐藏菜单start -->
+<ul class="layui-nav layui-nav-tree dynamic-navigation" lay-filter="test">
+    <li class="layui-nav-item">
+      <a href="../index.html"><i class="layui-icon" style="font-size: 16px;">&#xe68e;</i>&nbsp;&nbsp;博客主页</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../note/note.html"><i class="layui-icon" style="font-size: 16px;">&#xe705;</i>&nbsp;&nbsp;漫笔随谈</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../life/life.html"><i class="layui-icon" style="font-size: 16px;">&#xe6ed;</i>&nbsp;&nbsp;青春岁月</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../about/about.html"><i class="layui-icon" style="font-size: 16px;">&#xe60b;</i>&nbsp;&nbsp;关于</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../../html/search/search.html" target="_blank"><i class="layui-icon" style="font-size: 16px;">&#xe615;</i>&nbsp;&nbsp;搜索</a>
+    </li>
+</ul>
+<!-- 隐藏菜单end -->
+<div class="fly-panel fly-column">
+  <div class="layui-container">
+    <ul class="layui-clear">
+      <li class="layui-hide-xs">&nbsp;&nbsp;<span class="motto animated fadeIn" style="color:red"></span></li> 
+    </ul> 
+    
+    <div class="fly-column-right layui-hide-xs animated fadeIn"> 
+      <span><i class="layui-icon" style="font-size: 16px;">&#xe60e;</i>当前时间：<span id="blog-date"></span></span> 
+    </div> 
+    <p style="text-align: center;"><span class="layui-show-xs layui-hide-md motto animated fadeIn" style="color:red;"></span></p>
+  </div>
+</div>
+
+<div class="fly-home fly-panel" style="background-image: url();">
+  <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="happyyu">
+  <i class="iconfont icon-renzheng" title="管理员认证"></i>
+  <h1>
+    于庆辉
+    <i class="iconfont icon-nan"></i>
+    <!-- <i class="iconfont icon-nv"></i>  -->
+    <i class="layui-badge fly-badge-vip">VIP3</i>
+    <!--
+    <span style="color:#c00;">（管理员）</span>
+    <span style="color:#5FB878;">（社区之光）</span>
+    <span>（该号已被封）</span>
+    -->
+  </h1>
+
+  <p style="padding: 10px 0; color: #5FB878;">认证信息：管理员</p>
+
+  <p class="fly-home-info">
+    <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">66666 飞吻</span>
+    <i class="iconfont icon-shijian"></i><span>2018-5-17 加入</span>
+    <i class="iconfont icon-chengshi"></i><span>来自济南</span>
+  </p>
+
+  <p class="fly-home-sign">（人生仿若一场修行）</p>
+
+</div>
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md6 fly-home-jie">
+      <div class="fly-panel">
+        <h3 class="fly-panel-title">于庆辉 最近的留言</h3>
+        <ul class="jie-row">
+          <li>
+            <a href="javascript:;" class="jie-title"> 这个博客开源下载</a>
+            <i>刚刚</i>
+            <em class="layui-hide-xs">1136赞/1032回复</em>
+          </li>
+          <!-- <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><i style="font-size:14px;">没有发表任何求解</i></div> -->
+        </ul>
+      </div>
+    </div>
+    
+    <div class="layui-col-md6 fly-home-da">
+      <div class="fly-panel">
+        <h3 class="fly-panel-title">于庆辉 最近的回复</h3>
+        <ul class="home-jieda">
+        <li>
+          <p>
+            <span>1分钟前</span>
+            在<a href="../detail/detail.html" target="_blank">SpringBoot内嵌Tomcat临时上传文件目录被意外删除导致异常</a>中回复：
+          </p>
+          <div class="home-dacontent">
+            这篇文章写得不错
+          </div>
+        </li>
+        <!-- <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><span>没有回答任何问题</span></div> -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fly-footer">
+    <p><a href="/" target="_blank">3306Blog 所有</a> 2018 &copy;  Design By Happyyu</p>
+    <p class="ft-copyright">鲁ICP备11002373号-1</p>
+    <p><a href="javascript:donate();">捐赠赞赏</a></p>
+</div>
+ 
+<script src="../../res/layui/layui.js"></script>
+<script>
+
+layui.config({
+  version: "3.0.0"
+  ,base: '../../res/mods/' 
+}).extend({
+  fly: 'index',
+ 
+}).use('fly');
+
+//捐赠赞赏
+function donate(){
+  var height = (window.screen.height)/2-250;
+		layui.use('layer',function(){
+			var layer = layui.layer;
+			layer.open({
+		        title: '',
+		        offset: height,
+		        shadeClose:true,
+		        type: 1,
+		        area: ['350px', '350px'], //宽高
+		        content: '<img src="../../res/images/donate.jpg">'
+		    });
+		})
+    }
+    
+   
+</script>
+
+</body>
+</html>

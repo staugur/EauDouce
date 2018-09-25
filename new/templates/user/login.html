@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>3306Blog登入</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="3306blog,3306,java社区,blog">
+  <meta name="description" content="3306Blog社区前端layui开发，后端java开发，致力于分享知识与生活">
+  <link rel="stylesheet" href="../../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../../res/css/global.css">
+  <link href="../../res/css/animate.min.css" rel="stylesheet">
+  <script src="../../res//mods/love.js"></script>
+ 
+</head>
+<body>
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+        <a class="fly-logo" href="/">
+        <img src="../../res/images/logo.png" alt="layui">
+        </a>
+        <ul class="layui-nav fly-nav layui-hide-xs">
+            <li class="layui-nav-item ">
+              <a href="../index.html"><i class="layui-icon" style="font-size: 22px;">&#xe68e;</i>博客主页</a>
+            </li>
+            <li class="layui-nav-item">
+              <a href="../note/note.html"><i class="layui-icon" style="font-size: 22px;">&#xe705;</i>漫笔随谈</a>
+            </li>
+            <li class="layui-nav-item">
+              <a href="../life/life.html"><i class="layui-icon" style="font-size: 22px;">&#xe6ed;</i>青春岁月</a>
+            </li>
+            <li class="layui-nav-item">
+              <a href="../about/about.html"><i class="layui-icon" style="font-size: 22px;">&#xe60b;</i>关于</a>
+            </li>
+            <li class="layui-nav-item">
+              <a href="../search/search.html" target="_blank"><i class="layui-icon" style="font-size: 22px;">&#xe615;</i>搜索</a>
+            </li>
+        </ul> 
+        
+        <ul class="layui-nav fly-nav-user">
+        
+        <!-- 未登入的状态 -->
+        <li class="layui-nav-item">
+            <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+        </li>
+        <li class="layui-nav-item layui-show-xs layui-hide-md ">
+            <a class="leftmenusswitch"><i class="layui-icon " style="font-size: 18px;color:#838383;">&#xe66b;</i></a>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a href="../user/login.html">登入</a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="../user/regist.html">注册</a>
+        </li>
+        
+        <!-- 登入后的状态 -->
+      <!--
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">于庆辉</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：3306Blog博主"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>-->
+        
+        </ul> 
+    </div>
+</div>
+        
+<!-- 隐藏菜单start -->
+<ul class="layui-nav layui-nav-tree dynamic-navigation" lay-filter="test">
+    <li class="layui-nav-item">
+      <a href="../index.html"><i class="layui-icon" style="font-size: 16px;">&#xe68e;</i>&nbsp;&nbsp;博客主页</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../note/note.html"><i class="layui-icon" style="font-size: 16px;">&#xe705;</i>&nbsp;&nbsp;漫笔随谈</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../life/life.html"><i class="layui-icon" style="font-size: 16px;">&#xe6ed;</i>&nbsp;&nbsp;青春岁月</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../about/about.html"><i class="layui-icon" style="font-size: 16px;">&#xe60b;</i>&nbsp;&nbsp;关于</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="../search/search.html" target="_blank"><i class="layui-icon" style="font-size: 16px;">&#xe615;</i>&nbsp;&nbsp;搜索</a>
+    </li>
+</ul>
+<!-- 隐藏菜单end -->
+
+<div class="layui-container fly-marginTop  animated fadeInUp">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title">
+        <li class="layui-this">登入</li>
+        <li><a href="../user/regist.html">注册</a></li>
+      </ul>
+      <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+        <div class="layui-tab-item layui-show">
+          <div class="layui-form layui-form-pane">
+            <form method="post">
+              <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline"style="position: relative;">
+                  <input type="text" id="L_email" name="username" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <div style="width:110px;height: 40px;position:absolute;right: 0px;top: 0px;">
+                      <select name="emailsuffix" class="emailsuffix">
+                        <option value="@qq.com">@qq.com</option>
+                        <option value="@163.com" >@163.com</option>
+                        <option value="@126.com">@126.com</option>
+                        <option value="@139.com">@139.com</option>
+                        <option value="@sina.com">@sina.com</option>
+                        <option value="@gmail.com">@gmail.com</option>
+                    </select>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                  <input type="password" id="L_pass" name="password" required lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_vercode" class="layui-form-label">验证码</label>
+                <div id="mpanel1" ></div>
+                <div class="layui-input-inline">
+                  <input type="text" id="L_vercode" name="randomcode" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">
+                  <img onclick="javascript:randomcode_refresh()" id="randomcode_img" src="/PurpleSoftBBS/fly-3.0/volidatecode/validatecode.jsp" alt="" style="cursor:pointer;width:56;height:30; align:'absMiddle'" /> 
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <button type="button" class="layui-btn" lay-filter="loginform" lay-submit>立即登录</button>
+                <span style="padding-left:20px;">
+                  <a href="forget.html">忘记密码？</a>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fly-footer">
+    <p><a href="/" target="_blank">3306Blog 所有</a> 2018 &copy;  Design By Happyyu</p>
+    <p class="ft-copyright">鲁ICP备11002373号-1</p>
+    <p><a href="javascript:donate();">捐赠赞赏</a></p>
+</div>
+ 
+<script src="../../res/layui/layui.js"></script>
+<script>
+
+layui.config({
+  version: "3.0.0"
+  ,base: '../../res/mods/' 
+}).extend({
+  fly: 'index',
+ 
+}).use('fly');
+
+//捐赠赞赏
+function donate(){
+  var height = (window.screen.height)/2-250;
+		layui.use('layer',function(){
+			var layer = layui.layer;
+			layer.open({
+		        title: '',
+		        offset: height,
+		        shadeClose:true,
+		        type: 1,
+		        area: ['350px', '350px'], //宽高
+		        content: '<img src="../../res/images/donate.jpg">'
+		    });
+		})
+    }
+    
+   
+</script>
+
+</body>
+</html>
