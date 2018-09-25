@@ -11,6 +11,7 @@ MIT
 
 ```
 Flask==0.10.1
+Flask-PluginKit>=0.1.10
 Flask-RESTful
 SpliceURL>=1.2
 MySQL-python>=1.2.3
