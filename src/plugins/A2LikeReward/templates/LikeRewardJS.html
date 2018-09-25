@@ -54,7 +54,7 @@
                 userId = result;
             {%- endif %}
             $.ajax({
-                url: "/LikeReward/?Action=has&blogId={{ blogId }}&userId=" + userId,
+                url: "/LikeReward/?Action=has&blogId={{ g.blogData.blogId }}&userId=" + userId,
                 success: function(res) {
                     if (res.has===true) {
                         //data-status=1, 已经点赞，文字为取消赞
@@ -92,7 +92,7 @@
                     $.ajax({
                         url: url,
                         type: "post",
-                        data: {blogId: "{{ blogId }}", userId: userId},
+                        data: {blogId: "{{ g.blogData.blogId }}", userId: userId},
                         success: function(res) {
                             if (res.code===0) {
                                 $('#Favor').text(statusText);

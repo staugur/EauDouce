@@ -26,6 +26,9 @@ def index():
 def blogShow(bid):
     data = g.api.blog_get_id(bid).get("data")
     if data:
+        original = True if data.get("sources") == "原创" else False
+        data.update(original=original, blogId=bid)
+        g.blogData = data
         return render_template("front/blogShow.html", blogId=bid, data=data, original=True if data.get("sources") == "原创" else False)
     else:
         return abort(404)

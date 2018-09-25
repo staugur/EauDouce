@@ -6,7 +6,7 @@ $(document).ready(function () {
         url: "{{ url_for('api.misc', action='BaiduActivePush') }}",
         method: 'POST',
         datatype: 'json',
-        data: {"pushUrl": "{{ request.base_url }}", "original": "{{ original }}"},
+        data: {"pushUrl": "{{ request.base_url }}", "original": "{{ g.blogData.original }}"},
         success: function(res) {
             console.log(res);
             if (res.success==true) {

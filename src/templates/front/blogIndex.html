@@ -96,7 +96,7 @@ blockquote {
 					</h4>
 					<h5>
 					    {#
-					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.userGo', uid=blog.author) }}" title="由 {{ blog.author }} 发布" style="color: #999">&nbsp;{{ blog.author }}</a>&nbsp;</small>
+					    <small><i class="icon-user icon-1x"></i><a href="{{ url_for('front.userGo', uid=blog.author) }}" style="color: #999">&nbsp;作者主页</a>&nbsp;</small>
 					    #}
 
                         {% if blog.catalog %}
@@ -115,9 +115,7 @@ blockquote {
 					    <small><i class="icon-calendar icon-1x"></i><scan style="color: #999">&nbsp;{{ blog.create_time }}</scan>&nbsp;</small>
 					    {% endif %}
 
-					    {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
-                        <small><i class="icon-comment-alt icon-1x"></i><a href="{{ url_for('front.blogShow', bid=blog.id) }}#SOHUCS" title="《{{ blog.title }}》 上的评论" style="color: #999">&nbsp;评论{{ g.api.misc_get_commend(blog.id).data.comments }}次</a>&nbsp;</small>
-                        {% endif -%}
+                        {{ emit_tep('blog_index_infolist', blog=blog) }}
 					</h5>
 				</div>
 			</div>

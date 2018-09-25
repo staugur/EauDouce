@@ -220,7 +220,7 @@ class BlogApiManager(ServiceBase):
 
         res   = {"msg": None, "data": [], "code": 0, "page": {}}
         LIMIT = "LIMIT " + str(limit) if limit else ""
-        sql   = "SELECT id,title,create_time,update_time,tag,author,catalog FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
+        sql   = "SELECT id,title,create_time,update_time,tag,author,catalog,comment_num FROM blog_article ORDER BY id %s %s" %(sort, LIMIT)
         logger.api.info("query single index SQL: %s" %sql)
         try:
             page = int(page)

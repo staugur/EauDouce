@@ -41,7 +41,9 @@ app = Flask(__name__)
 app.config.update(
     REDIS_URL = REDIS,
     RQ_POLL_INTERVAL = 2500,
-    PLUGINKIT_AUTHMETHOD = "BOOL"
+    PLUGINKIT_AUTHMETHOD = "BOOL",
+    PLUGINKIT_GUNICORN_ENABLED = True,
+    PLUGINKIT_GUNICORN_PROCESSNAME = 'gunicorn: master [%s]' %GLOBAL['ProcessName']
 )
 
 #初始化插件管理器(自动扫描并加载运行)
@@ -60,7 +62,7 @@ app.register_blueprint(blueprint, url_prefix="/PluginManager")
 
 @app.context_processor  
 def GlobalTemplateVariables():  
-    data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor, "TagRandomColor": TagRandomColor, "timestamp_to_timestring": timestamp_to_timestring}
+    data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor, "TagRandomColor": TagRandomColor, "timestamp_to_timestring": timestamp_to_timestring, "PLUGINS": PLUGINS}
     return data
 
 @app.before_request
@@ -75,7 +77,6 @@ def before_request():
     # 仅是重定向页面快捷定义
     g.redirect_uri = get_redirect_url()
     logger.access.debug("sid: {}, uid: {}, userinfo: {}".format(g.sid, g.uid, g.userinfo))
-    print app.url_map
 
 @app.after_request
 def after_request(response):

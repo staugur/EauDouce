@@ -12,15 +12,11 @@
             } else {
                 BaiduIncludedCheck.setAttribute("class", "text-danger");
                 BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度未收录';
-                var bp = document.createElement('script');
-                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(bp, s);
             }
         },
         error: function(error){
-                BaiduIncludedCheck.setAttribute("class", "text-danger");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件异常';
+            BaiduIncludedCheck.setAttribute("class", "text-danger");
+            BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件异常';
         }
     });
 </script>

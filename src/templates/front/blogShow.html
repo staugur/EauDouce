@@ -95,14 +95,10 @@
                         <i class="icon-calendar icon-1x"></i><scan style="color: #999" title="{{ timetext }}">&nbsp;{{ data.update_time or data.create_time }}</scan>&nbsp;
                         {% endif %}
 
-                        {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
-                        <i class="icon-comment-alt icon-1x"></i>&nbsp;评论<a href="#SOHUCS">{{ g.api.misc_get_commend(blogId).data.comments }}</a>次&nbsp;
-                        {% endif %}
-
                         {{ emit_tep('blog_show_funcarea') }}
                     </h6>
                     <hr>
-		    {{ data['content'] | safe }}
+		            {{ data['content'] | safe }}
                 </div>
                 {%- if data.get("sources") == "原创" %}
                 <p></p>
@@ -133,30 +129,12 @@
             </script>
             {% endif %}
 
-            {%- if g.plugins.ChangyanComment.enable in ('true', 'True', True) %}
-                <!-- 畅言评论框插件,PC和WAP自适应版 -->
-                <div id="SOHUCS" sid="{{ blogId }}" ></div> 
-                <script type="text/javascript"> 
-                (function(){ 
-                    var appid = '{{ g.plugins.ChangyanComment.appid }}'; 
-                    var conf = '{{ g.plugins.ChangyanComment.appkey }}'; 
-                    var width = window.innerWidth || document.documentElement.clientWidth; 
-                    if (width < 960) { 
-                        window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); 
-                </script>
-            {% endif -%}
 {% endblock %}
 
 {% block script %}
 {{ emit_tep('blog_show_script') }}
 
 <script type="text/javascript">
-$(document).ready(function() {
-    setTimeout(function(){
-        document.getElementById("feedAv").style.display="none";
-        document.getElementById('feedAv').id="feedAvBak";
-    },2000);
-});
 {% if g.username in g.api.user_get_admins().data %}
 // 设置或取消置顶文章
 function setTop(value) {

@@ -77,7 +77,7 @@ class LikeApi(PluginBase):
         if self.has(blogId, userId):
             res.update(code=0, msg="Already praised")
         else:
-            if self.check(loginStatus) and loginStatus in (0, 1):
+            if self.check(blogId) and loginStatus in (0, 1):
                 key = self.genIndexKey(blogId)
                 pipe = self.redis.pipeline()
                 pipe.sadd(key, userId)

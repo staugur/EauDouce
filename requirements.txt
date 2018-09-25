@@ -1,5 +1,5 @@
 Flask==0.10.1
-Flask-PluginKit>=0.1.9
+Flask-PluginKit>=0.1.10
 flask-multistatic
 Flask-RESTful
 SpliceURL>=1.2
