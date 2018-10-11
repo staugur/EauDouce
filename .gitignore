@@ -89,3 +89,5 @@ logs/
 
 # Rope project settings
 .ropeproject
+lextab.py
+yacctab.py

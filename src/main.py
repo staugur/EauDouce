@@ -64,7 +64,7 @@ def GlobalTemplateVariables():
     data = {"Version": __version__, "Author": __author__, "Email": __email__, "Doc": __doc__, "ChoiceColor": ChoiceColor, "TagRandomColor": TagRandomColor, "timestamp_to_timestring": timestamp_to_timestring, "PLUGINS": PLUGINS}
     return data
 
-@app.before_request
+@app.before_request_top
 def before_request():
     g.startTime = time.time()
     g.signin    = verify_sessionId(request.cookies.get("sessionId"))
