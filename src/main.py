@@ -25,8 +25,7 @@ __license__ = "MIT"
 
 import time, os.path, jinja2, sys, rq_dashboard
 from flask import request, g, render_template, redirect, make_response, url_for
-from flask_pluginkit import PluginManager, blueprint
-from flask_multistatic import MultiStaticFlask as Flask
+from flask_pluginkit import PluginManager, blueprint, Flask
 from config import GLOBAL, SSO, PLUGINS, REDIS
 from utils.tool import logger, ChoiceColor, TagRandomColor, timestamp_to_timestring
 from utils.web import verify_sessionId, analysis_sessionId, get_redirect_url
@@ -47,7 +46,7 @@ app.config.update(
 )
 
 #初始化插件管理器(自动扫描并加载运行)
-plugin = PluginManager(app, logger=logger.plugin)
+plugin = PluginManager(app, logger=logger.plugin, stpl=True)
 
 #初始化接口管理器
 api = ApiManager()

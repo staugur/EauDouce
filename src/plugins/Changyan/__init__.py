@@ -57,4 +57,4 @@ class ChangyanComment(PluginBase):
 
     def register_tep(self):
         """注册模板入口, 返回扩展点名称及扩展的代码, 其中include点必须是实际的HTML文件, string点必须是HTML代码."""
-        return {"blog_index_infolist": "Changyan/index_infolist.html", "blog_show_funcarea": "Changyan/blog_func.html", "blog_show_content": "Changyan/blog_content.html", "blog_show_script": "Changyan/blog_script.html"}
+        return {"blog_index_infolist": "Changyan/index_infolist.html", "blog_show_funcarea": "Changyan/blog_func.html", "blog_show_content": "3@Changyan/blog_content.html", "blog_show_script": "Changyan/blog_script.html"}
