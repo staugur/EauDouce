@@ -20,7 +20,7 @@ from libs.base import PluginBase
 
 #：Your plug-in name must be consistent with the plug-in directory name.
 #：你的插件名称，必须和插件目录名称等保持一致.
-__name__        = "PluginDemo"
+__plugin_name__ = "PluginDemo"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
 __description__ = "A demo"

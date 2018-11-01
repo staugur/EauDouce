@@ -18,7 +18,7 @@ from utils.tool import logger, get_current_timestamp, timestamp_after_timestamp,
 from flask import Blueprint, jsonify, request, make_response, url_for, send_from_directory
 from werkzeug import secure_filename
 
-__name__ = "CrawlHuaban"
+__plugin_name__  = "CrawlHuaban"
 __description__ = "抓取花瓣、堆糖图片并压缩提供下载"
 __author__ = "Mr.tao"
 __version__ = "0.3"

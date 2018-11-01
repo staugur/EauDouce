@@ -1,5 +1,5 @@
 Flask==0.10.1
-Flask-PluginKit>=1.2.0
+Flask-PluginKit>=2.0.0
 Flask-RESTful
 SpliceURL>=1.2
 MySQL-python>=1.2.3
@@ -15,3 +15,4 @@ uwsgi
 user_agents
 rq
 rq-dashboard
+pycrypto

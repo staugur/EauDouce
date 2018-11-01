@@ -13,7 +13,7 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 from config import PLUGINS
 
-__name__        = "BaiduIncludedCheck"
+__plugin_name__ = "BaiduIncludedCheck"
 __description__ = "检查百度是否收录某URL的插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
 __version__     = "0.1" 

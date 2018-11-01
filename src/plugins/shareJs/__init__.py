@@ -19,7 +19,7 @@ from config import PLUGINS
 
 #：Your plug-in name must be consistent with the plug-in directory name.
 #：你的插件名称，必须和插件目录名称等保持一致.
-__name__        = "shareJs"
+__plugin_name__ = "shareJs"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
 __description__ = "一键分享到微博、QQ空间、QQ好友、微信、腾讯微博、豆瓣、Facebook、Twitter、Linkedin、Google+、点点等"

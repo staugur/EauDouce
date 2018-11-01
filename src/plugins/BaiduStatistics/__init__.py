@@ -20,7 +20,7 @@ from config import PLUGINS
 
 #：Your plug-in name must be consistent with the plug-in directory name.
 #：你的插件名称，必须和插件目录名称等保持一致.
-__name__        = "BaiduStatistics"
+__plugin_name__ = "BaiduStatistics"
 #: Plugin describes information. What does it do?
 #: 插件描述信息,什么用处.
 __description__ = "百度统计插件"

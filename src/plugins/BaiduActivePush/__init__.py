@@ -13,7 +13,7 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 from config import PLUGINS
 
-__name__        = "BaiduActivePush"
+__plugin_name__ = "BaiduActivePush"
 __description__ = "百度主动推送(实时)插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
 __version__     = "0.1"

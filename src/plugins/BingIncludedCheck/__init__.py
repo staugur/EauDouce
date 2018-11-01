@@ -13,7 +13,7 @@ from __future__ import absolute_import
 from libs.base import PluginBase
 from config import PLUGINS
 
-__name__        = "BingIncludedCheck"
+__plugin_name__ = "BingIncludedCheck"
 __description__ = "检查必应是否收录博客文章的插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
 __version__     = "0.1" 

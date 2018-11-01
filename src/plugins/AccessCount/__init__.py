@@ -17,7 +17,7 @@ from utils.tool import get_today, getIpArea
 from utils.qf import Click2MySQL, Click2Redis
 from flask import Blueprint, jsonify, request, g
 
-__name__        = "AccessCount"
+__plugin_name__ = "AccessCount"
 __description__ = "IP、PV、UV统计插件"
 __author__      = "Mr.tao"
 __version__     = "0.1" 
