@@ -1,4 +1,4 @@
-Flask==0.10.1
+Flask>=0.10.1
 Flask-PluginKit>=2.0.0
 Flask-RESTful
 SpliceURL>=1.2
