@@ -68,7 +68,7 @@ class AccessCount(PluginBase):
             if request.endpoint == "front.blogShow":
                 self.asyncQueue.enqueue(Click2MySQL, data)
 
-    def register_cep(self):
+    def register_hep(self):
         return {"after_request_hook": self.Record_ip_pv}
 
     def register_tep(self):

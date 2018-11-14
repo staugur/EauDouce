@@ -82,7 +82,7 @@ class PluginDemoMain(PluginBase):
     def _hook(self, **kwargs):
         self.logger.debug("I am a demo for after cep, get redis all key: {}".format(self.redis.keys()))
 
-    def register_cep(self):
+    def register_hep(self):
         """注册上下文入口, 返回扩展点名称及执行的函数"""
         cep = {"after_request_hook": self._hook}
         return cep
