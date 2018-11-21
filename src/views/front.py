@@ -22,6 +22,10 @@ front_blueprint = Blueprint("front", __name__)
 def index():
     return render_template("front/blogIndex.html")
 
+@front_blueprint.route("/blog/special.html")
+def special():
+    return render_template("front/blogSpecial.html")
+
 @front_blueprint.route('/blog/<int:bid>.html')
 def blogShow(bid):
     data = g.api.blog_get_id(bid).get("data")
