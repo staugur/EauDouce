@@ -11,7 +11,15 @@ Page({
     motto: 'Hello ! WelCome to WeChat applet',
     islogin: false,
     userInfo: {},
-    version: app.globalData.version
+    version: app.globalData.version,
+    gzhpic: "https://blog.saintic.com/static/img/gongzhonghao.jpg"
+  },
+  previewImage: function (e) {
+    var current = e.target.dataset.src;
+    wx.previewImage({
+      current: current, // 当前显示图片的http链接
+      urls: [this.data.gzhpic,] // 需要预览的图片http链接列表
+    })
   },
   onPullDownRefresh: function () {
     wx.stopPullDownRefresh()
