@@ -606,7 +606,7 @@ class UserApiManager(ServiceBase):
     def user_get_authors(self):
         "获取作者列表"
         admins = self.user_get_admins()["data"]
-        authors = ["UHXnd78VmQ6ydcc9q4qcVX"]
+        authors = []
         return dict(code=0, msg=None, data=admins + authors)
 
     def user_update_cover(self, username, coverUrl):
