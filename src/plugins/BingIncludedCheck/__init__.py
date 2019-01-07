@@ -16,7 +16,7 @@ from config import PLUGINS
 __plugin_name__ = "BingIncludedCheck"
 __description__ = "检查必应是否收录博客文章的插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
-__version__     = "0.1" 
+__version__     = "0.1.0"
 if PLUGINS["BingIncludedCheck"] in ("true", "True", True):
     __state__   = "enabled"
 else:

@@ -30,7 +30,7 @@ __description__ = "点赞打赏组件"
 __author__      = "Mr.tao <staugur@saintic.com>"
 #: Plugin Version
 #: 插件版本
-__version__     = "0.2" 
+__version__     = "0.2.0" 
 #: Plugin Url
 #: 插件主页
 __url__         = "https://www.saintic.com"

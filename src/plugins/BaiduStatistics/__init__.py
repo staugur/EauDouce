@@ -29,7 +29,7 @@ __description__ = "百度统计插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
 #: Plugin Version
 #: 插件版本
-__version__     = "0.1" 
+__version__     = "0.1.0"
 #: Plugin Url
 #: 插件主页
 __url__         = "https://www.saintic.com"

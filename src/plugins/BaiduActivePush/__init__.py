@@ -16,7 +16,7 @@ from config import PLUGINS
 __plugin_name__ = "BaiduActivePush"
 __description__ = "百度主动推送(实时)插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
-__version__     = "0.1"
+__version__     = "0.1.0"
 if PLUGINS["BaiduActivePush"]["enable"] in ("true", "True", True):
     __state__   = "enabled"
 else:

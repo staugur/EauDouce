@@ -21,7 +21,7 @@ from werkzeug import secure_filename
 __plugin_name__  = "CrawlHuaban"
 __description__ = "抓取花瓣、堆糖图片并压缩提供下载"
 __author__ = "Mr.tao"
-__version__ = "0.3"
+__version__ = "0.3.0"
 __license__ = "MIT"
 if PLUGINS["CrawlHuaban"] in ("true", "True", True):
     __state__ = "enabled"

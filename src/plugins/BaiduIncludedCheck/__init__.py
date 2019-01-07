@@ -16,7 +16,7 @@ from config import PLUGINS
 __plugin_name__ = "BaiduIncludedCheck"
 __description__ = "检查百度是否收录某URL的插件"
 __author__      = "Mr.tao <staugur@saintic.com>"
-__version__     = "0.1" 
+__version__     = "0.1.0"
 if PLUGINS["BaiduIncludedCheck"] in ("true", "True", True):
     __state__   = "enabled"
 else:
