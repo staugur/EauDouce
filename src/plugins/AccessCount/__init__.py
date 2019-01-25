@@ -61,12 +61,8 @@ class AccessCount(PluginBase):
             "agent": request.headers.get("User-Agent"),
             "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
         }
-        if "/rqdashboard" in data.get("url") or "/static/" in data.get("url"):
-            pass
-        else:
-            self.asyncQueueLow.enqueue(Click2Redis, data, self.pvKey, self.ipKey, self.urlKey)
-            if request.endpoint == "front.blogShow":
-                self.asyncQueue.enqueue(Click2MySQL, data)
+        if request.endpoint in ("front.blogShow", "front.blogEnjoy"):
+            self.asyncQueue.enqueue(Click2MySQL, data)
 
     def register_hep(self):
         return {"after_request_hook": self.Record_ip_pv}
