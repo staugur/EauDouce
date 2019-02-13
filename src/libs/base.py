@@ -12,7 +12,7 @@
 from rq import Queue
 from redis import from_url
 from torndb import Connection
-from config import REDIS, MYSQL, PLUGINS
+from config import REDIS, MYSQL, PLUGINS, RQREDIS
 from utils.tool import ParseMySQL, logger
 
 
@@ -24,6 +24,7 @@ class ServiceBase(object):
         self.timeout= 2
         #建立redis单机或集群连接
         self.redis  = from_url(REDIS)
+        self.rqredis  = from_url(RQREDIS)
         #解析mysql配置并建立读写分离连接
         self._minfo = ParseMySQL(MYSQL)
         self._mysql = Connection(
@@ -37,9 +38,9 @@ class ServiceBase(object):
                     max_idle_time=self.timeout)
         self.mysql_read = self._mysql
         self.mysql_write= self._mysql
-        self.asyncQueue = Queue(connection=self.redis)
-        self.asyncQueueLow = Queue(name='low', connection=self.redis)
-        self.asyncQueueHigh = Queue(name='high', connection=self.redis)
+        self.asyncQueue = Queue(connection=self.rqredis)
+        self.asyncQueueLow = Queue(name='low', connection=self.rqredis)
+        self.asyncQueueHigh = Queue(name='high', connection=self.rqredis)
 
 
 class PluginBase(ServiceBase):

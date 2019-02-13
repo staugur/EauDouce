@@ -8,7 +8,7 @@ dir=$(cd $(dirname $0); pwd)
 cd $dir
 
 useRqscheduler=false
-redisurl=$(python -c "from config import REDIS;print REDIS")
+redisurl=$(python -c "from config import RQREDIS;print RQREDIS")
 pidfile1=${dir}/logs/rq.pid
 logfile1=${dir}/logs/rq.log
 pidfile2=${dir}/logs/rqscheduler.pid

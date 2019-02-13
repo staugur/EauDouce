@@ -12,10 +12,10 @@
 if __name__ == '__main__':
     import setproctitle
     from redis import from_url
-    from config import GLOBAL, REDIS
+    from config import GLOBAL, RQREDIS
     from rq import Worker, Queue, Connection
     listen = ['high', 'default', 'low']
     setproctitle.setproctitle(GLOBAL['ProcessName'] + '.rq')
-    with Connection(from_url(REDIS)):
+    with Connection(from_url(RQREDIS)):
         worker = Worker(map(Queue, listen))
         worker.work()

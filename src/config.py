@@ -54,6 +54,12 @@ REDIS=getenv("eaudouce_redis_url")
 #host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
 
 
+RQREDIS=getenv("eaudouce_rqredis_url", REDIS)
+#RQ任务队列的Redis数据库连接信息，格式：
+#redis://[:password]@host:port/db
+#host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
+
+
 # 邮箱配置段
 EMAIL = {
 
