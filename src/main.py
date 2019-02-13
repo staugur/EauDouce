@@ -26,7 +26,7 @@ __license__ = "MIT"
 import time, os.path, jinja2, sys, rq_dashboard
 from flask import request, g, render_template, redirect, make_response, url_for
 from flask_pluginkit import PluginManager, blueprint, Flask
-from config import GLOBAL, SSO, PLUGINS, REDIS
+from config import GLOBAL, SSO, PLUGINS, RQREDIS
 from utils.tool import logger, ChoiceColor, TagRandomColor, timestamp_to_timestring
 from utils.web import verify_sessionId, analysis_sessionId, get_redirect_url
 from urllib import urlencode
@@ -38,7 +38,7 @@ sys.setdefaultencoding('utf-8')
 #初始化定义application
 app = Flask(__name__)
 app.config.update(
-    REDIS_URL = REDIS,
+    REDIS_URL = RQREDIS,
     RQ_POLL_INTERVAL = 2500,
     PLUGINKIT_AUTHMETHOD = "BOOL",
     PLUGINKIT_GUNICORN_ENABLED = True,
