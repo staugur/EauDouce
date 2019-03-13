@@ -1,8 +1,9 @@
 # EauDouce
 A flask+mysql+bootstrap blog based on personal interests and hobbies.
 
-## LICENSE
-MIT
+#### 更新于2019-03-13言：
+目前更新计划较少，而代码中个性化东西太多（针对个人所有域），所以若拿来就用不适合，待普遍化更新。
+
 
 ## Environment
 > 1. Python Version: 2.7

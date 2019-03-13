@@ -1,0 +1,15 @@
+<!--gitalk评论-->
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+var gitalk = new Gitalk({
+  clientID: '{{ g.plugins.gitalk.clientId }}',
+  clientSecret: '{{ g.plugins.gitalk.clientSecret }}',
+  repo: '{{ g.plugins.gitalk.repo }}',
+  owner: '{{ g.plugins.gitalk.user }}',
+  admin: ['{{ g.plugins.gitalk.user }}'],
+  id: '{{ blogId }}',      // Ensure uniqueness and length less than 50
+  distractionFreeMode: false  // Facebook-like distraction free mode
+});
+gitalk.render('gitalk');
+</script>
+

@@ -113,7 +113,7 @@
             {{ emit_tep('blog_show_content') }}
             {%- if g.plugins.gitment.enable in ('true', 'True', True) %}
             <!--gitment评论系统-->
-            <div id="gitment"></div>
+            <p><div id="gitment"></div></p>
             <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
             <script>
                 var gitment = new Gitment({
@@ -199,7 +199,7 @@ function delBlog() {
     layer.confirm('你确定要删除此文章?', {
         btn: ['确认删除','我再想想']
     }, function(){
-        console.warn("将要删除节点"+{{ blogId }});
+        console.warn("将要删除节点"+"{{ blogId }}");
         $.ajax({
             url: "{{ url_for('api.blog', blogId=blogId) }}",
             method: 'DELETE',

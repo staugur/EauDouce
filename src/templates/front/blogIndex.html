@@ -85,8 +85,9 @@ blockquote {
                 </div>
             </div>
             <!-- 文章列表缩略 -->
-            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 8)) %}
             <h3>最新文章</h3>
+            {% set blogs = g.api.blog_get_single_index(page=request.args.get("page", 0), length=request.args.get("length", 8)) %}
+            {% if blogs.data %}
             <blockquote>
             {% for blog in blogs.data %}
 			<div class="row clearfix">
@@ -148,5 +149,6 @@ blockquote {
 			</center>
 			</nav>
 			</blockquote>
+            {% endif %}
 {% endblock %}
 

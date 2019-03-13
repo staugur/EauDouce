@@ -123,6 +123,14 @@ PLUGINS={
     },
     #gitment评论系统
 
+    "gitalk": {
+        "enable": getenv("eaudouce_gitalk_enable", False),
+        "user": getenv("eaudouce_gitalk_user", "staugur"),
+        "repo": getenv("eaudouce_gitalk_repo", "EauDouce"),
+        "clientId": getenv("eaudouce_gitalk_clientId", "clientId"),
+        "clientSecret": getenv("eaudouce_gitalk_clientSecret", "clientSecret")
+    },
+
     "BaiduStatistics": getenv("eaudouce_BaiduStatistics", False),
     #百度统计插件
 
@@ -135,10 +143,10 @@ PLUGINS={
     },
     #百度主动推送(实时)插件
 
-    "BaiduIncludedCheck": getenv("eaudouce_BaiduIncludedCheck", True),
+    "BaiduIncludedCheck": getenv("eaudouce_BaiduIncludedCheck", False),
     #百度收录检测插件
 
-    "BingIncludedCheck": getenv("eaudouce_BingIncludedCheck", True),
+    "BingIncludedCheck": getenv("eaudouce_BingIncludedCheck", False),
     #必应收录检测插件
 
     "UpYunStorage": {
@@ -150,13 +158,13 @@ PLUGINS={
     },
     #又拍云存储插件
 
-    "LikeReward": getenv("eaudouce_LikeReward", True),
+    "LikeReward": getenv("eaudouce_LikeReward", False),
     #点赞打赏插件
 
     "AccessCount": getenv("eaudouce_AccessCount", False),
     #访问统计插件
 
-    "shareJs": getenv("eaudouce_shareJs", True),
+    "shareJs": getenv("eaudouce_shareJs", False),
     #社会化分享插件
 
     "CrawlHuaban": getenv("eaudouce_CrawlHuaban", True),

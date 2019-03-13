@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `blog_article`;
 CREATE TABLE `blog_article` (
   `id` int(4) NOT NULL AUTO_INCREMENT COMMENT 'BlogId',
   `title` varchar(88) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '文章标题',
-  `content` varchar(20000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '文章',
+  `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '文章',
   `create_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '文章创建时间',
   `update_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '文章更新时间',
   `tag` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '技术' COMMENT '文章标签',
