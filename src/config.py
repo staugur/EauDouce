@@ -130,6 +130,14 @@ PLUGINS={
         "clientId": getenv("eaudouce_gitalk_clientId", "clientId"),
         "clientSecret": getenv("eaudouce_gitalk_clientSecret", "clientSecret")
     },
+    #gitalk评论系统
+
+    "valine": {
+        "enable": getenv("eaudouce_valine_enable", False),
+        "appId": getenv("eaudouce_valine_appid", "appId"),
+        "appKey": getenv("eaudouce_valine_appkey", "appKey")
+    },
+    #valine评论系统，https://valine.js.org
 
     "BaiduStatistics": getenv("eaudouce_BaiduStatistics", False),
     #百度统计插件

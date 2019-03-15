@@ -25,7 +25,7 @@ __license__ = "MIT"
 
 import time, os.path, jinja2, sys, rq_dashboard
 from flask import request, g, render_template, redirect, make_response, url_for
-from flask_pluginkit import PluginManager, blueprint, Flask
+from flask_pluginkit import PluginManager, Flask
 from config import GLOBAL, SSO, PLUGINS, RQREDIS
 from utils.tool import logger, ChoiceColor, TagRandomColor, timestamp_to_timestring
 from utils.web import verify_sessionId, analysis_sessionId, get_redirect_url
@@ -57,7 +57,6 @@ app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(upload_blueprint, url_prefix="/upload")
 app.register_blueprint(rq_dashboard.blueprint, url_prefix="/rqdashboard")
-app.register_blueprint(blueprint, url_prefix="/PluginManager")
 
 @app.context_processor  
 def GlobalTemplateVariables():  
