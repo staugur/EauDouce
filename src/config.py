@@ -22,7 +22,7 @@ GLOBAL={
     "Port": getenv("eaudouce_port", 10140),
     #监听端口.
 
-    "LogLevel": getenv("eaudouce_loglevel", "DEBUG"),
+    "LogLevel": getenv("eaudouce_loglevel", "INFO"),
     #应用日志记录级别, 依次为 DEBUG, INFO, WARNING, ERROR, CRITICAL.
 }
 
@@ -175,6 +175,4 @@ PLUGINS={
     "shareJs": getenv("eaudouce_shareJs", False),
     #社会化分享插件
 
-    "CrawlHuaban": getenv("eaudouce_CrawlHuaban", True),
-    #抓取花瓣网图片
 }
