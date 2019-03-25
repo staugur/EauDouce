@@ -214,18 +214,12 @@
 <script src='/static/js/tagscloud.js' type="text/javascript"></script>
 <script src="{{ url_for('static', filename='js/jquery-3.1.0.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jq.snow.js') }}"></script>
 <script src="{{ url_for('static', filename='layer/layer.js') }}"></script>
 {% block script %}{% endblock %}
 {{ emit_tep('base_front_script') }}
 <script type="text/javascript">
 $(document).ready(function(){
     dropdownOpen();//调用
-    $.fn.snow({ 
-            minSize: 5,
-            maxSize: 50,
-            newOn: 300
-    });
 });
 
 function dropdownOpen() {
