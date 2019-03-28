@@ -16,9 +16,6 @@
                             </div>
                             <div class="ibox-content no-padding">
                                 <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <span class="badge badge-primary">{{ g.api.user_get_list(True).data|length }}</span>用户数量
-                                    </li>
                                     <li class="list-group-item ">
                                         <span class="badge badge-info">{{ statistics.ArticleTotal }}</span> 文章数量
                                     </li>
@@ -44,7 +41,7 @@
                             <div class="ibox-content">
                                <address>
                                 <p class="text-success">
-                                   <strong>{{ config.about_awi }}</strong><br />
+                                   <strong>{{ config.about_awi or '' }}</strong><br />
                                 </p>
                                 {% if config.about_address %}
                                     <i class="fa fa-map-marker"></i>&nbsp;&nbsp;&nbsp;{{ config.about_address }}<br />
@@ -95,23 +92,6 @@
                                         <li><a href="{{ url_for('front.blogResource', resource_type='sources', resource_data=2) }}">转载</a></li>
                                         <li><a href="{{ url_for('front.blogResource', resource_type='sources', resource_data=3) }}">翻译</a></li>
                                     </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--标签云-->
-                    <div class="col-sm-4">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>标签云<span class="badge badge-danger">{{ statistics.TagTotal }}</span></h5>
-                            </div>
-                            <div class="ibox-content">
-                                <div class="row clearfix">
-                                    <div class="col-md-12 column">
-                                    {% for tag in g.api.blog_get_tags_list().data %}
-                                        <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}"><span class="label label-{{ ChoiceColor() }}">{{ tag }}<strong>&nbsp;{{ g.api.blog_get_tag_data(tag=tag).data|length }}</strong></span></a>
-                                    {% endfor %}
-                                    </div>
                                 </div>
                             </div>
                         </div>

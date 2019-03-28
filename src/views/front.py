@@ -18,9 +18,11 @@ from config import SSO
 
 front_blueprint = Blueprint("front", __name__)
 
+
 @front_blueprint.route("/")
 def index():
     return render_template("front/blogIndex.html")
+
 
 @front_blueprint.route('/blog/<int:bid>.html')
 def blogShow(bid):
@@ -33,6 +35,7 @@ def blogShow(bid):
     else:
         return abort(404)
 
+
 @front_blueprint.route('/blogEnjoy/<int:bid>.html')
 def blogEnjoy(bid):
     # 文章纯享版，全屏展示文章内容，无其他不相关
@@ -42,10 +45,12 @@ def blogEnjoy(bid):
     else:
         return abort(404)
 
+
 @front_blueprint.route("/blog/write/")
 @login_required
 def blogWrite():
     return render_template("front/blogWrite.html")
+
 
 @front_blueprint.route("/blog/edit/")
 @login_required
@@ -58,13 +63,16 @@ def blogEdit():
                 return render_template("front/blogEdit.html", blogId=blogId, data=data)
         return abort(404)
 
+
 @front_blueprint.route("/blog/resource/")
 def blogResource():
     return render_template("front/blogResource.html")
 
+
 @front_blueprint.route("/blog/search/")
 def blogSearch():
     return render_template("front/blogSearch.html")
+
 
 @front_blueprint.route("/user/go/")
 def userGo():
@@ -76,6 +84,7 @@ def userGo():
     else:
         return abort(404)
 
+
 @front_blueprint.route("/user/<domain_name>")
 def userIndex(domain_name):
     # 用户主页
@@ -85,64 +94,49 @@ def userIndex(domain_name):
     else:
         return abort(404)
 
+
 @front_blueprint.route("/user/setting/")
 @login_required
 def userSet():
     return redirect("{}/user/setting/".format(SSO["sso_server"].strip("/")))
 
+
 @front_blueprint.route("/user/ChangeAvater/")
 @login_required
 def userChangeAvater():
     return redirect("{}/user/setting/#avatar".format(SSO["sso_server"].strip("/")))
-    return render_template("front/userChangeAvater2.html")
-    return render_template("front/userChangeAvater.html")
+
 
 @front_blueprint.route("/user/ChangePassword/")
 @login_required
 def userChangePassword():
     return redirect("{}/user/setting/#pass".format(SSO["sso_server"].strip("/")))
-    return render_template("front/userChangePassword.html")
 
-@front_blueprint.route("/user/ChangeCover/")
-@login_required
-def userChangeCover():
-    return u"暂不开放"
-    return render_template("front/userChangeCover.html")
 
 @front_blueprint.route("/user/ChangeProfile/")
 @login_required
 def userChangeProfile():
     return redirect("{}/user/setting/".format(SSO["sso_server"].strip("/")))
-    return render_template("front/userChangeProfile.html")
 
-@front_blueprint.route("/robots.txt")
-def robots():
-    return """
-User-agent: *
-Disallow: 
-    """
 
 @front_blueprint.route("/sitemap.xml")
 def sitemapxml():
     resp = make_response(render_template("public/sitemap.xml"))
-    resp.headers["Content-Type"] = "application/xml"    
+    resp.headers["Content-Type"] = "application/xml"
     return resp
+
 
 @front_blueprint.route("/sitemap.html")
 def sitemaphtml():
     # 站点地图
     return render_template("public/sitemap.html")
 
-@front_blueprint.route("/BingSiteAuth.xml")
-def BingSiteAuth():
-    # Bing验证
-    return render_template("public/BingSiteAuth.xml")
 
 @front_blueprint.route("/feed/")
 def feed():
     # 订阅
     data = g.api.blog_get_all(limit=10).get("data")
-    feed = AtomFeed(g.api.get_sys_config().get("data").get("site_feedname"), feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))
+    feed = AtomFeed(g.api.get_sys_config().get("data").get("site_feedname") or "EauDouce", feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))
     for article in data:
         updated = article['update_time'][:10] if article['update_time'] else article['create_time'][:10]
         feed.add(article['title'], unicode(article['content']),
@@ -153,7 +147,3 @@ def feed():
                  updated=datetime.datetime.strptime(updated, "%Y-%m-%d"),
                  published=datetime.datetime.strptime(article['create_time'][:10], "%Y-%m-%d"))
     return feed.get_response()
-
-@front_blueprint.route("/thirds/StaticUpload/")
-def thirdPluginStaticUpload():
-    return render_template("admin/thirdPluginStaticUpload.html")

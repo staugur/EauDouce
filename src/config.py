@@ -11,22 +11,40 @@
 
 from os import getenv
 
-GLOBAL={
+GLOBAL = {
 
     "ProcessName": "EauDouce",
-    #自定义进程名.
+    # 自定义进程名.
 
     "Host": getenv("eaudouce_host", "0.0.0.0"),
-    #监听地址
+    # 监听地址
 
     "Port": getenv("eaudouce_port", 10140),
-    #监听端口.
+    # 监听端口.
 
     "LogLevel": getenv("eaudouce_loglevel", "INFO"),
-    #应用日志记录级别, 依次为 DEBUG, INFO, WARNING, ERROR, CRITICAL.
+    # 应用日志记录级别, 依次为 DEBUG, INFO, WARNING, ERROR, CRITICAL.
 }
 
 
+MYSQL = getenv("eaudouce_mysql_url")
+# MYSQL数据库连接信息
+# mysql://host:port:user:password:database?charset=&timezone=
+
+
+REDIS = getenv("eaudouce_redis_url")
+# Redis数据库连接信息，格式：
+# redis://[:password]@host:port/db
+# host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
+
+
+RQREDIS = getenv("eaudouce_rqredis_url", REDIS)
+# RQ任务队列的Redis数据库连接信息，格式：
+# redis://[:password]@host:port/db
+# host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
+
+
+# 认证配置段，需要部署github.com/staugur/passport程序
 SSO = {
 
     "app_name": getenv("eaudouce_sso_app_name", GLOBAL["ProcessName"]),
@@ -41,23 +59,6 @@ SSO = {
     "sso_server": getenv("eaudouce_sso_server", "YourPassportFQDN"),
     # Passport部署允许的完全合格域名根地址，例如作者的`https://passport.saintic.com`
 }
-
-
-MYSQL=getenv("eaudouce_mysql_url")
-#MYSQL数据库连接信息
-#mysql://host:port:user:password:database?charset=&timezone=
-
-
-REDIS=getenv("eaudouce_redis_url")
-#Redis数据库连接信息，格式：
-#redis://[:password]@host:port/db
-#host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
-
-
-RQREDIS=getenv("eaudouce_rqredis_url", REDIS)
-#RQ任务队列的Redis数据库连接信息，格式：
-#redis://[:password]@host:port/db
-#host,port必填项,如有密码,记得密码前加冒号,默认localhost:6379/0
 
 
 # 邮箱配置段
@@ -101,18 +102,18 @@ SYSTEM = {
 }
 
 
-#内置插件
-PLUGINS={
+# 内置插件
+PLUGINS = {
 
     "CodeHighlighting": getenv("eaudouce_CodeHighlighting", True),
-    #代码高亮插件
+    # 代码高亮插件
 
     "ChangyanComment": {
         "enable": getenv("eaudouce_ChangyanComment_enable", False),
         "appid": getenv("eaudouce_ChangyanComment_appid", "app_id"),
         "appkey": getenv("eaudouce_ChangyanComment_appkey", "app_key")
     },
-    #畅言评论系统
+    # 畅言评论系统
 
     "gitment": {
         "enable": getenv("eaudouce_gitment_enable", False),
@@ -121,7 +122,7 @@ PLUGINS={
         "clientId": getenv("eaudouce_gitment_clientId", "clientId"),
         "clientSecret": getenv("eaudouce_gitment_clientSecret", "clientSecret")
     },
-    #gitment评论系统
+    # gitment评论系统
 
     "gitalk": {
         "enable": getenv("eaudouce_gitalk_enable", False),
@@ -130,32 +131,32 @@ PLUGINS={
         "clientId": getenv("eaudouce_gitalk_clientId", "clientId"),
         "clientSecret": getenv("eaudouce_gitalk_clientSecret", "clientSecret")
     },
-    #gitalk评论系统
+    # gitalk评论系统
 
     "valine": {
         "enable": getenv("eaudouce_valine_enable", False),
         "appId": getenv("eaudouce_valine_appid", "appId"),
         "appKey": getenv("eaudouce_valine_appkey", "appKey")
     },
-    #valine评论系统，https://valine.js.org
+    # valine评论系统，https://valine.js.org
 
     "BaiduStatistics": getenv("eaudouce_BaiduStatistics", False),
-    #百度统计插件
+    # 百度统计插件
 
     "BaiduAutoPush": getenv("eaudouce_BaiduAutoPush", False),
-    #百度自动推送插件
-    
+    # 百度自动推送插件
+
     "BaiduActivePush": {
         "enable":  getenv("eaudouce_BaiduActivePush_enable", False),
         "callUrl": getenv("eaudouce_BaiduActivePush_callUrl", "YourCallUrl")
     },
-    #百度主动推送(实时)插件
+    # 百度主动推送(实时)插件
 
     "BaiduIncludedCheck": getenv("eaudouce_BaiduIncludedCheck", False),
-    #百度收录检测插件
+    # 百度收录检测插件
 
     "BingIncludedCheck": getenv("eaudouce_BingIncludedCheck", False),
-    #必应收录检测插件
+    # 必应收录检测插件
 
     "UpYunStorage": {
         "enable": getenv("eaudouce_UpYunStorage_enable", False),
@@ -164,15 +165,15 @@ PLUGINS={
         "password": getenv("eaudouce_UpYunStorage_password", ""),
         "dn": getenv("eaudouce_UpYunStorage_dn", "https://img.saintic.com"),
     },
-    #又拍云存储插件
+    # 又拍云存储插件
 
     "LikeReward": getenv("eaudouce_LikeReward", False),
-    #点赞打赏插件
+    # 点赞打赏插件
 
     "AccessCount": getenv("eaudouce_AccessCount", False),
-    #访问统计插件
+    # 访问统计插件
 
     "shareJs": getenv("eaudouce_shareJs", False),
-    #社会化分享插件
+    # 社会化分享插件
 
 }

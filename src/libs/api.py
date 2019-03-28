@@ -47,7 +47,7 @@ class BlogApiManager(ServiceBase):
             #res.update(data=[ blog for blog in data if q in blog["title"] ])
             res.update(data=data)
             logger.api.info(sql)
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_catalog_data(self, catalog, sort="desc", limit=None):
@@ -65,7 +65,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(data=data)
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_sources_data(self, sources, sort="desc", limit=None):
@@ -92,7 +92,7 @@ class BlogApiManager(ServiceBase):
             else:
                 res.update(data=data)
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_tag_data(self, tag, sort="desc"):
@@ -114,7 +114,7 @@ class BlogApiManager(ServiceBase):
                     tagData.append(_)
             res.update(data=tagData)
 
-        logger.api.debug(res)
+        
         return res
 
 
@@ -133,7 +133,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(data=data)
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_top_data(self, sort="desc", limit=None):
@@ -151,7 +151,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(data=[ _ for _ in data if _.get("top") in ("true", "True", True) ])
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_recommend_data(self, sort="desc", limit=None):
@@ -168,7 +168,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(data=[ _ for _ in data if _.get("recommend") in ("true", "True", True) ])
 
-        logger.api.debug(res)
+        
         return res
 
 
@@ -188,7 +188,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(data=data)
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_tags_list(self):
@@ -211,7 +211,7 @@ class BlogApiManager(ServiceBase):
             data = list(set(tags))
             res.update(data=data)
 
-        logger.api.debug(res)
+        
         return res
 
 
@@ -237,7 +237,7 @@ class BlogApiManager(ServiceBase):
             else:
                 logger.api.info("get single index, but IndexOut with page {}".format(page))
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_user_blog(self, user, sort="desc", limit=None):
@@ -255,7 +255,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(data=data)
         
-        logger.api.debug(res)
+        
         return res
 
     def blog_refresh_id_cache(self, blogId):
@@ -285,7 +285,7 @@ class BlogApiManager(ServiceBase):
                 self.redis.set(key, json.dumps(data))
                 self.redis.expire(key, 600)
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_all(self, limit=None, sort="desc"):
@@ -302,7 +302,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(data=data)
 
-        logger.api.debug(res)
+        
         return res
 
 
@@ -331,7 +331,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(msg="data in wrong format.", code=1000014)
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_update(self, **kwargs):
@@ -365,7 +365,7 @@ class BlogApiManager(ServiceBase):
             else:
                 res.update(msg="blog form error.", code=1000017)
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_delete(self, blogId):
@@ -382,7 +382,7 @@ class BlogApiManager(ServiceBase):
         else:
             res.update(success=True, msg=self.blog_refresh_id_cache(blogId))
 
-        logger.api.debug(res)
+        
         return res
 
     def blog_get_statistics(self):
@@ -393,7 +393,6 @@ class BlogApiManager(ServiceBase):
             "TagTotal": len(self.blog_get_tags_list().get("data")),
             "CommentTotal": None,
         }
-        logger.api.info(data)
         return data
 
 class MiscApiManager(ServiceBase):
@@ -415,7 +414,7 @@ class MiscApiManager(ServiceBase):
         except:
             res.update(msg="illegal parameter blogId", code=200002)
         if res['msg']:
-            logger.api.debug(res)
+            
             return res
 
         try:
@@ -429,7 +428,7 @@ class MiscApiManager(ServiceBase):
         else:
             res.update(success=True, msg=self.blog_refresh_id_cache(blogId))
 
-        logger.api.debug(res)
+        
         return res
 
     def misc_set_top(self, blogId, value="true"):
@@ -449,7 +448,7 @@ class MiscApiManager(ServiceBase):
         except:
             res.update(msg="illegal parameter blogId", code=200005)
         if res['msg']:
-            logger.api.debug(res)
+            
             return res
 
         try:
@@ -462,7 +461,7 @@ class MiscApiManager(ServiceBase):
         else:
             res.update(success=True, msg=self.blog_refresh_id_cache(blogId))
 
-        logger.api.debug(res)
+        
         return res
 
     def misc_get_commend(self, blogId):
@@ -483,18 +482,7 @@ class MiscApiManager(ServiceBase):
         else:
             res.update(msg="illegal parameter action", code=-1)
 
-        logger.api.debug(res)
-        return res
-
-    def misc_get_baiduincludedcheck(self, url):
-        """查询收录URL情况"""
-
-        res = {"code": 0, "msg": None, "Included": False}
-        if "http://" in url or "https://" in url:
-            result = BaiduIncludedCheck(url)
-            res.update(Included=True)
-
-        logger.api.debug(res)
+        
         return res
 
     def misc_BaiduActivePush(self, pushUrl, original=True):
@@ -593,6 +581,9 @@ class UserApiManager(ServiceBase):
     def user_get_admins(self):
         "获取管理员列表"
         res = {"code": 0, "msg": None, "data": []}
+
+        res.update(data=["kvem3JnuDv5wfPwTenZEeM"])
+        return res
         sql = "SELECT uid FROM user_profile WHERE is_admin=1"
         try:
             data = self.mysql_read.query(sql)
@@ -631,7 +622,7 @@ class UserApiManager(ServiceBase):
                     res.update(code=404)
         else:
             res.update(msg="Invaild uid", code=3)
-        logger.api.debug(res)
+        
         return res
 
     def user_getprofile_with_domainName(self, domainName):
@@ -651,7 +642,7 @@ class UserApiManager(ServiceBase):
                     res.update(code=404)
         else:
             res.update(msg="Invaild domain_name", code=1)
-        logger.api.debug(res)
+        
         return res
 
 class SysApiManager(ServiceBase):
@@ -671,7 +662,7 @@ class SysApiManager(ServiceBase):
         else:
             res.update(data=data)
 
-        logger.api.debug(res)
+        
         return res
 
     def post_sys_notice(self, noticeMsg):
@@ -690,7 +681,7 @@ class SysApiManager(ServiceBase):
             else:
                 res.update(data=data, success=True)
 
-        logger.api.debug(res)
+        
         return res
 
     def delete_sys_notice(self, noticeId):
@@ -703,24 +694,7 @@ class SysApiManager(ServiceBase):
             logger.api.error(e, exc_info=True)
         else:
             res.update(success=True)
-        logger.api.debug(res)
-        return res
-
-    def get_sys_config(self):
-        "查询系统配置"
-
-        res = {"code": 0, "msg": None, "data": None}
-        sql = "SELECT * FROM sys_config"
-        logger.api.info("query config data with sql: " + sql)
-        try:
-            data = self.mysql_read.get(sql)
-        except Exception,e:
-            logger.api.error(e)
-            res.update(msg="query config data error", code=400002)
-        else:
-            res.update(data=data)
-
-        logger.api.debug(res)
+        
         return res
 
     def get_sys_friendlink(self):
@@ -736,8 +710,33 @@ class SysApiManager(ServiceBase):
             res.update(msg="query friend link data error", code=400003)
         else:
             res.update(data=data)
+        return res
 
-        logger.api.debug(res)
+    def get_sys_config(self):
+        """查询系统配置"""
+
+        res = {"code": 0, "msg": None, "data": None}
+        key = "EauDouce:SysConfig"
+        try:
+            data = self.redis.hgetall(key)
+        except:
+            res.update(msg="query config data error", code=400002)
+        else:
+            res.update(data=data)
+        return res
+
+    def update_sys_configure(self, **kwargs):
+        """更新配置"""
+
+        res = {"code": 0, "msg": None, "success": False}
+        key = "EauDouce:SysConfig"
+        try:
+            self.redis.hmset(key, kwargs)
+        except Exception,e:
+            logger.api.error(e, exc_info=True)
+            res.update(msg="update configure data error")
+        else:
+            res.update(success=True)
         return res
 
     def post_sys_friendlink(self, link, title):
@@ -756,7 +755,7 @@ class SysApiManager(ServiceBase):
             else:
                 res.update(success=True)
 
-        logger.api.debug(res)
+        
         return res
 
     def delete_sys_friendlink(self, friendlinkId):
@@ -769,7 +768,7 @@ class SysApiManager(ServiceBase):
             logger.api.error(e, exc_info=True)
         else:
             res.update(success=True)
-        logger.api.debug(res)
+        
         return res
 
     def post_apply_author(self, username):
@@ -797,7 +796,6 @@ class SysApiManager(ServiceBase):
         else:
             res.update(msg="No author username", code=400005)
 
-        logger.api.debug(res)
         return res
 
     def get_apply_author(self, isActive=1):
@@ -816,24 +814,7 @@ class SysApiManager(ServiceBase):
         else:
             res.update(data=data)
 
-        logger.api.debug(res)
-        return res
-
-    def update_sys_configure(self, **kwargs):
-        """更新配置"""
-
-        data= DO(kwargs)
-        res = {"code": 0, "msg": None, "success": False}
-        sql = "UPDATE sys_config SET about_awi=%s, about_ww=%s, about_address=%s, about_phone=%s, about_email=%s, about_beian=%s, seo_keywords=%s, seo_description=%s, site_title=%s, site_feedname=%s,applet=%s"
-        try:
-            data = self.mysql_write.update(sql, data.about_awi, data.about_ww, data.about_address, data.about_phone, data.about_email, data.about_beian, data.seo_keywords, data.seo_description, data.site_title, data.site_feedname, data.applet)
-        except Exception,e:
-            logger.api.error(e, exc_info=True)
-            res.update(msg="update configure data error")
-        else:
-            res.update(success=True)
-
-        logger.api.debug(res)
+        
         return res
 
     def post_applet_users(self, **kwargs):
@@ -856,7 +837,7 @@ class SysApiManager(ServiceBase):
                 res.update(msg="Not added. May already exist.")
         else:
             res.update(msg="param error")
-        logger.api.debug(res)
+        
         return res
 
     def get_applet_users(self):

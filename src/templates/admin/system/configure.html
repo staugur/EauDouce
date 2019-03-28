@@ -47,6 +47,9 @@
                                     </div>
                                     <div class="form-group">
                                         <label>微信小程序地址</label><input type="text" placeholder="微信小程序地址" class="form-control" value="{{ config.applet }}" name="applet">
+                                   </div>
+                                    <div class="form-group">
+                                        <label>服务状态地址</label><input type="url" placeholder="服务状态地址" class="form-control" value="{{ config.status_url }}" name="status_url">
                                     </div>
                                 </form>
                     </div>
@@ -65,9 +68,8 @@ function UpdateConfigure() {
         data: $('#ConfigureForm').serialize(),
         success: function(res) {
             console.log(res);
-            if (res.success==true) {
+            if (res.success===true) {
                 layer.msg("更新配置成功！");
-                document.location.reload()
             } else {
                 layer.msg("更新配置失败！");
             }

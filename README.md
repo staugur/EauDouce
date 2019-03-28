@@ -1,6 +1,7 @@
 # EauDouce
 A flask+mysql+bootstrap blog based on personal interests and hobbies.
 
+
 #### 更新于2019-03-13言：
 目前更新计划较少，而代码中个性化东西太多（针对个人所有域），所以若拿来就用不适合，待普遍化更新。
 
@@ -8,30 +9,9 @@ A flask+mysql+bootstrap blog based on personal interests and hobbies.
 ## Environment
 > 1. Python Version: 2.7
 > 2. 框架: Flask
-> 3. 依赖包:
+> 3. 依赖包: requirements.txt
+> 4. 依赖服务: MySQL(必需) Passport(认证)
 
-```
-Flask==0.10.1
-Flask-PluginKit>=0.1.10
-Flask-RESTful
-SpliceURL>=1.2
-MySQL-python>=1.2.3
-torndb>=0.3
-requests
-beautifulsoup4
-upyun
-redis
-setproctitle
-gunicorn
-gevent
-uwsgi
-```
-> 4. 依赖服务:
-
-```
-1. MySQL(必需)
-2. Passport
-```
 
 ## Usage
 
@@ -50,22 +30,13 @@ uwsgi
 3. run:
     3.0 cd src
     3.1 python main.py               #开发环境启动
-    3.2 python -O online_gevent.py   #生产环境前台启动,采用gevent,不需要额外安装,可使用supervisor守护
-    3.3 python -O online_tornado.py  #生产环境前台启动,采用tornado,需要安装:pip install tornado,可使用supervisor守护
-    3.4 sh online_uwsgi.sh start     #生产环境后台启动,采用uwsgi,不需要额外安装,推荐使用!
-    3.5 sh online_gunicorn.sh start  #生产环境后台启动,采用gunicorn+gevent,不需要额外安装,推荐使用!
-    3.6 python super_debug.py        #性能调试模式
+    3.2 sh online_gunicorn.sh start  #生产环境后台启动,采用gunicorn+gevent,不需要额外安装,推荐使用!
+    3.3 python super_debug.py        #性能调试模式
 
 4. nginx
-
+```
 server {
     listen 80;
-    server_name yourdomainname.com www.yourdomainname.com;
-    charset utf-8;
-    access_log  /var/log/nginx/yourdomainname.access.log main;
-    rewrite ^/(.*)$ https://www.yourdomainname.com/$1 permanent;
-}
-server {
     listen 443 ssl http2;
     server_name yourdomainname.com www.yourdomainname.com;
     access_log /var/log/nginx/yourdomainname.access.log main;
@@ -120,6 +91,3 @@ server {
     }
 }
 ```
-
-## Plugin
-
