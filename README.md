@@ -16,7 +16,6 @@ A flask+mysql+bootstrap blog based on personal interests and hobbies.
 ## Usage
 
 ```
-
 0. Deploy Passport:
     Please redirect to https://github.com/staugur/passport
 
@@ -32,6 +31,7 @@ A flask+mysql+bootstrap blog based on personal interests and hobbies.
     3.1 python main.py               #开发环境启动
     3.2 sh online_gunicorn.sh start  #生产环境后台启动,采用gunicorn+gevent,不需要额外安装,推荐使用!
     3.3 python super_debug.py        #性能调试模式
+```
 
 4. nginx
 ```

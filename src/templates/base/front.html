@@ -119,9 +119,10 @@
                             <scan>微信扫一扫，手滑关注它</scan>
                             <img src="/static/img/gongzhonghao.jpg" class="img-rounded img-responsive" title="微信公众号" width="160px" height='160px'>
                         </div>
+                        {% set appletUrl = config.applet or '/static/img/applet.jpg' %}
                         <div id="tab-3" class="tab-pane fade">
                             <scan>微信扫一扫，进入小程序</scan>
-                            <img src="/static/img/applet.jpg" class="img-rounded img-responsive" title="微信小程序" width="160px" height='160px'>
+                            <img src="{{ appletUrl }}" class="img-rounded img-responsive" title="微信小程序" width="160px" height='160px'>
                         </div>
                     </div>
                 </div>
@@ -178,12 +179,12 @@
             {% if config.about_beian %}
             <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ config.about_beian }}</a>&nbsp;
             {% endif %}
-            <scan class="icon-sitemap"></scan></scan>&nbsp;<a href="{{ url_for('front.sitemaphtml') }}">站点地图</a>&nbsp;
+            <scan class="icon-sitemap text-muted"></scan></scan>&nbsp;<a href="{{ url_for('front.sitemaphtml') }}">站点地图</a>&nbsp;
             {% if config.status_url %}
-            <scan class="icon-ok-sign"></scan>&nbsp;<a href="{{ config.status_url }}" target="_blank" title="SaintIC Status">服务状态</a>&nbsp;
+            <scan class="icon-ok-sign text-success"></scan>&nbsp;<a href="{{ config.status_url }}" target="_blank" title="SaintIC Status">服务状态</a>&nbsp;
             {% endif %}
             <br/>
-            Copyright &copy; <script>document.write( new Date().getFullYear() );</script>.&nbsp;All rights reserved.&nbsp;<a href="https://github.com/staugur/EauDouce" target="_blank">Powered by EauDouce.</a>
+            Copyright &copy; <script>document.write( new Date().getFullYear() );</script>.&nbsp;All rights reserved.&nbsp;Powered by <a href="https://github.com/staugur/EauDouce" target="_blank">EauDouce.</a>
             {{ emit_tep('base_front_footer') }}
         </p>
     </div>

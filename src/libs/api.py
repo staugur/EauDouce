@@ -581,9 +581,6 @@ class UserApiManager(ServiceBase):
     def user_get_admins(self):
         "获取管理员列表"
         res = {"code": 0, "msg": None, "data": []}
-
-        res.update(data=["kvem3JnuDv5wfPwTenZEeM"])
-        return res
         sql = "SELECT uid FROM user_profile WHERE is_admin=1"
         try:
             data = self.mysql_read.query(sql)
