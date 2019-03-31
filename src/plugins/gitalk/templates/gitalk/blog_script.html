@@ -7,7 +7,7 @@ var gitalk = new Gitalk({
   repo: '{{ g.plugins.gitalk.repo }}',
   owner: '{{ g.plugins.gitalk.user }}',
   admin: ['{{ g.plugins.gitalk.user }}'],
-  id: '{{ blogId }}',      // Ensure uniqueness and length less than 50
+  id: '{{ g.blogData.blogId }}',      // Ensure uniqueness and length less than 50
   distractionFreeMode: false  // Facebook-like distraction free mode
 });
 gitalk.render('gitalk');

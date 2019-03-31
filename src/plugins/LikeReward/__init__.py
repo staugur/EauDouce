@@ -194,7 +194,7 @@ class LikeRewardMain(PluginBase):
     __doc__ = __description__
 
     def register_tep(self):
-        return {"blog_show_content": "2@LikeReward.html", "blog_show_script": "LikeRewardJS.html"}
+        return {"blog_show_content": "0@LikeReward.html", "blog_show_script": "LikeRewardJS.html"}
 
     def register_bep(self):
         """注册蓝图入口, 返回蓝图路由前缀及蓝图名称"""
