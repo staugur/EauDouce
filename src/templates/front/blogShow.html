@@ -104,13 +104,14 @@
                 <p></p>
                 <div class="alert alert-success alert-dismissible" role="alert">
                     <b>版权声明</b>：<br />
-                    &nbsp;&nbsp;&nbsp;&nbsp;本文为原创文章，由 {{ g.api.get_sys_config().data.about_awi }} 创作和发表，遵循<a href="https://creativecommons.org/licenses/by-nc-nd/2.5/cn/" target="_blank">CC BY-NC-ND 2.5</a>许可！<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;本文为原创文章，由 {{ g.api.get_sys_config().data.about_awi }} 创作和发表，遵循<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank">CC BY-NC-ND 4.0</a>许可！<br />
                     &nbsp;&nbsp;&nbsp;&nbsp;本文标题是：{{ data['title'] }}， 本文来源地址：<a href="{{ request.base_url }}" class="alert-link">{{ request.base_url }}</a>
                 </div>
                 {% endif -%}
             </article>
             <p></p>
             {{ emit_tep('blog_show_content') }}
+            {{ emit_tep('valine_content') }}
             {%- if g.plugins.gitment.enable in ('true', 'True', True) %}
             <!--gitment评论系统-->
             <p><div id="gitment"></div></p>
@@ -133,6 +134,7 @@
 
 {% block script %}
 {{ emit_tep('blog_show_script') }}
+{{ emit_tep('valine_script') }}
 
 <script type="text/javascript">
 {% if g.username in g.api.user_get_admins().data %}

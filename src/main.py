@@ -42,11 +42,16 @@ app.config.update(
     RQ_POLL_INTERVAL = 2500,
     PLUGINKIT_AUTHMETHOD = "BOOL",
     PLUGINKIT_GUNICORN_ENABLED = True,
-    PLUGINKIT_GUNICORN_PROCESSNAME = 'gunicorn: master [%s]' %GLOBAL['ProcessName']
+    PLUGINKIT_GUNICORN_PROCESSNAME = 'gunicorn: master [%s]' %GLOBAL['ProcessName'],
+    PLUGINKIT_VALINE_APPID=PLUGINS["valine"]["appId"],
+    PLUGINKIT_VALINE_APPKEY=PLUGINS["valine"]["appKey"]
 )
 
 #初始化插件管理器(自动扫描并加载运行)
-plugin = PluginManager(app, logger=logger.plugin, stpl=True)
+plugin_packages = []
+if PLUGINS["valine"]["enable"] in ("true", True, "True"):
+    plugin_packages.append("flask_pluginkit_valine")
+plugin = PluginManager(app, logger=logger.plugin, stpl=True, plugin_packages=plugin_packages)
 
 #初始化接口管理器
 api = ApiManager()
