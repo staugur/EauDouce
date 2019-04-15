@@ -156,7 +156,7 @@ class WechatApplet(Resource):
 class NovelView(Resource):
     """小说接口"""
 
-    @sign.signature_required
+    #@sign.signature_required
     def get(self):
         res = dict(code=-1)
         Action = request.args.get("Action")
@@ -165,12 +165,15 @@ class NovelView(Resource):
         elif Action == "getChapters":
             book_id = request.args.get("bood_id")
             res = g.api.novel_get_chapters(book_id)
+        elif Action == "getChapterDetail":
+            chapter_id = request.args.get("chapter_id")
+            res = g.api.novel_get_chapter_detail(chapter_id)
         return res
 
     @apilogin_required
     def post(self):
         res = dict(code=-1)
-        if not g.uid in g.api.user_get_admins()["data"]
+        if not g.uid in g.api.user_get_admins()["data"]:
             res.update(msg="Administrator privileges are required")
             return res
         Action = request.args.get("Action")

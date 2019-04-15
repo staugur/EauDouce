@@ -890,7 +890,7 @@ class NovelApiManager(ServiceBase):
         return res
 
     def novel_refresh_chapters(self, book_id):
-        key = "EauDouce:novel:%s" %book_id
+        key = "EauDouce:novel:chapters:%s" %book_id
         return self.redis.delete(key)
 
     def novel_refresh_books(self):
@@ -925,16 +925,16 @@ class NovelApiManager(ServiceBase):
         return res
 
     def novel_get_chapters(self, book_id):
-        """获取一本小说所有章节"""
+        """获取一本小说所有章节列表，不包含内容"""
         res = dict(code=1, msg=None)
         if book_id:
-            key = "EauDouce:novel:%s" %book_id
+            key = "EauDouce:novel:chapters:%s" %book_id
             try:
                 data = json.loads(self.redis.get(key))
                 if not data:
                     raise
             except:
-                sql = "SELECT chapter_id,title,content,word_count,ctime FROM novel_chapters WHERE book_id=%s"
+                sql = "SELECT chapter_id,title,word_count,ctime FROM novel_chapters WHERE book_id=%s"
                 try:
                     data = self.mysql_read.query(sql, book_id)
                 except Exception as e:
@@ -955,6 +955,36 @@ class NovelApiManager(ServiceBase):
             res.update(msg="Param error")
         return res
 
+    def novel_get_chapter_detail(self, chapter_id):
+        """获取章节内容"""
+        res = dict(code=1, msg=None)
+        if chapter_id:
+            key = "EauDouce:novel:chapter:%s" %chapter_id
+            try:
+                data = json.loads(self.redis.get(key))
+                if not data:
+                    raise
+            except:
+                sql = "SELECT book_id,chapter_id,title,word_count,content,ctime FROM novel_chapters WHERE chapter_id=%s"
+                try:
+                    data = self.mysql_read.get(sql, chapter_id)
+                except Exception as e:
+                    res.update(msg=str(e))
+                else:
+                    res.update(code=0, data=data)
+                    if data:
+                        pipe = self.redis.pipeline()
+                        pipe.set(key, json.dumps(data))
+                        pipe.expire(key, 3600*24)
+                        try:
+                            pipe.execute()
+                        except:
+                            pass
+            else:
+                res.update(code=0, data=data)
+        else:
+            res.update(msg="Param error")
+        return res
 
 class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager, NovelApiManager):
     pass
