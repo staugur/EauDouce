@@ -9,7 +9,7 @@
     :license: MIT, see LICENSE for more details.
 """
 
-import os, re, requests, hashlib, datetime, random, upyun, time, hmac
+import os, re, requests, hashlib, datetime, random, upyun, time, hmac, string
 from uuid import uuid4
 from log import Logger
 from base64 import b32encode
@@ -239,3 +239,26 @@ def make_zipfile(zip_filename, zip_path, exclude=[]):
         return zip_filename if os.path.isabs(zip_filename) else os.path.join(os.getcwd(), zip_filename)
     else:
         raise TypeError
+
+def str_count(str):
+    '''找出字符串中的中英文、空格、数字、标点符号个数'''
+    count_en = count_dg = count_sp = count_zh = count_pu = 0
+
+    for s in str:
+        # 英文
+        if s in string.ascii_letters:
+            count_en += 1
+        # 数字
+        elif s.isdigit():
+            count_dg += 1
+        # 空格
+        elif s.isspace():
+            count_sp += 1
+        # 中文
+        elif s.isalpha():
+            count_zh += 1
+        # 特殊字符
+        else:
+            count_pu += 1
+    return sum([count_en, count_dg, count_sp, count_zh, count_pu])
+

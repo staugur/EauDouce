@@ -127,3 +127,12 @@ def admin_login_required(f):
         else:
             return abort(404)
     return decorated_function
+
+
+def apilogin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not g.signin:
+            return jsonify(dfr(dict(msg="Authentication failed or no permission to access", code=1)))
+        return f(*args, **kwargs)
+    return decorated_function

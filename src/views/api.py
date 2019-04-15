@@ -15,6 +15,7 @@ from flask import request, g, Blueprint, abort
 from flask_restful import Api, Resource
 from utils.tool import logger
 from utils.Signature import Signature
+from utils.web import apilogin_required
 
 sign = Signature()
 
@@ -152,9 +153,44 @@ class WechatApplet(Resource):
             limit  = request.args.get('limit', None)
             return g.api.blog_get_top_data(sort, limit)
 
+class NovelView(Resource):
+    """小说接口"""
+
+    @sign.signature_required
+    def get(self):
+        res = dict(code=-1)
+        Action = request.args.get("Action")
+        if Action == "getBooks":
+            res = g.api.novel_get_books()
+        elif Action == "getChapters":
+            book_id = request.args.get("bood_id")
+            res = g.api.novel_get_chapters(book_id)
+        return res
+
+    @apilogin_required
+    def post(self):
+        res = dict(code=-1)
+        if not g.uid in g.api.user_get_admins()["data"]
+            res.update(msg="Administrator privileges are required")
+            return res
+        Action = request.args.get("Action")
+        if Action == "addBook":
+            name = request.form.get("name")
+            summary = request.form.get("summary")
+            cover = request.form.get("cover")
+            link = request.form.get("link") or ""
+            res = g.api.novel_post_book(name, summary, cover, link)
+        elif Action == "addChapter":
+            book_id = request.form.get("bood_id")
+            title = request.form.get("title")
+            content = request.form.get("content")
+            res = g.api.novel_post_chapter(book_id, title, content)
+        return res
+
 api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)
 api.add_resource(Blog, '/blog', '/blog/', endpoint='blog')
 api.add_resource(Misc, '/misc', '/misc/', endpoint='misc')
 api.add_resource(Sys, '/sys', '/sys/', endpoint='sys')
 api.add_resource(WechatApplet, '/wechatapplet', '/wechatapplet/', endpoint='wechatapplet')
+api.add_resource(NovelView, '/novel', '/novel/', endpoint='novel')

@@ -12,7 +12,7 @@
 import requests, sys, json
 from config import PLUGINS
 from torndb import IntegrityError
-from utils.tool import logger, get_today, ListEqualSplit, md5, DO, user_pat, sql_safestring_check
+from utils.tool import logger, get_today, ListEqualSplit, md5, DO, user_pat, sql_safestring_check, get_current_timestamp, str_count
 from .base import ServiceBase
 
 
@@ -851,5 +851,110 @@ class SysApiManager(ServiceBase):
         sql = "SELECT id,url,agent,method,ip,status_code,referer,isp,browserType,browserDevice,browserOs,browserFamily FROM blog_clicklog ORDER BY id DESC LIMIT 100"
         return self.mysql_read.query(sql)
 
-class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager):
+class NovelApiManager(ServiceBase):
+
+    def novel_post_book(self, name, summary, cover, link=''):
+        """创建一本小说"""
+        res = dict(code=1, msg=None)
+        if name and summary and cover:
+            sql = "INSERT INTO novel_books (book_id,name,summary,cover,ctime,link) VALUES (%s,%s,%s,%s,%s,%s)"
+            try:
+                book_id = md5(name)
+                self.mysql_write.insert(sql, book_id, name, summary, cover, get_current_timestamp(), link)
+            except Exception as e:
+                res.update(msg=str(e))
+            else:
+                res.update(code=0, book_id=book_id)
+                self.novel_refresh_books()
+        else:
+            res.update(msg="Param error")
+        return res
+
+    def novel_post_chapter(self, book_id, title, content):
+        """小说上传新章节"""
+        res = dict(code=1, msg=None)
+        if book_id and title and content:
+            if isinstance(content, str):
+                content = content.decode("utf8")
+            word_count = str_count(content)
+            sql = "INSERT INTO novel_chapters (book_id,title,content,word_count,ctime) VALUES (%s,%s,%s,%s,%s)"
+            try:
+                self.mysql_write.insert(sql, book_id, title, content, word_count, get_current_timestamp())
+            except Exception as e:
+                res.update(msg=str(e))
+            else:
+                res.update(code=0)
+                self.novel_refresh_chapters(book_id)
+        else:
+            res.update(msg="Param error")
+        return res
+
+    def novel_refresh_chapters(self, book_id):
+        key = "EauDouce:novel:%s" %book_id
+        return self.redis.delete(key)
+
+    def novel_refresh_books(self):
+        key = "EauDouce:novels"
+        return self.redis.delete(key)
+
+    def novel_get_books(self):
+        res = dict(code=1, msg=None)
+        key = "EauDouce:novels"
+        try:
+            data = json.loads(self.redis.get(key))
+            if not data:
+                raise
+        except:
+            sql = "SELECT book_id,name,summary,cover,link,ctime FROM novel_books"
+            try:
+                data = self.mysql_read.query(sql)
+            except Exception as e:
+                res.update(msg=str(e))
+            else:
+                res.update(code=0, data=data)
+                if data:
+                    pipe = self.redis.pipeline()
+                    pipe.set(key, json.dumps(data))
+                    pipe.expire(key, 3600*24)
+                    try:
+                        pipe.execute()
+                    except:
+                        pass
+        else:
+            res.update(code=0, data=data)
+        return res
+
+    def novel_get_chapters(self, book_id):
+        """获取一本小说所有章节"""
+        res = dict(code=1, msg=None)
+        if book_id:
+            key = "EauDouce:novel:%s" %book_id
+            try:
+                data = json.loads(self.redis.get(key))
+                if not data:
+                    raise
+            except:
+                sql = "SELECT chapter_id,title,content,word_count,ctime FROM novel_chapters WHERE book_id=%s"
+                try:
+                    data = self.mysql_read.query(sql, book_id)
+                except Exception as e:
+                    res.update(msg=str(e))
+                else:
+                    res.update(code=0, data=data)
+                    if data:
+                        pipe = self.redis.pipeline()
+                        pipe.set(key, json.dumps(data))
+                        pipe.expire(key, 3600*24)
+                        try:
+                            pipe.execute()
+                        except:
+                            pass
+            else:
+                res.update(code=0, data=data)
+        else:
+            res.update(msg="Param error")
+        return res
+
+
+class ApiManager(BlogApiManager, MiscApiManager, UserApiManager, SysApiManager, NovelApiManager):
     pass
