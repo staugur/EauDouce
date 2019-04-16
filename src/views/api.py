@@ -162,8 +162,12 @@ class NovelView(Resource):
         Action = request.args.get("Action")
         if Action == "getBooks":
             res = g.api.novel_get_books()
+        elif Action == "getBookInfo":
+            book_id = request.args.get("book_id")
+            get_chapters = request.args.get("get_chapters")
+            res = g.api.novel_get_book_info(book_id, get_chapters)
         elif Action == "getChapters":
-            book_id = request.args.get("bood_id")
+            book_id = request.args.get("book_id")
             res = g.api.novel_get_chapters(book_id)
         elif Action == "getChapterDetail":
             chapter_id = request.args.get("chapter_id")

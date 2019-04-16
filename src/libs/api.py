@@ -853,6 +853,8 @@ class SysApiManager(ServiceBase):
 
 class NovelApiManager(ServiceBase):
 
+    enable_cache = False
+
     def novel_post_book(self, name, summary, cover, link=''):
         """创建一本小说"""
         res = dict(code=1, msg=None)
@@ -898,9 +900,12 @@ class NovelApiManager(ServiceBase):
         return self.redis.delete(key)
 
     def novel_get_books(self):
+        """获取所有小说信息"""
         res = dict(code=1, msg=None)
         key = "EauDouce:novels"
         try:
+            if self.enable_cache is False:
+                raise
             data = json.loads(self.redis.get(key))
             if not data:
                 raise
@@ -912,7 +917,7 @@ class NovelApiManager(ServiceBase):
                 res.update(msg=str(e))
             else:
                 res.update(code=0, data=data)
-                if data:
+                if data and self.enable_cache is True:
                     pipe = self.redis.pipeline()
                     pipe.set(key, json.dumps(data))
                     pipe.expire(key, 3600*24)
@@ -924,12 +929,39 @@ class NovelApiManager(ServiceBase):
             res.update(code=0, data=data)
         return res
 
+    def novel_get_book_info(self, book_id, get_chapters=False):
+        """获取单个小说的信息"""
+        if book_id:
+            res = self.novel_get_books()
+            if res["code"] == 0:
+                data = None
+                for i in res.pop("data"):
+                    if i["book_id"] == book_id:
+                        data = i
+                if data:
+                    res.update(data=data, code=0)
+                    if get_chapters in ("true", "True", True, "1", 1):
+                        _res = self.novel_get_chapters(book_id)
+                        if _res["code"] == 0:
+                            chapters = _res["data"]
+                            res["data"]["chapters"] = chapters
+                        else:
+                            res["data"]["chapters"] = []
+                            res["msg"] = "query chapters failed"
+                else:
+                    res.update(code=1, msg="Not found such book_id")
+        else:
+            res = dict(code=1, msg="param error")
+        return res
+
     def novel_get_chapters(self, book_id):
         """获取一本小说所有章节列表，不包含内容"""
         res = dict(code=1, msg=None)
         if book_id:
             key = "EauDouce:novel:chapters:%s" %book_id
             try:
+                if self.enable_cache is False:
+                    raise
                 data = json.loads(self.redis.get(key))
                 if not data:
                     raise
@@ -941,7 +973,7 @@ class NovelApiManager(ServiceBase):
                     res.update(msg=str(e))
                 else:
                     res.update(code=0, data=data)
-                    if data:
+                    if data and self.enable_cache is True:
                         pipe = self.redis.pipeline()
                         pipe.set(key, json.dumps(data))
                         pipe.expire(key, 3600*24)
@@ -953,6 +985,36 @@ class NovelApiManager(ServiceBase):
                 res.update(code=0, data=data)
         else:
             res.update(msg="Param error")
+        if res["code"] == 0:
+            # 遍历计算每个章节的上一章、下一章
+            data = sorted(res["data"], key=lambda x:x['chapter_id'], reverse=False)
+            newData = []
+            def get_prev_next(index, _type):
+                """根据index获取下一个索引的章节id，"""
+                if index == 0:
+                    if _type == "prev":
+                       return 0
+                try:
+                    if _type == "prev":
+                        index -= 1
+                    elif _type == "next":
+                        index += 1
+                    else:
+                        raise ValueError("Invalid _type")
+                    _data = data[index]
+                except IndexError:
+                    # 无法获取索引时，可能是第一章也可能是最后一章，返回0表示两种情况
+                    return 0
+                else:
+                    # 正常章节id，大于0的值
+                    return _data["chapter_id"]
+            for i,d in enumerate(data):
+                # p是prev即上一章，n是next即下一章
+                p = get_prev_next(i, "prev")
+                n = get_prev_next(i, "next")
+                d.update(prev=p, next=n)
+                newData.append(d)
+            res.update(data=newData)
         return res
 
     def novel_get_chapter_detail(self, chapter_id):
@@ -961,6 +1023,8 @@ class NovelApiManager(ServiceBase):
         if chapter_id:
             key = "EauDouce:novel:chapter:%s" %chapter_id
             try:
+                if self.enable_cache is False:
+                    raise
                 data = json.loads(self.redis.get(key))
                 if not data:
                     raise
@@ -972,7 +1036,7 @@ class NovelApiManager(ServiceBase):
                     res.update(msg=str(e))
                 else:
                     res.update(code=0, data=data)
-                    if data:
+                    if data and self.enable_cache is True:
                         pipe = self.redis.pipeline()
                         pipe.set(key, json.dumps(data))
                         pipe.expire(key, 3600*24)

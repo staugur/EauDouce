@@ -1,0 +1,25 @@
+@host = http://blog.dev.vip/api/novel/
+
+### getBooks
+GET {{host}} HTTP/1.1
+    ?Action=getBooks
+
+
+### getBookInfo
+GET {{host}} HTTP/1.1
+    ?Action=getBookInfo
+    &book_id=7b0fdf127ced366001bb939e8f36e1e5
+    &get_chapters=true
+
+
+### getChapters
+GET {{host}} HTTP/1.1
+    ?Action=getChapters
+    &book_id=7b0fdf127ced366001bb939e8f36e1e5
+
+
+### getChapterDetail
+GET {{host}} HTTP/1.1
+    ?Action=getChapterDetail
+    &chapter_id=1
+
