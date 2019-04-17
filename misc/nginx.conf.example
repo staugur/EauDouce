@@ -8,7 +8,7 @@ server {
         access_log off;
     }
     location ^~ /read {
-        alias /EauDouce/novel/;
+        alias /EauDouce/read/;
         index index.html;
     }
     location / {

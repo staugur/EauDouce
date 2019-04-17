@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>书架 - SaintIC</title>
+    <link rel="stylesheet" href="css/bulma.min.css">
+    <link href="https://img.saintic.com/cdn/images/favicon-32.png" rel="icon" type="image/x-icon" />
+    <link href="https://img.saintic.com/cdn/images/favicon-32.png" rel="shortcut icon" type="image/x-icon" />
+</head>
+
+<body>
+    <nav class="navbar is-transparent">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="javascript:;">
+                <img src="/static/img/logo.png" height="28px">
+            </a>
+            <a class="navbar-item" href="https://blog.saintic.com">
+                博客
+            </a>
+            <a class="navbar-item" href="https://open.saintic.com">
+                诏预
+            </a>
+        </div>
+    </nav>
+    <section class="section">
+        <div class="container">
+            <div class="columns" id="books_list">
+                <!--demo
+                <div class="column is-4">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image">
+                                <img src="https://static.saintic.com/novel/xianfan_cover.jpg">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                                <div class="content">
+                                    <b>标题</b>
+                                </div>
+                            <div class="content">
+                                混沌未分天地乱，茫茫渺渺无人见。自从先圣破鸿蒙，开辟从兹清浊辨。
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <a href="#" class="card-footer-item">访问原文</a>
+                            <a href="#" class="card-footer-item">立即阅读</a>
+                        </footer>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+    </section>
+    <script src="js/zepto.min.js"></script>
+    <script src="js/md5.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        (function () {
+            "use strict";
+
+            $.get(API_URL + Util.make_url({ Action: "getBooks" }), function (res) {
+                if (res.code === 0) {
+                    var data = res.data, html = '';
+                    for (var i in data) {
+                        var d = data[i];
+                        if (d.link) {
+                            var link_html = '<a href="' + d.link + '" class="card-footer-item has-text-info" target="_blank">访问原文</a>';
+                        } else {
+                            var link_html = '';
+                        }
+                        html += '<div class="column is-4"><div class="card"><div class="card-image"><figure class="image"><img src="' + d.cover + '"></figure></div><div class="card-content"><div class="content"><b>' + d.name + '</b></div><div class="content">' + d.summary + '</div></div><footer class="card-footer">' + link_html + '<a href="detail.html?book_id=' + d.book_id + '" class="card-footer-item has-text-success">立即阅读</a><a class="card-footer-item has-text-primary" href="catalog.html?book_id=' + d.book_id + '">目录详情</a></footer></div></div>';
+                    }
+                    $("#books_list").html(html);
+                }
+            });
+
+        })();
+    </script>
+
+</body>
+
+</html>

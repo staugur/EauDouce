@@ -853,7 +853,7 @@ class SysApiManager(ServiceBase):
 
 class NovelApiManager(ServiceBase):
 
-    enable_cache = False
+    enable_cache = True
 
     def novel_post_book(self, name, summary, cover, link=''):
         """创建一本小说"""
@@ -929,7 +929,7 @@ class NovelApiManager(ServiceBase):
             res.update(code=0, data=data)
         return res
 
-    def novel_get_book_info(self, book_id, get_chapters=False):
+    def novel_get_book_info(self, book_id, get_chapters=False, sort_chapters="asc"):
         """获取单个小说的信息"""
         if book_id:
             res = self.novel_get_books()
@@ -941,7 +941,7 @@ class NovelApiManager(ServiceBase):
                 if data:
                     res.update(data=data, code=0)
                     if get_chapters in ("true", "True", True, "1", 1):
-                        _res = self.novel_get_chapters(book_id)
+                        _res = self.novel_get_chapters(book_id, sort=sort_chapters)
                         if _res["code"] == 0:
                             chapters = _res["data"]
                             res["data"]["chapters"] = chapters
@@ -954,7 +954,7 @@ class NovelApiManager(ServiceBase):
             res = dict(code=1, msg="param error")
         return res
 
-    def novel_get_chapters(self, book_id):
+    def novel_get_chapters(self, book_id, sort="asc"):
         """获取一本小说所有章节列表，不包含内容"""
         res = dict(code=1, msg=None)
         if book_id:
@@ -987,7 +987,7 @@ class NovelApiManager(ServiceBase):
             res.update(msg="Param error")
         if res["code"] == 0:
             # 遍历计算每个章节的上一章、下一章
-            data = sorted(res["data"], key=lambda x:x['chapter_id'], reverse=False)
+            data = sorted(res["data"], key=lambda x:x['chapter_id'], reverse=False if sort == "asc" else True)
             newData = []
             def get_prev_next(index, _type):
                 """根据index获取下一个索引的章节id，"""

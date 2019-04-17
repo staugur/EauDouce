@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>目录 - SaintIC</title>
+    <link rel="stylesheet" href="css/bulma.min.css">
+    <link href="https://img.saintic.com/cdn/images/favicon-32.png" rel="icon" type="image/x-icon" />
+    <link href="https://img.saintic.com/cdn/images/favicon-32.png" rel="shortcut icon" type="image/x-icon" />
+</head>
+
+<body>
+    <nav class="navbar is-transparent">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="javascript:;">
+                <img src="/static/img/logo.png" height="28px">
+            </a>
+            <a class="navbar-item" href="https://blog.saintic.com">
+                博客
+            </a>
+            <a class="navbar-item" href="https://open.saintic.com">
+                诏预
+            </a>
+            <a class="navbar-item" href="/read/">
+                书架
+            </a>
+        </div>
+    </nav>
+    <section class="section">
+        <div class="container">
+            <div class="columns is-mobile">
+                <div class="column">
+                    <figure class="image is-128x128">
+                        <img alt="封面" id="book_cover">
+                    </figure>
+                </div>
+                <div class="column">
+                    <div class="content">
+                        <h1 class="title">
+                            <scan id="book_name"></scan>
+                        </h1>
+                        <div class="field is-grouped is-grouped-multiline">
+                            <div class="control">
+                                <div class="tags has-addons">
+                                    <span class="tag is-dark">作者</span>
+                                    <span class="tag is-success" id="book_author"></span>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="tags has-addons">
+                                    <span class="tag is-dark">原文</span>
+                                    <span class="tag is-primary" id="book_link"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p id="book_summary"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="box">
+        <div class="container">
+            <div class="content">
+                <button class="button is-small" id="sort-btn-desc">倒序</button>
+                <button class="button is-small" id="sort-btn-asc">正序</button>
+                <a class="button is-small" id="book_last_chapter">最近阅读</a>
+                <p>
+                <span class="tag is-dark">以下是所有章节：</span>
+                <ul class="datalist" style="list-style-type:none;" id="book_chapters"></ul>
+                </p>
+            </div>
+        </div>
+    </section>
+    <script src="js/zepto.min.js"></script>
+    <script src="js/md5.min.js"></script>
+    <script src="js/timeago.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        (function () {
+            "use strict";
+
+            var book_id = Util.getUrlQuery("book_id");
+            if (!book_id) {
+                alert("阅读书籍参数错误，即将跳转到书架。");
+                location.href = '/read/';
+                return;
+            }
+            var last_chapter_id = Util.StorageGetter(book_id + '_last_chapter');
+            var last_read_link = last_chapter_id ? ("&chapter_id=" + last_chapter_id) : "";
+
+            $.get(API_URL + Util.make_url({ Action: "getBookInfo", get_chapters: true, sort: "desc", book_id: book_id }), function (res) {
+                if (res.code === 0) {
+                    var data = res.data, html = '';
+                    $("#book_cover").attr("src", data.cover);
+                    $("#book_name").text(data.name);
+                    $("#book_author").text(data.author || "保密");
+                    $("#book_link").html(data.link ? "<a class='has-text-white' target='_blank' href='" + data.link + "'>点击访问</a>" : "保密");
+                    $("#book_summary").text(data.summary);
+                    $("#book_last_chapter").attr("href", "detail.html?book_id=" + book_id + last_read_link);
+                    for (var i in data.chapters) {
+                        var d = data.chapters[i];
+                        html += [
+                            '<li class="item"><span class="item-name"><a href="detail.html?book_id=',
+                            book_id,
+                            '&chapter_id=',
+                            d.chapter_id,
+                            '"><div class="tags has-addons"><span class="tag is-dark">发布于<i class="needs_timeago_rendered" datetime="' + Util.formatUnixtimestamp(d.ctime) + '"></i>',
+                            '</span><span class="tag is-light">',
+                            d.title,
+                            '</span></div></a></span><span class="item-count" style="display:none">', d.chapter_id, '</span></li>'
+                        ].join("");
+                    }
+                    $("#book_chapters").html(html);
+                    //渲染实时显示时间
+                    var nodes = document.querySelectorAll('.needs_timeago_rendered');
+                    timeago().render(nodes, 'zh_CN');
+                }
+            });
+
+            /**
+             * 对list排序
+             * @param {boolean} flag     [正逆序标记]
+             * @param {JQ dom} $domlist     [参与排序的列表]
+             * @return {JQ dom}      [返回重新排序过的列表]
+             */
+            var sortDom = function (flag, $domlist) {
+                var $item = $domlist.find('.item');
+                var $newList = Array.prototype.sort.call($item, function (a, b) {
+                    return flag ? ($(a).find('.item-count').html() - 0) - ($(b).find('.item-count').html() - 0) : ($(b).find('.item-count').html() - 0) - ($(a).find('.item-count').html() - 0)
+                });
+                return $newList;
+            }
+            $('#sort-btn-desc').click(function () {
+                var $domlist = $('.datalist');
+                var $result = sortDom(false, $domlist);
+                $('.datalist').html($result);
+            });
+            $('#sort-btn-asc').click(function () {
+                var $domlist = $('.datalist');
+                var $result = sortDom(true, $domlist);
+                $('.datalist').html($result);
+            });
+        })();
+    </script>
+
+</body>
+
+</html>

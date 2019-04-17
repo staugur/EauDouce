@@ -13,7 +13,7 @@
     http://flask.pocoo.org/docs/0.10/styleguide/#comments
 
     :copyright: (c) 2017 by Mr.tao.
-    :license: MIT, see LICENSE for more details.
+    :license: BSD 3-Clause, see LICENSE for more details.
 """
 
 __author__  = "Mr.tao"
@@ -21,7 +21,7 @@ __email__   = "staugur@saintic.com"
 __doc__     = "A flask+mysql+bootstrap blog based on personal interests and hobbies."
 __date__    = "2017-03-26"
 __version__ = "0.0.1"
-__license__ = "MIT"
+__license__ = "BSD 3-Clause License"
 
 import time, os.path, jinja2, sys, rq_dashboard
 from flask import request, g, render_template, redirect, make_response, url_for
