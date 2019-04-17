@@ -41,8 +41,8 @@ class Signature(object):
         if len(str(req_timestamp)) == 10:
             req_timestamp = int(req_timestamp)
             now_timestamp = get_current_timestamp()
-            logger.sys.debug("req_timestamp: {}, now_timestamp: {}, req_timestamp <= now_timestamp: {}, 30s: {}".format(req_timestamp, now_timestamp, req_timestamp <= now_timestamp, req_timestamp + self._timestamp_expiration >= now_timestamp))
-            if req_timestamp <= now_timestamp and req_timestamp + self._timestamp_expiration >= now_timestamp:
+            logger.sys.info("req_timestamp: {}, now_timestamp: {}, req_timestamp <= now_timestamp: {}, 30s: {}".format(req_timestamp, now_timestamp, req_timestamp <= now_timestamp, req_timestamp + self._timestamp_expiration >= now_timestamp))
+            if req_timestamp - self._timestamp_expiration <= now_timestamp and req_timestamp + self._timestamp_expiration >= now_timestamp:
                 return True
         return False
 
