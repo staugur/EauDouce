@@ -13,8 +13,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
-    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+    <link href="https://img.saintic.com/cdn/images/favicon-32.png" rel="icon" type="image/x-icon" />
+    <link href="https://img.saintic.com/cdn/images/favicon-32.png" rel="shortcut icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link rel="alternate" type="application/atom+xml" title="{{ config.site_feedname }}" href="{{ url_for('front.feed') }}">
     {% block head %}{% endblock %}
@@ -48,6 +48,14 @@
                                 <li><a href="{{ url_for('front.blogResource', resource_type='sources', resource_data=3) }}">翻译</a></li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                                <a href="#" title="Novels" class="dropdown-toggle" data-toggle="dropdown">唔，小说&nbsp;<i class="icon-book icon-1x"></i></a>
+                                <ul class="dropdown-menu">
+                                    {% for d in g.api.novel_get_books().data or [] %}
+                                    <li><a href="/read/catalog.html?book_id={{ d.book_id}}">{{ d.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
                         {{ emit_tep('base_front_navigation') }}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

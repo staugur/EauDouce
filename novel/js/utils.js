@@ -6,8 +6,8 @@
 
 var API_URL = "/api/novel/?";
 var version = "v1";
-var accesskey_id = "accesskey_id";
-var accesskey_secret = "accesskey_secret";
+var accesskey_id = "U2JpQXBp";
+var accesskey_secret = "GBRDOOBSGIZGIZBZHE2TINJYGZQTKY3B";
 
 var Util = (function () {
     var prefix = 'eaudouce_';

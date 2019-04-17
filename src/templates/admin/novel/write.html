@@ -1,0 +1,45 @@
+{% extends "base/admin.html" %}
+
+{% block title %}发布章节{% endblock %}
+
+{% block content %}
+<form class="form-horizontal" id="form" action="{{ url_for('api.novel', Action='addChapter') }}" method="POST">
+    <div class="form-group">
+        <input type="submit" id="submit" class="btn btn-success" value="发布" />
+    </div>
+    <div class="form-group">
+        <select class="form-control" id="book_id" name="book_id" required>
+            <option value="">请选择书籍</option>
+            {% set data = g.api.novel_get_books().data or [] %}
+            {% for d in data %}
+            <option value="{{ d.book_id }}">{{ d.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="text" id="title" name="title" placeholder="文章标题" required />
+    </div>
+    <div class="form-group">
+        <textarea class="form-control" id="content" name="content" placeholder="文章内容" rows="23" required></textarea>
+    </div>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+$('#form').on('submit', function(){
+    $("#submit").attr('disabled','disabled');
+    var data = $("#form").serialize();
+    $.post("{{ url_for('api.novel', Action='addChapter') }}", data, function (res) {
+        if (res.code===0) {
+            layer.msg("发布成功", {icon:1});
+        } else {
+            layer.msg("发布失败", {icon:2});
+            $("#submit").removeAttr("disabled");
+        }
+    }, "json");
+    //event.preventDefault(); //阻止form表单默认提交
+    return false;
+});
+</script>
+{% endblock %}

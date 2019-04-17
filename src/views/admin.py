@@ -87,3 +87,8 @@ def system_friendlink():
 @admin_login_required
 def system_clicklog():
     return render_template("admin/system/clicklog.html")
+
+@admin_blueprint.route("/novel/write/")
+@admin_login_required
+def novel_write():
+    return render_template("admin/novel/write.html")

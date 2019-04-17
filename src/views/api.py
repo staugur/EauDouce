@@ -190,7 +190,7 @@ class NovelView(Resource):
             link = request.form.get("link") or ""
             res = g.api.novel_post_book(name, summary, cover, link)
         elif Action == "addChapter":
-            book_id = request.form.get("bood_id")
+            book_id = request.form.get("book_id")
             title = request.form.get("title")
             content = request.form.get("content")
             res = g.api.novel_post_chapter(book_id, title, content)
