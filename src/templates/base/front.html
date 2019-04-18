@@ -49,7 +49,7 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                                <a href="#" title="Novels" class="dropdown-toggle" data-toggle="dropdown">唔，小说&nbsp;<i class="icon-book icon-1x"></i></a>
+                                <a href="/read/" title="Novels" class="dropdown-toggle" data-toggle="dropdown">唔，小说&nbsp;<i class="icon-book icon-1x"></i></a>
                                 <ul class="dropdown-menu">
                                     {% for d in g.api.novel_get_books().data or [] %}
                                     <li><a href="/read/catalog.html?book_id={{ d.book_id}}">{{ d.name }}</a></li>
