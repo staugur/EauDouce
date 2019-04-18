@@ -32,7 +32,9 @@ $('#form').on('submit', function(){
     var data = $("#form").serialize();
     $.post("{{ url_for('api.novel', Action='addChapter') }}", data, function (res) {
         if (res.code===0) {
-            layer.msg("发布成功", {icon:1});
+            layer.msg("发布成功", {icon:1}, function() {
+                location.reload();
+            });
         } else {
             layer.msg("发布失败", {icon:2});
             $("#submit").removeAttr("disabled");
