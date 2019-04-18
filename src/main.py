@@ -20,7 +20,7 @@ __author__  = "Mr.tao"
 __email__   = "staugur@saintic.com"
 __doc__     = "A flask+mysql+bootstrap blog based on personal interests and hobbies."
 __date__    = "2017-03-26"
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 __license__ = "BSD 3-Clause License"
 
 import time, os.path, jinja2, sys, rq_dashboard
@@ -42,14 +42,12 @@ app.config.update(
     RQ_POLL_INTERVAL = 2500,
     PLUGINKIT_AUTHMETHOD = "BOOL",
     PLUGINKIT_GUNICORN_ENABLED = True,
-    PLUGINKIT_GUNICORN_PROCESSNAME = 'gunicorn: master [%s]' %GLOBAL['ProcessName'],
-    PLUGINKIT_VALINE_APPID=PLUGINS["valine"]["appId"],
-    PLUGINKIT_VALINE_APPKEY=PLUGINS["valine"]["appKey"]
+    PLUGINKIT_GUNICORN_PROCESSNAME = 'gunicorn: master [%s]' %GLOBAL['ProcessName']
 )
 
 #初始化插件管理器(自动扫描并加载运行)
 plugin_packages = []
-if PLUGINS["valine"]["enable"] in ("true", True, "True"):
+if PLUGINS["Valine"]["enable"] in ("true", True, "True"):
     plugin_packages.append("flask_pluginkit_valine")
 plugin = PluginManager(app, logger=logger.plugin, stpl=True, plugin_packages=plugin_packages)
 

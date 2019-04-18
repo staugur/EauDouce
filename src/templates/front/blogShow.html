@@ -19,10 +19,6 @@
         }
     </style>
     {{ emit_tep('blog_show_header') }}
-    {%- if g.plugins.gitment.enable in ('true', 'True', True) %}
-    <!--gitment评论系统-->
-    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-    {% endif %}
 {% endblock %}
 
 {% block PathNavigation %}
@@ -112,23 +108,6 @@
             <p></p>
             {{ emit_tep('blog_show_content') }}
             {{ emit_tep('valine_content') }}
-            {%- if g.plugins.gitment.enable in ('true', 'True', True) %}
-            <!--gitment评论系统-->
-            <p><div id="gitment"></div></p>
-            <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-            <script>
-                var gitment = new Gitment({
-                    id: '{{ blogId }}', // 可选。默认为 location.href
-                    owner: '{{ g.plugins.gitment.user }}',
-                    repo: '{{ g.plugins.gitment.repo }}',
-                    oauth: {
-                        client_id: '{{ g.plugins.gitment.clientId }}',
-                        client_secret: '{{ g.plugins.gitment.clientSecret }}',
-                    },
-                })
-                gitment.render('gitment')
-            </script>
-            {% endif %}
 
 {% endblock %}
 

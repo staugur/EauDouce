@@ -115,15 +115,6 @@ PLUGINS = {
     },
     # 畅言评论系统
 
-    "gitment": {
-        "enable": getenv("eaudouce_gitment_enable", False),
-        "user": getenv("eaudouce_gitment_user", "staugur"),
-        "repo": getenv("eaudouce_gitment_repo", "EauDouce"),
-        "clientId": getenv("eaudouce_gitment_clientId", "clientId"),
-        "clientSecret": getenv("eaudouce_gitment_clientSecret", "clientSecret")
-    },
-    # gitment评论系统
-
     "gitalk": {
         "enable": getenv("eaudouce_gitalk_enable", False),
         "user": getenv("eaudouce_gitalk_user", "staugur"),
@@ -133,10 +124,10 @@ PLUGINS = {
     },
     # gitalk评论系统
 
-    "valine": {
-        "enable": getenv("eaudouce_valine_enable", False),
-        "appId": getenv("eaudouce_valine_appid", "appId"),
-        "appKey": getenv("eaudouce_valine_appkey", "appKey")
+   "Valine": {
+       "enable": getenv("eaudouce_valine_enable", False),
+       "PLUGINKIT_VALINE_APPID": getenv("eaudouce_valine_appid", "appId"),
+       "PLUGINKIT_VALINE_APPKEY": getenv("eaudouce_valine_appkey", "appKey"),
     },
     # valine评论系统，https://valine.js.org
 

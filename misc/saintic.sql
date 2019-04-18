@@ -84,24 +84,6 @@ CREATE TABLE `blog_clicklog` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for sys_config
--- ----------------------------
-DROP TABLE IF EXISTS `sys_config`;
-CREATE TABLE `sys_config` (
-  `about_awi` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '一句话介绍本站',
-  `about_ww` varchar(140) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '站长的话',
-  `about_address` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '地址',
-  `about_phone` char(11) DEFAULT NULL COMMENT '手机号',
-  `about_email` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '邮件',
-  `about_beian` varchar(30) DEFAULT NULL,
-  `seo_keywords` varchar(20) DEFAULT NULL,
-  `seo_description` varchar(100) DEFAULT NULL,
-  `site_title` varchar(30) DEFAULT NULL COMMENT '站点后缀标题',
-  `site_feedname` varchar(15) NOT NULL DEFAULT '' COMMENT 'feed订阅源名称',
-  `applet` varchar(300) DEFAULT NULL COMMENT '微信小程序码链接'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
 -- Table structure for sys_friendlink
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_friendlink`;
@@ -138,6 +120,11 @@ CREATE TABLE `novel_books` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of novel_books
+-- ----------------------------
+INSERT INTO `novel_books` VALUES ('1', '7b0fdf127ced366001bb939e8f36e1e5', '仙反', '混沌未分天地乱，茫茫渺渺无人见。自从先圣破鸿蒙，开辟从兹清浊辨。', 'https://static.saintic.com/novel/xianfan_cover.jpg', '1555510260', '');
+
+-- ----------------------------
 -- Table structure for novel_chapters
 -- ----------------------------
 DROP TABLE IF EXISTS `novel_chapters`;
@@ -151,4 +138,4 @@ CREATE TABLE `novel_chapters` (
   `mtime` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`chapter_id`),
   KEY `book_id` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

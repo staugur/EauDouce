@@ -1,4 +1,4 @@
-@host = http://blog.dev.vip/api/novel/
+@host = https://blog.saintic.com/api/novel/
 
 ### getBooks
 GET {{host}} HTTP/1.1
