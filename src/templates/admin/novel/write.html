@@ -20,7 +20,10 @@
         <input class="form-control" type="text" id="title" name="title" placeholder="文章标题" required />
     </div>
     <div class="form-group">
-        <textarea class="form-control" id="content" name="content" placeholder="文章内容" rows="23" required></textarea>
+        <textarea class="form-control" id="content" name="content" placeholder="文章内容" rows="23" required onkeyup="wordStatic(this);"></textarea>
+    </div>
+    <div class="form-group">
+        您已输入<span id="num" class="text-success">0</span>字！
     </div>
 </form>
 {% endblock %}
@@ -43,5 +46,17 @@ $('#form').on('submit', function(){
     //event.preventDefault(); //阻止form表单默认提交
     return false;
 });
+function wordStatic(input) {
+        // 获取要显示已经输入字数文本框对象
+        var content = document.getElementById('num');
+        if (content && input) {
+            // 获取输入框输入内容长度并更新到界面
+            var value = input.value;
+            // 将换行符不计算为单词数
+            value = value.replace(/\n|\r/gi,"");
+            // 更新计数
+            content .innerText = value.length;
+        }
+}
 </script>
 {% endblock %}
