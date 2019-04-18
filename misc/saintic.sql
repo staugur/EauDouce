@@ -122,3 +122,33 @@ CREATE TABLE `sys_notice` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- ----------------------------
+-- Table structure for novel_books
+-- ----------------------------
+DROP TABLE IF EXISTS `novel_books`;
+CREATE TABLE `novel_books` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `book_id` char(32) NOT NULL COMMENT '书名name的md5值',
+  `name` varchar(50) NOT NULL,
+  `summary` varchar(300) NOT NULL,
+  `cover` varchar(100) NOT NULL,
+  `ctime` int(10) unsigned NOT NULL,
+  `link` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for novel_chapters
+-- ----------------------------
+DROP TABLE IF EXISTS `novel_chapters`;
+CREATE TABLE `novel_chapters` (
+  `chapter_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `book_id` char(32) CHARACTER SET latin1 NOT NULL,
+  `title` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `content` longtext CHARACTER SET utf8 NOT NULL,
+  `word_count` int(11) unsigned NOT NULL DEFAULT '0',
+  `ctime` int(10) unsigned NOT NULL,
+  `mtime` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`chapter_id`),
+  KEY `book_id` (`book_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

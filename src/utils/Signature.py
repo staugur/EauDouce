@@ -39,6 +39,7 @@ class Signature(object):
         @pram req_timestamp str,int: 请求参数中的时间戳(10位)
         """
         if len(str(req_timestamp)) == 10:
+            return True
             req_timestamp = int(req_timestamp)
             now_timestamp = get_current_timestamp()
             logger.sys.info("req_timestamp: {}, now_timestamp: {}, req_timestamp <= now_timestamp: {}, 30s: {}".format(req_timestamp, now_timestamp, req_timestamp <= now_timestamp, req_timestamp + self._timestamp_expiration >= now_timestamp))
