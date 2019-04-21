@@ -1023,6 +1023,10 @@ class NovelApiManager(ServiceBase):
         if chapter_id:
             key = "EauDouce:novel:chapter:%s" %chapter_id
             try:
+                self.redis.hincrby("EauDouce:novel:chapters:pv", chapter_id, 1)
+            except:
+                pass
+            try:
                 if self.enable_cache is False:
                     raise
                 data = json.loads(self.redis.get(key))
