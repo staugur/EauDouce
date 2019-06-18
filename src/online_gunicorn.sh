@@ -17,7 +17,7 @@ fi
 host=$(python -c "from config import GLOBAL;print GLOBAL['Host']")
 port=$(python -c "from config import GLOBAL;print GLOBAL['Port']")
 procname=$(python -c "from config import GLOBAL;print GLOBAL['ProcessName']")
-cpu_count=$[$(cat /proc/cpuinfo | grep "processor" | wc -l)*2]
+cpu_count=$(cat /proc/cpuinfo | grep "processor" | wc -l)
 [ -d ${dir}/logs ] || mkdir -p ${dir}/logs
 logfile=${dir}/logs/gunicorn.log
 pidfile=${dir}/logs/${procname}.pid
@@ -37,7 +37,7 @@ function Monthly2Number() {
         Nov) echo 11;;
         Dec) echo 12;;
         *)   exit;;
-  esac
+    esac
 }
 
 case $1 in

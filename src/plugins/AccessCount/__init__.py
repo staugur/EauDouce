@@ -61,8 +61,10 @@ class AccessCount(PluginBase):
             "agent": request.headers.get("User-Agent"),
             "TimeInterval": "%0.2fs" %float(time.time() - g.startTime)
         }
-        if request.endpoint in ("front.blogShow", "front.blogEnjoy"):
+        if request.endpoint in ("front.blogShow", "front.blogEnjoy") and data['status_code'] == 200:
             self.asyncQueue.enqueue(Click2MySQL, data)
+        # pv
+        pb.redis.hincrby(self.pvKey, get_today("%Y%m%d"), 1)
 
     def register_hep(self):
         return {"after_request_hook": self.Record_ip_pv}
