@@ -486,7 +486,7 @@ class MiscApiManager(ServiceBase):
         return res
 
     def misc_BaiduActivePush(self, pushUrl, original=True):
-        """百度主动推送(实时)接口提交链接，每个链接3次提交机会，超过后不允许提交
+        """百度主动推送(实时)接口提交链接，每个链接10次提交机会，超过后不允许提交
         @param pushUrl str: 提交的链接
         @param original bool: 是否原创
         """
@@ -496,7 +496,7 @@ class MiscApiManager(ServiceBase):
         callUrl = callUrl + "&type=original" if original else callUrl
         pushTimes = int(self.redis.hget(key, pushUrl) or 0)
         logger.api.debug("pushUrl: {}, original: {}, pushTimes: {}, check: {}".format(pushUrl, original, pushTimes, 0 <= pushTimes <= 3))
-        if 0 <= pushTimes <= 3:
+        if 0 <= pushTimes <= 10:
             try:
                 data = requests.post(url=callUrl, data=pushUrl, timeout=3, headers={"User-Agent": "BaiduActivePush/www.saintic.com"}).json()
             except Exception,e:

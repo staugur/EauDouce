@@ -124,10 +124,10 @@ PLUGINS = {
     },
     # gitalk评论系统
 
-   "Valine": {
-       "enable": getenv("eaudouce_valine_enable", False),
-       "PLUGINKIT_VALINE_APPID": getenv("eaudouce_valine_appid", "appId"),
-       "PLUGINKIT_VALINE_APPKEY": getenv("eaudouce_valine_appkey", "appKey"),
+    "Valine": {
+        "enable": getenv("eaudouce_valine_enable", False),
+        "PLUGINKIT_VALINE_APPID": getenv("eaudouce_valine_appid", "appId"),
+        "PLUGINKIT_VALINE_APPKEY": getenv("eaudouce_valine_appkey", "appKey"),
     },
     # valine评论系统，https://valine.js.org
 
