@@ -135,7 +135,7 @@ def sitemaphtml():
 @front_blueprint.route("/feed/")
 def feed():
     # 订阅
-    data = g.api.blog_get_all(limit=10).get("data")
+    data = g.api.blog_get_all(limit=5).get("data")
     feed = AtomFeed(g.api.get_sys_config().get("data").get("site_feedname") or "EauDouce", feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))
     for article in data:
         updated = article['update_time'][:10] if article['update_time'] else article['create_time'][:10]
