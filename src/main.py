@@ -40,9 +40,6 @@ app = Flask(__name__)
 app.config.update(
     REDIS_URL = RQREDIS,
     RQ_POLL_INTERVAL = 2500,
-    PLUGINKIT_AUTHMETHOD = "BOOL",
-    PLUGINKIT_GUNICORN_ENABLED = True,
-    PLUGINKIT_GUNICORN_PROCESSNAME = 'gunicorn: master [%s]' %GLOBAL['ProcessName']
 )
 
 #初始化插件管理器(自动扫描并加载运行)
