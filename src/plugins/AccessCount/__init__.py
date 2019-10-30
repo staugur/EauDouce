@@ -44,11 +44,12 @@ def getPluginClass():
 class AccessCount(PluginBase):
     """记录与统计每天访问数据"""
 
-    def Record_ip_pv(self, **kwargs):
+    def Record_ip_pv(self, *args, **kwargs):
         """ 记录ip、ip """
+        resp = kwargs.get("response") or args[0]
         pvKey = "EauDouce:AccessCount:pv:hash"
         pipe = pb.redis.pipeline()
-        if request.endpoint in ("front.blogShow", "front.blogEnjoy") and kwargs['response'].status_code == 200:
+        if request.endpoint in ("front.blogShow", "front.blogEnjoy") and resp.status_code == 200:
             pipe.hincrby(blogPvKey, request.path.split("/")[-1], 1)
         # pv
         pipe.hincrby(pvKey, get_today("%Y%m%d"), 1)
