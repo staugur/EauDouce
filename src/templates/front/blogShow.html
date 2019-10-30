@@ -94,7 +94,7 @@
                         {{ emit_tep('blog_show_funcarea') }}
                     </h6>
                     <hr>
-		            {{ data['content'] | safe }}
+                    {{ data['content'] | safe }}
                 </div>
                 {%- if data.get("sources") == "原创" %}
                 <p></p>
@@ -108,12 +108,14 @@
             <p></p>
             {{ emit_tep('blog_show_content') }}
             {{ emit_tep('valine_content') }}
+            {{ emit_tep('isso_content', title=data.title) }}
 
 {% endblock %}
 
 {% block script %}
 {{ emit_tep('blog_show_script') }}
 {{ emit_tep('valine_script') }}
+{{ emit_tep('isso_script') }}
 
 <script type="text/javascript">
 {% if g.username in g.api.user_get_admins().data %}

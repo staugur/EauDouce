@@ -40,12 +40,15 @@ app = Flask(__name__)
 app.config.update(
     REDIS_URL = RQREDIS,
     RQ_POLL_INTERVAL = 2500,
+    ISSO_API = PLUGINS["ISSO"]["api"],
 )
 
 #初始化插件管理器(自动扫描并加载运行)
 plugin_packages = []
 if PLUGINS["Valine"]["enable"] in ("true", True, "True"):
     plugin_packages.append("flask_pluginkit_valine")
+if PLUGINS["ISSO"]["enable"] in ("true", True, "True"):
+    plugin_packages.append("flask_pluginkit_isso")
 plugin = PluginManager(app, logger=logger.plugin, stpl=True, plugin_packages=plugin_packages)
 
 #初始化接口管理器

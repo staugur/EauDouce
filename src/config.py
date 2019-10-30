@@ -131,6 +131,12 @@ PLUGINS = {
     },
     # valine评论系统，https://valine.js.org
 
+    "ISSO": {
+        "enable": getenv("eaudouce_isso_enable", False),
+        "api": getenv("eaudouce_isso_api")
+    },
+    # isso评论系统，https://posativ.org/isso/
+
     "BaiduStatistics": getenv("eaudouce_BaiduStatistics", False),
     # 百度统计插件
 
