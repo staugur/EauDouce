@@ -160,7 +160,7 @@ PLUGINS = {
         "bucket": getenv("eaudouce_UpYunStorage_bucket", ""),
         "username": getenv("eaudouce_UpYunStorage_username", ""),
         "password": getenv("eaudouce_UpYunStorage_password", ""),
-        "dn": getenv("eaudouce_UpYunStorage_dn", "https://img.saintic.com"),
+        "dn": getenv("eaudouce_UpYunStorage_dn", ""),
     },
     # 又拍云存储插件
 

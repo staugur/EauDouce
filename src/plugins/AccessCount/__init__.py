@@ -51,6 +51,8 @@ class AccessCount(PluginBase):
         pipe = pb.redis.pipeline()
         if request.endpoint in ("front.blogShow", "front.blogEnjoy") and resp.status_code == 200:
             pipe.hincrby(blogPvKey, request.path.split("/")[-1], 1)
+        if request.endpoint == "api.wechatapplet" and request.args.get("Action") == "get_blogId":
+            pipe.hincrby(blogPvKey, "%s.html" % request.args.get("blogId"), 1)
         # pv
         pipe.hincrby(pvKey, get_today("%Y%m%d"), 1)
         try:
