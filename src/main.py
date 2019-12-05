@@ -75,6 +75,7 @@ def before_request():
     g.api       = api
     g.plugins   = PLUGINS
     g.userinfo  = api.sso_get_userinfo(g.uid)
+    g.config = api.get_sys_config()['data']
     # 仅是重定向页面快捷定义
     g.redirect_uri = get_redirect_url()
     logger.access.debug("sid: {}, uid: {}, userinfo: {}".format(g.sid, g.uid, g.userinfo))

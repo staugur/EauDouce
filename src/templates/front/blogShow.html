@@ -101,7 +101,7 @@
                 <p></p>
                 <div class="alert alert-success alert-dismissible" role="alert">
                     <b>版权声明</b>：<br />
-                    &nbsp;&nbsp;&nbsp;&nbsp;本文为原创文章，由 {{ g.api.get_sys_config().data.about_awi }} 创作和发表，遵循<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank">CC BY-NC-ND 4.0</a>许可！<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;本文为原创文章，由 {{ g.config.about_awi }} 创作和发表，遵循<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank">CC BY-NC-ND 4.0</a>许可！<br />
                     &nbsp;&nbsp;&nbsp;&nbsp;本文标题是：{{ data['title'] }}， 本文来源地址：<a href="{{ request.base_url }}" class="alert-link">{{ request.base_url }}</a>
                 </div>
                 {% endif -%}
@@ -114,16 +114,7 @@
 {% endblock %}
 
 {% block asideAd %}
-<div class="col-md-12 column">
-        <!-- test -->
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-5102708766475618"
-             data-ad-slot="6293855502"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-
-</div>
+<div class="col-md-12 column" id="ad"></div>
 {% endblock %}
 
 {% block script %}
@@ -131,10 +122,18 @@
 {{ emit_tep('valine_script') }}
 {{ emit_tep('isso_script') }}
 
+{% if g.config.adsense_enable in ('true', True, "True") %}
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
+    //ad
+    function load_google_ad(){
+        $("#ad").append("<ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-5102708766475618' data-ad-slot='6293855502' data-ad-format='auto' data-full-width-responsive='true'></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script>");
+    }
+    $(document).ready(function(){
+        setTimeout("load_google_ad()", 2000);
+    });
 </script>
+{% endblock %}
 
 <script type="text/javascript">
 {% if g.username in g.api.user_get_admins().data %}

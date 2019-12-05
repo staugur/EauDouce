@@ -3,13 +3,12 @@
   
   <head>
     {% set blogs = g.api.blog_get_all().data %}
-    {% set config = g.api.get_sys_config().data %}
     {% set catalogs = g.api.blog_get_catalog_list().data %}
-    <title>站点地图 | {{ config.site_title }}</title>
+    <title>站点地图 | {{ g.config.site_title }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="{{ g.api.get_sys_config().data.seo_keywords }}">
-    <meta name="description" content="{{ g.api.get_sys_config().data.seo_description }}">
+    <meta name="keywords" content="{{ g.config.seo_keywords }}">
+    <meta name="description" content="{{ g.config.seo_description }}">
     <link rel="canonical" href="{{ '{}{}'.format(request.url_root.strip('/'), url_for('front.sitemaphtml')) }}" />
     <meta name="copyright" content="EauDouce" />
     <style type="text/css">body {font-family: Verdana;FONT-SIZE: 12px;MARGIN: 0;color: #000000;background: #ffffff;} img {border:0;} li {margin-top: 8px;} .page {padding: 4px; border-top: 1px #EEEEEE solid} .author {background-color:#EEEEFF; padding: 6px; border-top: 1px #ddddee solid} #nav, #content, #footer {padding: 8px; border: 1px solid #EEEEEE; clear: both; width: 95%; margin: auto; margin-top: 10px;}
@@ -19,7 +18,7 @@
   </head>
   
   <body vlink="#333333" link="#333333">
-    <h2 style="text-align: center; margin-top: 20px">{{ config.site_title }}</h2>
+    <h2 style="text-align: center; margin-top: 20px">{{ g.config.site_title }}</h2>
     <center></center>
     <div id="nav">
       <a href="{{ url_for('front.index') }}"><strong>站点首页</strong></a>&raquo;
@@ -63,12 +62,12 @@
       </div>
     </div>
     <div id="footer">查看博客首页:
-      <strong><a href="{{ url_for('front.index') }}">{{ config.site_title }}</a></strong>
+      <strong><a href="{{ url_for('front.index') }}">{{ g.config.site_title }}</a></strong>
     </div>
     <br />
     <center>
       <div style="text-algin: center; font-size: 11px">
-        <strong>{{ config.about_awi }}</strong>
+        <strong>{{ g.config.about_awi }}</strong>
         <br />
         <br />
       </div>

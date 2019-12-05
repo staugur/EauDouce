@@ -139,11 +139,14 @@ def feed():
     feed = AtomFeed(g.api.get_sys_config().get("data").get("site_feedname") or "EauDouce", feed_url=request.url, url=request.url_root, subtitle="From the latest article in {}".format(request.url))
     for article in data:
         updated = article['update_time'][:10] if article['update_time'] else article['create_time'][:10]
-        feed.add(article['title'], unicode(article['content']),
-                 content_type='html',
-                 author=article['author'],
-                 id=article['id'],
-                 url=url_for(".blogShow", bid=article['id'], utm_source='feed', _external=True),
-                 updated=datetime.datetime.strptime(updated, "%Y-%m-%d"),
-                 published=datetime.datetime.strptime(article['create_time'][:10], "%Y-%m-%d"))
+        feed.add(
+            article['title'],
+            unicode(article['content']),
+            content_type='html',
+            author=article['author'],
+            id=article['id'],
+            url=url_for(".blogShow", bid=article['id'], utm_source='feed', _external=True),
+            updated=datetime.datetime.strptime(updated, "%Y-%m-%d"),
+            published=datetime.datetime.strptime(article['create_time'][:10], "%Y-%m-%d")
+        )
     return feed.get_response()

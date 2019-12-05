@@ -77,6 +77,7 @@ server {
     #处理静态资源:
     location ~ ^\/static\/.*$ {
         root /xxx/eaudouce/src/;
+        expires 30d;
     }
     location /favicon.ico {
         root /xxx/eaudouce/src/static/img/;

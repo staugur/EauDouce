@@ -3,7 +3,6 @@
 {% block title %}仪表盘{% endblock %}
 
 {% block content %}
-        {% set config = g.api.get_sys_config().data %}
         {% set statistics = g.api.blog_get_statistics() %}
         <div class="row">
             <div class="col-md-12">
@@ -41,19 +40,19 @@
                             <div class="ibox-content">
                                <address>
                                 <p class="text-success">
-                                   <strong>{{ config.about_awi or '' }}</strong><br />
+                                   <strong>{{ g.config.about_awi or '' }}</strong><br />
                                 </p>
-                                {% if config.about_address %}
-                                    <i class="fa fa-map-marker"></i>&nbsp;&nbsp;&nbsp;{{ config.about_address }}<br />
+                                {% if g.config.about_address %}
+                                    <i class="fa fa-map-marker"></i>&nbsp;&nbsp;&nbsp;{{ g.config.about_address }}<br />
                                 {% endif %}
-                                {% if config.about_phone %}
-                                    <i class="fa fa-mobile-phone"></i>&nbsp;&nbsp;&nbsp;{{ config.about_phone }}<br />
+                                {% if g.config.about_phone %}
+                                    <i class="fa fa-mobile-phone"></i>&nbsp;&nbsp;&nbsp;{{ g.config.about_phone }}<br />
                                 {% endif %}
-                                {% if config.about_email %}
-                                    <i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:{{ config.about_email }}">{{ config.about_email }}</a><br />
+                                {% if g.config.about_email %}
+                                    <i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:{{ g.config.about_email }}">{{ g.config.about_email }}</a><br />
                                 {% endif %}
-                                {% if config.about_ww %}
-                                    <i class="fa fa-comments"></i>&nbsp;&nbsp;{{ config.about_ww }}<br />
+                                {% if g.config.about_ww %}
+                                    <i class="fa fa-comments"></i>&nbsp;&nbsp;{{ g.config.about_ww }}<br />
                                 {% endif %}
                                 </address>                               
                             </div>

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    {%- set config = g.api.get_sys_config().data %}
-    <title>{% block title %}{% endblock %} | {{ config.site_title }}</title>
+    <title>{% block title %}{% endblock %} | {{ g.config.site_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="{{ config.seo_keywords }}">
-    <meta name="description" content="{{ config.seo_description }}">
+    <meta name="keywords" content="{{ g.config.seo_keywords }}">
+    <meta name="description" content="{{ g.config.seo_description }}">
     <!-- 引入 Bootstrap -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://static.saintic.com/iconfont/iconfont.min.css">
@@ -17,7 +16,7 @@
     <link href="https://static.saintic.com/cdn/images/favicon-32.png" rel="icon" type="image/x-icon" />
     <link href="https://static.saintic.com/cdn/images/favicon-32.png" rel="shortcut icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-    <link rel="alternate" type="application/atom+xml" title="{{ config.site_feedname }}" href="{{ url_for('front.feed') }}">
+    <link rel="alternate" type="application/atom+xml" title="{{ g.config.site_feedname }}" href="{{ url_for('front.feed') }}">
     {% block head %}{% endblock %}
     {{ emit_tep("base_front_header") }}
 </head>
@@ -136,7 +135,7 @@
                 </div>
             </div>
             <!-- 友情链接 -->
-            <h4><scan class="saintic-icon saintic-icon-link saintic-icon-1"> 友情链接</scan>&nbsp;&nbsp;<small><a href="mailto:{{ config.about_email }}?subject=%e7%94%b3%e8%af%b7%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%e4%ba%a4%e6%8d%a2&body=%e8%af%b7%e5%85%88%e6%b7%bb%e5%8a%a0%e6%9c%ac%e7%ab%99%e4%b8%ba%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%ef%bc%8c%e5%9c%a8%e9%82%ae%e4%bb%b6%e4%b8%ad%e5%86%99%e6%98%8e%e6%82%a8%e7%9a%84%e7%ab%99%e7%82%b9%e3%80%82">交换友链</a></small></h4>
+            <h4><scan class="saintic-icon saintic-icon-link saintic-icon-1"> 友情链接</scan>&nbsp;&nbsp;<small><a href="mailto:{{ g.config.about_email }}?subject=%e7%94%b3%e8%af%b7%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%e4%ba%a4%e6%8d%a2&body=%e8%af%b7%e5%85%88%e6%b7%bb%e5%8a%a0%e6%9c%ac%e7%ab%99%e4%b8%ba%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%ef%bc%8c%e5%9c%a8%e9%82%ae%e4%bb%b6%e4%b8%ad%e5%86%99%e6%98%8e%e6%82%a8%e7%9a%84%e7%ab%99%e7%82%b9%e3%80%82">交换友链</a></small></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     {% for fl in g.api.get_sys_friendlink().data %}
@@ -161,12 +160,12 @@
 <nav class="navbar navbar-default text-center">
     <div class="navbar-inner navbar-content-center">
         <p class="text-muted credit" style="padding: 10px;">
-            {% if config.about_beian %}
-            <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ config.about_beian }}</a>&nbsp;
+            {% if g.config.about_beian %}
+            <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.config.about_beian }}</a>&nbsp;
             {% endif %}
             <scan class="saintic-icon saintic-icon-sitemap text-muted"></scan></scan>&nbsp;<a href="{{ url_for('front.sitemaphtml') }}">站点地图</a>&nbsp;
-            {% if config.status_url %}
-            <scan class="saintic-icon saintic-icon-success text-muted"></scan>&nbsp;<a href="{{ config.status_url }}" target="_blank" title="SaintIC Status">服务状态</a>&nbsp;
+            {% if g.config.status_url %}
+            <scan class="saintic-icon saintic-icon-success text-muted"></scan>&nbsp;<a href="{{ g.config.status_url }}" target="_blank" title="SaintIC Status">服务状态</a>&nbsp;
             {% endif %}
             <b>页面改版中...</b>
             <br/>
