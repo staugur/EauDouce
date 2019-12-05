@@ -19,7 +19,9 @@
 </style> 
 {% endblock %}
 
-{% block AlternateDiagram %}
+{% block AlternateDiagramBody %}
+<div class="row clearfix">
+<div class="col-md-12 column">
     <div class="bg" style="background: url({{ userdata.cover or 'https://img.saintic.com/EauDouce/cover/defaultCover.jpg' }}) no-repeat top center;">
 		<div class="col-md-4 column">
 		  	<img id="avatar" src="{{ userdata.avatar or 'https://img.saintic.com/EauDouce/avatar/default.jpg' }}" class="img-thumbnail" style="display: block; max-height: 200px" />
@@ -80,7 +82,9 @@
 			</div>
 	    </blockquote>
 		{% endfor %}
-	</div>
+    </div>
+</div>
+</div>
 {% endblock %}
 
 {% block PathNavigation %}{% endblock %}
