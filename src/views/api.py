@@ -113,7 +113,7 @@ class Sys(Resource):
 
         query = request.args.get("q", request.args.get("query", None))
         if query == "configure":
-            data = { k:v for k,v in request.form.iteritems() if k in ("about_awi", "about_ww", "about_address", "about_phone", "about_email", "about_beian", "seo_keywords", "seo_description", "site_title", "site_feedname", "applet", "status_url", "adsense_enable") }
+            data = { k:v for k,v in request.form.iteritems() if k in ("about_awi", "about_ww", "about_address", "about_phone", "about_email", "about_beian", "seo_keywords", "seo_description", "site_title", "site_feedname", "applet", "status_url", "adsense_enable", "adsense_cleint_slot") }
             return g.api.update_sys_configure(**data)
 
 

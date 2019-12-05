@@ -123,11 +123,12 @@
 {{ emit_tep('isso_script') }}
 
 {% if g.config.adsense_enable in ('true', True, "True") %}
+{% set ad_client, ad_slot = g.config.adsense_cleint_slot.split(",") %}
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
     //ad
     function load_google_ad(){
-        $("#ad").append("<ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-5102708766475618' data-ad-slot='6293855502' data-ad-format='auto' data-full-width-responsive='true'></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script>");
+        $("#ad").append("<ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-{{ ad_client }}' data-ad-slot='{{ ad_slot }}' data-ad-format='auto' data-full-width-responsive='true'></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script>");
     }
     $(document).ready(function(){
         setTimeout("load_google_ad()", 2000);
