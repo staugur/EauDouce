@@ -39,7 +39,7 @@
             <!-- 文章详情 -->
             <article>
                 <header>
-			        <h3 class="text-center text-success">{{ data['title'] }}
+                    <h3 class="text-center text-success">{{ data['title'] }}
                     {% if data.get("sources") == "原创" %}
                         <attr title="原创文章"><img src="{{ url_for('static', filename='img/Original.gif') }}"></attr>
                     {% elif data.get("sources") == "转载" %}
@@ -48,13 +48,14 @@
                         <attr title="翻译文章"><img src="{{ url_for('static', filename='img/Translate.gif') }}"></attr>
                     {% endif %}
                     </h3>
-			    </header>
+                </header>
                 <div class="funcarea">
                     {% set admins = g.api.user_get_admins().data %}
                     <div>
                         <a href="{{ url_for('front.blogEnjoy', bid=blogId) }}" style='color:blue' target="_blank"><button type="button" class="btn btn-success">纯享阅读</button></a>
                         {% if g.signin and g.username == data.author or g.username in admins %}
                             <a href="{{ url_for('front.blogEdit', blogId=blogId) }}" style='color:blue'><button type="button" class="btn btn-warning">编辑文章</button></a>
+                            <!--TODO: fix bug-->
                             <a href="javascript:delBlog()" style='color:blue'><button type="button" class="btn btn-danger">删除文章</button></a>
                         {% endif %}
                         {% if g.username in admins %}
@@ -72,15 +73,15 @@
                     </div>
                     <h6>
                         {#
-                        <i class="icon-user icon-1x"></i><a href="{{ url_for('front.userGo', uid=data.author) }}" title="由 {{ data.author }} 发布" style="color: #999">&nbsp;{{ data.author }}</a>&nbsp;
+                        <i class="saintic-icon saintic-icon-user saintic-icon-1"></i><a href="{{ url_for('front.userGo', uid=data.author) }}" title="由 {{ data.author }} 发布" style="color: #999">&nbsp;{{ data.author }}</a>&nbsp;
                         #}
 
                         {% if data.catalog %}
-                        <i class="icon-folder-open icon-1x"></i><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=data.catalog) }}" title="查看 {{ data.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ data.catalog }}</a>&nbsp;
+                        <i class="saintic-icon saintic-icon-extend saintic-icon-1"></i><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=data.catalog) }}" title="查看 {{ data.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ data.catalog }}</a>&nbsp;
                         {% endif %}
 
                         {% if data.tag %}
-                        <i class="icon-tag icon-1x"></i>
+                        <i class="saintic-icon saintic-icon-icon-management saintic-icon-1"></i>
                         {% for tag in data.tag.split() %}
                             <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
                         {% endfor %}
@@ -88,7 +89,7 @@
 
                         {% if data.update_time or data.create_time %}
                         {% set timetext = '修改时间' if data.update_time else '创建时间' %}
-                        <i class="icon-calendar icon-1x"></i><scan style="color: #999" title="{{ timetext }}">&nbsp;{{ data.update_time or data.create_time }}</scan>&nbsp;
+                        <i class="saintic-icon saintic-icon-info saintic-icon-1"></i><scan style="color: #999" title="{{ timetext }}">&nbsp;{{ data.update_time or data.create_time }}</scan>&nbsp;
                         {% endif %}
 
                         {{ emit_tep('blog_show_funcarea') }}
@@ -112,10 +113,28 @@
 
 {% endblock %}
 
+{% block asideAd %}
+<div class="col-md-12 column">
+        <!-- test -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-5102708766475618"
+             data-ad-slot="6293855502"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+
+</div>
+{% endblock %}
+
 {% block script %}
 {{ emit_tep('blog_show_script') }}
 {{ emit_tep('valine_script') }}
 {{ emit_tep('isso_script') }}
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 
 <script type="text/javascript">
 {% if g.username in g.api.user_get_admins().data %}

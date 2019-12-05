@@ -21,9 +21,9 @@ class BlogApiManager(ServiceBase):
     def get_banner(self):
         res = dict(msg=None)
         data = [
-            {'imgUrl':'https://static.saintic.com/interest.blog/blog/9045593365244993.png','title':'来：订阅更新本站吆！','id':200, "isActive": False},
-            {'imgUrl':'https://static.saintic.com/interest.blog/blog/201701032126317486.png','title':'Python抓取花瓣网画板图片','id':204, "isActive": False},
-            {'imgUrl':'https://static.saintic.com/interest.blog/blog/swarm.png','title':'开源项目之SwarmOps','id':217, "isActive": True},
+            {'imgUrl':'https://static.saintic.com/interest.blog/blog/9045593365244993.png','title':'来：订阅更新本站吆！','id':200, "isActive": True},
+            #{'imgUrl':'https://static.saintic.com/interest.blog/blog/201701032126317486.png','title':'Python抓取花瓣网画板图片','id':204, "isActive": False},
+            #{'imgUrl':'https://static.saintic.com/interest.blog/blog/swarm.png','title':'开源项目之SwarmOps','id':217, "isActive": True},
         ]
         res.update(data=data)
         return res

@@ -29,13 +29,13 @@ blockquote {
 </style>
 {% endblock %}
 
- {% block notice %}
+{% block notice %}
             <marquee direction="left" scrollamount="5" bgcolor="#FFFFFF">
                 {% for notice in g.api.get_sys_notice().data %}
                 <i class="icon-bullhorn"></i>&nbsp;{{ notice.msg|safe }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 {% endfor %}
             </marquee>
- {% endblock %}
+{% endblock %}
 
 {% block PathNavigation %}
 			<ul class="breadcrumb">

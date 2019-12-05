@@ -8,15 +8,15 @@
             console.log(res);
             if (res.Included==true) {
                 BaiduIncludedCheck.setAttribute("class", "text-success");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度已收录';
+                BaiduIncludedCheck.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;百度已收录';
             } else {
                 BaiduIncludedCheck.setAttribute("class", "text-danger");
-                BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度未收录';
+                BaiduIncludedCheck.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;百度未收录';
             }
         },
         error: function(error){
             BaiduIncludedCheck.setAttribute("class", "text-danger");
-            BaiduIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度收录插件异常';
+            BaiduIncludedCheck.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;百度收录插件异常';
         }
     });
 </script>

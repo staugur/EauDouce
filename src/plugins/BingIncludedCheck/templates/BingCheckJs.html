@@ -8,15 +8,15 @@
             console.log(res);
             if (res.success==true) {
                 BingIncludedCheck.setAttribute("class", "text-success");
-                BingIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;必应已收录';
+                BingIncludedCheck.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;必应已收录';
             } else {
                 BingIncludedCheck.setAttribute("class", "text-danger");
-                BingIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;必应未收录';
+                BingIncludedCheck.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;必应未收录';
             }
         },
         error: function(error){
             BingIncludedCheck.setAttribute("class", "text-danger");
-            BingIncludedCheck.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;必应收录插件异常';
+            BingIncludedCheck.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;必应收录插件异常';
         }
     });
 </script>

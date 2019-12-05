@@ -8,18 +8,18 @@
     <meta name="description" content="{{ config.seo_description }}">
     <!-- 引入 Bootstrap -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://static.saintic.com/iconfont/iconfont.min.css">
+    <!--<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">-->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon" type="image/x-icon" />
-    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+    <link href="https://static.saintic.com/cdn/images/favicon-32.png" rel="icon" type="image/x-icon" />
+    <link href="https://static.saintic.com/cdn/images/favicon-32.png" rel="shortcut icon" type="image/x-icon" />
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link rel="alternate" type="application/atom+xml" title="{{ config.site_feedname }}" href="{{ url_for('front.feed') }}">
     {% block head %}{% endblock %}
     {{ emit_tep("base_front_header") }}
-</head>
 </head>
 <body>
 
@@ -30,14 +30,14 @@
             <!--顶部导航-->
             <nav class="navbar navbar-default" role="navigation">
                 <div class="navbar-header">
-                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}"><img src="/static/img/logo.png" height="28"></a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="saintic-icon saintic-icon-bars"></span></button> <a class="navbar-brand" href="{{ url_for('.index') }}"><img src="/static/img/logo.png" height="28"></a>
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ url_for('front.blogWrite') }}" title="Write">创作&nbsp;<i class="icon-pencil icon-1x"></i></a></li>
-                        <li><a href="{{ url_for('front.feed') }}" target="_blank" title="Feed">订阅&nbsp;<i class="icon-rss icon-1x"></i></a></li>
+                        <li><a href="{{ url_for('front.blogWrite') }}" title="Write">创作&nbsp;<i class="saintic-icon saintic-icon-blog saintic-icon-1"></i></a></li>
+                        <li><a href="{{ url_for('front.feed') }}" target="_blank" title="Feed">订阅&nbsp;<i class="saintic-icon saintic-icon-rss saintic-icon-1"></i></a></li>
                         <li class="dropdown">
-                            <a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="icon-folder-open icon-1x"></i></a>
+                            <a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="saintic-icon saintic-icon-extend saintic-icon-1"></i></a>
                             <ul class="dropdown-menu">
                                 {% for catalog in g.api.blog_get_catalog_list().data %}
                                 <li><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=catalog) }}">{{ catalog }}</a></li>
@@ -50,7 +50,7 @@
                         </li>
                         <li class="dropdown">
                                 <!--
-                                <a href="/read/" title="Novels" class="dropdown-toggle" data-toggle="dropdown">唔，小说&nbsp;<i class="icon-book icon-1x"></i></a>
+                                <a href="/read/" title="Novels" class="dropdown-toggle" data-toggle="dropdown">唔，小说&nbsp;<i class="saintic-icon saintic-icon-docs saintic-icon-1"></i></a>
                                 <ul class="dropdown-menu">
                                     {% for d in g.api.novel_get_books().data or [] %}
                                     <li><a href="/read/catalog.html?book_id={{ d.book_id}}">{{ d.name }}</a></li>
@@ -63,44 +63,45 @@
                     <ul class="nav navbar-nav navbar-right">
                         {% if g.signin %}
                         <li class="dropdown">
-                            <a href="{{ url_for('front.userGo', uid=g.uid) }}" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="icon-user icon-1x"></i></a>
+                            <a href="{{ url_for('front.userGo', uid=g.uid) }}" title="User Home" class="dropdown-toggle" data-toggle="dropdown">个人中心&nbsp;<i class="saintic-icon saintic-icon-user saintic-icon-1"></i></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('front.userGo', uid=g.uid) }}">我的主页</a></li>
-                                <li><a href="{{ url_for('front.userGo', uid=g.uid) }}#blog">我的文章</a></li>
+                                <li><a href="{{ url_for('front.userGo', uid=g.uid) }}">主页</a></li>
                                 {% if g.username in g.api.user_get_admins().data %}
-                                <li><a href="{{ url_for('admin.index') }}">后台管理</a></li>
+                                <li><a href="{{ url_for('admin.index') }}">后台</a></li>
                                 {% endif %}
                                 <li class="divider"></li>
-                                <li><a href="{{ url_for('front.userSet') }}" title="Setting" target="_blank">设置&nbsp;<i class="icon-cog icon-1x"></i></a></li>
-                                <li><a href="{{ url_for('logout') }}" title="Sign Out">注销&nbsp;<i class="icon-signout icon-1x"></i></a></li>
+                                <li><a href="{{ url_for('front.userSet') }}" title="Setting" target="_blank">设置</a></li>
+                                <li><a href="{{ url_for('logout') }}" title="Sign Out">登出</a></li>
                             </ul>
                         </li>
                         {% else %}
-                        <li><a href="{{ url_for('login') }}" title="Sign In">登录&nbsp;<i class="icon-signin icon-1x"></i></a></li>
-                        <li><a href="{{ url_for('signup') }}" title="Sign Up">注册&nbsp;<i class="icon-signin icon-1x"></i></a></li>
+                        <li><a href="{{ url_for('login') }}" title="Sign In">登录</i></a></li>
+                        <li><a href="{{ url_for('signup') }}" title="Sign Up">注册</a></li>
                         {% endif %}
                     </ul>
                 </div>
             </nav>
         </div>
     </div>
+    <!--
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <!--首页轮番图-->
-            {% block AlternateDiagram %}{% endblock %}
-            <!-- 公告 -->
-            {% block notice %}{% endblock %}
+            //首页轮番图
+            {% block AlternateDiagramClosed %}{% endblock %}
         </div>
     </div>
+    -->
     <div class="row clearfix">
         <div class="col-md-8 column">
             <!-- 路径导航 -->
             {% block PathNavigation %}{% endblock %}
+            <!-- 公告 -->
+            {% block noticeclosed %}{% endblock %}
             <!-- 搜索 -->
             {% block search %}
             <form class="form-search form-horizontal" id="SearchForm" method="GET" action="{{ url_for('front.blogSearch') }}" target="_blank">
                 <div class="input-group search-input-group">
-                    <button type="submit" style="height: 30px;" class="btn btn-success"><i class="icon-search"></i></button>
+                    <button type="submit" style="height: 30px;" class="btn btn-success"><i class="saintic-icon saintic-icon-search"></i></button>
                     <input type="text" name="q" id="input" placeholder="站内搜索" value="{{ request.args.get('q','') }}">
                     <input type="hidden" name="cc" value="saintic.com">
                 </div>
@@ -111,34 +112,8 @@
         <!-- 右侧 -->
         {% block aside %}
         <div class="col-md-4 column">
-            <!-- 小程序 -->
-            <h4><scan class="icon-qrcode icon-1x"> 交流分享</scan></h4>
-            <div class="row clearfix">
-                <div class="tabs-container">
-                    <ul class="nav nav-tabs" id="overviewTab">
-                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">QQ交流群</a></li>
-                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false"> 微信公众号</a></li>
-                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false"> 微信小程序</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="tab-1" class="tab-pane fade in active">
-                            <scan>QQ扫一扫或点击二维码加入，群号577543189</scan>
-                            <a href="https://jq.qq.com/?_wv=1027&k=5aZyCMV" target="_blank" title="点击加入群聊"><img src="/static/img/qqgroup.jpg" class="img-rounded img-responsive" title="QQ交流群" width="160px" height='160px'></a>
-                        </div>
-                        <div id="tab-2" class="tab-pane fade">
-                            <scan>微信扫一扫，手滑关注它</scan>
-                            <img src="/static/img/gongzhonghao.jpg" class="img-rounded img-responsive" title="微信公众号" width="160px" height='160px'>
-                        </div>
-                        {% set appletUrl = config.applet or '/static/img/applet.jpg' %}
-                        <div id="tab-3" class="tab-pane fade">
-                            <scan>微信扫一扫，进入小程序</scan>
-                            <img src="{{ appletUrl }}" class="img-rounded img-responsive" title="微信小程序" width="160px" height='160px'>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- 推荐文章列表 -->
-            <h4><scan class="icon-book icon-large"></scan> 推荐文章</h4>
+            <h4><scan class="saintic-icon saintic-icon-thumbsup icon-large"></scan> 推荐文章</h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <ul class="list-unstyled">
@@ -149,7 +124,7 @@
                 </div>
             </div>
             <!-- 标签云 -->
-            <h4><scan class="icon-tags icon-1x"> 标签云集</scan></h4>
+            <h4><scan class="saintic-icon saintic-icon-icon-management saintic-icon-1"> 标签云集</scan></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     {%- set tags = g.api.blog_get_tags_list().data %}
@@ -161,25 +136,25 @@
                 </div>
             </div>
             <!-- 友情链接 -->
-            <h4><scan class="icon-link icon-1x"> 友情链接</scan>&nbsp;&nbsp;<small><a href="mailto:{{ config.about_email }}?subject=%e7%94%b3%e8%af%b7%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%e4%ba%a4%e6%8d%a2&body=%e8%af%b7%e5%85%88%e6%b7%bb%e5%8a%a0%e6%9c%ac%e7%ab%99%e4%b8%ba%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%ef%bc%8c%e5%9c%a8%e9%82%ae%e4%bb%b6%e4%b8%ad%e5%86%99%e6%98%8e%e6%82%a8%e7%9a%84%e7%ab%99%e7%82%b9%e3%80%82">交换友链</a></small></h4>
+            <h4><scan class="saintic-icon saintic-icon-link saintic-icon-1"> 友情链接</scan>&nbsp;&nbsp;<small><a href="mailto:{{ config.about_email }}?subject=%e7%94%b3%e8%af%b7%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%e4%ba%a4%e6%8d%a2&body=%e8%af%b7%e5%85%88%e6%b7%bb%e5%8a%a0%e6%9c%ac%e7%ab%99%e4%b8%ba%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5%ef%bc%8c%e5%9c%a8%e9%82%ae%e4%bb%b6%e4%b8%ad%e5%86%99%e6%98%8e%e6%82%a8%e7%9a%84%e7%ab%99%e7%82%b9%e3%80%82">交换友链</a></small></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     {% for fl in g.api.get_sys_friendlink().data %}
-                        <p class="text-success"><scan class="icon-external-link"></scan>&nbsp;<a href="{{ fl.link }}" title="{{ fl.title }}" target="_blank">{{ fl.title }}</a></p>
+                        <p class="text-success"><scan class="saintic-icon saintic-icon-link-exchange"></scan>&nbsp;<a href="{{ fl.link }}" title="{{ fl.title }}" target="_blank">{{ fl.title }}</a></p>
                     {% endfor %}
                 </div>
             </div>
             <!-- 推广 -->
-            <h4><scan class="icon-tags icon-1x"> 推广位</scan></h4>
+            <h4><scan class="saintic-icon saintic-icon-god saintic-icon-1"> 推广位</scan></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <p><a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=rxnbx8o5&utm_source=rxnbx8o5" target="_blank">免费领取阿里云优惠券！</a></p>
                 </div>
+                {% block asideAd %}{% endblock %}
             </div>
         </div>
         {% endblock %}
     </div>
-
 </div>
 
 <div id="footer" class="container">
@@ -189,12 +164,13 @@
             {% if config.about_beian %}
             <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ config.about_beian }}</a>&nbsp;
             {% endif %}
-            <scan class="icon-sitemap text-muted"></scan></scan>&nbsp;<a href="{{ url_for('front.sitemaphtml') }}">站点地图</a>&nbsp;
+            <scan class="saintic-icon saintic-icon-sitemap text-muted"></scan></scan>&nbsp;<a href="{{ url_for('front.sitemaphtml') }}">站点地图</a>&nbsp;
             {% if config.status_url %}
-            <scan class="icon-ok-sign text-success"></scan>&nbsp;<a href="{{ config.status_url }}" target="_blank" title="SaintIC Status">服务状态</a>&nbsp;
+            <scan class="saintic-icon saintic-icon-success text-muted"></scan>&nbsp;<a href="{{ config.status_url }}" target="_blank" title="SaintIC Status">服务状态</a>&nbsp;
             {% endif %}
+            <b>页面改版中...</b>
             <br/>
-            Copyright &copy; <script>document.write( new Date().getFullYear() );</script>.&nbsp;All rights reserved.&nbsp;Powered by <a href="https://github.com/staugur/EauDouce" target="_blank">EauDouce.</a>
+            Copyright &copy; 2017-<script>document.write( new Date().getFullYear() );</script>.&nbsp;All rights reserved.&nbsp;Powered by <a href="https://github.com/staugur/EauDouce" target="_blank">EauDouce.</a>
             {{ emit_tep('base_front_footer') }}
         </p>
     </div>
@@ -205,7 +181,9 @@
 <script src='/static/js/tagscloud.js' type="text/javascript"></script>
 <script src="{{ url_for('static', filename='js/jquery-3.1.0.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% if request.endpoint != "front.index" %}
 <script src="{{ url_for('static', filename='layer/layer.js') }}"></script>
+{% endif %}
 {% block script %}{% endblock %}
 {{ emit_tep('base_front_script') }}
 <script type="text/javascript">
@@ -238,21 +216,20 @@ function search(){
 }
 
 //返回顶部
-    $(window).scroll(function(){
-      var sc=$(window).scrollTop();
-      var rwidth=$(window).width()
-      if(sc>0){
+$(window).scroll(function(){
+    var sc=$(window).scrollTop();
+    var rwidth=$(window).width()
+    if(sc>0){
         $("#goTopBtn").css("display","block");
         $("#goTopBtn").css("left",(rwidth-36)+"px");
-      }else{
+    }else{
         $("#goTopBtn").css("display","none");
-      }
-    })
-    $("#goTopBtn").click(function(){
-      var sc=$(window).scrollTop();
-      $('body,html').animate({scrollTop:0},500);
-    })
-
+    }
+})
+$("#goTopBtn").click(function(){
+    var sc=$(window).scrollTop();
+    $('body,html').animate({scrollTop:0},500);
+})
 </script>  
 </body>
 </html>

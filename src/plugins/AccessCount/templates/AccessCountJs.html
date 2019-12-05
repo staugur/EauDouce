@@ -6,11 +6,11 @@
         datatype: 'json',
         success: function(res) {
             console.log(res);
-            AccessCount.innerHTML = '<i class="icon-eye-open icon-1x"></i><scan style="color: #999">阅读量&nbsp;'+res.data+'</scan>&nbsp;';
+            AccessCount.innerHTML = '<i class="saintic-icon saintic-icon-eye-open saintic-icon-1"></i><scan style="color: #999">阅读量&nbsp;'+res.data+'</scan>&nbsp;';
         },
         error: function(error){
             AccessCount.setAttribute("class", "text-danger");
-            AccessCount.innerHTML = '<i class="icon-eye-open icon-1x"></i>&nbsp;访问统计插件发生未知错误';
+            AccessCount.innerHTML = '<i class="saintic-icon saintic-icon-eye-open saintic-icon-1"></i>&nbsp;访问统计插件发生未知错误';
         }
     });
 </script>

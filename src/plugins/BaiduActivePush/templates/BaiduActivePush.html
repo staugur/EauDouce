@@ -11,15 +11,15 @@ $(document).ready(function () {
             console.log(res);
             if (res.success==true) {
                 BaiduActivePush.setAttribute("class", "text-success");
-                BaiduActivePush.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度主动推送成功';
+                BaiduActivePush.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;百度主动推送成功';
             } else {
                 BaiduActivePush.setAttribute("class", "text-danger");
-                BaiduActivePush.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度主动推送失败';
+                BaiduActivePush.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;百度主动推送失败';
             }
         },
         error: function(error){
                 BaiduActivePush.setAttribute("class", "text-danger");
-                BaiduActivePush.innerHTML = '<i class="icon-ok-circle icon-1x"></i>&nbsp;百度主动推送插件发生未知错误';
+                BaiduActivePush.innerHTML = '<i class="saintic-icon saintic-icon-success saintic-icon-1"></i>&nbsp;百度主动推送插件发生未知错误';
         }
     });
 });
