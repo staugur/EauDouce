@@ -269,11 +269,9 @@ class BlogApiManager(ServiceBase):
 
         res = {"msg": None, "data": [], "code": 0}
         key = "EauDouce:blog:{}:cache".format(blogId)
-        if self.redis.exists(key):
+        try:
             data = json.loads(self.redis.get(key))
-            res.update(data=data)
-            logger.api.info("hit blog cache")
-        else:
+        except:
             sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article WHERE id=%s" %blogId
             try:
                 data = self.mysql_read.get(sql)
@@ -284,7 +282,9 @@ class BlogApiManager(ServiceBase):
                 res.update(data=data)
                 self.redis.set(key, json.dumps(data))
                 self.redis.expire(key, 600)
-
+        else:
+            logger.api.info("hit blog cache")
+            res.update(data=data)
         
         return res
 

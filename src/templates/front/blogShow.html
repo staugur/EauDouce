@@ -77,11 +77,11 @@
                         #}
 
                         {% if data.catalog %}
-                        <i class="saintic-icon saintic-icon-extend saintic-icon-1"></i><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=data.catalog) }}" title="查看 {{ data.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ data.catalog }}</a>&nbsp;
+                        <i class="saintic-icon saintic-icon-catalog saintic-icon-1"></i><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=data.catalog) }}" title="查看 {{ data.catalog }} 分类中所有文章" style="color: #999">&nbsp;{{ data.catalog }}</a>&nbsp;
                         {% endif %}
 
                         {% if data.tag %}
-                        <i class="saintic-icon saintic-icon-icon-management saintic-icon-1"></i>
+                        <i class="saintic-icon saintic-icon-tags saintic-icon-1"></i>
                         {% for tag in data.tag.split() %}
                             <a href="{{ url_for('front.blogResource', resource_type='tag', resource_data=tag) }}" title="查看 {{ tag }} 标签中所有文章" style="color: #999">{{ tag }}</a>&nbsp;
                         {% endfor %}
@@ -89,7 +89,7 @@
 
                         {% if data.update_time or data.create_time %}
                         {% set timetext = '修改时间' if data.update_time else '创建时间' %}
-                        <i class="saintic-icon saintic-icon-info saintic-icon-1"></i><scan style="color: #999" title="{{ timetext }}">&nbsp;{{ data.update_time or data.create_time }}</scan>&nbsp;
+                        <i class="saintic-icon saintic-icon-time saintic-icon-1"></i><scan style="color: #999" title="{{ timetext }}">&nbsp;{{ data.update_time or data.create_time }}</scan>&nbsp;
                         {% endif %}
 
                         {{ emit_tep('blog_show_funcarea') }}

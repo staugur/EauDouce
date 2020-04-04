@@ -36,7 +36,7 @@
                         <li><a href="{{ url_for('front.blogWrite') }}" title="Write">创作&nbsp;<i class="saintic-icon saintic-icon-blog saintic-icon-1"></i></a></li>
                         <li><a href="{{ url_for('front.feed') }}" target="_blank" title="Feed">订阅&nbsp;<i class="saintic-icon saintic-icon-rss saintic-icon-1"></i></a></li>
                         <li class="dropdown">
-                            <a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="saintic-icon saintic-icon-extend saintic-icon-1"></i></a>
+                            <a href="#" title="Catalog" class="dropdown-toggle" data-toggle="dropdown">分类目录&nbsp;<i class="saintic-icon saintic-icon-catalog saintic-icon-1"></i></a>
                             <ul class="dropdown-menu">
                                 {% for catalog in g.api.blog_get_catalog_list().data %}
                                 <li><a href="{{ url_for('front.blogResource', resource_type='catalog', resource_data=catalog) }}">{{ catalog }}</a></li>
@@ -113,7 +113,7 @@
         {% block aside %}
         <div class="col-md-4 column">
             <!-- 推荐文章列表 -->
-            <h4><scan class="saintic-icon saintic-icon-thumbsup icon-large"></scan> 推荐文章</h4>
+            <h4><scan class="saintic-icon saintic-icon-recommended-2 icon-large"></scan> 推荐文章</h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <ul class="list-unstyled">
@@ -124,7 +124,7 @@
                 </div>
             </div>
             <!-- 标签云 -->
-            <h4><scan class="saintic-icon saintic-icon-icon-management saintic-icon-1"> 标签云集</scan></h4>
+            <h4><scan class="saintic-icon saintic-icon-tags saintic-icon-1"> 标签云集</scan></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     {%- set tags = g.api.blog_get_tags_list().data %}
@@ -145,7 +145,7 @@
                 </div>
             </div>
             <!-- 推广 -->
-            <h4><scan class="saintic-icon saintic-icon-god saintic-icon-1"> 推广位</scan></h4>
+            <h4><scan class="saintic-icon saintic-icon-ad saintic-icon-1"> 推广位</scan></h4>
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <p><a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=rxnbx8o5&utm_source=rxnbx8o5" target="_blank">免费领取阿里云优惠券！</a></p>
@@ -162,7 +162,7 @@
     <div class="navbar-inner navbar-content-center">
         <p class="text-muted credit" style="padding: 10px;">
             {% if g.config.about_beian %}
-            <a href="http://www.miibeian.gov.cn/" target="_blank" title="ICP备案号">{{ g.config.about_beian }}</a>&nbsp;
+            <a href="http://www.beian.miit.gov.cn/" target="_blank" title="ICP备案号">{{ g.config.about_beian }}</a>&nbsp;
             {% endif %}
             <scan class="saintic-icon saintic-icon-sitemap text-muted"></scan></scan>&nbsp;<a href="{{ url_for('front.sitemaphtml') }}">站点地图</a>&nbsp;
             {% if g.config.status_url %}
