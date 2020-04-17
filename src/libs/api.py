@@ -271,6 +271,8 @@ class BlogApiManager(ServiceBase):
         key = "EauDouce:blog:{}:cache".format(blogId)
         try:
             data = json.loads(self.redis.get(key))
+            if not data:
+                raise
         except:
             sql = "SELECT id,title,content,create_time,update_time,tag,catalog,sources,author,recommend,top FROM blog_article WHERE id=%s" %blogId
             try:
