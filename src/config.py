@@ -81,6 +81,14 @@ EMAIL = {
 }
 
 
+# picbed图床
+PICBED = {
+    "enable": getenv("passport_picbed_enable", True),
+    "api": getenv("passport_picbed_api"),
+    "LinkToken": getenv("passport_picbed_linktoken")
+}
+
+
 # 系统配置
 SYSTEM = {
 

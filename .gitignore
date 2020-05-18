@@ -91,3 +91,4 @@ logs/
 .ropeproject
 lextab.py
 yacctab.py
+src/static/upload/
