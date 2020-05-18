@@ -83,9 +83,9 @@ EMAIL = {
 
 # picbed图床
 PICBED = {
-    "enable": getenv("passport_picbed_enable", True),
-    "api": getenv("passport_picbed_api"),
-    "LinkToken": getenv("passport_picbed_linktoken")
+    "enable": getenv("eaudouce_picbed_enable", True),
+    "api": getenv("eaudouce_picbed_api"),
+    "LinkToken": getenv("eaudouce_picbed_linktoken")
 }
 
 
